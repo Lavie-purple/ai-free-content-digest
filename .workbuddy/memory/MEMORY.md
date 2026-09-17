@@ -47,11 +47,21 @@
 | --- | --- | --- |
 | `build_web.py [src] [out]` | md → 单文件网页版 | 出稿后 |
 | `verify_web.py [src] [out]` | 六项自查，须 `ALL GREEN` | 编译后 |
+| `probe_layout.py [src] [--widths 1440,560]` | UI 量测（列宽满足度/搜索可用宽/压字），需 Edge | 改版式后 |
+| `audit_color.py [build_web.py]` | 配色审计（色距/WCAG/opacity 叠加） | 改配色后 |
 | `extract_deadlines.py [src]` | 第四章截止表 → `data/deadlines.csv` | 出刊前 |
 | `check_deadlines.py [--days N] [--today D]` | 到期巡检（`--today` 可复现任意基准日） | 出刊前 |
 | `check_frozen.py [src]` | 防重复往期，有 🔴 高危则 **exit 1** | 出刊前 |
 | `build_source_hits.py [--dry]` | 信源命中 → 回写台账 + CSV（幂等） | 出刊后 |
 | `build_index.py` | 重建根目录 `INDEX.md` | 出刊后 |
+
+### UI 审查的量化口径（2026-09-17 建立，两个脚本留在工具链里）
+
+- **看截图不可靠，一律量 DOM。** 无头浏览器把指标写进 `document.title`，再用 `--dump-dom` 抓回来。实测抓到过两个只看截图会漏的问题。
+- **「首列过窄」不能只看宽度**：`#` 序号列天然 41px 是合理的。正确判据是三条同时成立 —— 实宽 < 140px、行高 > 90px、首列内容是 ≥4 字真文字。需求宽度用「临时 `white-space:nowrap` 后量 `scrollWidth`」得到。
+- **截图三条硬规矩**（`probe_layout.py` 里已内置第一条）：① 必须先关入场动画 —— 页面大量用 `animation:...both` 起始 `opacity:0`，无头下会冻结在 t=0，拍出来「标题+正文整块空白」；② 想看中段**不能用「删兄弟节点」** —— 删掉 `.rail` 后 `.drawerwrap` 会掉进第 1 栏（196px），页面被挤成窄缝（实测 PNG 只有 15KB）；正确做法是保留栅格、只把前置内容 `display:none`；③ 一图一个 `--user-data-dir`，截完 `md5sum` 验一遍（全同=抓拍失败），再删 profile（每个十几 MB）。
+- **配色审计看三样**：语义色色距（查「两个不同语义用了同一个颜色」）、WCAG 对比度（小字要 4.5）、**整行 opacity 叠加后的实际对比度**（`.ledger tr[data-st="over"]{opacity:.55}` 把「已结束」行从 3.55 拉到 **1.87**）。
+- **设计规范与代码有轻微漂移**：MEMORY 上写强调色 `#B23A1E`，`build_web.py` 实际是 `#bf3327`。以代码为准，规范文本待统一。
 
 ### 结构化台账（`.workbuddy/data/`）
 
