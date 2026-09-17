@@ -4,17 +4,38 @@
 - 保真：md 里的每个字、每张表都原样落进 HTML，只做结构化增强
 - 增强：刊头、章节编号、可筛选的截止时间表、搜索高亮、明暗主题、打印样式
 产物：与 md 同名的 .html（自包含，零外部资源）
+
+用法：
+    python build_web.py                     # 自动取工作区日期最新的一期
+    python build_web.py <source.md>         # 指定期
+    python build_web.py <source.md> <out.html>
 """
 import io, os, re, sys, html
 
-SRC = "AI免费内容与权益速递-第006期-2026-09-17.md"
-OUT = "AI免费内容与权益速递-第006期-2026-09-17.html"
+WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def pick_default():
+    """取工作区里日期最新的一期日报（按文件名里的 YYYY-MM-DD 排序）。"""
+    cands = []
+    for fn in os.listdir(WS):
+        m = re.match(r"^(AI免费内容与权益速递.*?(\d{4}-\d{2}-\d{2}))\.md$", fn)
+        if m:
+            cands.append((m.group(2), fn))
+    if not cands:
+        raise SystemExit("工作区里没找到日报 md")
+    cands.sort()
+    return os.path.join(WS, cands[-1][1])
+
 
 # 命令行优先： python build_web.py [source.md [out.html]]
-# 不传参时回落到上面的 SRC / OUT（保持旧用法可用）
+# 不传参时自动取日期最新的一期——不再需要每期手改路径
 if len(sys.argv) > 1:
     SRC = sys.argv[1]
     OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.splitext(SRC)[0] + ".html"
+else:
+    SRC = pick_default()
+    OUT = os.path.splitext(SRC)[0] + ".html"
 
 CN_NUM = {"一": "01", "二": "02", "三": "03", "四": "04", "五": "05",
           "六": "06", "七": "07", "八": "08", "九": "09", "十": "10"}
