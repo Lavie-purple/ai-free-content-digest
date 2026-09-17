@@ -39,7 +39,8 @@
 
 ### 版本控制
 
-- 本工作区已是 git 仓库，远端私仓 **`Lavie-purple/ai-free-content-digest`（private）**。每期出刊 + 编译 + 校验后应提交一次。
+- 本工作区已是 git 仓库，远端 **`Lavie-purple/ai-free-content-digest`**（**2026-09-17 已由 private 改为 public**，默认分支 main）。每期出刊 + 编译 + 校验后应提交一次。
+- 根目录有 `README.md`（仓库首页，2026-09-17 新建）。改仓库结构或工具链时**记得同步它**——它列了目录树与工具链表，容易和实际脱钩。
 - **沙箱会丢弃 `.git/refs/remotes/` 的写入**，所以 `git status` 常年显示 `[gone]`——**这是假象，别据此判断没推上去**。核实远端只能调 GitHub API 比对 `repos/<owner>/<repo>/commits/main` 的 sha 与本地 `HEAD`（`git push` 的回显也不可信）。
 
 ### 工具链（`.workbuddy/`，除注明外均可**不传参自动取最新一期**）
