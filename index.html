@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 免费内容与权益速递 · 总目录</title>
+<meta name="description" content="每天筛出 AI 免费额度、免费内容与分发入口的新变化，只做增量与纠错。已出 6 期。">
+<meta property="og:title" content="AI 免费内容与权益速递">
+<meta property="og:description" content="每天筛出 AI 免费额度、免费内容与分发入口的新变化，只做增量与纠错。">
+<meta property="og:type" content="website">
+<style>
+:root{
+  --bg:#f2eee5; --surface:#fbf9f3; --surface-2:#f6f2e8;
+  --ink:#1b1913; --ink-2:#3a362d; --muted:#5f584a; --faint:#736a5a;
+  --rule:rgba(27,25,19,.16); --rule-2:rgba(27,25,19,.34); --rule-strong:rgba(27,25,19,.62);
+  --accent:#bf3327; --accent-ink:#a02a20; --accent-soft:rgba(191,51,39,.10);
+  --fd:Georgia,"Times New Roman","Source Han Serif SC","Songti SC","SimSun",serif;
+  --fu:-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+  --fm:"Cascadia Mono",Consolas,"JetBrains Mono",Menlo,monospace;
+  --shadow:0 1px 2px rgba(40,32,20,.10),0 8px 28px rgba(40,32,20,.07);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#131210; --surface:#1c1a16; --surface-2:#232019;
+    --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;
+    --rule:rgba(236,231,220,.15); --rule-2:rgba(236,231,220,.3); --rule-strong:rgba(236,231,220,.55);
+    --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--fu); line-height:1.85; -webkit-text-size-adjust:100%;
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:radial-gradient(70rem 42rem at 8% -12%, var(--accent-soft), transparent 62%);
+}
+.wrap{position:relative; z-index:2; max-width:880px; margin:0 auto; padding:56px 24px 88px}
+a{color:inherit}
+header.top{border-bottom:3px solid var(--ink); padding-bottom:18px; margin-bottom:8px}
+.kicker{
+  font-family:var(--fm); font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--muted); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  padding-bottom:10px;
+}
+.kicker em{font-style:normal; color:var(--accent-ink)}
+h1{
+  font-size:clamp(30px,5.2vw,46px); line-height:1.14; margin:0 0 12px;
+  font-weight:800; letter-spacing:-.01em;
+}
+.lede{
+  font-family:var(--fd); font-size:17px; line-height:1.9; color:var(--ink-2);
+  margin:0 0 18px; max-width:60ch;
+}
+.lede strong{color:var(--ink); font-weight:700}
+.stats{
+  display:flex; gap:22px; flex-wrap:wrap; font-family:var(--fm); font-size:12.5px;
+  color:var(--muted); padding-top:4px;
+}
+.stats b{color:var(--ink); font-weight:700; font-size:15px; margin-right:4px}
+section{margin-top:44px}
+.slabel{
+  font-family:var(--fm); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--faint); padding-bottom:8px; margin-bottom:16px; border-bottom:1px solid var(--rule);
+}
+.card{
+  background:var(--surface); border:1px solid var(--rule); border-radius:0 10px 10px 0;
+  border-left:3px solid var(--accent); box-shadow:var(--shadow); padding:24px 26px;
+}
+.card .tagline{
+  font-family:var(--fm); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent-ink); display:flex; align-items:center; gap:7px; margin-bottom:10px;
+}
+.card .dot{width:7px;height:7px;border-radius:99px;background:var(--accent);display:inline-block}
+.metaline{font-family:var(--fm); font-size:12.5px; color:var(--muted); margin-bottom:8px}
+.metaline b{color:var(--ink)}
+.metaline .sep{margin:0 8px; color:var(--faint)}
+.card h2{
+  font-size:clamp(22px,3.4vw,30px); line-height:1.3; margin:0 0 14px; font-weight:800;
+}
+.card h2 a{text-decoration:none; border-bottom:2px solid transparent; transition:border-color .18s}
+.card h2 a:hover{border-bottom-color:var(--accent)}
+ul.abs{list-style:none; margin:0 0 20px; padding:0; display:grid; gap:9px}
+ul.abs li{
+  position:relative; padding-left:19px; font-family:var(--fd); font-size:15.5px;
+  line-height:1.85; color:var(--ink-2);
+}
+ul.abs li::before{
+  content:""; position:absolute; left:2px; top:.8em; width:7px; height:1.5px; background:var(--accent);
+}
+.acts{display:flex; gap:10px; flex-wrap:wrap}
+.btn{
+  display:inline-block; padding:9px 18px; border-radius:99px; font-size:14px; font-weight:600;
+  border:1px solid var(--rule-2); text-decoration:none; transition:all .18s var(--ease);
+}
+.btn:hover{border-color:var(--accent); color:var(--accent-ink); transform:translateY(-1px)}
+.btn.primary{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.btn.primary:hover{background:var(--accent); border-color:var(--accent); color:#fff}
+ul.list{list-style:none; margin:0; padding:0; border-top:1px solid var(--rule)}
+ul.list li.row{border-bottom:1px solid var(--rule)}
+ul.list li.row a{
+  display:grid;
+  grid-template-columns:52px 68px minmax(0,1fr) auto auto;
+  gap:14px; align-items:baseline; padding:13px 10px 13px 12px; text-decoration:none;
+  border-left:3px solid transparent; transition:background .16s,border-color .16s;
+}
+ul.list li.row a:hover{background:var(--surface-2); border-left-color:var(--accent)}
+.no{font-family:var(--fm); font-weight:700; color:var(--accent-ink); font-size:14px}
+.d{font-family:var(--fm); font-size:12.5px; color:var(--faint)}
+.th{font-size:14.5px; color:var(--ink-2); overflow-wrap:break-word}
+.pit{font-family:var(--fm); font-size:11.5px; color:var(--faint); white-space:nowrap}
+.kind{
+  font-family:var(--fm); font-size:10.5px; letter-spacing:.06em; color:var(--muted);
+  border:1px solid var(--rule); border-radius:3px; padding:1px 6px; white-space:nowrap;
+}
+footer{
+  margin-top:56px; padding-top:20px; border-top:2px solid var(--ink);
+  font-size:13.5px; color:var(--muted); line-height:1.9;
+}
+footer a{color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--rule-2)}
+footer a:hover{border-bottom-color:var(--accent)}
+footer .fr{
+  font-family:var(--fm); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  padding-bottom:10px; margin-bottom:14px; border-bottom:1px solid var(--rule); color:var(--faint);
+}
+.warn{
+  margin:26px 0 0; padding:14px 18px; border-left:3px solid var(--rule-strong);
+  background:var(--surface-2); border-radius:0 8px 8px 0;
+  font-size:13.5px; color:var(--muted); line-height:1.85;
+}
+@media (max-width:720px){
+  .wrap{padding:36px 16px 64px}
+  ul.list li.row a{grid-template-columns:52px minmax(0,1fr); gap:6px 12px}
+  .d{order:2}
+  .th{grid-column:2; font-size:14px}
+  .pit,.kind{display:none}
+  .card{padding:20px 18px}
+  .stats{gap:16px}
+}
+@media (max-width:420px){
+  .wrap{padding:26px 12px 52px}
+  h1{font-size:clamp(24px,7.4vw,32px)}
+  .lede{font-size:15.5px}
+  .card{padding:18px 15px}
+  ul.abs li{font-size:15px; padding-left:17px}
+  ul.list li.row a{padding:11px 6px 11px 10px; grid-template-columns:46px minmax(0,1fr)}
+  .no{font-size:13px}
+  .btn{padding:8px 15px; font-size:13.5px}
+}
+@media print{
+  body::before{display:none}
+  .wrap{max-width:none; padding:0}
+  .card,ul.list li.row a{box-shadow:none}
+  .btn{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">
+    <span>AI 免费内容与权益速递</span>
+    <span>更新至 <em>第 006 期</em></span>
+  </div>
+  <h1>每天，哪些 AI 能力可以免费用</h1>
+  <p class="lede">
+    把散落在官方公告、模型卡、平台招募页和社区帖里的<strong>免费额度、免费内容与分发入口</strong>
+    逐条核实，写清口径、标好截止日期。<strong>只做增量与纠错</strong>，不重复往期已固化的内容。
+  </p>
+  <div class="stats">
+    <span><b>6</b>期</span>
+    <span><b>68,019</b>字</span>
+    <span><b>67</b>张表</span>
+    <span><b>182</b>条信源</span>
+  </div>
+</header>
+
+<section>
+  <div class="slabel">最新一期</div>
+  <article class="card big">
+  <div class="tagline"><span class="dot"></span>最新一期</div>
+  <div class="metaline"><b>第 006 期</b><span class="sep">·</span>2026-09-17<span class="sep">·</span>43,688 字<span class="sep">·</span>15 张表</div>
+  <h2><a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC006%E6%9C%9F-2026-09-17.html">匿名模型与分发入口续集</a></h2>
+  <ul class="abs"><li>本期最大新增（免费 API 线）：Union Alpha 匿名隐身模型 9/16 上线 OpenRouter + OpenCode（同步上 Cline、Cloudflare），限免一周（约至 9/23），容量宣称 5 万亿 tokens/天、262K 上下文 / 131K 输出、支持图片输入与工具调用。⚠️ 同一天条款就分叉：OpenCode 写&quot;零留存、不训练&quot;，OpenRouter 写&quot;可能留存、但不用于训练&quot;——在哪用它，就受哪家条款管。</li><li>本期最大新增（免费发布线）：快手正式宣布将推出&quot;AI 互动内容&quot;创作能力，首批合作创作者招募已开放，锁定互动剧情 / AI 角色对话 / AI 互动轻应用三个品类。国内内容平台的 AI 分发入口从 5 家变 6 家。</li><li>口径大幅上修：B站 Toy 总体验量已达 2956 万次（005 期记的是&quot;1 个多月 850 万+&quot;）；小红书已聚集超 16 万 AI 开发者&quot;公开构建&quot;、Skill 话题曝光超 6 亿。</li><li>本期最该知道的一条成本现实：AI 漫剧博主集体停更——9/1《微短剧发展管理办法》落地，叠加算力成本从&quot;每小时 500 元&quot;涨到&quot;每秒一元多&quot;，一集两分半成本约 400–500 元，有博主 4 部新剧完播率从 42% 掉到 19%、无一回本。&quot;免费内容&quot;这条线上的免费，是有天花板的。</li></ul>
+  <div class="acts"><a class="btn primary" href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC006%E6%9C%9F-2026-09-17.html">读网页版 →</a><a class="btn" href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC006%E6%9C%9F-2026-09-17.md">看 Markdown</a></div>
+</article>
+</section>
+
+<section>
+  <div class="slabel">全部 6 期 · 新的在前</div>
+  <ul class="list">
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC005%E6%9C%9F-2026-09-16.html">
+    <span class="no">005</span>
+    <span class="d">09-16</span>
+    <span class="th">分发入口专题版</span>
+    <span class="pit">避坑 16–20</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC004%E6%9C%9F-2026-09-15.md">
+    <span class="no">004</span>
+    <span class="d">09-15</span>
+    <span class="th">晚间信源扩版</span>
+    <span class="pit">避坑 12–15</span>
+    <span class="kind">Markdown</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC003%E6%9C%9F-2026-09-15.md">
+    <span class="no">003</span>
+    <span class="d">09-15</span>
+    <span class="th">刷新版</span>
+    <span class="pit">避坑 1–11</span>
+    <span class="kind">Markdown</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC002%E6%9C%9F-2026-09-14-%E5%A4%8D%E6%A0%B8%E7%89%88.md">
+    <span class="no">002</span>
+    <span class="d">09-14</span>
+    <span class="th">复核更新版</span>
+    <span class="pit">避坑 1–10</span>
+    <span class="kind">Markdown</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-2026-09-14.md">
+    <span class="no">001</span>
+    <span class="d">09-14</span>
+    <span class="th">AI 免费内容发布 · 免费额度 · 免费内容生成工具</span>
+    <span class="pit">避坑 1–7</span>
+    <span class="kind">Markdown</span>
+  </a>
+</li>
+  </ul>
+</section>
+
+<div class="warn">
+  <strong>说明</strong>：这是一份人工核实过的情报整理，<strong>不构成投资、法律或商业决策建议</strong>。
+  厂商条款与额度随时会变，请以官方页面为最终依据。<br>
+  其中「免费」区分三种不同口径：<strong>零价格</strong> / <strong>限时试用</strong> / <strong>不限量但留存数据</strong>，
+  报告里会在需要处写明条款分叉点。
+</div>
+
+<footer>
+  <div class="fr"><span>AI 免费内容与权益速递</span><span>2026-09-14 ~ 2026-09-17</span></div>
+  <p>本页由 <code>.workbuddy/build_index_web.py</code> 自动生成，请勿手工编辑。</p>
+  <p>仓库：<a href="https://github.com/Lavie-purple/ai-free-content-digest">Lavie-purple/ai-free-content-digest</a></p>
+</footer>
+
+</div>
+</body>
+</html>

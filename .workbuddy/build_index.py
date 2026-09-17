@@ -115,12 +115,19 @@ def main():
                  ("check_deadlines.py", "截止巡检：过期未更新 / N 天内到期（`--days` / `--today`）"),
                  ("check_frozen.py", "出刊前防重复：比对已固化条目库，有重复则 exit 1"),
                  ("build_source_hits.py", "信源命中统计 → 回写台账 + 导出 CSV"),
-                 ("build_index.py", "重建本索引")]:
+                 ("build_index.py", "重建本索引（INDEX.md）"),
+                 ("build_index_web.py", "生成站点首页 index.html（GitHub Pages 根路径入口）")]:
         L.append("| `%s` | %s |" % (s, d))
     L.append("")
-    L.append("## 版本控制")
+    L.append("## 版本控制与线上地址")
     L.append("")
-    L.append("远端私仓：`Lavie-purple/ai-free-content-digest`（GitHub，private）")
+    L.append("远端仓库：`Lavie-purple/ai-free-content-digest`（GitHub，**public**）")
+    L.append("")
+    L.append("站点首页（GitHub Pages）：https://lavie-purple.github.io/ai-free-content-digest/")
+    L.append("")
+    L.append("> 根路径由 `index.html` 提供入口（`build_index_web.py` 生成）。"
+             "GitHub Pages 的根路径只认 `index.html` / `index.md`，"
+             "而日报文件名带中文，故必须显式生成此文件，否则根路径会 404。")
     L.append("")
 
     io.open(OUT, "w", encoding="utf-8", newline="\n").write("\n".join(L))
