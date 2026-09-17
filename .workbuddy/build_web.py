@@ -116,7 +116,7 @@ def render_table(rows, section_no):
     body = [cells(r) for r in rows[2:]]
     ncol = len(head)
     ledger = (section_no == "04")
-    cls = "tbl" + (" ledger" if ledger else "")
+    cls = "tbl" + (" ledger" if ledger else "") + (" c%d" % ncol)
     out = ['<div class="tblwrap%s">' % (" scrolly" if ledger else "")]
     if ledger:
         out.append(
@@ -146,15 +146,32 @@ def render_table(rows, section_no):
 
     # 首列条目名若属于「中短专名」区间，给一个按内容估出的最小宽度，
     # 避免被其它长列挤到中文逐字换行。序号列（#）与超长说明列不处理。
+    #
+    # 上限 210 是**桌面端**的约束：正文栏就 900 来 px，首列再宽会把整表撑出容器
+    # （没有横滑兜底）。手机端则相反——表格本来就待在横滑容器里，横滑 200px 和
+    # 340px 都是横滑，但把「ZDTaichu5.0」这种无空格专名压成逐字竖排是没法读的。
+    # 所以 210 < need <= 320 这段只输出手机端下限 --w1m，不动桌面版。
     w1 = 0
+    w1m = 0
     first_head = head[0].strip() if head else ""
     if first_head not in ("#", "序号", "") and body:
         need = max(disp_w(r[0]) for r in body)
         if 92 <= need <= 210:
             w1 = int(need + 33)
+        # 手机端下限门槛压到 40px（约 3 个中文字）：手机屏只有 375px，
+        # 「小红书」这种 3 字列会被压到 58px、只能放 2 个字而折成两行。
+        # 上限仍是 320px —— 更长的说明性首列折行是正常排版，不该为它把表撑到离谱。
+        # 序号列（#）已在上面按表头名排除，不受影响。
+        if 40 <= need <= 320:
+            w1m = int(need + 33)
 
-    tcls = cls + (" w1" if w1 else "")
-    style = ' style="--w1:%dpx"' % w1 if w1 else ""
+    tcls = cls + (" w1" if w1 else "") + (" w1m" if w1m else "")
+    vars_ = []
+    if w1:
+        vars_.append("--w1:%dpx" % w1)
+    if w1m:
+        vars_.append("--w1m:%dpx" % w1m)
+    style = (' style="%s"' % ";".join(vars_)) if vars_ else ""
     out.append('<table class="%s"%s>' % (tcls, style))
     out.append("<thead><tr>" + "".join(
         "<th%s>%s</th>" % (' data-col="%s"' % kinds[i] if kinds[i] else "", inline(h))
@@ -173,14 +190,18 @@ def render_table(rows, section_no):
                         '<span class="st-txt">%s</span></td>' % (st, badge or "\u25CB", inline(rest))
                     )
                 else:
-                    tds.append("<td>%s</td>" % inline(c))
+                    # 手机端会把截止表拆成一张张卡片，靠 data-col 认列——比 nth-child 稳，
+                    # 换一期表头顺序变了也不会错位
+                    tds.append('<td data-col="%s">%s</td>' % (kinds[i], inline(c)))
             out.append('<tr data-st="%s">%s</tr>' % (st, "".join(tds)))
     else:
         for r in body:
             r = (r + [""] * ncol)[:ncol]
             out.append("<tr>" + "".join("<td>%s</td>" % inline(c) for c in r) + "</tr>")
     out.append("</tbody></table>")
-    out.append('<p class="scrollhint" aria-hidden="true">\u2190 表格可横向滑动</p>')
+    # 手机端 2 列表会被改成纵向堆叠、不再横滑，所以只给 >=3 列的表输出滑动手势提示
+    if ncol > 2:
+        out.append('<p class="scrollhint" aria-hidden="true">\u2194 表格可左右滑动</p>')
     out.append("</div>")
     return "\n".join(out)
 
@@ -360,7 +381,7 @@ PAGE = """<!DOCTYPE html>
 <html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>__TITLE__ · 第 __ISSUE__ 期</title>
 <meta name="description" content="__METAS__">
 <meta name="color-scheme" content="light dark">
@@ -393,6 +414,9 @@ PAGE = """<!DOCTYPE html>
   --s1:4px; --s2:8px; --s3:16px; --s4:24px; --s5:40px; --s6:64px; --s7:96px;
   --r1:3px; --r2:8px; --r3:14px;
   --ease:cubic-bezier(.16,1,.3,1); --fast:170ms; --base:340ms;
+  /* 顶栏与筛选条的实际高度：抽屉定位、吸顶偏移都要跟它们对齐。
+     初值只是兜底，页面加载后由 JS 量出真值覆盖（字号/换行都会改变高度）。 */
+  --tb-h:57px; --chips-h:47px;
 }
 html[data-theme="dark"]{
   --bg:#131210; --bg-2:#191713; --surface:#1c1a16; --surface-2:#232019;
@@ -413,6 +437,9 @@ body{
   font-family:var(--fu); font-size:var(--fs-base); line-height:1.9;
   font-feature-settings:"kern" 1;
   text-rendering:optimizeLegibility;
+  /* 长英文专名 / URL / 模型 ID 在窄屏会把行撑破（320px 实测溢出 4px）。
+     用 break-word 而不是 anywhere：后者会改变 min-content，连带把表格列宽算歪。 */
+  overflow-wrap:break-word;
 }
 body::before{ /* 氛围层：纸面暖光 */
   content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
@@ -495,6 +522,7 @@ code{
 }
 .iconbtn:hover{border-color:var(--accent); color:var(--accent-ink); transform:translateY(-1px)}
 #menuBtn{display:none}
+#searchBtn{display:none}   /* 只在手机端露出来：点开一条全宽搜索栏 */
 .progress{position:fixed; top:0; left:0; height:2px; width:0; background:var(--accent); z-index:31; transition:width 90ms linear}
 
 /* ============================================================ 刊头 */
@@ -503,6 +531,8 @@ code{
   display:flex; justify-content:space-between; align-items:baseline; gap:var(--s3);
   font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.14em; color:var(--muted);
   text-transform:uppercase; padding-bottom:var(--s2); flex-wrap:wrap;
+  /* 窄屏换行时避免把「…增量与纠错口径」拆成只剩一个「径」字的孤行 */
+  text-wrap:pretty;
 }
 .mh-top em{font-style:normal; color:var(--accent-ink)}
 .mh-rule{height:0; border-top:3px solid var(--ink); border-bottom:1px solid var(--ink); padding-top:3px; margin-bottom:var(--s4)}
@@ -585,6 +615,7 @@ main strong{font-weight:700; color:var(--ink)}
   content:"0" counter(sum);
   position:absolute; left:var(--s3); top:var(--s3);
   font-family:var(--fm); font-size:20px; font-weight:700; color:var(--accent); line-height:1.1;
+  white-space:nowrap;   /* 窄屏下「01」会被折成上下两个数字，竖排数字看着像排版事故 */
 }
 .summary .ul{counter-reset:sum}
 
@@ -673,6 +704,9 @@ tr[data-st="warn"] .st-txt{color:var(--plan)}
 tr[data-st="over"] .st-txt{color:var(--over)}
 .chips{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:10px var(--s3);
   background:var(--surface-2); border-bottom:1.5px solid var(--rule-strong); position:sticky; top:0; z-index:3}
+/* 截止表待在可滚动容器里，容器顶部已经被 chips 占住——表头要吸在它下方，
+   否则两者都 top:0、chips 的 z-index 更高，表头第一行会被整个盖住。 */
+.tblwrap.scrolly .tbl thead th{top:var(--chips-h)}
 .chips-label{font-family:var(--fm); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin-right:4px}
 .chip{
   font-family:var(--fu); font-size:12.5px; color:var(--ink-2); cursor:pointer;
@@ -728,7 +762,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
   /* 抽屉：外层 fixed + overflow:hidden 当裁剪盒，内层才平移。
      若直接平移 fixed 的 .rail，它会把文档 scrollWidth 撑宽 326px（实测）。 */
   .drawerwrap{
-    position:fixed; inset:56px 0 0 0; overflow:hidden; z-index:29;
+    position:fixed; inset:var(--tb-h) 0 0 0; overflow:hidden; z-index:29;
     visibility:hidden; pointer-events:none; transition:visibility 0s linear var(--base);
   }
   body.nav-open .drawerwrap{visibility:visible; pointer-events:auto; transition-delay:0s}
@@ -760,14 +794,173 @@ mark.hl.cur{background:var(--accent); color:#fff}
   .ol.big li{grid-template-columns:26px 1fr; gap:var(--s2)}
   .summary .ul li{padding-left:52px}
 }
+/* ---------- 手机（<=600px）：换一套阅读形态，不是把桌面版等比缩小 ----------
+   三处结构性改动，都对着实测出来的毛病改：
+   ① 搜索不再隐藏。原先 <=520px 直接 display:none，手机上等于没有搜索；
+      现在收成一个图标，点开是一条全宽搜索栏（绝对定位挂在顶栏下沿，不撑高顶栏）。
+   ② 2 列表改成纵向堆叠卡片。手机上横滑表格很难用，而 2 列表堆叠后既不用滑、
+      又刚好把「名称 → 说明」的层级关系表达出来。
+   ③ 3 列及以上继续横滑，但首列粘住——横滑时不丢参照物，知道自己看的是哪一行。
+   另外把触控目标放大到 44px（图标按钮原 38px、筛选 chip 原 26px 高，都偏小）。
+*/
 @media (max-width:600px){
+  :root{--fs-base:17px; --s3:14px; --s4:20px; --s5:26px; --s6:34px; --s7:48px}
   .mh-num{display:none}
+
+  /* 顶栏与搜索 */
+  .tb-in{min-height:52px}
+  #searchBtn{display:inline-grid}
+  .iconbtn{width:44px; height:44px; font-size:16px}
+  .tb-tools{gap:6px}
+  .search{
+    position:absolute; left:0; right:0; top:100%; z-index:35;
+    display:none; padding:10px var(--s3);
+    background:var(--surface); border-bottom:1px solid var(--rule-2); box-shadow:var(--shadow);
+  }
+  body.search-open .search{display:flex}
+  .search input{width:100%; font-size:16px; padding:11px 14px 11px 34px; -webkit-appearance:none; appearance:none}
+  .search input:focus{width:100%}
+  .search .si{left:calc(var(--s3) + 12px)}
+  .search input:not(:placeholder-shown){padding-right:104px}
+  /* 计数与上下条按钮要能点得中：原尺寸 11px/18px 高，手机上根本按不准 */
+  .search .sc{right:10px; gap:6px; font-size:13px}
+  .search .sc button{min-width:34px; min-height:34px; font-size:14px; border-radius:6px}
+
+  /* 刊头 */
+  h1.mh-t{font-size:27px; line-height:1.22}
+  .mh-top{font-size:10.5px; letter-spacing:.1em; gap:var(--s2)}
+  .mh-sub{font-size:13.5px; margin-bottom:var(--s4)}
+  .pubnote{padding:var(--s3)}
+  .pubnote p{font-size:14.5px}
+
+  /* 目录抽屉条目放大 */
+  .toc-a{padding:11px var(--s2)}
+
+  /* 章节 */
+  .sec{scroll-margin-top:calc(var(--tb-h) + 10px)}
+  .sec h2{font-size:21px}
+  h3{font-size:17px; margin:var(--s4) 0 var(--s3)}
+
+  /* 摘要卡片 */
+  .summary .ul li{padding:13px var(--s3) 13px 46px; font-size:15px; line-height:1.78}
+  .summary .ul li::before{font-size:17px; top:13px}
+
+  /* 列表 */
+  .ul li{padding-left:19px}
+  .ol{gap:var(--s2)}
+  .ol li{grid-template-columns:28px 1fr; gap:10px}
+  .ol.big li{padding:13px 14px; grid-template-columns:24px 1fr; gap:10px}
+  .ol.big .lin{font-size:19px}
+
+  /* 表格：3 列以上横滑 + 首列粘住 */
+  /* 先解开 .tbl 自己的 overflow:hidden。它原本只为了裁圆角，但 overflow:hidden
+     同样会把自己变成「滚动容器」，于是 td 的 sticky 以 table 为参照（而 table
+     并不滚动）——首列粘性会静默失效，横滑时首列照样滚走（实测截图确认）。
+     手机上优先保首列粘住，圆角让位（表格改直角，肉眼几乎无感）。 */
+  .tbl{overflow:visible; border-radius:0}
+  .tblwrap:not(.scrolly){overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .tblwrap:not(.scrolly) .tbl{min-width:600px}
+  .tblwrap:not(.scrolly) .tbl:not(.c2) tbody td:first-child,
+  .tblwrap.scrolly .tbl tbody td:first-child{
+    position:sticky; left:0; z-index:1;
+    background:var(--surface); box-shadow:1px 0 0 var(--rule-2);
+  }
+  .tblwrap:not(.scrolly) .tbl:not(.c2) thead th:first-child,
+  .tblwrap.scrolly .tbl thead th:first-child{left:0; z-index:4; background:var(--surface-2)}
+  /* 首列装长专名的表（桌面端放不下、只给了手机端下限）：放宽，别压成逐字竖排 */
+  .tblwrap:not(.scrolly) .tbl.w1m:not(.c2) tbody td:first-child,
+  .tblwrap.scrolly .tbl.w1m tbody td:first-child{
+    min-width:var(--w1m); overflow-wrap:break-word;
+  }
+  .scrollhint{text-align:left}
+
+  /* 表格：2 列纵向堆叠成卡片，彻底不横滑 */
+  .tblwrap:not(.scrolly) .tbl.c2,
+  .tblwrap.scrolly .tbl.c2{
+    display:block; min-width:0; border:0; background:transparent; border-radius:0;
+  }
+  .tbl.c2 thead{display:none}
+  .tbl.c2 tbody{display:block}
+  .tbl.c2 tbody tr{
+    display:block; background:var(--surface); border:1px solid var(--rule);
+    border-radius:var(--r2); padding:12px 14px; margin-bottom:10px; box-shadow:var(--shadow);
+  }
+  .tbl.c2 tbody tr:last-child{margin-bottom:0}
+  .tbl.c2 tbody tr:hover{background:var(--surface)}
+  .tbl.c2 tbody td{display:block; border:0; padding:0; background:transparent; box-shadow:none}
+  .tbl.c2 tbody td:first-child{
+    position:relative; padding-left:15px; margin-bottom:5px;
+    font-family:var(--fu); font-weight:700; font-size:14.5px; color:var(--ink);
+  }
+  .tbl.c2 tbody td:first-child::before{
+    content:""; position:absolute; left:0; top:.62em; width:7px; height:1.5px; background:var(--accent);
+  }
+
+  /* 截止表筛选条：改成一行横滑，避免换行成三四排把表格挤下去 */
+  .chips{
+    flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; padding:9px var(--s3); gap:7px;
+    border-radius:var(--r2) var(--r2) 0 0;
+  }
+  .chips::-webkit-scrollbar{display:none}
+  .chips-label,.chips-count{display:none}
+  .chip{flex:0 0 auto; padding:9px 14px; font-size:13px; min-height:40px}
+  .chip b{font-size:11px}
+
+  /* 截止表：手机上拆成一张张卡片，不再横滑。
+     两个理由：① 它最关键的信息是「什么时候到期」，而截止列在横滑视口之外，
+        用户得先横滑才看得到，跟这张表的用途正好相反；
+     ② 横滑时行高被状态列的长文本撑开，首列只有一行字、下面一大片空白。
+     拆成卡片后「活动 / 截止 / 状态」三行一屏读完，状态色条也还在。
+     列定位靠编译期打好的 data-col，不依赖第几列。 */
+  .tblwrap.scrolly{
+    max-height:none; overflow:visible; border:0; background:transparent; box-shadow:none;
+  }
+  .tblwrap.scrolly .chips{top:var(--tb-h)}   /* 吸在顶栏下沿，滚到哪都能筛 */
+  .tbl.ledger{display:block; min-width:0; border:0; background:transparent; table-layout:auto}
+  .tbl.ledger thead{display:none}
+  .tbl.ledger tbody{display:block}
+  .tbl.ledger tbody tr{
+    /* 日期列用 max-content：状态列文字很长时，若两列是 1fr/auto，
+       状态列会把日期列挤到几乎为 0，日期被压成「9\n/\n1\n7」逐字竖排 */
+    display:grid; grid-template-columns:max-content minmax(0,1fr); gap:5px 10px; align-items:baseline;
+    background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2);
+    padding:12px 14px; margin-bottom:9px;
+  }
+  .tbl.ledger tbody tr:last-child{margin-bottom:0}
+  .tbl.ledger tbody td{display:block; border:0; padding:0; background:transparent; box-shadow:none}
+  .tbl.ledger tbody td[data-col="body"]{grid-column:1 / -1; color:var(--ink); font-weight:600; font-size:14.5px}
+  .tbl.ledger tbody td[data-col="date"]{
+    grid-column:1; white-space:nowrap;
+    font-family:var(--fm); font-size:12.5px; color:var(--muted);
+  }
+  .tbl.ledger tbody td[data-col="st"]{grid-column:2; text-align:right; font-size:13px}
+  .tbl.ledger tbody tr:hover{background:var(--surface)}
+  /* 截止表已经拆成卡片、不再横滑，滑动提示在这里是错的 */
+  .tblwrap.scrolly .scrollhint{display:none}
+
+  /* 悬浮控件与刘海/小白条 —— env() 在不支持时整条声明被丢弃，自动退回上面的值 */
+  .fab{right:calc(14px + env(safe-area-inset-right)); bottom:calc(14px + env(safe-area-inset-bottom))}
+  .tb-in{padding-left:calc(var(--s3) + env(safe-area-inset-left));
+         padding-right:calc(var(--s3) + env(safe-area-inset-right))}
+  .masthead,.shell,.foot{
+    padding-left:calc(var(--s3) + env(safe-area-inset-left));
+    padding-right:calc(var(--s3) + env(safe-area-inset-right));
+  }
+  .foot{padding-bottom:calc(var(--s6) + env(safe-area-inset-bottom))}
+  .search{padding-left:calc(var(--s3) + env(safe-area-inset-left));
+          padding-right:calc(var(--s3) + env(safe-area-inset-right))}
 }
-@media (max-width:520px){
-  .search{display:none}
-  .chips{gap:5px}
-  .chips-label{display:none}
-  .chips-count{margin-left:0}
+/* 超窄屏（<=360px：iPhone SE 一代、小屏安卓）再收一档。
+   断点取 360 而不是 380，是为了把 375/390/414 这些在售机型都留在上面那一档
+   用 27px 主标题——375 恰恰是 iPhone SE 2/3 的宽度，也是相当常见的屏幕。 */
+@media (max-width:360px){
+  h1.mh-t{font-size:24px}
+  .mh-top{font-size:9.5px}
+  .tblwrap:not(.scrolly) .tbl{min-width:560px}
+  .tblwrap:not(.scrolly) .tbl.c2{min-width:0}
+  .summary .ul li{padding-left:42px}
+  .summary .ul li::before{font-size:16px}
 }
 
 /* ============================================================ 打印 */
@@ -794,6 +987,20 @@ mark.hl.cur{background:var(--accent); color:#fff}
   .tbl thead th{position:static; background:#fff; color:#000; border-bottom:1pt solid #000; font-size:8pt}
   .tbl tbody td{border-bottom:.5pt solid #666; padding:5px 7px}
   .tbl tbody tr{box-shadow:none !important; opacity:1 !important; break-inside:avoid}
+  /* 手机端那套堆叠/粘性样式在纸上要退回成真表格（窄屏下打印时两条媒体查询会同时命中，
+     print 在后面所以能覆盖；仍加 !important 防字号相关的特异性意外） */
+  .tbl.c2{display:table !important; border:1pt solid #000 !important}
+  .tbl.c2 thead{display:table-header-group !important}
+  .tbl.c2 tbody{display:table-row-group !important}
+  .tbl.c2 tbody tr{display:table-row !important; margin-bottom:0 !important; padding:0 !important}
+  .tbl.c2 tbody td{display:table-cell !important; padding:5px 7px !important}
+  .tbl.c2 tbody td:first-child::before{content:none !important}
+  .tbl.ledger{display:table !important; border:1pt solid #000 !important}
+  .tbl.ledger thead{display:table-header-group !important}
+  .tbl.ledger tbody{display:table-row-group !important}
+  .tbl.ledger tbody tr{display:table-row !important; margin:0 !important; padding:0 !important}
+  .tbl.ledger tbody td{display:table-cell !important; padding:5px 7px !important}
+  .tbl tbody td:first-child,.tbl thead th:first-child{position:static !important; box-shadow:none !important}
   .st{background:#000 !important; border:0}
   .ledger tbody tr{box-shadow:none !important}
   .tbl a,.tbl a:hover{color:#000}
@@ -813,6 +1020,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
     <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#__ISSUE__</b></span>
     <nav class="tb-nav" id="topnav" aria-label="章节导航">__NAV__</nav>
     <div class="tb-tools">
+      <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">\u2315</button>
       <div class="search">
         <span class="si" aria-hidden="true">\u2315</span>
         <input id="q" type="search" placeholder="全文检索…" aria-label="全文检索" autocomplete="off">
@@ -1004,6 +1212,36 @@ __BODY__
   });
   document.getElementById("qnext").addEventListener("click",function(){jump(1);});
   document.getElementById("qprev").addEventListener("click",function(){jump(-1);});
+
+  /* ---------- 手机端搜索条：<=600px 时搜索收成一个图标，点开成全宽搜索栏 ---------- */
+  var sBtn=document.getElementById("searchBtn");
+  function closeSearch(){
+    document.body.classList.remove("search-open");
+    sBtn.textContent="\u2315";
+    sBtn.setAttribute("aria-expanded","false");
+  }
+  sBtn.addEventListener("click",function(){
+    var open=document.body.classList.toggle("search-open");
+    sBtn.textContent=open?"\u2715":"\u2315";
+    sBtn.setAttribute("aria-expanded",open?"true":"false");
+    if(open) q.focus();
+  });
+  document.addEventListener("keydown",function(e){
+    /* 输入框内的 Esc 交给上面那段处理（只清空，不关面板） */
+    if(e.key==="Escape" && document.body.classList.contains("search-open") && document.activeElement!==q) closeSearch();
+  });
+
+  /* ---------- 量顶栏与筛选条的实际高度写回 CSS 变量 ----------
+     --tb-h 决定抽屉从哪开始、锚点跳转留多少空；--chips-h 决定截止表表头吸在哪。
+     两者都随字号与是否换行变化，写死数值迟早对不上。 */
+  function syncMetrics(){
+    var tb=document.querySelector(".topbar"), ch=document.querySelector(".chips");
+    if(tb) root.style.setProperty("--tb-h", tb.offsetHeight+"px");
+    if(ch) root.style.setProperty("--chips-h", ch.offsetHeight+"px");
+  }
+  syncMetrics();
+  window.addEventListener("resize",syncMetrics);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(syncMetrics);
 
   /* ---------- 移动端目录 ---------- */
   var menuBtn=document.getElementById("menuBtn");

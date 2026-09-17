@@ -122,15 +122,18 @@ Markdown 之外，每期可选生成一份**单文件自包含**的网页版：
 
 ## 工具链：把「不能凭估」变成脚本
 
-日报里所有能和过去对不上的数字，都必须**由脚本核对**，不靠人眼。9 个脚本全部支持
+日报里所有能和过去对不上的数字，都必须**由脚本核对**，不靠人眼。13 个脚本全部支持
 **不传参自动取最新一期**，不需要改路径。
 
 ```bash
+python .workbuddy/run_all.py            # 一把跑完 build + probe + verify（日志是干净的 UTF-8）
 python .workbuddy/build_web.py          # 编译最新一期 → 单文件网页版
 python .workbuddy/verify_web.py         # 必跑：判定 ALL GREEN 才继续
 python .workbuddy/check_frozen.py       # 出刊前：比对已固化条目，有重复直接 exit 1
 python .workbuddy/check_deadlines.py    # 出刊前：巡检过期未更新 / N 天内到期
 python .workbuddy/build_index.py        # 出刊后：重建期号索引
+python .workbuddy/probe_mobile.py       # 改版式后：320/360/375/414 四档手机视口量测
+python .workbuddy/snap_mobile.py        # 改版式后：出 11 张手机端截图
 ```
 
 | 脚本 | 它防的是什么 |
@@ -139,12 +142,18 @@ python .workbuddy/build_index.py        # 出刊后：重建期号索引
 | `check_frozen.py` | **重复往期** —— 每期只做增量，靠它拦住"这条上期写过了" |
 | `check_deadlines.py` | **截止日期写错** —— 过期却没标"已结束"、或即将到期却没提醒 |
 | `probe_layout.py` | **版式退化** —— 表格列被压成中文逐字换行、搜索框窄到输不进字、装饰大字压住正文 |
+| `probe_mobile.py` | **手机端退化** —— 搜索被整个隐藏、触控目标小于 40px、横滑时首列滚走、窄屏横向溢出 |
+| `snap_mobile.py` | 手机端**视觉回归** —— iframe 造窄视口出图，靠 md5 判断镜头之间是否真的拍出了差异 |
 | `audit_color.py` | **配色语义混淆** —— 两个不同语义用了同一个颜色、小字对比度不达 AA |
 | `build_source_hits.py` | 台账与正文脱钩 —— 命中情况每次从正文重建，**幂等**（连跑字节一致） |
 
 > UI 审查一律**量 DOM 不量截图**：把指标写进 `document.title` 再用无头浏览器 `--dump-dom` 抓回。
 > 判据都带阈值（例如"首列过窄"要同时满足：实宽 < 140px + 行高 > 130px + 内容 ≥ 4 字真文字 + 满足度 < 90%），
 > 否则会把「`#` 序号列天生就窄」这类正常情况误报成缺陷。
+>
+> 手机视口**不能**用 `--window-size` 直接量：Windows 下 Edge/Chrome 有约 490px 的最小窗口宽度，
+> 设 320 / 375 / 414 会被静默抬到 489，三档数字一模一样。两个探针都改用 **iframe 造窄视口**，
+> 媒体查询按 iframe 宽度求值才是真的手机版式。
 
 ---
 
@@ -157,7 +166,7 @@ python .workbuddy/build_index.py        # 出刊后：重建期号索引
 | 内容保真 | `verify_web.py` 输出 `VERDICT: ALL GREEN`（表格逐表一致、缺失片段 0、外部引用 0） |
 | 防重复 | `check_frozen.py` 高危 0 条，`exit 0` |
 | 截止日期 | 过期未标的 **0 条**；对账后条目数与 CSV 一致 |
-| 版式 | 1440 / 560 两档视口均无横向溢出，无首列逐字换行 |
+| 版式 | 桌面 1440 / 1024 与窄屏 560 无横向溢出、无首列逐字换行；**手机 320 / 360 / 375 / 414 四档**同样无溢出，触控目标 ≥ 40px，横滑表格首列粘住 |
 | 配色 | 语义色色距全部 ≥ 40；WCAG AA 4.5 全过 |
 | 编号连续 | 避坑编号接着上一期编，不重置 |
 

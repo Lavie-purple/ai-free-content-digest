@@ -56,6 +56,22 @@
 | `check_frozen.py [src]` | 防重复往期，有 🔴 高危则 **exit 1** | 出刊前 |
 | `build_source_hits.py [--dry]` | 信源命中 → 回写台账 + CSV（幂等） | 出刊后 |
 | `build_index.py` | 重建根目录 `INDEX.md` | 出刊后 |
+| `build_index_web.py` | 生成 GitHub Pages 根目录 `index.html` | 改首页后 |
+| `probe_mobile.py [src] [--widths 320,360,375,414] [--out f]` | **窄视口** DOM 量测（iframe 模拟），两份产物共用 | 改移动端版式后 |
+| `snap_mobile.py` | 375×812 手机截图（日报 8 张 + 首页 3 张），iframe 内滚动 + md5 去重 | 改移动端版式后 |
+| `run_all.py [job...]` | 统一入口，Python 捕获 stdout 写 UTF-8 日志到 `_shot/_<job>.log` | 随时 |
+
+### 移动端适配（2026-09-17 定稿）
+
+- **Windows 上 `--window-size` 量不了窄视口**：Edge/Chrome 最小窗口宽约 **490px**，320/375/414 全被静默夹到 489px。`--force-device-scale-factor` 只改 `devicePixelRatio`。**唯一可行路径是用 iframe 模拟宽度**（媒体查询按 iframe 宽求值），子页 `postMessage` → 父页写 `document.title` → `--dump-dom` 抓回。这就是 `probe_mobile.py` 的存在理由。
+- **三档表处理策略**：2 列 → 纵向堆叠卡片（`thead{display:none}`）；3 列及以上 → 横向滚动 + `td{position:sticky;left:0}` 首列吸附；**截止表（台账）→ 卡片**，因为最关键的一列（截止日期）正好落在横滑视口之外，横滑等于藏起最重要信息。
+- **`.tbl{overflow:hidden}` 会静默废掉 `td` 的 sticky**：表格自己成了滚动容器，sticky 参照它而非外层滚动器。CSS 不报错、看截图才发现首列跟着滚走。手机端块里必须 `.tbl{overflow:visible;border-radius:0}`。**验证法**：`wrap.scrollLeft=120` 后重量 `td` 的 `left`，不变才算粘住。
+- **搜索框窄屏改「图标 → 展开全宽条」**：常驻会被压到只剩 26px 可用文本。输入框字号 **必须 ≥16px**，否则 iOS Safari 自动放大整页。
+- **台账卡片列宽用 `grid-template-columns:max-content minmax(0,1fr)`**，不能用 `1fr auto`——长状态文字会把日期列挤成逐字换行。
+- **触控目标 ≥40px**；`viewport-fit=cover` + `env(safe-area-inset-*)`（不支持的浏览器整条丢弃该声明，自动回退，无需 `@supports`）。
+- **头部高度别写魔法数字**：JS `syncMetrics()` 从活的 `offsetHeight` 写 `--tb-h`/`--chips-h`，load/resize/`fonts.ready` 三处调用。
+- 中文孤字/拆字：`text-wrap:pretty` / `text-wrap:balance`，或直接插 **WORD JOINER `&#8288;`**。
+- 判定线：`verify_web.py` 仍须 `ALL GREEN`；`probe_mobile.py` 在 320/360/375/414 四档**横向溢出必须为 0**、触控偏小为 0、首列 `[粘住]`。
 
 ### UI 审查的量化口径（2026-09-17 建立，两个脚本留在工具链里）
 

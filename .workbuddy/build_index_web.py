@@ -56,8 +56,12 @@ def theme_of(text):
     return m.group(1).strip() if m else "—"
 
 
-def abstract_of(text, n=4):
-    """从「摘要（3 秒版）」里取前 n 条要点，去掉 markdown 标记。"""
+def abstract_of(text, n=4, maxlen=110):
+    """从「摘要（3 秒版）」里取前 n 条要点，去掉 markdown 标记，并截断到 maxlen 字。
+
+    首页是索引页、不是正文页：单条摘要动辄三四百字，四条铺开就把首页拉得很长，
+    反而看不见下面的往期列表和两个入口按钮。想看全文点进去即可。
+    """
     m = re.search(r"(?ms)^##+[^\n]*摘要[^\n]*\n(.*?)(?=^## |\Z)", text)
     if not m:
         return []
@@ -71,6 +75,8 @@ def abstract_of(text, n=4):
         t = re.sub(r"`([^`]*)`", r"\1", t)
         t = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", t)
         t = re.sub(r"^\s*[0-9]+[\.、)]\s*", "", t)
+        if len(t) > maxlen:
+            t = t[:maxlen].rstrip("，、；：,;: ") + "…"
         if t:
             out.append(t)
         if len(out) >= n:
@@ -167,7 +173,7 @@ def main():
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>AI 免费内容与权益速递 · 总目录</title>
 <meta name="description" content="每天筛出 AI 免费额度、免费内容与分发入口的新变化，只做增量与纠错。已出 __CNT__ 期。">
 <meta property="og:title" content="AI 免费内容与权益速递">
@@ -198,6 +204,7 @@ def main():
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:var(--fu); line-height:1.85; -webkit-text-size-adjust:100%;
+  overflow-wrap:break-word;
 }
 body::before{
   content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
@@ -215,6 +222,9 @@ header.top{border-bottom:3px solid var(--ink); padding-bottom:18px; margin-botto
 h1{
   font-size:clamp(30px,5.2vw,46px); line-height:1.14; margin:0 0 12px;
   font-weight:800; letter-spacing:-.01em;
+  /* 手机上「每天，哪些 AI 能力可以免费用」正好卡在折行临界点，
+     第二行只剩一个「用」字。balance 让两行长度均匀。 */
+  text-wrap:balance;
 }
 .lede{
   font-family:var(--fd); font-size:17px; line-height:1.9; color:var(--ink-2);
@@ -297,24 +307,55 @@ footer .fr{
   background:var(--surface-2); border-radius:0 8px 8px 0;
   font-size:13.5px; color:var(--muted); line-height:1.85;
 }
-@media (max-width:720px){
-  .wrap{padding:36px 16px 64px}
-  ul.list li.row a{grid-template-columns:52px minmax(0,1fr); gap:6px 12px}
-  .d{order:2}
-  .th{grid-column:2; font-size:14px}
-  .pit,.kind{display:none}
+/* ---------- 手机（<=600px）----------
+   两个要点：
+   ① 按钮做成 44px 高的真触控区（原来 36px 高、手机上不好点），且两个按钮等分整行；
+   ② 往期列表改成「左列期号+日期上下排、右列标题跨两行垂直居中」的显式网格，
+      不再靠 order 让浏览器自己摆——原写法在不同引擎下 d 的落点并不一致。 */
+@media (max-width:600px){
+  .wrap{padding:30px 16px 56px}
+  .kicker{font-size:11px; letter-spacing:.12em; gap:6px 14px}
+  h1{font-size:27px; line-height:1.2}
+  .lede{font-size:16px; line-height:1.85; margin-bottom:16px}
+  .stats{gap:12px 18px; font-size:12px}
+  .stats b{font-size:14px}
+  section{margin-top:34px}
+  .slabel{font-size:10.5px; margin-bottom:14px}
   .card{padding:20px 18px}
-  .stats{gap:16px}
+  .metaline{font-size:12px}
+  .card h2{font-size:21px; line-height:1.32; margin-bottom:12px}
+  ul.abs{gap:10px; margin-bottom:18px}
+  ul.abs li{font-size:15.5px; line-height:1.8}
+  .acts{gap:10px}
+  .btn{
+    display:flex; align-items:center; justify-content:center;
+    flex:1 1 auto; min-height:44px; padding:12px 16px; font-size:15px;
+  }
+  ul.list li.row a{
+    grid-template-columns:46px minmax(0,1fr);
+    grid-template-rows:auto auto;
+    gap:2px 12px; align-items:center; padding:14px 10px 14px 12px;
+  }
+  .no{grid-column:1; grid-row:1; align-self:end; font-size:13.5px}
+  .d{grid-column:1; grid-row:2; align-self:start; font-size:12px}
+  .th{grid-column:2; grid-row:1 / span 2; font-size:15px}
+  .pit,.kind{display:none}
+  .warn{padding:14px 16px; font-size:14px}
+  footer{margin-top:40px; font-size:13.5px}
+  /* 刘海 / 小白条 —— env() 不被支持时整条声明作废，自动退回上面的值 */
+  .wrap{
+    padding-left:calc(16px + env(safe-area-inset-left));
+    padding-right:calc(16px + env(safe-area-inset-right));
+    padding-bottom:calc(56px + env(safe-area-inset-bottom));
+  }
 }
-@media (max-width:420px){
-  .wrap{padding:26px 12px 52px}
-  h1{font-size:clamp(24px,7.4vw,32px)}
-  .lede{font-size:15.5px}
+/* 超窄屏（<=360px） */
+@media (max-width:360px){
+  .wrap{padding:24px 12px 48px}
+  h1{font-size:24px}
   .card{padding:18px 15px}
   ul.abs li{font-size:15px; padding-left:17px}
-  ul.list li.row a{padding:11px 6px 11px 10px; grid-template-columns:46px minmax(0,1fr)}
-  .no{font-size:13px}
-  .btn{padding:8px 15px; font-size:13.5px}
+  .btn{padding:11px 14px; font-size:14px}
 }
 @media print{
   body::before{display:none}
@@ -332,7 +373,9 @@ footer .fr{
     <span>AI 免费内容与权益速递</span>
     <span>更新至 <em>第 __LATEST__ 期</em></span>
   </div>
-  <h1>每天，哪些 AI 能力可以免费用</h1>
+  <!-- 「能&#8288;力」之间插的是 WORD JOINER（U+2060）：手机上标题正好在这里折行，
+       会把「能力」拆成上下两截。零宽不换行符只是禁掉这一个断点，换行点自然移到别处。 -->
+  <h1>每天，哪些 AI 能&#8288;力可以免费用</h1>
   <p class="lede">
     把散落在官方公告、模型卡、平台招募页和社区帖里的<strong>免费额度、免费内容与分发入口</strong>
     逐条核实，写清口径、标好截止日期。<strong>只做增量与纠错</strong>，不重复往期已固化的内容。

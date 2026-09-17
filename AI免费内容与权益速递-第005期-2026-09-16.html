@@ -2,7 +2,7 @@
 <html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>AI 免费内容与权益速递 · 第 005 期</title>
 <meta name="description" content="2026-09-16（周三）· 分发入口专题版 · 主题：AI 免费内容发布 · 免费内容（生成/分发）· 免费额度">
 <meta name="color-scheme" content="light dark">
@@ -35,6 +35,9 @@
   --s1:4px; --s2:8px; --s3:16px; --s4:24px; --s5:40px; --s6:64px; --s7:96px;
   --r1:3px; --r2:8px; --r3:14px;
   --ease:cubic-bezier(.16,1,.3,1); --fast:170ms; --base:340ms;
+  /* 顶栏与筛选条的实际高度：抽屉定位、吸顶偏移都要跟它们对齐。
+     初值只是兜底，页面加载后由 JS 量出真值覆盖（字号/换行都会改变高度）。 */
+  --tb-h:57px; --chips-h:47px;
 }
 html[data-theme="dark"]{
   --bg:#131210; --bg-2:#191713; --surface:#1c1a16; --surface-2:#232019;
@@ -55,6 +58,9 @@ body{
   font-family:var(--fu); font-size:var(--fs-base); line-height:1.9;
   font-feature-settings:"kern" 1;
   text-rendering:optimizeLegibility;
+  /* 长英文专名 / URL / 模型 ID 在窄屏会把行撑破（320px 实测溢出 4px）。
+     用 break-word 而不是 anywhere：后者会改变 min-content，连带把表格列宽算歪。 */
+  overflow-wrap:break-word;
 }
 body::before{ /* 氛围层：纸面暖光 */
   content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
@@ -137,6 +143,7 @@ code{
 }
 .iconbtn:hover{border-color:var(--accent); color:var(--accent-ink); transform:translateY(-1px)}
 #menuBtn{display:none}
+#searchBtn{display:none}   /* 只在手机端露出来：点开一条全宽搜索栏 */
 .progress{position:fixed; top:0; left:0; height:2px; width:0; background:var(--accent); z-index:31; transition:width 90ms linear}
 
 /* ============================================================ 刊头 */
@@ -145,6 +152,8 @@ code{
   display:flex; justify-content:space-between; align-items:baseline; gap:var(--s3);
   font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.14em; color:var(--muted);
   text-transform:uppercase; padding-bottom:var(--s2); flex-wrap:wrap;
+  /* 窄屏换行时避免把「…增量与纠错口径」拆成只剩一个「径」字的孤行 */
+  text-wrap:pretty;
 }
 .mh-top em{font-style:normal; color:var(--accent-ink)}
 .mh-rule{height:0; border-top:3px solid var(--ink); border-bottom:1px solid var(--ink); padding-top:3px; margin-bottom:var(--s4)}
@@ -227,6 +236,7 @@ main strong{font-weight:700; color:var(--ink)}
   content:"0" counter(sum);
   position:absolute; left:var(--s3); top:var(--s3);
   font-family:var(--fm); font-size:20px; font-weight:700; color:var(--accent); line-height:1.1;
+  white-space:nowrap;   /* 窄屏下「01」会被折成上下两个数字，竖排数字看着像排版事故 */
 }
 .summary .ul{counter-reset:sum}
 
@@ -315,6 +325,9 @@ tr[data-st="warn"] .st-txt{color:var(--plan)}
 tr[data-st="over"] .st-txt{color:var(--over)}
 .chips{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:10px var(--s3);
   background:var(--surface-2); border-bottom:1.5px solid var(--rule-strong); position:sticky; top:0; z-index:3}
+/* 截止表待在可滚动容器里，容器顶部已经被 chips 占住——表头要吸在它下方，
+   否则两者都 top:0、chips 的 z-index 更高，表头第一行会被整个盖住。 */
+.tblwrap.scrolly .tbl thead th{top:var(--chips-h)}
 .chips-label{font-family:var(--fm); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin-right:4px}
 .chip{
   font-family:var(--fu); font-size:12.5px; color:var(--ink-2); cursor:pointer;
@@ -370,7 +383,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
   /* 抽屉：外层 fixed + overflow:hidden 当裁剪盒，内层才平移。
      若直接平移 fixed 的 .rail，它会把文档 scrollWidth 撑宽 326px（实测）。 */
   .drawerwrap{
-    position:fixed; inset:56px 0 0 0; overflow:hidden; z-index:29;
+    position:fixed; inset:var(--tb-h) 0 0 0; overflow:hidden; z-index:29;
     visibility:hidden; pointer-events:none; transition:visibility 0s linear var(--base);
   }
   body.nav-open .drawerwrap{visibility:visible; pointer-events:auto; transition-delay:0s}
@@ -402,14 +415,176 @@ mark.hl.cur{background:var(--accent); color:#fff}
   .ol.big li{grid-template-columns:26px 1fr; gap:var(--s2)}
   .summary .ul li{padding-left:52px}
 }
+/* ---------- 手机（<=600px）：换一套阅读形态，不是把桌面版等比缩小 ----------
+   三处结构性改动，都对着实测出来的毛病改：
+   ① 搜索不再隐藏。原先 <=520px 直接 display:none，手机上等于没有搜索；
+      现在收成一个图标，点开是一条全宽搜索栏（绝对定位挂在顶栏下沿，不撑高顶栏）。
+   ② 2 列表改成纵向堆叠卡片。手机上横滑表格很难用，而 2 列表堆叠后既不用滑、
+      又刚好把「名称 → 说明」的层级关系表达出来。
+   ③ 3 列及以上继续横滑，但首列粘住——横滑时不丢参照物，知道自己看的是哪一行。
+   另外把触控目标放大到 44px（图标按钮原 38px、筛选 chip 原 26px 高，都偏小）。
+*/
 @media (max-width:600px){
+  :root{--fs-base:17px; --s3:14px; --s4:20px; --s5:26px; --s6:34px; --s7:48px}
   .mh-num{display:none}
+
+  /* 顶栏与搜索 */
+  .tb-in{min-height:52px}
+  #searchBtn{display:inline-grid}
+  .iconbtn{width:44px; height:44px; font-size:16px}
+  .tb-tools{gap:6px}
+  .search{
+    position:absolute; left:0; right:0; top:100%; z-index:35;
+    display:none; padding:10px var(--s3);
+    background:var(--surface); border-bottom:1px solid var(--rule-2); box-shadow:var(--shadow);
+  }
+  body.search-open .search{display:flex}
+  .search input{width:100%; font-size:16px; padding:11px 14px 11px 34px; -webkit-appearance:none; appearance:none}
+  .search input:focus{width:100%}
+  .search .si{left:calc(var(--s3) + 12px)}
+  .search input:not(:placeholder-shown){padding-right:104px}
+  /* 计数与上下条按钮要能点得中：原尺寸 11px/18px 高，手机上根本按不准 */
+  .search .sc{right:10px; gap:6px; font-size:13px}
+  .search .sc button{min-width:34px; min-height:34px; font-size:14px; border-radius:6px}
+
+  /* 刊头 */
+  h1.mh-t{font-size:27px; line-height:1.22}
+  .mh-top{font-size:10.5px; letter-spacing:.1em; gap:var(--s2)}
+  .mh-sub{font-size:13.5px; margin-bottom:var(--s4)}
+  .pubnote{padding:var(--s3)}
+  .pubnote p{font-size:14.5px}
+
+  /* 目录抽屉条目放大 */
+  .toc-a{padding:11px var(--s2)}
+
+  /* 章节 */
+  .sec{scroll-margin-top:calc(var(--tb-h) + 10px)}
+  .sec h2{font-size:21px}
+  h3{font-size:17px; margin:var(--s4) 0 var(--s3)}
+
+  /* 摘要卡片 */
+  .summary .ul li{padding:13px var(--s3) 13px 46px; font-size:15px; line-height:1.78}
+  .summary .ul li::before{font-size:17px; top:13px}
+
+  /* 列表 */
+  .ul li{padding-left:19px}
+  .ol{gap:var(--s2)}
+  .ol li{grid-template-columns:28px 1fr; gap:10px}
+  .ol.big li{padding:13px 14px; grid-template-columns:24px 1fr; gap:10px}
+  .ol.big .lin{font-size:19px}
+
+  /* 表格：3 列以上横滑 + 首列粘住 */
+  /* 先解开 .tbl 自己的 overflow:hidden。它原本只为了裁圆角，但 overflow:hidden
+     同样会把自己变成「滚动容器」，于是 td 的 sticky 以 table 为参照（而 table
+     并不滚动）——首列粘性会静默失效，横滑时首列照样滚走（实测截图确认）。
+     手机上优先保首列粘住，圆角让位（表格改直角，肉眼几乎无感）。 */
+  .tbl{overflow:visible; border-radius:0}
+  .tblwrap:not(.scrolly){overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .tblwrap:not(.scrolly) .tbl{min-width:600px}
+  .tblwrap:not(.scrolly) .tbl:not(.c2) tbody td:first-child,
+  .tblwrap.scrolly .tbl tbody td:first-child{
+    position:sticky; left:0; z-index:1;
+    background:var(--surface); box-shadow:1px 0 0 var(--rule-2);
+  }
+  .tblwrap:not(.scrolly) .tbl:not(.c2) thead th:first-child,
+  .tblwrap.scrolly .tbl thead th:first-child{left:0; z-index:4; background:var(--surface-2)}
+  /* 首列装长专名的表（桌面端放不下、只给了手机端下限）：放宽，别压成逐字竖排 */
+  .tblwrap:not(.scrolly) .tbl.w1m:not(.c2) tbody td:first-child,
+  .tblwrap.scrolly .tbl.w1m tbody td:first-child{
+    min-width:var(--w1m); overflow-wrap:break-word;
+  }
+  .scrollhint{text-align:left}
+
+  /* 表格：2 列纵向堆叠成卡片，彻底不横滑 */
+  .tblwrap:not(.scrolly) .tbl.c2,
+  .tblwrap.scrolly .tbl.c2{
+    display:block; min-width:0; border:0; background:transparent; border-radius:0;
+  }
+  .tbl.c2 thead{display:none}
+  .tbl.c2 tbody{display:block}
+  .tbl.c2 tbody tr{
+    display:block; background:var(--surface); border:1px solid var(--rule);
+    border-radius:var(--r2); padding:12px 14px; margin-bottom:10px; box-shadow:var(--shadow);
+  }
+  .tbl.c2 tbody tr:last-child{margin-bottom:0}
+  .tbl.c2 tbody tr:hover{background:var(--surface)}
+  .tbl.c2 tbody td{display:block; border:0; padding:0; background:transparent; box-shadow:none}
+  .tbl.c2 tbody td:first-child{
+    position:relative; padding-left:15px; margin-bottom:5px;
+    font-family:var(--fu); font-weight:700; font-size:14.5px; color:var(--ink);
+  }
+  .tbl.c2 tbody td:first-child::before{
+    content:""; position:absolute; left:0; top:.62em; width:7px; height:1.5px; background:var(--accent);
+  }
+
+  /* 截止表筛选条：改成一行横滑，避免换行成三四排把表格挤下去 */
+  .chips{
+    flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; padding:9px var(--s3); gap:7px;
+    border-radius:var(--r2) var(--r2) 0 0;
+  }
+  .chips::-webkit-scrollbar{display:none}
+  .chips-label,.chips-count{display:none}
+  .chip{flex:0 0 auto; padding:9px 14px; font-size:13px; min-height:40px}
+  .chip b{font-size:11px}
+
+  /* 截止表：手机上拆成一张张卡片，不再横滑。
+     两个理由：① 它最关键的信息是「什么时候到期」，而截止列在横滑视口之外，
+        用户得先横滑才看得到，跟这张表的用途正好相反；
+     ② 横滑时行高被状态列的长文本撑开，首列只有一行字、下面一大片空白。
+     拆成卡片后「活动 / 截止 / 状态」三行一屏读完，状态色条也还在。
+     列定位靠编译期打好的 data-col，不依赖第几列。 */
+  .tblwrap.scrolly{
+    max-height:none; overflow:visible; border:0; background:transparent; box-shadow:none;
+  }
+  .tblwrap.scrolly .chips{top:var(--tb-h)}   /* 吸在顶栏下沿，滚到哪都能筛 */
+  .tbl.ledger{display:block; min-width:0; border:0; background:transparent; table-layout:auto}
+  .tbl.ledger thead{display:none}
+  .tbl.ledger tbody{display:block}
+  .tbl.ledger tbody tr{
+    /* 日期列用 max-content：状态列文字很长时，若两列是 1fr/auto，
+       状态列会把日期列挤到几乎为 0，日期被压成「9
+/
+1
+7」逐字竖排 */
+    display:grid; grid-template-columns:max-content minmax(0,1fr); gap:5px 10px; align-items:baseline;
+    background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2);
+    padding:12px 14px; margin-bottom:9px;
+  }
+  .tbl.ledger tbody tr:last-child{margin-bottom:0}
+  .tbl.ledger tbody td{display:block; border:0; padding:0; background:transparent; box-shadow:none}
+  .tbl.ledger tbody td[data-col="body"]{grid-column:1 / -1; color:var(--ink); font-weight:600; font-size:14.5px}
+  .tbl.ledger tbody td[data-col="date"]{
+    grid-column:1; white-space:nowrap;
+    font-family:var(--fm); font-size:12.5px; color:var(--muted);
+  }
+  .tbl.ledger tbody td[data-col="st"]{grid-column:2; text-align:right; font-size:13px}
+  .tbl.ledger tbody tr:hover{background:var(--surface)}
+  /* 截止表已经拆成卡片、不再横滑，滑动提示在这里是错的 */
+  .tblwrap.scrolly .scrollhint{display:none}
+
+  /* 悬浮控件与刘海/小白条 —— env() 在不支持时整条声明被丢弃，自动退回上面的值 */
+  .fab{right:calc(14px + env(safe-area-inset-right)); bottom:calc(14px + env(safe-area-inset-bottom))}
+  .tb-in{padding-left:calc(var(--s3) + env(safe-area-inset-left));
+         padding-right:calc(var(--s3) + env(safe-area-inset-right))}
+  .masthead,.shell,.foot{
+    padding-left:calc(var(--s3) + env(safe-area-inset-left));
+    padding-right:calc(var(--s3) + env(safe-area-inset-right));
+  }
+  .foot{padding-bottom:calc(var(--s6) + env(safe-area-inset-bottom))}
+  .search{padding-left:calc(var(--s3) + env(safe-area-inset-left));
+          padding-right:calc(var(--s3) + env(safe-area-inset-right))}
 }
-@media (max-width:520px){
-  .search{display:none}
-  .chips{gap:5px}
-  .chips-label{display:none}
-  .chips-count{margin-left:0}
+/* 超窄屏（<=360px：iPhone SE 一代、小屏安卓）再收一档。
+   断点取 360 而不是 380，是为了把 375/390/414 这些在售机型都留在上面那一档
+   用 27px 主标题——375 恰恰是 iPhone SE 2/3 的宽度，也是相当常见的屏幕。 */
+@media (max-width:360px){
+  h1.mh-t{font-size:24px}
+  .mh-top{font-size:9.5px}
+  .tblwrap:not(.scrolly) .tbl{min-width:560px}
+  .tblwrap:not(.scrolly) .tbl.c2{min-width:0}
+  .summary .ul li{padding-left:42px}
+  .summary .ul li::before{font-size:16px}
 }
 
 /* ============================================================ 打印 */
@@ -436,6 +611,20 @@ mark.hl.cur{background:var(--accent); color:#fff}
   .tbl thead th{position:static; background:#fff; color:#000; border-bottom:1pt solid #000; font-size:8pt}
   .tbl tbody td{border-bottom:.5pt solid #666; padding:5px 7px}
   .tbl tbody tr{box-shadow:none !important; opacity:1 !important; break-inside:avoid}
+  /* 手机端那套堆叠/粘性样式在纸上要退回成真表格（窄屏下打印时两条媒体查询会同时命中，
+     print 在后面所以能覆盖；仍加 !important 防字号相关的特异性意外） */
+  .tbl.c2{display:table !important; border:1pt solid #000 !important}
+  .tbl.c2 thead{display:table-header-group !important}
+  .tbl.c2 tbody{display:table-row-group !important}
+  .tbl.c2 tbody tr{display:table-row !important; margin-bottom:0 !important; padding:0 !important}
+  .tbl.c2 tbody td{display:table-cell !important; padding:5px 7px !important}
+  .tbl.c2 tbody td:first-child::before{content:none !important}
+  .tbl.ledger{display:table !important; border:1pt solid #000 !important}
+  .tbl.ledger thead{display:table-header-group !important}
+  .tbl.ledger tbody{display:table-row-group !important}
+  .tbl.ledger tbody tr{display:table-row !important; margin:0 !important; padding:0 !important}
+  .tbl.ledger tbody td{display:table-cell !important; padding:5px 7px !important}
+  .tbl tbody td:first-child,.tbl thead th:first-child{position:static !important; box-shadow:none !important}
   .st{background:#000 !important; border:0}
   .ledger tbody tr{box-shadow:none !important}
   .tbl a,.tbl a:hover{color:#000}
@@ -455,6 +644,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
     <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#005</b></span>
     <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s04"><b>04</b>限时活动与截止时间表</a><a href="#s05"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s08"><b>08</b>本期信源体系更新：纳入 `aihot.news`</a><a href="#s09"><b>09</b>来源与核查说明</a></nav>
     <div class="tb-tools">
+      <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">⌕</button>
       <div class="search">
         <span class="si" aria-hidden="true">⌕</span>
         <input id="q" type="search" placeholder="全文检索…" aria-label="全文检索" autocomplete="off">
@@ -503,7 +693,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <h3 id="h3-2"><span class="h3n">1</span>🆕 抖音「AI 工坊」+「兴趣卡」—— 本期最值钱的一条</h3>
 <p>9/14 多家媒体报道：抖音在创作者中心<strong>小范围上线「AI 工坊」</strong>，配套产出的<strong>「兴趣卡」已进入首页推荐流灰度测试</strong>。</p>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl c2 w1m" style="--w1m:103px">
 <thead><tr><th>维度</th><th>情况</th></tr></thead><tbody>
 <tr><td><strong>形态</strong></td><td>兴趣卡 = <strong>结合个性化推荐分发的"个性化 + 可交互的 AI 内容卡"</strong></td></tr>
 <tr><td><strong>位置</strong></td><td><strong>直接长在首页推荐流里</strong>，标注"AI 生成"，点击即可交互</td></tr>
@@ -514,7 +704,6 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>冷启动激励</strong></td><td><strong>内测期每个通过审核的兴趣卡作品给 100 元现金奖励</strong></td></tr>
 <tr><td><strong>模型来源</strong></td><td>豆包自己的模型 + 第三方模型均可调用</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
 </div>
 <p><strong>为什么这条重要</strong>：它是从"人找内容"到"内容找人"的切换。此前抖音的互动内容入口是<strong>「互动空间」独立广场</strong>（2026 年年中上线，创作者用字节 Trae 生成互动作品，但只是<strong>侧边栏二级入口</strong>）。AI 工坊 + 兴趣卡真正的突破是<strong>把交互内容直接置入首页推荐流</strong>。</p>
 <p><strong>⚠️ 三条必须看清</strong>：</p>
@@ -522,7 +711,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <h3 id="h3-3"><span class="h3n">2</span>国内内容平台「AI 分发入口」全景（截至 9/16）</h3>
 <p>这是本期新增的一张核心表：<strong>谁在把发现流量开放给 AI 内容，条件是什么。</strong></p>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl c5 w1m" style="--w1m:75px">
 <thead><tr><th>平台</th><th>入口/产品</th><th>形态与门槛</th><th>状态</th><th>冷启动激励</th></tr></thead><tbody>
 <tr><td><strong>抖音</strong></td><td><strong>AI 工坊 + 兴趣卡</strong></td><td>可交互 AI 内容卡，进首页推荐流；自然语言创作，非代码用户可上手</td><td>邀请制内测</td><td><strong>每个过审作品 100 元</strong></td></tr>
 <tr><td><strong>小红书</strong></td><td><strong>RED Skill + Vibe Coding + Builder Hub</strong></td><td>AI 工具<strong>挂载在笔记下方</strong>，用户刷笔记顺手就用、无需跳转</td><td>RED Skill <strong>全量上线</strong>，Vibe Coding 内测</td><td>站内已超 <strong>7,300 个</strong>原创 Skill；2 月以来<strong>每月新增 4–5 万件</strong>作品</td></tr>
@@ -532,28 +721,28 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>字节</strong></td><td><strong>豆包「技能·连接器」</strong></td><td>第三方工具封装成可按需调用的能力模块，含飞书/企业微信/钉钉/同花顺/天眼查/企查查</td><td>8 月上线</td><td>已上架 <strong>200+</strong> 技能与连接器</td></tr>
 <tr><td><strong>腾讯</strong></td><td><strong>WorkBuddy 生态平台</strong></td><td>同上逻辑，首批<strong>上百款 Buddy 应用</strong>（通达信/腾讯电子签/美图等）</td><td>9 月初开放</td><td>—</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <blockquote class="bq"><p><strong>读法</strong>：三条路径（内容平台的推荐流 / 社区挂载 / 应用商店）指向同一个核心命题——<strong>给 AI 应用打通公域流量的出口</strong>。对做免费内容的人来说，<strong>小红书是目前唯一"全量开放 + 有站内流量"的一档</strong>，抖音是"最有想象力但还在内测"的一档，B站和吐司是"有作品就能上"的一档。</p></blockquote>
 <h3 id="h3-4"><span class="h3n">3</span>小红书侧的关键事实（本期补齐）</h3>
 <ul class="ul"><li>小红书开发者文档明确：小工具<strong>在本地隔离沙箱内运行</strong>——<strong>不能发网络请求、不能开外部链接、不能执行动态代码、不能嵌其他页面</strong>，但可使用部分设备能力。</li><li><strong>这个限制反过来定义了机会</strong>：适合做<strong>自包含的计算器、测试、生成器、互动媒体</strong>；不适合需要账号、远端数据或持续后端的服务。</li><li>小红书已把 AI 上升为<strong>一级部门 Dots</strong>——平台侧的投入是长期的，不是一次活动。</li></ul>
 <h3 id="h3-5"><span class="h3n">4</span>三条可直接抄的零成本链路（更新版）</h3>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl c3 w1m" style="--w1m:243px">
 <thead><tr><th>目标</th><th>链路</th><th>成本</th></tr></thead><tbody>
 <tr><td><strong>国内图文（公众号/小红书/知乎）</strong></td><td>Kimi 或豆包出文案 → 即梦出封面（60 积分/天）→ 剪映成片 → <strong>AiToEarn 一键分发</strong></td><td>¥0</td></tr>
 <tr><td><strong>AI 短剧 / 漫剧</strong></td><td><strong>Pavo 剧场模式</strong>：一句话 → 剧本+资产+分镜 → Flash 版免费批量出片 → 每日 200 积分跑标准版 → 平台发布</td><td>¥0</td></tr>
 <tr><td><strong>出海社媒</strong></td><td><strong>Nimply</strong> 免费档出文案+配图+排期自动发布（7 平台）</td><td>¥0</td></tr>
 <tr><td>🆕 <strong>可交互小工具/互动内容</strong></td><td><strong>抖音 AI 工坊</strong>（有邀请码时）或 <strong>B站 Toy</strong> 或 <strong>小红书 RED Skill</strong>：自包含 HTML 互动件 → 发布 → 吃推荐流量</td><td>¥0（抖音内测期另有 100 元/件）</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
 <section id="s02" class="sec">
 <h2><span class="sn">02</span><span class="h2t">免费内容生成工具</span><span class="h2sub">（本期增量）</span></h2>
 <h3 id="h3-7">新增</h3>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl c4 w1m" style="--w1m:246px">
 <thead><tr><th>工具</th><th>免费额度</th><th>水印 / 商用</th><th>备注</th></tr></thead><tbody>
 <tr><td><strong>可灵 Kling</strong></td><td><strong>66 credits/天</strong>，每日重置不累积</td><td>免费导出<strong>带水印</strong></td><td>约合 3–6 条约 5 秒 720p 短片/天；付费 $10/月起去水印、升 1080p</td></tr>
 <tr><td><strong>Suno</strong></td><td><strong>50 credits/天 ≈ 10 首/天</strong>（约 300 首/月）</td><td><strong>仅个人使用，不可商用变现</strong></td><td>每次生成 10 credits、出 2 个版本；2026 年免费档下载权在持续收紧</td></tr>
@@ -566,11 +755,11 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>PixTV（pixtv.ai）</strong></td><td>新用户体验额度</td><td>—</td><td>集成 Seedance 2.5、MiniMax H3；把静态图变动态镜头</td></tr>
 <tr><td><strong>LibTV</strong></td><td>同体系免费额度</td><td>—</td><td><strong>无限画布</strong>工作流，剧本自动拆分镜</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <h3 id="h3-8">免费开源内容资产（本期新增，可自部署）</h3>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl c4 w1m" style="--w1m:288px">
 <thead><tr><th>模型</th><th>规格</th><th>协议</th><th>意义</th></tr></thead><tbody>
 <tr><td><strong>Qwen3.8-27B</strong></td><td>27B 稠密多模态，原生 26 万字上下文</td><td><strong>Apache 2.0，免费商用</strong></td><td><strong>9/16 登顶 Hugging Face 历史"最受欢迎"开源模型</strong>，超越 FLUX.1 / DeepSeek-R1 / Kimi-K3 / Llama-3；被海外开发者称为"本地版 Opus 4.6"</td></tr>
 <tr><td><strong>Xiaomi-Robotics-U0</strong>（小米，9/15–16）</td><td>约 38B 具身世界基础模型；另有 <strong>U0-4B / FlashAR</strong> 权重</td><td>开源</td><td>一个 next-token 框架统一文生图、任意图编辑、多视角具身场景生成、可控具身迁移、具身视频推演（1/3/5 fps）；HF + ModelScope 均有权重</td></tr>
@@ -579,26 +768,25 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>GLM-5.3-Flash</strong>（智谱，8/26）</td><td>320B 总参 / <strong>18B 激活</strong> MoE，GLM-5 系列<strong>首个原生多模态</strong>，1M 上下文</td><td><strong>MIT</strong></td><td>稀疏注意力 + 线性注意力混合架构，注意力计算量降至 GLM-5.3 的约 1/3；AA 综合智能指数 57 分</td></tr>
 <tr><td><strong>Hy4 preview</strong>（腾讯）</td><td><strong>770B / 49B 激活 / 1M+ 上下文</strong></td><td>开源</td><td>API 定价 $0.834/M in、$2.501/M out、$0.042/M 缓存命中；<strong>首次参与自身训练优化</strong>（推理吞吐 +31.8%）</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
 <section id="s03" class="sec">
 <h2><span class="sn">03</span><span class="h2t">常驻免费额度与 API</span><span class="h2sub">（本期增量 + 口径澄清）</span></h2>
 <h3 id="h3-10"><span class="h3n">1</span>🆕 阿里云 OPC 创新助力计划 —— 本期最大的"额度"变动</h3>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl c2">
 <thead><tr><th>项目</th><th>内容</th></tr></thead><tbody>
 <tr><td><strong>对象</strong></td><td>独立开发者、自由职业者、<strong>"一人公司"（OPC）</strong></td></tr>
 <tr><td><strong>额度</strong></td><td><strong>最低 1000 元、最高 100 万元 Token 补贴</strong></td></tr>
 <tr><td><strong>模式</strong></td><td><strong>"先用后返"</strong>——按实际消费金额次月获得相应额度的满返优惠券</td></tr>
 <tr><td><strong>入口</strong></td><td><code>opc.aliyun.com/products</code></td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
 </div>
 <blockquote class="bq"><p>这是本期唯一一条<strong>以"钱"为单位</strong>的免费额度，且上限最高（100 万元），值得单独记。</p></blockquote>
 <h3 id="h3-11"><span class="h3n">2</span>阿里云其余权益（本期补齐）</h3>
 <div class="tblwrap">
-<table class="tbl w1" style="--w1:170px">
+<table class="tbl c3 w1 w1m" style="--w1:170px;--w1m:170px">
 <thead><tr><th>项目</th><th>内容</th><th>截止</th></tr></thead><tbody>
 <tr><td><strong>新用户免费 Tokens</strong></td><td>开通百炼即领<strong>超 1 亿</strong>（90 天）；也可表述为"超 7000 万"，<strong>实际取决于开通的模型数量，各模型额度独立、不共享不叠加</strong></td><td>90 天</td></tr>
 <tr><td><strong>模型体验额度</strong></td><td>登录后<strong>每个模型 100 万 tokens</strong></td><td>—</td></tr>
@@ -608,11 +796,11 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>Night Plan 夜间优惠</strong></td><td>每日 <strong>22:00–次日 08:00</strong> 调 qwen3.8-flash，Credits 消耗享折扣，<strong>权益自动生效无需手动开</strong></td><td>—</td></tr>
 <tr><td><strong>限速（硬约束）</strong></td><td><strong>每分钟 20 次、并发 2</strong></td><td>长期</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <h3 id="h3-12"><span class="h3n">3</span>八家"能长期用"的免费 API（复核后的额度）</h3>
 <div class="tblwrap">
-<table class="tbl w1" style="--w1:177px">
+<table class="tbl c4 w1 w1m" style="--w1:177px;--w1m:177px">
 <thead><tr><th>平台</th><th>免费额度</th><th>有效期</th><th>坑</th></tr></thead><tbody>
 <tr><td><strong>火山引擎（豆包）</strong></td><td><strong>每天自动发 200 万 Tokens</strong>，零点刷新不累积；单模型另给 50 万</td><td>日更</td><td><strong>必须到控制台手动开通模型</strong>，否则拿着 Key 也打不通</td></tr>
 <tr><td><strong>百度千帆（文心）</strong></td><td>新用户<strong>每模型 100 万</strong>；ERNIE-Speed / ERNIE-Lite 长期免费</td><td>3 个月</td><td>长期免费的有限速</td></tr>
@@ -623,11 +811,11 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>移动云</strong></td><td>免费试用 <strong>2500 万 Token</strong></td><td><strong>12/31</strong></td><td>—</td></tr>
 <tr><td><strong>华为云 CodeArts</strong></td><td><strong>每日 1000 万 Token</strong></td><td>当日 24 点清零</td><td>不累积</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <h3 id="h3-13"><span class="h3n">4</span>其他新增/澄清</h3>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl c3 w1m" style="--w1m:265px">
 <thead><tr><th>平台</th><th>变化</th><th>说明</th></tr></thead><tbody>
 <tr><td><strong>B.AI（Bank of AI，BAI Inc.）</strong> 🆕</td><td>8/17 起<strong>六大模型限时零门槛无限量免费</strong>：GLM-5.3-Flash、Qwen3.8-Flash、DeepSeek-V4-Flash、DeepSeek-V4-Flash-Vision-Exp、Tencent Hy3、Xiaomi MiMo-V2.5。Chat 端 5 个模型挂免费标签，API 侧 6 个计费变体</td><td>2026 年 5 月上线，多模型聚合，<strong>Web2（Google 登录 / 微信 / 支付宝 / 银联）+ Web3（钱包）双轨</strong>；$1 = 1,000,000 credits；8/31 单日吞吐 <strong>1.11 万亿 token</strong>，14 天累计 6.86 万亿、新增 API 用户 19.6 万。<strong>⚠️ 条款明写：充值积分不退、对话会被记录存储</strong></td></tr>
 <tr><td><strong>WorkBuddy 国际版</strong>（workbuddy.ai）🆕</td><td><strong>Hy4 preview / Hy3 / DeepSeek-V4.1-Flash 三个模型 Free now，消耗倍率 0.00x</strong></td><td>窗口 <strong>9/11–9/25</strong>；Free 档自带<strong>每月 100 积分 + 每日活跃 30 积分 + 注册 250 积分</strong>；另有 GPT-6-Astra（6.67x）、GPT-5.6-Sol（3.47x）等可选。<strong>⚠️ 国际版与国内版是两套账</strong></td></tr>
@@ -648,52 +836,52 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>Claude</strong></td><td>免费档 <strong>Sonnet 5 每 5 小时重置</strong>；<strong>Guest Pass 7 天邀请制</strong>；科研计划 <strong>10,000 席位</strong>（标准免费）；Claude Code Pro/Max/Team <strong>周限额永久提额 25%</strong></td><td><strong>Fable 5 Credits 9/17 截止</strong>；Tag Credits Enterprise $25,000 / Team $2,500 至 10/1</td></tr>
 <tr><td><strong>Perplexity</strong></td><td>教育认证 <strong>1 个月免费 Pro</strong>（之后 $10/月）；<strong>Comet AI 免费</strong></td><td>—</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
 <section id="s04" class="sec">
 <h2><span class="sn">04</span><span class="h2t">限时活动与截止时间表</span><span class="h2sub">（9/16 上午复核）</span></h2>
 <div class="tblwrap scrolly">
 <div class="chips" role="group" aria-label="按状态筛选"><span class="chips-label">按状态筛</span><button class="chip on" data-f="all" aria-pressed="true">全部<b data-c="all">0</b></button><button class="chip" data-f="crit" aria-pressed="false">🔴 必办<b data-c="crit">0</b></button><button class="chip" data-f="soon" aria-pressed="false">🟠 今明换挡<b data-c="soon">0</b></button><button class="chip" data-f="live" aria-pressed="false">🟢 生效中<b data-c="live">0</b></button><button class="chip" data-f="warn" aria-pressed="false">⚠ 口径存疑<b data-c="warn">0</b></button><button class="chip" data-f="over" aria-pressed="false">○ 已结束<b data-c="over">0</b></button><span class="chips-count" id="ledgerCount" aria-live="polite"></span></div>
-<table class="tbl ledger">
+<table class="tbl ledger c3">
 <thead><tr><th data-col="body">活动</th><th data-col="date">截止</th><th data-col="st">状态</th></tr></thead><tbody>
-<tr data-st="soon"><td>🔴 <strong>智谱 AutoClaw 积分加油站第二期（全员档）</strong></td><td><strong>9/16 24:00</strong></td><td data-col="st"><span class="st st-soon">🟠</span><span class="st-txt"><strong>今天最后一天</strong>，当天领当天用</span></td></tr>
-<tr data-st="soon"><td>🔴 <strong>B.AI 三模型免费（Qwen3.8-Flash / Hy3 / MiMo-V2.5）</strong></td><td><strong>9/16 16:59 (SGT)</strong></td><td data-col="st"><span class="st st-soon">🟠</span><span class="st-txt"><strong>今天换挡</strong>，17:00 起转 1 折</span></td></tr>
-<tr data-st="live"><td>🟠 <strong>Claude Fable 5 Credits / ChatGPT 免费版邀请加额</strong></td><td><strong>9/17</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="live"><td>🟠 <strong>ZCode 夜间免费（GLM-5.3-Flash 额度归零 / 其他 Agent 翻倍）</strong></td><td><strong>9/20</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，窗口最后几天</span></td></tr>
-<tr data-st="live"><td>🟠 <strong>杭州 Token 卡（约 500 元 / 10,000 积分）</strong></td><td>9/20 启动，发完即止</td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">未开始，35 家市级大创园现场</span></td></tr>
-<tr data-st="live"><td>🟠 <strong>WorkBuddy / CodeBuddy 国内版 DeepSeek V4.1 Flash 0.03x</strong></td><td><strong>9/23</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中 ← <strong>本期新增节点</strong></span></td></tr>
-<tr data-st="live"><td>🟠 <strong>百度文心快码 Comate 测试版</strong>（9 款模型不限 Token）</td><td><strong>9/24</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，窗口最短</span></td></tr>
-<tr data-st="live"><td>🔴 <strong>WorkBuddy 国际版三模型 0.00x</strong>（Hy4 preview / Hy3 / DeepSeek V4.1 Flash）</td><td><strong>9/25</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中 ← <strong>本期新增节点</strong></span></td></tr>
-<tr data-st="live"><td>🟡 <strong>火山方舟 Agent Plan deepseek-v4.1-flash 抵扣 5 折</strong></td><td><strong>9/28</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="live"><td>🟡 <strong>文心 4.0 全系列免费</strong>（文小言 App）</td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，10 月转付费</span></td></tr>
-<tr data-st="live"><td>🟡 <strong>腾讯混元 Hy3</strong>（WorkBuddy / CodeBuddy 端内）</td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，本期确认已延期</span></td></tr>
-<tr data-st="live"><td>🟡 <strong>WorkBuddy 教师版 1000 积分</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="warn"><td>🟡 <strong>Qoder：Qwen3.8-Max 免费 800 次</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-warn">⚠</span><span class="st-txt"><strong>口径冲突，见第五章纠错</strong></span></td></tr>
-<tr data-st="live"><td>🟡 <strong>百炼 Qwen3.7-Plus API 8 折 + 赠 100 万</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="live"><td>🟡 <strong>Trae 企业加量包双倍积分</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="live"><td>🟡 <strong>阿里云 AI 焕新季满减券</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中（领取后 14 天有效）</span></td></tr>
-<tr data-st="crit"><td>🔴 <strong>腾讯老混元大模型平台停服</strong></td><td><strong>2026 年 9 月底</strong></td><td data-col="st"><span class="st st-crit">🔴</span><span class="st-txt"><strong>必须迁移到 TokenHub</strong> ← <strong>本期最重要的运维节点</strong></span></td></tr>
-<tr data-st="live"><td>🟢 <strong>Claude Tag Credits</strong>（Enterprise $25,000 / Team $2,500）</td><td><strong>10/1</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="live"><td>🟢 <strong>腾讯混元 Hy4 preview 新用户窗口</strong></td><td><strong>10/10</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">未使用用户 10/10 前首启，享 14 天每日免费</span></td></tr>
-<tr data-st="live"><td>🟢 <strong>Bolt Forge 50× 用量</strong>（GLM 5.3 / 5.3 Flash / Kimi K3 / DeepSeek v4 Pro）</td><td><strong>10/14</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">需 opt-in 贡献构建数据</span></td></tr>
-<tr data-st="live"><td>🟢 <strong>Bolt Lite $9/月 waitlist</strong></td><td><strong>10/14 报名截止</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">进入后价格长期有效</span></td></tr>
-<tr data-st="live"><td>🟢 <strong>WorkBuddy 学生版 1000 积分 / ChatGPT 学生促销</strong></td><td><strong>10/31</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="live"><td>🟢 <strong>火山 Coding Plan 2.5 折（Pro 首购 49.9 元）</strong></td><td><strong>11/8</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="live"><td>🟢 <strong>杭州全城 Coding 计划</strong>（个人季卡 −44% / 年卡 −51%，上城企业年卡 −55%）</td><td><strong>12/9</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="live"><td>🟢 <strong>腾讯云 TokenHub 新人免费包 / 移动云 2500 万 Token / Gemini 学生免费 / 即梦片场 S 级全额返还 / Trae 企业版半价</strong></td><td><strong>12/31</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="over"><td>⚪ ZCode Weekend Build V · 3 亿 token</td><td>9/14 09:00</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
-<tr data-st="over"><td>⚪ Arena GPT-Image-2.5 Sunburst 免费 72 小时</td><td>9/13 23:00</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
-<tr data-st="over"><td>⚪ Qoder × Qwen3.8-Max 免费调用（原活动）</td><td>9/3 23:59</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
-<tr data-st="over"><td>⚪ Hy4 preview 原限免（国际版首发两周）</td><td>9/10 23:59</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束，改走 9/11 新规</span></td></tr>
+<tr data-st="soon"><td data-col="body">🔴 <strong>智谱 AutoClaw 积分加油站第二期（全员档）</strong></td><td data-col="date"><strong>9/16 24:00</strong></td><td data-col="st"><span class="st st-soon">🟠</span><span class="st-txt"><strong>今天最后一天</strong>，当天领当天用</span></td></tr>
+<tr data-st="soon"><td data-col="body">🔴 <strong>B.AI 三模型免费（Qwen3.8-Flash / Hy3 / MiMo-V2.5）</strong></td><td data-col="date"><strong>9/16 16:59 (SGT)</strong></td><td data-col="st"><span class="st st-soon">🟠</span><span class="st-txt"><strong>今天换挡</strong>，17:00 起转 1 折</span></td></tr>
+<tr data-st="live"><td data-col="body">🟠 <strong>Claude Fable 5 Credits / ChatGPT 免费版邀请加额</strong></td><td data-col="date"><strong>9/17</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟠 <strong>ZCode 夜间免费（GLM-5.3-Flash 额度归零 / 其他 Agent 翻倍）</strong></td><td data-col="date"><strong>9/20</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，窗口最后几天</span></td></tr>
+<tr data-st="live"><td data-col="body">🟠 <strong>杭州 Token 卡（约 500 元 / 10,000 积分）</strong></td><td data-col="date">9/20 启动，发完即止</td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">未开始，35 家市级大创园现场</span></td></tr>
+<tr data-st="live"><td data-col="body">🟠 <strong>WorkBuddy / CodeBuddy 国内版 DeepSeek V4.1 Flash 0.03x</strong></td><td data-col="date"><strong>9/23</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中 ← <strong>本期新增节点</strong></span></td></tr>
+<tr data-st="live"><td data-col="body">🟠 <strong>百度文心快码 Comate 测试版</strong>（9 款模型不限 Token）</td><td data-col="date"><strong>9/24</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，窗口最短</span></td></tr>
+<tr data-st="live"><td data-col="body">🔴 <strong>WorkBuddy 国际版三模型 0.00x</strong>（Hy4 preview / Hy3 / DeepSeek V4.1 Flash）</td><td data-col="date"><strong>9/25</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中 ← <strong>本期新增节点</strong></span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>火山方舟 Agent Plan deepseek-v4.1-flash 抵扣 5 折</strong></td><td data-col="date"><strong>9/28</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>文心 4.0 全系列免费</strong>（文小言 App）</td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，10 月转付费</span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>腾讯混元 Hy3</strong>（WorkBuddy / CodeBuddy 端内）</td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，本期确认已延期</span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>WorkBuddy 教师版 1000 积分</strong></td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="warn"><td data-col="body">🟡 <strong>Qoder：Qwen3.8-Max 免费 800 次</strong></td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-warn">⚠</span><span class="st-txt"><strong>口径冲突，见第五章纠错</strong></span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>百炼 Qwen3.7-Plus API 8 折 + 赠 100 万</strong></td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>Trae 企业加量包双倍积分</strong></td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>阿里云 AI 焕新季满减券</strong></td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中（领取后 14 天有效）</span></td></tr>
+<tr data-st="crit"><td data-col="body">🔴 <strong>腾讯老混元大模型平台停服</strong></td><td data-col="date"><strong>2026 年 9 月底</strong></td><td data-col="st"><span class="st st-crit">🔴</span><span class="st-txt"><strong>必须迁移到 TokenHub</strong> ← <strong>本期最重要的运维节点</strong></span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>Claude Tag Credits</strong>（Enterprise $25,000 / Team $2,500）</td><td data-col="date"><strong>10/1</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>腾讯混元 Hy4 preview 新用户窗口</strong></td><td data-col="date"><strong>10/10</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">未使用用户 10/10 前首启，享 14 天每日免费</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>Bolt Forge 50× 用量</strong>（GLM 5.3 / 5.3 Flash / Kimi K3 / DeepSeek v4 Pro）</td><td data-col="date"><strong>10/14</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">需 opt-in 贡献构建数据</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>Bolt Lite $9/月 waitlist</strong></td><td data-col="date"><strong>10/14 报名截止</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">进入后价格长期有效</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>WorkBuddy 学生版 1000 积分 / ChatGPT 学生促销</strong></td><td data-col="date"><strong>10/31</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>火山 Coding Plan 2.5 折（Pro 首购 49.9 元）</strong></td><td data-col="date"><strong>11/8</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>杭州全城 Coding 计划</strong>（个人季卡 −44% / 年卡 −51%，上城企业年卡 −55%）</td><td data-col="date"><strong>12/9</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>腾讯云 TokenHub 新人免费包 / 移动云 2500 万 Token / Gemini 学生免费 / 即梦片场 S 级全额返还 / Trae 企业版半价</strong></td><td data-col="date"><strong>12/31</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="over"><td data-col="body">⚪ ZCode Weekend Build V · 3 亿 token</td><td data-col="date">9/14 09:00</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
+<tr data-st="over"><td data-col="body">⚪ Arena GPT-Image-2.5 Sunburst 免费 72 小时</td><td data-col="date">9/13 23:00</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
+<tr data-st="over"><td data-col="body">⚪ Qoder × Qwen3.8-Max 免费调用（原活动）</td><td data-col="date">9/3 23:59</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
+<tr data-st="over"><td data-col="body">⚪ Hy4 preview 原限免（国际版首发两周）</td><td data-col="date">9/10 23:59</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束，改走 9/11 新规</span></td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
 <section id="s05" class="sec">
 <h2><span class="sn">05</span><span class="h2t">本期纠错清单</span><span class="h2sub">（对 001–004 期）</span></h2>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl c4">
 <thead><tr><th>#</th><th>004 期写法</th><th>实际情况</th><th>影响</th></tr></thead><tbody>
 <tr><td>1</td><td>9 月下旬最近节点是"9/24 文心快码 Comate"</td><td><strong>9/23 还有一个 WorkBuddy / CodeBuddy 国内版 DeepSeek V4.1 Flash 0.03x 折扣</strong>，比 Comate 早一天</td><td>按紧急度排待办会排错顺序</td></tr>
 <tr><td>2</td><td>未收录 WorkBuddy 国际版福利</td><td><strong>国际版 Hy4 preview / Hy3 / DeepSeek-V4.1-Flash 三模型 0.00x 免费，窗口 9/11–9/25</strong>，且与 Free 档自带积分不冲突</td><td>这是"已经在用的工具里躺着的免费额度"，性价比最高的一条</td></tr>
@@ -703,7 +891,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td>6</td><td>未提示混元平台停服</td><td><strong>腾讯老的混元大模型平台 2026 年 9 月底停服，新项目要上 TokenHub</strong></td><td>按老文档接入的项目会在 10 月直接断掉</td></tr>
 <tr><td>7</td><td>Bolt Forge"至 10/14"</td><td>确认；<strong>补充</strong>：Bolt Lite $9/月 waitlist 也是 <strong>10/14 关闭</strong>，与免费加成同日结束</td><td>想长期用便宜价的人只有 10/14 前这一窗口</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
 <section id="s06" class="sec">
@@ -714,7 +902,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <section id="s07" class="sec">
 <h2><span class="sn">07</span><span class="h2t">按任务选型速查</span><span class="h2sub">（更新版）</span></h2>
 <div class="tblwrap">
-<table class="tbl w1" style="--w1:224px">
+<table class="tbl c3 w1 w1m" style="--w1:224px;--w1m:224px">
 <thead><tr><th>我要做的事</th><th>免费组合</th><th>成本</th></tr></thead><tbody>
 <tr><td><strong>做 AI 短剧 / 漫剧</strong></td><td><strong>Pavo</strong>：Flash 免费批量出片 + 每日 200 积分跑标准版 + 无限画布返工 + 3D 导演台</td><td>¥0</td></tr>
 <tr><td><strong>一键分发多平台</strong></td><td><strong>AiToEarn</strong>（开源可自部署，10+ 平台，支持 MCP）或 Nimply（海外 7 平台自动发布）</td><td>¥0</td></tr>
@@ -731,7 +919,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>做办公交付物</strong></td><td>WorkBuddy（国内版体验版每月 500 积分；国际版 Free 每月 100 + 每日 30）+ 腾讯元器（每月 10 万次免费）+ 元宝（永久免费）</td><td>¥0</td></tr>
 <tr><td><strong>建内容站 / 让内容被 AI 引用</strong></td><td>⚠️ <strong>Cloudflare 9/15 起默认屏蔽 AI 爬虫</strong>（除非明示"仅搜索"与"训练/Agent"两类机器人身份），并转向 <strong>Pay Per Use</strong>（内容出现在 AI 回答里才付费）</td><td>影响收入，非省钱</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
 <section id="s08" class="sec">
@@ -740,7 +928,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p>用户本期补充的 <code>https://aihot.news/</code>，经核查<strong>属于 T4 层已有的「AI-HOT（168 信源分级）」项目</strong>——即 <code>aihot.virxact.com</code> 的新域名（<code>aihot.news/items/&lt;id&gt;</code> 为条目永久链接，<code>aihot.virxact.com/daily</code> 为日报页）。主理人是公众号「数字生命卡兹克」。</p>
 <p><strong>它对本报告的实际价值（本期首次使用后的评估）</strong>：</p>
 <div class="tblwrap">
-<table class="tbl w1" style="--w1:168px">
+<table class="tbl c3 w1 w1m" style="--w1:168px;--w1m:168px">
 <thead><tr><th>能力</th><th>说明</th><th>对本报告的作用</th></tr></thead><tbody>
 <tr><td><strong>按天归档 + 时间戳</strong></td><td>每条约 6 条/天，带精确到分钟的发布时间</td><td><strong>补 T0 首发时间</strong>——国内厂商发模型/发福利的准确时点</td></tr>
 <tr><td><strong>AI 评分（0–100）</strong></td><td>每条给"AI 评分"与"推荐理由"</td><td><strong>自动降噪</strong>，快速筛出值得追的条目</td></tr>
@@ -748,13 +936,13 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>按主题频道</strong></td><td>如"现象与趋势"（<code>/topics/trends</code>）等</td><td>按主题追溯，不必逐日翻</td></tr>
 <tr><td><strong>原文直链</strong></td><td>每条可点进原帖</td><td>满足"T0 定事实"的可追溯要求</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <p><strong>定位建议</strong>：放在 <strong>T4 聚合器</strong>，但<strong>用途高于其他 T4 源</strong>——它是少数<strong>同时做了自动抓取 + AI 筛选 + 跨源计数</strong>的聚合器，可作为"每日扫描的入口层"，再由它跳去 T0 原文定事实。<strong>注意</strong>：它自身的"AI 评分"是<strong>模型打分，不是事实核查</strong>，结论仍须回 T0。</p>
 <blockquote class="bq"><p>已同步更新 <code>AI信息源分级清单-T0-T4.md</code>：T4 的 AI-HOT 条目补记新域名 <code>aihot.news</code> 与上述四项能力（条目数不变，仍为 T4 = 12）。</p></blockquote>
 <h3 id="h3-20"><span class="h3n">2</span>本期实际命中分布</h3>
 <div class="tblwrap">
-<table class="tbl w1" style="--w1:146px">
+<table class="tbl c3 w1 w1m" style="--w1:146px;--w1m:146px">
 <thead><tr><th>层级</th><th>本期命中信源</th><th>贡献</th></tr></thead><tbody>
 <tr><td><strong>T0 官方一手·国内</strong></td><td>腾讯云 TokenHub 文档与服务条款、智谱 AutoClaw 官方活动文档、腾讯混元官方博客、阿里云百炼帮助中心/开发者社区、Google AI 博客、腾讯云开发者社区</td><td>Hy4 preview 开源与免费两周、AutoClaw 积分加油站、TokenHub 条款 9/14 生效、OPC 计划、TranslateGemma</td></tr>
 <tr><td><strong>T0 模型与开源</strong></td><td>Hugging Face（Most likes 榜）、ModelScope、arXiv</td><td><strong>Qwen3.8-27B 登顶 HF 历史最受欢迎榜（9/16）</strong>、Xiaomi-Robotics-U0</td></tr>
@@ -765,7 +953,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr><td><strong>T3 媒体·国外</strong></td><td>iadecider、Upgrade Magazine、China Innovation Watch、ai-daily.dev</td><td>B.AI 定价与合规、Hy4 preview 官方稿、中国 AI 分发入口分析</td></tr>
 <tr><td><strong>T4 聚合器</strong></td><td><strong>AIHOT（aihot.news）</strong>、felloai.com、freellm.net</td><td>每日扫描入口、2026 版免费额度实测（Kling/Suno/Runway/ElevenLabs）</td></tr>
 </tbody></table>
-<p class="scrollhint" aria-hidden="true">← 表格可横向滑动</p>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <h3 id="h3-21"><span class="h3n">3</span>清单缺口（本期再次确认，建议补）</h3>
 <ol class="ol"><li><span class="lin">1</span><span class="lit"><strong>上海人工智能实验室（书生 / InternLM）</strong> —— 004 期提出，本期仍无对应条目（Atria Dawn 系列持续产出）。</span></li><li><span class="lin">2</span><span class="lit"><strong>免费额度垂直站</strong>（freellm.net / aifree.dev / tokennav.cc/free）—— 本期 8 家免费 API 的额度表主要靠这些站交叉验证。</span></li><li><span class="lin">3</span><span class="lit"><strong>中文权益清单公众号</strong>（9 月福利大全、AI 小美矿队、什么值得买、All Agent 百科）—— 国内限时福利的<strong>唯一系统整理方</strong>，口径需降级标注。</span></li><li><span class="lin">4</span><span class="lit"><strong>地方政府门户 / 经信部门</strong>（成都、杭州、深圳龙岗、武汉江夏）—— 词元券、Token 卡类额度的唯一来源。</span></li><li><span class="lin">5</span><span class="lit">🆕 <strong>内容平台的官方创作者中心文档</strong>（抖音 AI 工坊、小红书开发者文档、B站 Toy、腾讯吐司）—— 本期"AI 免费内容发布"线<strong>全部关键事实出自这里</strong>，而清单的 T3 只有媒体，没有平台官方文档层。</span></li></ol>
@@ -936,6 +1124,36 @@ mark.hl.cur{background:var(--accent); color:#fff}
   });
   document.getElementById("qnext").addEventListener("click",function(){jump(1);});
   document.getElementById("qprev").addEventListener("click",function(){jump(-1);});
+
+  /* ---------- 手机端搜索条：<=600px 时搜索收成一个图标，点开成全宽搜索栏 ---------- */
+  var sBtn=document.getElementById("searchBtn");
+  function closeSearch(){
+    document.body.classList.remove("search-open");
+    sBtn.textContent="⌕";
+    sBtn.setAttribute("aria-expanded","false");
+  }
+  sBtn.addEventListener("click",function(){
+    var open=document.body.classList.toggle("search-open");
+    sBtn.textContent=open?"✕":"⌕";
+    sBtn.setAttribute("aria-expanded",open?"true":"false");
+    if(open) q.focus();
+  });
+  document.addEventListener("keydown",function(e){
+    /* 输入框内的 Esc 交给上面那段处理（只清空，不关面板） */
+    if(e.key==="Escape" && document.body.classList.contains("search-open") && document.activeElement!==q) closeSearch();
+  });
+
+  /* ---------- 量顶栏与筛选条的实际高度写回 CSS 变量 ----------
+     --tb-h 决定抽屉从哪开始、锚点跳转留多少空；--chips-h 决定截止表表头吸在哪。
+     两者都随字号与是否换行变化，写死数值迟早对不上。 */
+  function syncMetrics(){
+    var tb=document.querySelector(".topbar"), ch=document.querySelector(".chips");
+    if(tb) root.style.setProperty("--tb-h", tb.offsetHeight+"px");
+    if(ch) root.style.setProperty("--chips-h", ch.offsetHeight+"px");
+  }
+  syncMetrics();
+  window.addEventListener("resize",syncMetrics);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(syncMetrics);
 
   /* ---------- 移动端目录 ---------- */
   var menuBtn=document.getElementById("menuBtn");

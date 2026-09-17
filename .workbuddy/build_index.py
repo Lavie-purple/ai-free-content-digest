@@ -110,13 +110,16 @@ def main():
     for s, d in [("build_web.py", "日报 md → 单文件网页版（自包含，0 外部引用）"),
                  ("verify_web.py", "编译后必跑：表格列数/行数、保真度、标签闭合、状态格"),
                  ("probe_layout.py", "UI 量测：表格列宽满足度 / 搜索框可用宽 / 装饰元素压字（需 Edge）"),
+                 ("probe_mobile.py", "手机端量测：320–414px 四档视口 / 触控目标 / 溢出 / 首列粘性（需 Edge）"),
+                 ("snap_mobile.py", "手机端截图：iframe 造窄视口，11 个镜头，md5 判重（需 Edge）"),
                  ("audit_color.py", "配色审计：语义色色距 + WCAG 对比度 + opacity 叠加后实测值"),
                  ("extract_deadlines.py", "第四章截止表 → deadlines.csv"),
                  ("check_deadlines.py", "截止巡检：过期未更新 / N 天内到期（`--days` / `--today`）"),
                  ("check_frozen.py", "出刊前防重复：比对已固化条目库，有重复则 exit 1"),
                  ("build_source_hits.py", "信源命中统计 → 回写台账 + 导出 CSV"),
                  ("build_index.py", "重建本索引（INDEX.md）"),
-                 ("build_index_web.py", "生成站点首页 index.html（GitHub Pages 根路径入口）")]:
+                 ("build_index_web.py", "生成站点首页 index.html（GitHub Pages 根路径入口）"),
+                 ("run_all.py", "工具链统一入口：一把跑完并保证日志是 UTF-8（PowerShell 捕获会乱码）")]:
         L.append("| `%s` | %s |" % (s, d))
     L.append("")
     L.append("## 版本控制与线上地址")
