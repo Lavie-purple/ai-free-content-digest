@@ -1,0 +1,15 @@
+# 临时与中间产物（不入库）
+.workbuddy/_shot/
+.workbuddy/tmp_*
+.workbuddy/*.tmp
+*tmp_verify_*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 系统
+Thumbs.db
+desktop.ini
+.DS_Store
