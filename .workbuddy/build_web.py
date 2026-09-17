@@ -99,6 +99,18 @@ def is_sep(line):
     return bool(re.match(r"^\|[\s:\-\|]+\|$", line.strip()))
 
 
+def disp_w(s):
+    """估算一段文字在 14px 正文字号下的显示宽度（px），供首列下限使用。"""
+    t = re.sub(r"\*\*|`", "", s or "")
+    # 去掉 emoji / 变体选择符 / 零宽连接符：它们不占正文字宽
+    t = re.sub(r"[\U0001F000-\U0001FAFF\U0001F1E6-\U0001F1FF"
+               r"\u2190-\u21FF\u2300-\u27BF\u2B00-\u2BFF\uFE0F\u200D]", "", t)
+    w = 0.0
+    for ch in t:
+        w += 14.0 if ord(ch) > 0x2E80 else 7.4
+    return w
+
+
 def render_table(rows, section_no):
     head = cells(rows[0])
     body = [cells(r) for r in rows[2:]]
@@ -119,8 +131,34 @@ def render_table(rows, section_no):
             '<span class="chips-count" id="ledgerCount" aria-live="polite"></span>'
             "</div>"
         )
-    out.append('<table class="%s">' % cls)
-    out.append("<thead><tr>" + "".join("<th>%s</th>" % inline(h) for h in head) + "</tr></thead><tbody>")
+    # 列语义分类：截止表靠表头文字认日期列/状态列，用于固定列宽
+    if ledger:
+        kinds = []
+        for h in head:
+            if any(k in h for k in ("截止", "日期", "时间")):
+                kinds.append("date")
+            elif "状态" in h:
+                kinds.append("st")
+            else:
+                kinds.append("body")
+    else:
+        kinds = [""] * ncol
+
+    # 首列条目名若属于「中短专名」区间，给一个按内容估出的最小宽度，
+    # 避免被其它长列挤到中文逐字换行。序号列（#）与超长说明列不处理。
+    w1 = 0
+    first_head = head[0].strip() if head else ""
+    if first_head not in ("#", "序号", "") and body:
+        need = max(disp_w(r[0]) for r in body)
+        if 92 <= need <= 210:
+            w1 = int(need + 33)
+
+    tcls = cls + (" w1" if w1 else "")
+    style = ' style="--w1:%dpx"' % w1 if w1 else ""
+    out.append('<table class="%s"%s>' % (tcls, style))
+    out.append("<thead><tr>" + "".join(
+        "<th%s>%s</th>" % (' data-col="%s"' % kinds[i] if kinds[i] else "", inline(h))
+        for i, h in enumerate(head)) + "</tr></thead><tbody>")
     if ledger:
         for r in body:
             r = (r + [""] * ncol)[:ncol]
@@ -209,7 +247,8 @@ def build():
             body.append('<section id="%s" class="sec">' % aid)
             body.append(
                 '<h2><span class="sn">%s</span><span class="h2t">%s</span>%s</h2>'
-                % (no, esc(t), '<span class="h2sub">（%s）</span>' % inline(sub) if sub else "")
+                % (no if no != "00" else "\u00b7\u00b7", esc(t),
+                   '<span class="h2sub">（%s）</span>' % inline(sub) if sub else "")
             )
             i += 1
             continue
@@ -339,27 +378,28 @@ PAGE = """<!DOCTYPE html>
    ============================================================ */
 :root{
   --bg:#f2eee5; --bg-2:#eae4d7; --surface:#fbf9f3; --surface-2:#f6f2e8;
-  --ink:#1b1913; --ink-2:#3a362d; --muted:#6c6458; --faint:#958c7d;
+  --ink:#1b1913; --ink-2:#3a362d; --muted:#5f584a; --faint:#736a5a;
   --rule:rgba(27,25,19,.16); --rule-2:rgba(27,25,19,.34); --rule-strong:rgba(27,25,19,.62);
   --accent:#bf3327; --accent-ink:#a02a20; --accent-soft:rgba(191,51,39,.10);
-  --crit:#b23028; --soon:#a9701a; --live:#3b6a4d; --plan:#38587a; --over:#8b8378;
+  --crit:#8c1a10; --soon:#8f5e12; --live:#3b6a4d; --plan:#38587a; --over:#6e675c;
   --hl:#ffe08a; --shadow:0 1px 2px rgba(40,32,20,.10),0 8px 28px rgba(40,32,20,.07);
   --grain:.05;
   --fd:"Source Han Serif SC","Noto Serif SC","Songti SC","STSong","SimSun",Georgia,"Times New Roman",serif;
   --fu:"Source Han Sans SC","PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
   --fm:"JetBrains Mono","Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace;
-  --fs-xs:12px; --fs-sm:13.5px; --fs-base:17px; --fs-lg:19px; --fs-xl:23px;
-  --fs-2xl:30px; --fs-3xl:42px; --fs-4xl:clamp(96px,19vw,208px);
+  --fs-xs:12px; --fs-sm:13.5px; --fs-tbl:14px; --fs-mid:15px;
+  --fs-base:17px; --fs-lg:19px; --fs-xl:23px;
+  --fs-2xl:30px; --fs-3xl:42px; --fs-4xl:clamp(60px,9.8vw,138px);
   --s1:4px; --s2:8px; --s3:16px; --s4:24px; --s5:40px; --s6:64px; --s7:96px;
   --r1:3px; --r2:8px; --r3:14px;
   --ease:cubic-bezier(.16,1,.3,1); --fast:170ms; --base:340ms;
 }
 html[data-theme="dark"]{
   --bg:#131210; --bg-2:#191713; --surface:#1c1a16; --surface-2:#232019;
-  --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#7b7365;
+  --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;
   --rule:rgba(236,231,220,.15); --rule-2:rgba(236,231,220,.3); --rule-strong:rgba(236,231,220,.55);
   --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.14);
-  --crit:#ff6d55; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#8a8175;
+  --crit:#ff3b30; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#9c9387;
   --hl:#6b5a12; --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
   --grain:.045;
 }
@@ -411,6 +451,7 @@ code{
   display:flex; align-items:center; gap:var(--s3); min-height:56px;
 }
 .tb-brand{font-family:var(--fd); font-weight:700; letter-spacing:.04em; white-space:nowrap; font-size:var(--fs-sm)}
+.tb-brand .tbb-short{display:none}
 .tb-brand b{color:var(--accent-ink); font-family:var(--fm); font-weight:700; margin-left:6px; letter-spacing:0}
 .tb-nav{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; flex:1}
 .tb-nav::-webkit-scrollbar{display:none}
@@ -423,16 +464,25 @@ code{
 .tb-nav a.active{color:var(--accent-ink); background:var(--accent-soft)}
 .tb-nav a.active b{color:var(--accent-ink)}
 .tb-tools{display:flex; align-items:center; gap:var(--s2); margin-left:auto}
-.search{position:relative; display:flex; align-items:center}
+.search{position:relative; display:flex; align-items:center; flex:0 0 auto}
 .search input{
   font-family:var(--fu); font-size:var(--fs-sm); color:var(--ink);
   background:var(--surface); border:1px solid var(--rule-2); border-radius:99px;
-  padding:8px 74px 8px 32px; width:190px; transition:width var(--base) var(--ease),border-color var(--fast);
+  padding:8px 14px 8px 32px; width:220px;
+  transition:width var(--base) var(--ease),border-color var(--fast);
 }
 .search input::placeholder{color:var(--faint)}
-.search input:focus{width:250px; border-color:var(--accent); outline:none}
+/* 计数与上下条按钮只在「有输入」时占位，空态下把这段内边距还给占位符 */
+.search input:not(:placeholder-shown){padding-right:76px}
+.search input:focus{width:280px; border-color:var(--accent); outline:none}
 .search .si{position:absolute; left:11px; font-size:13px; color:var(--faint); pointer-events:none}
-.search .sc{position:absolute; right:8px; font-family:var(--fm); font-size:11px; color:var(--faint); display:flex; gap:4px; align-items:center}
+.search .sc{
+  position:absolute; right:8px; font-family:var(--fm); font-size:11px; color:var(--faint);
+  display:flex; gap:4px; align-items:center; opacity:0; pointer-events:none;
+  transition:opacity var(--fast);
+}
+.search input:not(:placeholder-shown) ~ .sc,
+.search input:focus ~ .sc{opacity:1; pointer-events:auto}
 .search .sc button{
   border:1px solid var(--rule); background:var(--surface-2); color:var(--ink-2); cursor:pointer;
   border-radius:var(--r1); font-size:11px; padding:2px 5px; line-height:1.4;
@@ -463,18 +513,18 @@ h1.mh-t{
 .mh-sub{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted); letter-spacing:.06em; margin:0 0 var(--s5)}
 .mh-sub b{color:var(--ink-2); font-weight:600}
 .mh-num{
-  position:absolute; right:var(--s4); top:clamp(58px,7.6vw,98px);
-  font-family:var(--fd); font-weight:700; font-size:var(--fs-4xl); line-height:.78;
-  color:transparent; -webkit-text-stroke:1.5px var(--rule-2);
+  position:absolute; right:var(--s4); top:clamp(74px,7.4vw,106px);
+  font-family:var(--fd); font-weight:700; font-size:var(--fs-4xl); line-height:.8;
+  color:transparent; -webkit-text-stroke:1.5px var(--rule);
   letter-spacing:-.03em; pointer-events:none; user-select:none; z-index:-1;
 }
 @supports not (-webkit-text-stroke:1px #000){.mh-num{color:var(--bg-2)}}
-html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:var(--rule-2)}
+html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
 .pubnote{
   border-left:3px solid var(--accent); background:var(--surface); box-shadow:var(--shadow);
   padding:var(--s3) var(--s4); margin:0 0 var(--s5); border-radius:0 var(--r2) var(--r2) 0;
 }
-.pubnote p{margin:0 0 6px; font-size:var(--fs-sm); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
+.pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
 .pubnote p:last-child{margin-bottom:0}
 .summary-note{}
 
@@ -573,7 +623,7 @@ blockquote{margin:0}
 .tblwrap{position:relative; margin:0 0 var(--s5)}
 .tblwrap.scrolly{max-height:74vh; overflow:auto; border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface); box-shadow:var(--shadow)}
 .tbl{
-  width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
   background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
 }
 .tblwrap.scrolly .tbl{border:0; border-radius:0}
@@ -588,20 +638,27 @@ blockquote{margin:0}
 .tbl tbody tr{transition:background var(--fast)}
 .tbl tbody tr:hover{background:var(--surface-2)}
 .tbl td:first-child{color:var(--ink); font-weight:600}
+/* 首列条目名被压到逐字换行时，给一个按内容算出的下限（由编译器写入 --w1） */
+.tbl.w1 tbody td:first-child{min-width:var(--w1,120px); overflow-wrap:break-word}
 .tbl code{background:transparent; border-color:var(--rule); padding:.05em .3em}
 .tbl strong{color:var(--ink)}
 .tbl tr[hidden]{display:none}
 
 /* 截止时间表：状态色条 + 筛选 */
 .ledger{border-left:3px solid transparent}
+/* 固定列宽：状态列原先 nowrap 会把该列 min-content 撑到整句宽（实测 779px），
+   把「活动」列榨到 126px 逐字换行。改为固定布局 + 状态列允许换行。 */
+.tbl.ledger{table-layout:fixed}
+.tbl.ledger th[data-col="date"]{width:76px}
+.tbl.ledger th[data-col="st"]{width:190px}
 .ledger tbody tr{box-shadow:inset 3px 0 0 var(--rule-2)}
 .ledger tbody tr[data-st="crit"]{box-shadow:inset 3px 0 0 var(--crit)}
 .ledger tbody tr[data-st="soon"]{box-shadow:inset 3px 0 0 var(--soon)}
 .ledger tbody tr[data-st="live"]{box-shadow:inset 3px 0 0 var(--live)}
 .ledger tbody tr[data-st="warn"]{box-shadow:inset 3px 0 0 var(--plan)}
-.ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over); opacity:.55}
+.ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over)}
 .ledger tbody tr[data-st="over"] td{color:var(--muted)}
-.ledger td[data-col="st"]{white-space:nowrap}
+.ledger td[data-col="st"]{white-space:normal; overflow-wrap:anywhere}
 .st{
   display:inline-block; width:9px; height:9px; border-radius:99px; margin-right:8px; vertical-align:1px;
   background:var(--rule-2);
@@ -688,9 +745,12 @@ mark.hl.cur{background:var(--accent); color:#fff}
 @media (max-width:820px){
   :root{--fs-base:16.5px; --fs-2xl:25px; --s5:32px; --s6:44px}
   .tb-in{padding:0 var(--s3); gap:var(--s2)}
-  .tb-brand span{display:none}
-  .search input{width:120px; padding-right:60px}
-  .search input:focus{width:170px}
+  .search input{width:168px}
+  .search input:focus{width:206px}
+  .tb-brand .tbb-long{display:none}
+  .tb-brand .tbb-short{display:inline}
+  .tbl.ledger{min-width:600px}
+  .tbl.ledger th[data-col="st"]{width:150px}
   .masthead,.shell,.foot{padding-left:var(--s3); padding-right:var(--s3)}
   .mh-num{right:var(--s3); -webkit-text-stroke-width:1px}
   .tblwrap:not(.scrolly){overflow-x:auto; -webkit-overflow-scrolling:touch}
@@ -699,6 +759,9 @@ mark.hl.cur{background:var(--accent); color:#fff}
   .ol.big li{padding:var(--s3)}
   .ol.big li{grid-template-columns:26px 1fr; gap:var(--s2)}
   .summary .ul li{padding-left:52px}
+}
+@media (max-width:600px){
+  .mh-num{display:none}
 }
 @media (max-width:520px){
   .search{display:none}
@@ -747,7 +810,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 
 <header class="topbar" data-no-print>
   <div class="tb-in">
-    <span class="tb-brand">AI 免费内容与权益速递<b>#__ISSUE__</b></span>
+    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#__ISSUE__</b></span>
     <nav class="tb-nav" id="topnav" aria-label="章节导航">__NAV__</nav>
     <div class="tb-tools">
       <div class="search">

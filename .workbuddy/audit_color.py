@@ -14,8 +14,9 @@ import sys
 WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT = os.path.join(WS, ".workbuddy", "build_web.py")
 
-# 语义上必须能互相区分的令牌（品牌强调色 vs 五个状态色）
-SEM = ["accent", "accent-ink", "crit", "soon", "live", "plan", "over"]
+# 语义上必须能互相区分的令牌（品牌强调色 vs 五个状态色）。
+# accent-ink 是 accent 的深色变体，本来就该相近，放进来只会稳定误报，故不计。
+SEM = ["accent", "crit", "soon", "live", "plan", "over"]
 
 # (显示名, 前景令牌, 背景令牌, AA 要求)
 PAIRS = [
@@ -82,16 +83,24 @@ def main():
     bad = 0
     for name, t in themes:
         print("-- %s主题 --" % name)
+        hits = 0
+        worst = (1e9, "", "")
         for i in range(len(SEM)):
             for j in range(i + 1, len(SEM)):
                 a, b = SEM[i], SEM[j]
                 if a not in t or b not in t:
                     continue
                 d = sum((x - y) ** 2 for x, y in zip(rgb(t[a]), rgb(t[b]))) ** 0.5
+                if d < worst[0]:
+                    worst = (d, a, b)
                 if d < 40:
                     flag = "  <<< 完全相同" if d == 0 else "  <<< 几乎无法区分"
                     bad += 1
+                    hits += 1
                     print("   %-10s%s  vs  %-10s%s   距离 %6.1f%s" % (a, t[a], b, t[b], d, flag))
+        if hits == 0:
+            print("   全部 >= 40，无语义混淆色（最接近的一对：%s vs %s = %.1f）"
+                  % (worst[1], worst[2], worst[0]))
         print()
 
     print("=" * 78)
@@ -108,14 +117,20 @@ def main():
         print()
 
     print("=" * 78)
-    print("③ 整行 opacity:.55（「已结束」行）叠加后的实际对比度")
+    print("③ 状态行整行 opacity 叠加后的实际对比度（值从源码里读，别写死）")
     print("=" * 78)
-    for name, t in themes:
-        fg, bg = rgb(t["over"]), rgb(t["surface"])
-        eff = mix(fg, bg, 0.55)
-        print("   %s: %s 原对比度 %5.2f  ->  opacity .55 后 %s 对比度 %5.2f%s"
-              % (name, t["over"], cr(fg, bg), eff, cr(eff, bg),
-                 "   <<< 已低于可读线" if cr(eff, bg) < 3.0 else ""))
+    mo = re.search(r'tr\[data-st="over"\]\{[^}]*?opacity:\s*([\d.]+)', css)
+    if not mo:
+        print("   未使用整行 opacity —— 弱化由状态色本身承担，不存在叠加损耗")
+        print("   （各主题 over 色的裸对比度见上表「状态 over」行，需 >= 4.5）")
+    else:
+        a = float(mo.group(1))
+        for name, t in themes:
+            fg, bg = rgb(t["over"]), rgb(t["surface"])
+            eff = mix(fg, bg, a)
+            print("   %s: %s 原对比度 %5.2f  ->  opacity %.2f 后 %s 对比度 %5.2f%s"
+                  % (name, t["over"], cr(fg, bg), a, eff, cr(eff, bg),
+                     "   <<< 已低于可读线" if cr(eff, bg) < 3.0 else ""))
     print()
 
 

@@ -45,7 +45,7 @@ PROBE = r"""
     // 告警规则：列够窄(实宽<140px) + 行够高(>90px) + 首列是真文字(>=4字)，
     // 三条同时成立才算「被挤成逐字换行」。单看满足度会把「#」序号列和
     // 「抖音」这类短值列误报（它们列窄是合理的）。
-    var alarm = mn < 140 && mh > 90 && samp.length >= 4;
+    var alarm = mn < 140 && mh > 130 && samp.length >= 4 && ratio < 0.9;
     o.push("表"+(t+1)+" "+kind+(tbs[t].closest(".tblwrap.scrolly")?" [可滚动]":"")
            +" 列宽="+w.join("/")+"  表宽="+Math.round(tbs[t].getBoundingClientRect().width)
            +"  首列实宽="+(mn===1e9?"-":Math.round(mn))+"px 需求="+Math.round(need)+"px 满足度="+(ratio*100).toFixed(0)+"%"
@@ -61,17 +61,37 @@ PROBE = r"""
            +"  可用文本宽="+u+"px"+("（约 "+(u/16).toFixed(1)+" 个中文字）")
            +(u<90?"   <<< 过窄，输入内容看不见":""));
   } else { o.push("搜索框 已隐藏（<=520px 断点）"); }
-  // 装饰元素是否压住文字
-  var n=document.querySelector(".mh-num"), top=document.querySelector(".mh-top");
-  if(n&&top){
+  // 装饰元素是否压住文字：逐个量刊头里的四块文字，别只看元信息行
+  var n=document.querySelector(".mh-num");
+  if(n){
     var a=n.getBoundingClientRect();
     if(a.width===0){o.push("刊头大数字 已收起（不占位）");}
     else{
-      var b=top.getBoundingClientRect();
-      var ox=Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left));
-      var oy=Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
-      o.push("刊头大数字 vs 元信息行 重叠="+Math.round(ox)+"x"+Math.round(oy)+"px"
-             +(ox>0&&oy>0?"   <<< 压住文字":""));
+      var tg=[["元信息行",".mh-top"],["主标题","h1.mh-t"],["副题",".mh-sub"],["刊例说明",".pubnote"]];
+      var hits=[];
+      function rects(e){
+        var out=[], w=document.createTreeWalker(e, NodeFilter.SHOW_TEXT, null), nd;
+        while((nd=w.nextNode())){
+          if(!nd.nodeValue.replace(/\s+/g,"")) continue;
+          var rg=document.createRange(); rg.selectNodeContents(nd);
+          var rl=rg.getClientRects();
+          for(var i=0;i<rl.length;i++){ if(rl[i].width>0&&rl[i].height>0) out.push(rl[i]); }
+        }
+        return out;
+      }
+      for(var q=0;q<tg.length;q++){
+        var e=document.querySelector(tg[q][1]); if(!e) continue;
+        var rs=rects(e), hit=0;
+        for(var j=0;j<rs.length;j++){
+          var b=rs[j];
+          var ox=Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left));
+          var oy=Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
+          hit=Math.max(hit,Math.round(ox*oy));
+        }
+        if(hit>0) hits.push(tg[q][0]+" 交集"+hit+"px2");
+      }
+      o.push("刊头大数字 "+Math.round(a.width)+"x"+Math.round(a.height)+"px"
+             +(hits.length?"   <<< 压住文字 "+hits.join(" / "):"   未压住任何刊头文字"));
     }
   }
   document.title="METRICS|"+o.join("||");

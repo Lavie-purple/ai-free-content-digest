@@ -20,27 +20,28 @@
    ============================================================ */
 :root{
   --bg:#f2eee5; --bg-2:#eae4d7; --surface:#fbf9f3; --surface-2:#f6f2e8;
-  --ink:#1b1913; --ink-2:#3a362d; --muted:#6c6458; --faint:#958c7d;
+  --ink:#1b1913; --ink-2:#3a362d; --muted:#5f584a; --faint:#736a5a;
   --rule:rgba(27,25,19,.16); --rule-2:rgba(27,25,19,.34); --rule-strong:rgba(27,25,19,.62);
   --accent:#bf3327; --accent-ink:#a02a20; --accent-soft:rgba(191,51,39,.10);
-  --crit:#b23028; --soon:#a9701a; --live:#3b6a4d; --plan:#38587a; --over:#8b8378;
+  --crit:#8c1a10; --soon:#8f5e12; --live:#3b6a4d; --plan:#38587a; --over:#6e675c;
   --hl:#ffe08a; --shadow:0 1px 2px rgba(40,32,20,.10),0 8px 28px rgba(40,32,20,.07);
   --grain:.05;
   --fd:"Source Han Serif SC","Noto Serif SC","Songti SC","STSong","SimSun",Georgia,"Times New Roman",serif;
   --fu:"Source Han Sans SC","PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
   --fm:"JetBrains Mono","Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace;
-  --fs-xs:12px; --fs-sm:13.5px; --fs-base:17px; --fs-lg:19px; --fs-xl:23px;
-  --fs-2xl:30px; --fs-3xl:42px; --fs-4xl:clamp(96px,19vw,208px);
+  --fs-xs:12px; --fs-sm:13.5px; --fs-tbl:14px; --fs-mid:15px;
+  --fs-base:17px; --fs-lg:19px; --fs-xl:23px;
+  --fs-2xl:30px; --fs-3xl:42px; --fs-4xl:clamp(60px,9.8vw,138px);
   --s1:4px; --s2:8px; --s3:16px; --s4:24px; --s5:40px; --s6:64px; --s7:96px;
   --r1:3px; --r2:8px; --r3:14px;
   --ease:cubic-bezier(.16,1,.3,1); --fast:170ms; --base:340ms;
 }
 html[data-theme="dark"]{
   --bg:#131210; --bg-2:#191713; --surface:#1c1a16; --surface-2:#232019;
-  --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#7b7365;
+  --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;
   --rule:rgba(236,231,220,.15); --rule-2:rgba(236,231,220,.3); --rule-strong:rgba(236,231,220,.55);
   --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.14);
-  --crit:#ff6d55; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#8a8175;
+  --crit:#ff3b30; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#9c9387;
   --hl:#6b5a12; --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
   --grain:.045;
 }
@@ -92,6 +93,7 @@ code{
   display:flex; align-items:center; gap:var(--s3); min-height:56px;
 }
 .tb-brand{font-family:var(--fd); font-weight:700; letter-spacing:.04em; white-space:nowrap; font-size:var(--fs-sm)}
+.tb-brand .tbb-short{display:none}
 .tb-brand b{color:var(--accent-ink); font-family:var(--fm); font-weight:700; margin-left:6px; letter-spacing:0}
 .tb-nav{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; flex:1}
 .tb-nav::-webkit-scrollbar{display:none}
@@ -104,16 +106,25 @@ code{
 .tb-nav a.active{color:var(--accent-ink); background:var(--accent-soft)}
 .tb-nav a.active b{color:var(--accent-ink)}
 .tb-tools{display:flex; align-items:center; gap:var(--s2); margin-left:auto}
-.search{position:relative; display:flex; align-items:center}
+.search{position:relative; display:flex; align-items:center; flex:0 0 auto}
 .search input{
   font-family:var(--fu); font-size:var(--fs-sm); color:var(--ink);
   background:var(--surface); border:1px solid var(--rule-2); border-radius:99px;
-  padding:8px 74px 8px 32px; width:190px; transition:width var(--base) var(--ease),border-color var(--fast);
+  padding:8px 14px 8px 32px; width:220px;
+  transition:width var(--base) var(--ease),border-color var(--fast);
 }
 .search input::placeholder{color:var(--faint)}
-.search input:focus{width:250px; border-color:var(--accent); outline:none}
+/* 计数与上下条按钮只在「有输入」时占位，空态下把这段内边距还给占位符 */
+.search input:not(:placeholder-shown){padding-right:76px}
+.search input:focus{width:280px; border-color:var(--accent); outline:none}
 .search .si{position:absolute; left:11px; font-size:13px; color:var(--faint); pointer-events:none}
-.search .sc{position:absolute; right:8px; font-family:var(--fm); font-size:11px; color:var(--faint); display:flex; gap:4px; align-items:center}
+.search .sc{
+  position:absolute; right:8px; font-family:var(--fm); font-size:11px; color:var(--faint);
+  display:flex; gap:4px; align-items:center; opacity:0; pointer-events:none;
+  transition:opacity var(--fast);
+}
+.search input:not(:placeholder-shown) ~ .sc,
+.search input:focus ~ .sc{opacity:1; pointer-events:auto}
 .search .sc button{
   border:1px solid var(--rule); background:var(--surface-2); color:var(--ink-2); cursor:pointer;
   border-radius:var(--r1); font-size:11px; padding:2px 5px; line-height:1.4;
@@ -144,18 +155,18 @@ h1.mh-t{
 .mh-sub{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted); letter-spacing:.06em; margin:0 0 var(--s5)}
 .mh-sub b{color:var(--ink-2); font-weight:600}
 .mh-num{
-  position:absolute; right:var(--s4); top:clamp(58px,7.6vw,98px);
-  font-family:var(--fd); font-weight:700; font-size:var(--fs-4xl); line-height:.78;
-  color:transparent; -webkit-text-stroke:1.5px var(--rule-2);
+  position:absolute; right:var(--s4); top:clamp(74px,7.4vw,106px);
+  font-family:var(--fd); font-weight:700; font-size:var(--fs-4xl); line-height:.8;
+  color:transparent; -webkit-text-stroke:1.5px var(--rule);
   letter-spacing:-.03em; pointer-events:none; user-select:none; z-index:-1;
 }
 @supports not (-webkit-text-stroke:1px #000){.mh-num{color:var(--bg-2)}}
-html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:var(--rule-2)}
+html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
 .pubnote{
   border-left:3px solid var(--accent); background:var(--surface); box-shadow:var(--shadow);
   padding:var(--s3) var(--s4); margin:0 0 var(--s5); border-radius:0 var(--r2) var(--r2) 0;
 }
-.pubnote p{margin:0 0 6px; font-size:var(--fs-sm); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
+.pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
 .pubnote p:last-child{margin-bottom:0}
 .summary-note{}
 
@@ -254,7 +265,7 @@ blockquote{margin:0}
 .tblwrap{position:relative; margin:0 0 var(--s5)}
 .tblwrap.scrolly{max-height:74vh; overflow:auto; border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface); box-shadow:var(--shadow)}
 .tbl{
-  width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
   background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
 }
 .tblwrap.scrolly .tbl{border:0; border-radius:0}
@@ -269,20 +280,27 @@ blockquote{margin:0}
 .tbl tbody tr{transition:background var(--fast)}
 .tbl tbody tr:hover{background:var(--surface-2)}
 .tbl td:first-child{color:var(--ink); font-weight:600}
+/* 首列条目名被压到逐字换行时，给一个按内容算出的下限（由编译器写入 --w1） */
+.tbl.w1 tbody td:first-child{min-width:var(--w1,120px); overflow-wrap:break-word}
 .tbl code{background:transparent; border-color:var(--rule); padding:.05em .3em}
 .tbl strong{color:var(--ink)}
 .tbl tr[hidden]{display:none}
 
 /* 截止时间表：状态色条 + 筛选 */
 .ledger{border-left:3px solid transparent}
+/* 固定列宽：状态列原先 nowrap 会把该列 min-content 撑到整句宽（实测 779px），
+   把「活动」列榨到 126px 逐字换行。改为固定布局 + 状态列允许换行。 */
+.tbl.ledger{table-layout:fixed}
+.tbl.ledger th[data-col="date"]{width:76px}
+.tbl.ledger th[data-col="st"]{width:190px}
 .ledger tbody tr{box-shadow:inset 3px 0 0 var(--rule-2)}
 .ledger tbody tr[data-st="crit"]{box-shadow:inset 3px 0 0 var(--crit)}
 .ledger tbody tr[data-st="soon"]{box-shadow:inset 3px 0 0 var(--soon)}
 .ledger tbody tr[data-st="live"]{box-shadow:inset 3px 0 0 var(--live)}
 .ledger tbody tr[data-st="warn"]{box-shadow:inset 3px 0 0 var(--plan)}
-.ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over); opacity:.55}
+.ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over)}
 .ledger tbody tr[data-st="over"] td{color:var(--muted)}
-.ledger td[data-col="st"]{white-space:nowrap}
+.ledger td[data-col="st"]{white-space:normal; overflow-wrap:anywhere}
 .st{
   display:inline-block; width:9px; height:9px; border-radius:99px; margin-right:8px; vertical-align:1px;
   background:var(--rule-2);
@@ -369,9 +387,12 @@ mark.hl.cur{background:var(--accent); color:#fff}
 @media (max-width:820px){
   :root{--fs-base:16.5px; --fs-2xl:25px; --s5:32px; --s6:44px}
   .tb-in{padding:0 var(--s3); gap:var(--s2)}
-  .tb-brand span{display:none}
-  .search input{width:120px; padding-right:60px}
-  .search input:focus{width:170px}
+  .search input{width:168px}
+  .search input:focus{width:206px}
+  .tb-brand .tbb-long{display:none}
+  .tb-brand .tbb-short{display:inline}
+  .tbl.ledger{min-width:600px}
+  .tbl.ledger th[data-col="st"]{width:150px}
   .masthead,.shell,.foot{padding-left:var(--s3); padding-right:var(--s3)}
   .mh-num{right:var(--s3); -webkit-text-stroke-width:1px}
   .tblwrap:not(.scrolly){overflow-x:auto; -webkit-overflow-scrolling:touch}
@@ -380,6 +401,9 @@ mark.hl.cur{background:var(--accent); color:#fff}
   .ol.big li{padding:var(--s3)}
   .ol.big li{grid-template-columns:26px 1fr; gap:var(--s2)}
   .summary .ul li{padding-left:52px}
+}
+@media (max-width:600px){
+  .mh-num{display:none}
 }
 @media (max-width:520px){
   .search{display:none}
@@ -428,7 +452,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 
 <header class="topbar" data-no-print>
   <div class="tb-in">
-    <span class="tb-brand">AI 免费内容与权益速递<b>#005</b></span>
+    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#005</b></span>
     <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s04"><b>04</b>限时活动与截止时间表</a><a href="#s05"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s08"><b>08</b>本期信源体系更新：纳入 `aihot.news`</a><a href="#s09"><b>09</b>来源与核查说明</a></nav>
     <div class="tb-tools">
       <div class="search">
@@ -470,7 +494,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
   </aside></div>
   <main id="main">
 <section id="s-abs" class="sec summary">
-<h2><span class="sn">00</span><span class="h2t">摘要</span><span class="h2sub">（3 秒版）</span></h2>
+<h2><span class="sn">··</span><span class="h2t">摘要</span><span class="h2sub">（3 秒版）</span></h2>
 <ul class="ul"><li><strong>本期最大新增（发布线）</strong>：<strong>抖音「AI 工坊」+「兴趣卡」</strong> —— 邀请制内测，AI 生成的交互内容<strong>直接进首页推荐流</strong>，不跳小程序、不离开 App；内测期<strong>每个过审作品给 100 元现金</strong>。这补上了"免费内容发出去"最难的一环。</li><li><strong>分发入口全景成型</strong>：抖音（兴趣卡）· 小红书（RED Skill 挂笔记）· B站（Toy）· 腾讯（吐司打通"生成→软著→备案→上架应用宝"）· 豆包（技能·连接器 200+）· WorkBuddy（生态平台上百款 Buddy 应用）。</li><li><strong>今天必须做的两件事</strong>：① 智谱 <strong>AutoClaw</strong> 免费档<strong>今天（9/16）最后一天</strong>，登录领 2 亿 GLM-5.3-Flash tokens；② <strong>B.AI 三模型免费额度 9/16 16:59 (SGT) 结束</strong>，17:00 起转 1 折。</li><li><strong>额度侧最大新增</strong>：阿里云 <strong>OPC 创新助力计划</strong> —— 一人公司/独立开发者可申请<strong>最低 1000 元、最高 100 万元 Token 补贴</strong>（"先用后返"）。</li><li><strong>⚠️ 本期最要命的避坑</strong>：<strong>腾讯老的混元大模型平台 2026 年 9 月底停服</strong>，新项目直接上 <strong>TokenHub</strong>；WorkBuddy/CodeBuddy 上 <strong>Hy3 免费延至 9/30</strong>、<strong>Hy4 preview 免费两周</strong>。</li><li><strong>开源侧</strong>：<strong>Qwen3.8-27B 于 9/16 登顶 Hugging Face 历史最受欢迎开源模型</strong>；小米开源 <strong>Xiaomi-Robotics-U0</strong>（38B 具身世界模型）；Google 开源 <strong>TranslateGemma</strong>（55 语言可离线）。</li></ul>
 </section>
 <section id="s01" class="sec">
@@ -574,7 +598,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <blockquote class="bq"><p>这是本期唯一一条<strong>以"钱"为单位</strong>的免费额度，且上限最高（100 万元），值得单独记。</p></blockquote>
 <h3 id="h3-11"><span class="h3n">2</span>阿里云其余权益（本期补齐）</h3>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl w1" style="--w1:170px">
 <thead><tr><th>项目</th><th>内容</th><th>截止</th></tr></thead><tbody>
 <tr><td><strong>新用户免费 Tokens</strong></td><td>开通百炼即领<strong>超 1 亿</strong>（90 天）；也可表述为"超 7000 万"，<strong>实际取决于开通的模型数量，各模型额度独立、不共享不叠加</strong></td><td>90 天</td></tr>
 <tr><td><strong>模型体验额度</strong></td><td>登录后<strong>每个模型 100 万 tokens</strong></td><td>—</td></tr>
@@ -588,7 +612,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </div>
 <h3 id="h3-12"><span class="h3n">3</span>八家"能长期用"的免费 API（复核后的额度）</h3>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl w1" style="--w1:177px">
 <thead><tr><th>平台</th><th>免费额度</th><th>有效期</th><th>坑</th></tr></thead><tbody>
 <tr><td><strong>火山引擎（豆包）</strong></td><td><strong>每天自动发 200 万 Tokens</strong>，零点刷新不累积；单模型另给 50 万</td><td>日更</td><td><strong>必须到控制台手动开通模型</strong>，否则拿着 Key 也打不通</td></tr>
 <tr><td><strong>百度千帆（文心）</strong></td><td>新用户<strong>每模型 100 万</strong>；ERNIE-Speed / ERNIE-Lite 长期免费</td><td>3 个月</td><td>长期免费的有限速</td></tr>
@@ -632,7 +656,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <div class="tblwrap scrolly">
 <div class="chips" role="group" aria-label="按状态筛选"><span class="chips-label">按状态筛</span><button class="chip on" data-f="all" aria-pressed="true">全部<b data-c="all">0</b></button><button class="chip" data-f="crit" aria-pressed="false">🔴 必办<b data-c="crit">0</b></button><button class="chip" data-f="soon" aria-pressed="false">🟠 今明换挡<b data-c="soon">0</b></button><button class="chip" data-f="live" aria-pressed="false">🟢 生效中<b data-c="live">0</b></button><button class="chip" data-f="warn" aria-pressed="false">⚠ 口径存疑<b data-c="warn">0</b></button><button class="chip" data-f="over" aria-pressed="false">○ 已结束<b data-c="over">0</b></button><span class="chips-count" id="ledgerCount" aria-live="polite"></span></div>
 <table class="tbl ledger">
-<thead><tr><th>活动</th><th>截止</th><th>状态</th></tr></thead><tbody>
+<thead><tr><th data-col="body">活动</th><th data-col="date">截止</th><th data-col="st">状态</th></tr></thead><tbody>
 <tr data-st="soon"><td>🔴 <strong>智谱 AutoClaw 积分加油站第二期（全员档）</strong></td><td><strong>9/16 24:00</strong></td><td data-col="st"><span class="st st-soon">🟠</span><span class="st-txt"><strong>今天最后一天</strong>，当天领当天用</span></td></tr>
 <tr data-st="soon"><td>🔴 <strong>B.AI 三模型免费（Qwen3.8-Flash / Hy3 / MiMo-V2.5）</strong></td><td><strong>9/16 16:59 (SGT)</strong></td><td data-col="st"><span class="st st-soon">🟠</span><span class="st-txt"><strong>今天换挡</strong>，17:00 起转 1 折</span></td></tr>
 <tr data-st="live"><td>🟠 <strong>Claude Fable 5 Credits / ChatGPT 免费版邀请加额</strong></td><td><strong>9/17</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
@@ -645,7 +669,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <tr data-st="live"><td>🟡 <strong>文心 4.0 全系列免费</strong>（文小言 App）</td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，10 月转付费</span></td></tr>
 <tr data-st="live"><td>🟡 <strong>腾讯混元 Hy3</strong>（WorkBuddy / CodeBuddy 端内）</td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，本期确认已延期</span></td></tr>
 <tr data-st="live"><td>🟡 <strong>WorkBuddy 教师版 1000 积分</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
-<tr data-st="warn"><td>🟡 <strong>Qoder：Qwen3.8-Max 免费 800 次</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-warn">⚠</span><span class="st-txt">️ <strong>口径冲突，见第五章纠错</strong></span></td></tr>
+<tr data-st="warn"><td>🟡 <strong>Qoder：Qwen3.8-Max 免费 800 次</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-warn">⚠</span><span class="st-txt"><strong>口径冲突，见第五章纠错</strong></span></td></tr>
 <tr data-st="live"><td>🟡 <strong>百炼 Qwen3.7-Plus API 8 折 + 赠 100 万</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
 <tr data-st="live"><td>🟡 <strong>Trae 企业加量包双倍积分</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
 <tr data-st="live"><td>🟡 <strong>阿里云 AI 焕新季满减券</strong></td><td><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中（领取后 14 天有效）</span></td></tr>
@@ -690,7 +714,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <section id="s07" class="sec">
 <h2><span class="sn">07</span><span class="h2t">按任务选型速查</span><span class="h2sub">（更新版）</span></h2>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl w1" style="--w1:224px">
 <thead><tr><th>我要做的事</th><th>免费组合</th><th>成本</th></tr></thead><tbody>
 <tr><td><strong>做 AI 短剧 / 漫剧</strong></td><td><strong>Pavo</strong>：Flash 免费批量出片 + 每日 200 积分跑标准版 + 无限画布返工 + 3D 导演台</td><td>¥0</td></tr>
 <tr><td><strong>一键分发多平台</strong></td><td><strong>AiToEarn</strong>（开源可自部署，10+ 平台，支持 MCP）或 Nimply（海外 7 平台自动发布）</td><td>¥0</td></tr>
@@ -716,7 +740,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p>用户本期补充的 <code>https://aihot.news/</code>，经核查<strong>属于 T4 层已有的「AI-HOT（168 信源分级）」项目</strong>——即 <code>aihot.virxact.com</code> 的新域名（<code>aihot.news/items/&lt;id&gt;</code> 为条目永久链接，<code>aihot.virxact.com/daily</code> 为日报页）。主理人是公众号「数字生命卡兹克」。</p>
 <p><strong>它对本报告的实际价值（本期首次使用后的评估）</strong>：</p>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl w1" style="--w1:168px">
 <thead><tr><th>能力</th><th>说明</th><th>对本报告的作用</th></tr></thead><tbody>
 <tr><td><strong>按天归档 + 时间戳</strong></td><td>每条约 6 条/天，带精确到分钟的发布时间</td><td><strong>补 T0 首发时间</strong>——国内厂商发模型/发福利的准确时点</td></tr>
 <tr><td><strong>AI 评分（0–100）</strong></td><td>每条给"AI 评分"与"推荐理由"</td><td><strong>自动降噪</strong>，快速筛出值得追的条目</td></tr>
@@ -730,7 +754,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <blockquote class="bq"><p>已同步更新 <code>AI信息源分级清单-T0-T4.md</code>：T4 的 AI-HOT 条目补记新域名 <code>aihot.news</code> 与上述四项能力（条目数不变，仍为 T4 = 12）。</p></blockquote>
 <h3 id="h3-20"><span class="h3n">2</span>本期实际命中分布</h3>
 <div class="tblwrap">
-<table class="tbl">
+<table class="tbl w1" style="--w1:146px">
 <thead><tr><th>层级</th><th>本期命中信源</th><th>贡献</th></tr></thead><tbody>
 <tr><td><strong>T0 官方一手·国内</strong></td><td>腾讯云 TokenHub 文档与服务条款、智谱 AutoClaw 官方活动文档、腾讯混元官方博客、阿里云百炼帮助中心/开发者社区、Google AI 博客、腾讯云开发者社区</td><td>Hy4 preview 开源与免费两周、AutoClaw 积分加油站、TokenHub 条款 9/14 生效、OPC 计划、TranslateGemma</td></tr>
 <tr><td><strong>T0 模型与开源</strong></td><td>Hugging Face（Most likes 榜）、ModelScope、arXiv</td><td><strong>Qwen3.8-27B 登顶 HF 历史最受欢迎榜（9/16）</strong>、Xiaomi-Robotics-U0</td></tr>
