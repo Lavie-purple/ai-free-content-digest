@@ -11,14 +11,14 @@
 > **📌 编号与工具约定（2026-09-17 起）**
 > 1. 每条记录的标题**以期号为准**（`第 00N 期`），不再用「第 N 次触发」——两者已多次脱钩：003/004 漏登记时，「第 3 次触发」产出的其实是第 005 期。
 > 2. **每期执行完必须写记忆**，这是硬要求。003、004 期就是漏写后于 09-17 补的。
-> 3. 工具链（全在 `.workbuddy/`，均可**不传参自动取日期最新一期**）：
->    - `build_web.py [src.md [out.html]]` —— md → 单文件网页
->    - `verify_web.py [src.md [out.html]]` —— 编译后必跑，须 **ALL GREEN**
->    - `build_index.py` —— 重建根目录 `INDEX.md` 期号索引
->    - `check_deadlines.py [--days N]` —— 读 `data/deadlines.csv`，报 N 天内到期
->    - `check_frozen.py` —— 出刊前比对 `data/frozen_items.md`，防重复往期
-> 4. 结构化台账在 `.workbuddy/data/`：`deadlines.csv`（截止时间表）、`frozen_items.md`（已固化条目）、`open_questions.md`（待澄清口径）。
-> 5. 版本控制：本工作区已是 git 仓库，远端私仓 `Lavie-purple/ai-free-content-digest`。每期出刊+编译+校验后应提交一次。
+> 3. **工具链（全在 `.workbuddy/`，均可传参指定期次；不传参自动取最新一期）——按出刊顺序跑：**
+>    - 出稿后：`build_web.py [src.md [out.html]]` —— md → 单文件网页
+>    - 编译后**必跑**：`verify_web.py [src.md [out.html]]` —— 六项自查，判定标准 **VERDICT: ALL GREEN**
+>    - 出刊**前**：`check_frozen.py [src.md]` —— 比对 `data/frozen_items.md` 防重复往期；**有 🔴 高危会 exit 1，必须先改**
+>    - 出刊**前**：`extract_deadlines.py [src.md]` 刷新 `data/deadlines.csv`，再跑 `check_deadlines.py [--days N] [--today YYYY-MM-DD]`；重点看「已过期但状态仍非已结束」那一类
+>    - 出刊**后**：`build_source_hits.py`（回写台账命中两列，幂等）→ `build_index.py`（重建 `INDEX.md`）
+> 4. 结构化台账在 `.workbuddy/data/`：`deadlines.csv`（截止时间表，每期从正文重建）、`frozen_items.md`（已固化条目，**新条目当期就登记**）、`open_questions.md`（待澄清口径，**挂满 3 期须升级为正式避坑**）、`source_hits.csv`（信源命中，口径是"品牌被提及"不是"实际取料"）。
+> 5. 版本控制：本工作区已是 git 仓库，远端私仓 `Lavie-purple/ai-free-content-digest`（private）。每期出刊+编译+校验后提交一次。**沙箱会丢弃 `.git/refs/remotes/` 写入，`git status` 显示 `[gone]` 是假象**；核实远端只能调 GitHub API 比 sha。
 
 ## 2026-09-14 第 001 期（首次执行）
 
