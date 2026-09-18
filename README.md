@@ -109,11 +109,12 @@ Markdown 之外，每期可选生成一份**单文件自包含**的网页版：
     ├── extract_deadlines.py  # 截止表 → CSV
     ├── check_deadlines.py    # 到期巡检
     ├── check_frozen.py       # 防重复往期
+    ├── check_tables.py       # 逐表核对 md 列数 + 避坑编号连续性
     ├── build_source_hits.py  # 信源命中统计
     ├── build_index.py        # 重建 INDEX.md
     └── data/                 # 结构化台账
-        ├── deadlines.csv     # 截止时间表（37 条）
-        ├── frozen_items.md   # 已固化条目库（防重复）
+        ├── deadlines.csv     # 截止时间表（41 条）
+        ├── frozen_items.md   # 已固化条目库（75 条，防重复）
         ├── open_questions.md # 待澄清口径
         └── source_hits.csv   # 信源命中（182 条）
 ```
@@ -122,13 +123,14 @@ Markdown 之外，每期可选生成一份**单文件自包含**的网页版：
 
 ## 工具链：把「不能凭估」变成脚本
 
-日报里所有能和过去对不上的数字，都必须**由脚本核对**，不靠人眼。13 个脚本全部支持
+日报里所有能和过去对不上的数字，都必须**由脚本核对**，不靠人眼。14 个脚本全部支持
 **不传参自动取最新一期**，不需要改路径。
 
 ```bash
 python .workbuddy/run_all.py            # 一把跑完 build + probe + verify（日志是干净的 UTF-8）
 python .workbuddy/build_web.py          # 编译最新一期 → 单文件网页版
 python .workbuddy/verify_web.py         # 必跑：判定 ALL GREEN 才继续
+python .workbuddy/check_tables.py       # 出稿后：逐表核对列数 + 避坑编号跨期连续
 python .workbuddy/check_frozen.py       # 出刊前：比对已固化条目，有重复直接 exit 1
 python .workbuddy/check_deadlines.py    # 出刊前：巡检过期未更新 / N 天内到期
 python .workbuddy/build_index.py        # 出刊后：重建期号索引
@@ -139,6 +141,7 @@ python .workbuddy/snap_mobile.py        # 改版式后：出 11 张手机端截�
 | 脚本 | 它防的是什么 |
 | --- | --- |
 | `verify_web.py` | md 与 html 的**表格列数/行数逐表比对**、文本片段保真、未闭合标签、外部引用、状态格色标数 |
+| `check_tables.py` | **表格错行与编号断裂** —— md 里每行 `\|` 个数必须与分隔行一致；避坑编号必须跨期连续 |
 | `check_frozen.py` | **重复往期** —— 每期只做增量，靠它拦住"这条上期写过了" |
 | `check_deadlines.py` | **截止日期写错** —— 过期却没标"已结束"、或即将到期却没提醒 |
 | `probe_layout.py` | **版式退化** —— 表格列被压成中文逐字换行、搜索框窄到输不进字、装饰大字压住正文 |
@@ -165,6 +168,7 @@ python .workbuddy/snap_mobile.py        # 改版式后：出 11 张手机端截�
 | --- | --- |
 | 内容保真 | `verify_web.py` 输出 `VERDICT: ALL GREEN`（表格逐表一致、缺失片段 0、外部引用 0） |
 | 防重复 | `check_frozen.py` 高危 0 条，`exit 0` |
+| 表格与编号 | `check_tables.py` 表格异常 **0 个**，避坑编号跨期连续 |
 | 截止日期 | 过期未标的 **0 条**；对账后条目数与 CSV 一致 |
 | 版式 | 桌面 1440 / 1024 与窄屏 560 无横向溢出、无首列逐字换行；**手机 320 / 360 / 375 / 414 四档**同样无溢出，触控目标 ≥ 40px，横滑表格首列粘住 |
 | 配色 | 语义色色距全部 ≥ 40；WCAG AA 4.5 全过 |
@@ -184,8 +188,9 @@ python .workbuddy/snap_mobile.py        # 改版式后：出 11 张手机端截�
 | 004 | 09-15 | 晚间信源扩版 | 10,441 | 11 | — | 12–15 |
 | 005 | 09-16 | 分发入口专题版 | 16,416 | 14 | ✓ | 16–20 |
 | **006** | **09-17** | **匿名模型与分发入口续集** | **20,115** | **15** | **✓** | **21–25** |
+| **007** | **09-18** | **创作者的"钱"与模型的"身份"** | **29,633** | **24** | **✓** | **26–30** |
 
-合计 **6 期 / 约 6.8 万字 / 67 张表**。
+合计 **7 期 / 约 9.8 万字 / 91 张表**。
 
 ---
 
@@ -209,4 +214,4 @@ python .workbuddy/snap_mobile.py        # 改版式后：出 11 张手机端截�
 
 ---
 
-<sub>期号索引与统计数字由 `.workbuddy/build_index.py` 自动生成 · 最近更新：2026-09-17</sub>
+<sub>期号索引与统计数字由 `.workbuddy/build_index.py` 自动生成 · 最近更新：2026-09-18</sub>

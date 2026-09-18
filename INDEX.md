@@ -3,7 +3,7 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **6 期**（2026-09-14 ~ 2026-09-17），Markdown 合计 **148495 B ≈ 145 KB**。
+共 **7 期**（2026-09-14 ~ 2026-09-18），Markdown 合计 **212395 B ≈ 207 KB**。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -13,11 +13,12 @@
 | **004** | 2026-09-15 | 晚间信源扩版 | 22,062 B | 11 | — | 12–15 |
 | **005** | 2026-09-16 | 分发入口专题版 | 35,071 B | 14 | 101351 B | 16–20 |
 | **006** | 2026-09-17 | 匿名模型与分发入口续集 | 43,688 B | 15 | 112743 B | 21–25 |
+| **007** | 2026-09-18 | 创作者的"钱"与模型的"身份" | 63,900 B | 24 | 140160 B | 26–30 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
 - **信源分级台账** `AI信息源分级清单-T0-T4.md`：182 条（T0 97 / T1 19 / T2 18 / T3 36 / T4 12）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：37 条（由 `extract_deadlines.py` 从最新一期重建）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：41 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
@@ -35,6 +36,7 @@
 | `extract_deadlines.py` | 第四章截止表 → deadlines.csv |
 | `check_deadlines.py` | 截止巡检：过期未更新 / N 天内到期（`--days` / `--today`） |
 | `check_frozen.py` | 出刊前防重复：比对已固化条目库，有重复则 exit 1 |
+| `check_tables.py` | 出稿后核对：逐表列数一致性 + 避坑编号跨期连续性 |
 | `build_source_hits.py` | 信源命中统计 → 回写台账 + 导出 CSV |
 | `build_index.py` | 重建本索引（INDEX.md） |
 | `build_index_web.py` | 生成站点首页 index.html（GitHub Pages 根路径入口） |

@@ -116,6 +116,7 @@ def main():
                  ("extract_deadlines.py", "第四章截止表 → deadlines.csv"),
                  ("check_deadlines.py", "截止巡检：过期未更新 / N 天内到期（`--days` / `--today`）"),
                  ("check_frozen.py", "出刊前防重复：比对已固化条目库，有重复则 exit 1"),
+                 ("check_tables.py", "出稿后核对：逐表列数一致性 + 避坑编号跨期连续性"),
                  ("build_source_hits.py", "信源命中统计 → 回写台账 + 导出 CSV"),
                  ("build_index.py", "重建本索引（INDEX.md）"),
                  ("build_index_web.py", "生成站点首页 index.html（GitHub Pages 根路径入口）"),
