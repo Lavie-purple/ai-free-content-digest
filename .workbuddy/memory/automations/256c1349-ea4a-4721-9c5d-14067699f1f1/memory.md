@@ -186,5 +186,19 @@
   2. **`check_frozen.py` 的 25 字符窗口**：`**本期最大新增（额度线）**：**Qoder 把 X…**` 这类行，从"新增"到关键词的字符距正好压在 25 以内 → 判🔴。**规避**：换成不含 NEW_PAT 的措辞（本期用"本期最大的一条（额度线）""本期又落地两项"），或把关键词往后推 ≥25 字符。
 - **下次执行建议**: ① 复核 **9/20**（AutoClaw 会员档 + ZCode 夜间免费双收口）、**9/22**（CorelDRAW）、**9/23**（AStudio 星火限免 / WorkBuddy 国内 0.03x / TikTok Hummingbird）、9/24（Comate + TraeCode）、**9/25**（WorkBuddy 国际版）、**9/29（OpenAI DevDay）**、9/30（单日 10 条同时到期）七个节点；② **追 Q08–Q11**：AStudio 每日 100 积分是否与注册礼叠加 / TraeCode·视频号 40%·快手 200 万三条第三方口径 / **抖音「新赛道计划」报名入口与细则** / **GPT-6 Sol 是否已发布（若成真，10/14 的 GPT-5.5 下线节点要提前倒排）**；③ 追 **ZCode 开源仓库是否落地 + 第三方审计是否进场**（"已修复"能否被采信的唯一凭据）；④ 复核 **Q04 老混元平台停服确切日期**（建议按 9/25 完成迁移倒排）。
 
+## 2026-09-19 21:50 运维修复 · 站点首页卡在 007 期（非出刊轮，用户发现）
+
+- 状态: 成功
+- 性质: 用户报告线上站点仍显示「更新至 第 007 期」（截图）。**不产出新期次**，修的是发布链路。
+- 根因: 008 期出刊只跑了 `build_index.py`（`INDEX.md` 已含 008），**漏跑 `build_index_web.py`**，`index.html` 的 mtime 停在 9/18 09:11。**真正的根因是工具表里触发条件被写成了「改首页后」**——每新增一期都等于改了首页，这句措辞本身在鼓励漏跑。
+- **关键教训（最该记的一条）**: `git status` 干净、`git push` 成功无报错、`check_frozen` / `check_tables` / `verify_web` 全绿——**这四项检查一个都没覆盖"线上首页是否跟上了最新一期"**。产物之间是脱钩的，`INDEX.md` 对了不代表 `index.html` 也对了。
+- 修复动作:
+  1. 重跑 `build_index_web.py`（8 期 / 132,860 字 / 118 表 / 信源 182）→ commit `ce81ce8` → push → API 核 sha 一致 → 抓线上确认为 008
+  2. 新增 **`.workbuddy/check_site_freshness.py`**：比对最新一期 md 与 `index.html`（更新至 / 最新卡片 / 网页版链接）+ `INDEX.md` 最大期号，落后即 **exit 1**；**已反向证伪**（把 index.html 换回 007 版 → 精确报出 3 项落后、exit 1；恢复后 ALL GREEN）
+  3. `run_all.py` 新增 `fresh` 任务，默认任务扩为 `build/probe/verify/index/indexmd/fresh`
+  4. `ENGINEERING.md` / `MEMORY.md`：两个 build_index 的触发条件统一改「**每期必跑**」；流水线第 6 步补齐顺序，第 7 步加「抓线上页面确认期号」
+  → commit `423320c` 推送，API 核 sha 一致
+- **下期起流程变更（下次执行必须照做）**: 推送后**除核 sha 外，还要抓一次线上 `index.html` 确认「更新至」期号 = 最新一期**。Pages 构建有 1–2 分钟延迟（`pages/builds/latest` 显示 `building`），响应带 `Cache-Control: max-age=600`，抓时带 `?t=<ts>` 绕缓存。**别把"还没构建完"误读成"没推上去"。**
+
 
 
