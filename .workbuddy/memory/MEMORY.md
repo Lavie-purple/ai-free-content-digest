@@ -27,8 +27,11 @@
 3. `extract_deadlines.py [src.md]` → `check_deadlines.py [--days N]`
 4. 写 md（增量 + 纠错）
 5. `build_web.py` → `verify_web.py`（**必须 `VERDICT: ALL GREEN`**）
-6. `build_source_hits.py` → `build_index.py` →（改了首页才跑 `build_index_web.py`）
-7. git commit + push，**调 GitHub API 比 sha 核实**
+6. `build_source_hits.py` → `build_index.py` → `build_index_web.py` → `check_site_freshness.py`
+   （**后两个每期必跑**，守卫须 ALL GREEN。008 期就是漏了 `build_index_web.py`，
+   站点首页「更新至」卡在 007 一整天——`INDEX.md` 对了不代表线上首页也对了）
+7. git commit + push，**调 GitHub API 比 sha 核实**，再**抓一次线上页面确认期号**
+   （Pages 构建有 1–2 分钟延迟，响应 `max-age=600`；抓时带 `?t=<ts>` 绕缓存）
 8. 写自动化记忆 + 当日日志
 
 ## 硬要求

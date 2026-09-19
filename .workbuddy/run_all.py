@@ -8,10 +8,14 @@
 让 Python 自己 subprocess 捕获、自己写 UTF-8 文件，就绕开了这一层转换。
 
 用法：
-    python .workbuddy/run_all.py                     # 默认 build + probe + verify
+    python .workbuddy/run_all.py                     # 默认一把跑完出刊所需全部
+                                                     # build + probe + verify + index + indexmd + fresh
     python .workbuddy/run_all.py build probe verify snap
-    python .workbuddy/run_all.py index indexprobe    # 站点首页
+    python .workbuddy/run_all.py index indexmd fresh # 站点首页与新鲜度守卫
 日志落在 .workbuddy/_shot/_<任务名>.log（该目录已被 .gitignore 忽略）。
+
+⚠️ 2026-09-19：默认任务里**必须有 index 与 fresh**。008 期就是默认只跑
+   build/probe/verify 时漏掉了 index，导致站点首页卡在 007 期一天。
 """
 import os
 import subprocess
@@ -30,13 +34,14 @@ JOBS = {
     "color": [os.path.join(HERE, "audit_color.py")],
     "index": [os.path.join(HERE, "build_index_web.py")],
     "indexmd": [os.path.join(HERE, "build_index.py")],
+    "fresh": [os.path.join(HERE, "check_site_freshness.py")],
     "indexprobe": [os.path.join(HERE, "probe_mobile.py"),
                    os.path.join(WS, "index.html"), "--out",
                    os.path.join(SHOT, "mobile_probe_index.txt")],
     "snap": [os.path.join(HERE, "snap_mobile.py")],
 }
 
-names = sys.argv[1:] or ["build", "probe", "verify"]
+names = sys.argv[1:] or ["build", "probe", "verify", "index", "indexmd", "fresh"]
 for name in names:
     if name not in JOBS:
         print("跳过未知任务 %s" % name)

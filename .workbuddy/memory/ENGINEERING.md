@@ -35,11 +35,21 @@
 | `check_frozen.py [src]` | 防重复往期，有 🔴 高危则 **exit 1** | 出刊前 |
 | `check_tables.py [src]` | **md 表格逐行数 `\|` 与分隔行比对** + 避坑编号跨期连续 | 出稿后 |
 | `build_source_hits.py [--dry]` | 信源命中 → 回写台账 + CSV（幂等） | 出刊后 |
-| `build_index.py` | 重建根目录 `INDEX.md` | 出刊后 |
-| `build_index_web.py` | 生成 GitHub Pages 根目录 `index.html` | 改首页后 |
+| `build_index.py` | 重建根目录 `INDEX.md` | **每期必跑**（出刊后） |
+| `build_index_web.py` | 生成 GitHub Pages 根目录 `index.html` | **每期必跑**（出刊后） |
+| `check_site_freshness.py` | 站点新鲜度守卫：`index.html` / `INDEX.md` 是否落后于最新一期，落后 **exit 1** | **推送 Pages 前必须为 0** |
 | `probe_mobile.py [src] [--widths 320,360,375,414] [--out f]` | **窄视口** DOM 量测（iframe 模拟），两份产物共用 | 改移动端版式后 |
 | `snap_mobile.py` | 375×812 手机截图（日报 8 张 + 首页 3 张），iframe 内滚动 + md5 去重 | 改移动端版式后 |
-| `run_all.py [job...]` | 统一入口，Python 捕获 stdout 写 UTF-8 日志到 `_shot/_<job>.log` | 随时 |
+| `run_all.py [job...]` | 统一入口，Python 捕获 stdout 写 UTF-8 日志到 `_shot/_<job>.log`；**默认已含 build/probe/verify/index/indexmd/fresh** | 随时 |
+
+### 站点发布：两个「每期必跑」项（2026-09-19 事故，008 期）
+
+- **症状**：`https://lavie-purple.github.io/ai-free-content-digest/` 在 008 期出刊后仍显示「更新至 **第 007 期**」，最新一期大卡片是 9/18 那期。而 `INDEX.md` 里 008 是好的——**两个产物一个跟上了、一个没跟上**。
+- **根因**：出刊只跑了 `build_index.py`，**漏跑 `build_index_web.py`**。`index.html` 的 mtime 停在 9/18 09:11，比 008 期的 md 早整一天。**不是脚本坏了，是触发条件写错了**——工具表原先写「改首页后」，可每新增一期都等于改了首页，这句措辞本身就在鼓励漏跑。
+- **为什么靠肉眼发现不了**：`git status` 是干净的（旧 `index.html` 早已随 007 期提交），`git push` 也成功、无任何报错。**只有把线上页面抓回来比对期号才会暴露**。
+- **现在怎么防**：① `build_index.py` 与 `build_index_web.py` 的触发条件统一改成「**每期必跑**」；② 新增 `check_site_freshness.py` 守卫，落后即 `exit 1`（已用反向证伪验证：把 `index.html` 换成 007 版，精确报出 3 项落后）；③ `run_all.py` 默认任务已含 index / indexmd / fresh。
+- **推 Pages 的完整收口顺序**：`build_source_hits.py` → `build_index.py` → `build_index_web.py` → `check_site_freshness.py`（须 ALL GREEN）→ commit → push → **API 核 sha** → **抓一次线上页面确认期号**。
+- **CDN 缓存别误判**：Pages 响应带 `Cache-Control: max-age=600`。构建完成前抓页面会拿到旧副本（`X-Cache: MISS` 但内容是旧的，因为构建还没跑完）。自查时带随机参数（`?t=<ts>`）绕过本地缓存，并记住 **push 到构建完成有约 1–2 分钟延迟**，别把"还没构建完"误读成"没推上去"。查构建状态用 `GET /repos/{owner}/{repo}/pages/builds/latest`。
 
 ## 三、移动端适配（2026-09-17 定稿）
 
