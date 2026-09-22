@@ -36,6 +36,13 @@
    站点首页「更新至」卡在 007 一整天——`INDEX.md` 对了不代表线上首页也对了）
 7. git commit + push，**调 GitHub API 比 sha 核实**，再**抓一次线上页面确认期号**
    （Pages 构建有 1–2 分钟延迟，响应 `max-age=600`；抓时带 `?t=<ts>` 绕缓存）
+   - ⚠️ **push 若报 `could not read Username … terminal prompts disabled`**：本机
+     `credential.helper=helper-selector` 是**坏的（返回空）**。用 `git-credential-manager get`
+     取令牌 + **内联助手**推（`-c credential.helper=` 先清空 → `-c credential.helper='!f(){…}'`）；
+     **别改用 `helper=manager`——会卡死在 GCM 的交互回退上，2 分钟无输出**（沙箱内外一样）。
+     详见 `ENGINEERING.md` §九。（`timeout` 在 Git Bash 要写 `/usr/bin/timeout`。）
+   - ⚠️ **抓线上页之前必须先轮询 `repos/<owner>/<repo>/pages/builds/latest` 到 `built`**——
+     构建期间带 `?t=` 抓到的**仍然是上一期**（011 期据此误判过一次"没更新"）。
 8. 写自动化记忆 + 当日日志
 
 ## 硬要求

@@ -108,6 +108,8 @@
   3. **`可灵` 这类"泛指品牌"关键词**（首见 003 期）：任何提到可灵的行都可能被扫到，**包括信源更新段的"新增本期命中（…、快手公益×可灵、…）"**。**写这段时把"新增"换成"补入 / 已补入"。**
   **规矩**：**给一个首见期较早的泛品牌关键词写 🆕 时，先数一数**；实在要标新，就**在写「本期登记」的同时把标记从中括号里删掉**——`❌ 引用` 与 `🔴 高危` 只差这一处措辞，重跑一次只要 2 秒。
 - **状态色标错用会静默污染 `deadlines.csv` 分类**：分类是"关键词优先、色标兜底"，行内没有状态关键词时**按色标判**——🟠 被归为 `switch`（换挡日）。007 期把 7 条"生效中"误写成 🟠，全部被判成换挡日。**色标语义固定：🟢 生效中·未开始 / 🟠 换挡日 / 🔴 必办 / 🟡 一般 / ⚪ 已结束。**（009 期复核：把"今天启动"与"今天收口"两类边界日写成 🟠 是**正确**用法——`check_deadlines` 会把它们列在【B】14 天内到期的首条，符合预期。）
+- **第四章状态列的文本会被 `extract_deadlines.py` 字面读入，不得残留旧状态词的原文（011 期实测）**：分类规则是"**关键词优先、色标兜底**"。011 期有一条「智谱 ZCode 夜间免费」需要**从"已结束"改回"生效中"**，状态格当场写成了 `🟢 生效中（状态反转：本行由"已结束"改回…）`——**结果那三个字被字面命中，整行又被归进【C】已结束**。**改法：叙述状态反转时不要复述旧状态词，写"本行由终止状态改回生效中"。** **同源风险**：`check_frozen.py` 的 25 字符窗口、`check_deadlines.py` 的关键词优先，本质都是"**按文本原义读**"的守卫——**凡是要被守卫读的格子，别在里面写会被误读的历史叙述。**
+- **色标归一 + 复核脚本（011 期新加）**：状态格**第一个字符必须是颜色**（`cells[2][0]`）——有些行原本从状态文本里带来第二个 emoji（如 ⚪ 行里又出现 ⚪），导致取色取错。**先跑归一脚本把每格首色对齐本行行首标记，再跑计数脚本读 `cells[-1][0]` 复核**（011 期：🔴 4 / 🟠 11 / 🟡 15 / 🟢 34 / ⚪ 11 = 75，与 `check_deadlines` 的 A0+B25+C11+D21+E18=75 互证）。
 
 ## 七、两条边界（都是有意为之，别"顺手"改掉）
 
@@ -125,3 +127,10 @@
 - 本工作区已是 git 仓库，远端 **`Lavie-purple/ai-free-content-digest`**（**2026-09-17 已由 private 改为 public**，默认分支 main）。每期出刊 + 编译 + 校验后提交一次。
 - 根目录有 `README.md`（仓库首页）。改仓库结构或工具链时**记得同步它**——它列了目录树与工具链表，容易和实际脱钩。
 - **沙箱会丢弃 `.git/refs/remotes/` 的写入**，所以 `git status` 常年显示 `[gone]`——**这是假象，别据此判断没推上去**。核实远端只能调 GitHub API 比对 `repos/<owner>/<repo>/commits/main` 的 sha 与本地 `HEAD`（`git push` 的回显也不可信）。
+- **推销路：凭据助手取不到凭据时 `git push` 会直接失败或挂死（011 期实测，必须记住）**。本机 `credential.helper=helper-selector`（来自 `PortableGit/versions/1.2.0/etc/gitconfig`），但它**返回空**；在 `GIT_TERMINAL_PROMPT=0` 下立刻报 `could not read Username for 'https://github.com': terminal prompts disabled`。换成 `-c credential.helper=manager` 更糟——**卡在 GCM 的交互回退上，沙箱内外都不返回，2 分多钟无输出**。**可用写法**（命令行一条搞定，令牌不落盘）：
+  ```sh
+  export GH_TOK="$(printf 'protocol=https\nhost=github.com\n\n' | git-credential-manager get 2>/dev/null | sed -n 's/^password=//p' | tr -d '\r\n')"
+  git -c credential.helper= -c credential.helper='!f() { echo username=Lavie-purple; echo "password=$GH_TOK"; }; f' push origin main
+  ```
+  **三个要点**：① `-c credential.helper=`（**空值**）必须显式写上，先把 `helper-selector` 清空，否则它仍会被调用；② `git-credential-manager get` 本身是好用的（011 期返回 `gho_` 40 位令牌，`api.github.com/user` → 200），**只有通过 git 调用它才出问题**；③ 令牌只走环境变量、命令里写的是 `$GH_TOK` 字面量，**不进 ps 列表、不落盘**。另：`timeout` 在 Git Bash 里会解析到 `C:\Windows\System32\TIMEOUT.EXE`（报"无效语法"），**要用 `/usr/bin/timeout`**。
+- **Pages 构建要等，抓一次会误判**：推送后 `repos/<o>/<r>/pages/builds/latest` 会先返回 `building`（011 期：`created 10:06:03Z` → `built`，同 commit `3f73edc`）。**在此之前带 `?t=<ts>` 抓首页，拿到的仍是上一期**（011 期首次抓取显示「更新至 第 010 期」，本地/线上体积 16879/16533 B 不一致即为此故）。**正确顺序：push → API 核 sha → 轮询 `pages/builds/latest` 到 `built` → 再抓线上页**（完成后体积与本地 `index.html` 逐字节一致）。
