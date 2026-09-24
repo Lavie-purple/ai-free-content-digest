@@ -1,8 +1,13 @@
 # 临时与中间产物（不入库）
 .workbuddy/_shot/
+.workbuddy/_probe/
 .workbuddy/tmp_*
 .workbuddy/*.tmp
 *tmp_verify_*
+
+# 本地评审与对话存档（含内部口径与自评，不进公开站点）
+对话记录.md
+vibe-coding-评审报告-*.md
 
 # Python
 __pycache__/
