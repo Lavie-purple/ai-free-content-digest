@@ -3,7 +3,7 @@ arXiv cs.AI,https://arxiv.org/list/cs.AI/recent,2,3,005,004/005,arxiv arxivcsai
 arXiv cs.CL,https://arxiv.org/list/cs.CL/recent,2,3,005,004/005,arxiv arxivcscl
 arXiv cs.CV,https://arxiv.org/list/cs.CV/recent,2,3,005,004/005,arxiv arxivcscv
 arXiv cs.LG / stat.ML,https://arxiv.org/list/cs.LG/recent,2,3,005,004/005,arxiv arxivcslgstatml
-Hugging Face Daily Papers,https://huggingface.co/papers,10,52,013,004/005/006/007/008/009/010/011/012/013,huggingface huggingfacedailypapers
+Hugging Face Daily Papers,https://huggingface.co/papers,11,53,014,004/005/006/007/008/009/010/011/012/013/014,huggingface huggingfacedailypapers
 OpenReview,https://openreview.net,0,0,,,openreview
 Papers with Code,https://paperswithcode.com,0,0,,,paperswithcode
 Semantic Scholar API,https://api.semanticscholar.org,0,0,,,semanticscholar semanticscholarapi
@@ -11,24 +11,24 @@ Semantic Scholar API,https://api.semanticscholar.org,0,0,,,semanticscholar seman
 TMLR / JMLR,https://jmlr.org,0,0,,,jmlr tmlrjmlr
 Nature MI / Nature / Science / PNAS,https://www.nature.com/natmachintell,0,0,,,nature natureminaturesciencepnas
 AMiner,https://www.aminer.cn,0,0,,,aminer
-Hugging Face Models (trending),https://huggingface.co/models?sort=trending,10,59,013,004/005/006/007/008/009/010/011/012/013,huggingface huggingfacemodels huggingfacemodelstrending
-Hugging Face Blog,https://huggingface.co/blog,10,50,013,004/005/006/007/008/009/010/011/012/013,huggingface huggingfaceblog
-Hugging Face Spaces,https://huggingface.co/spaces,10,50,013,004/005/006/007/008/009/010/011/012/013,huggingface huggingfacespaces
-ModelScope 魔搭,https://modelscope.cn/models,7,21,013,005/006/007/008/010/012/013,modelscope modelscope魔搭
-GitHub Trending,https://github.com/trending,11,64,013,001/002/003/006/007/008/009/010/011/012/013,github githubtrending
-GitHub Releases (各项目 atom),https://docs.github.com/en/rest/releases,11,60,013,001/002/003/006/007/008/009/010/011/012/013,github githubreleases githubreleases各项目atom
-OpenRouter Models,https://openrouter.ai/models,13,110,013,001/002/003/004/005/006/007/008/009/010/011/012/013,openrouter openroutermodels
+Hugging Face Models (trending),https://huggingface.co/models?sort=trending,11,60,014,004/005/006/007/008/009/010/011/012/013/014,huggingface huggingfacemodels huggingfacemodelstrending
+Hugging Face Blog,https://huggingface.co/blog,11,51,014,004/005/006/007/008/009/010/011/012/013/014,huggingface huggingfaceblog
+Hugging Face Spaces,https://huggingface.co/spaces,11,51,014,004/005/006/007/008/009/010/011/012/013/014,huggingface huggingfacespaces
+ModelScope 魔搭,https://modelscope.cn/models,8,22,014,005/006/007/008/010/012/013/014,modelscope modelscope魔搭
+GitHub Trending,https://github.com/trending,12,112,014,001/002/003/006/007/008/009/010/011/012/013/014,github githubtrending
+GitHub Releases (各项目 atom),https://docs.github.com/en/rest/releases,12,108,014,001/002/003/006/007/008/009/010/011/012/013/014,github githubreleases githubreleases各项目atom
+OpenRouter Models,https://openrouter.ai/models,14,124,014,001/002/003/004/005/006/007/008/009/010/011/012/013/014,openrouter openroutermodels
 Gitee AI / GitCode,https://ai.gitee.com,0,0,,,giteeaigitcode
 始智AI wisemodel,https://wisemodel.cn,0,0,,,wisemodel 始智aiwisemodel
 硅基流动 SiliconFlow 模型广场,https://siliconflow.cn/models,1,2,005,005,siliconflow 硅基流动siliconflow模型广场
 🆕 ComfyUI Blog（blog.comfy.org）,https://blog.comfy.org/,4,24,012,006/010/011/012,comfy comfyuiblog comfyuiblogblogcomfyorg
-OpenAI News,https://openai.com/news,12,103,013,001/002/003/005/006/007/008/009/010/011/012/013,openai openainews
-OpenAI Research,https://openai.com/research,12,103,013,001/002/003/005/006/007/008/009/010/011/012/013,openai openairesearch
-Anthropic News,https://www.anthropic.com/news,12,59,013,001/002/003/005/006/007/008/009/010/011/012/013,anthropic anthropicnews
-Anthropic Engineering,https://www.anthropic.com/engineering,12,59,013,001/002/003/005/006/007/008/009/010/011/012/013,anthropic anthropicengineering
+OpenAI News,https://openai.com/news,13,112,014,001/002/003/005/006/007/008/009/010/011/012/013/014,openai openainews
+OpenAI Research,https://openai.com/research,13,112,014,001/002/003/005/006/007/008/009/010/011/012/013/014,openai openairesearch
+Anthropic News,https://www.anthropic.com/news,13,67,014,001/002/003/005/006/007/008/009/010/011/012/013/014,anthropic anthropicnews
+Anthropic Engineering,https://www.anthropic.com/engineering,13,67,014,001/002/003/005/006/007/008/009/010/011/012/013/014,anthropic anthropicengineering
 Google DeepMind Blog,https://deepmind.google/discover/blog,1,2,006,006,deepmind googledeepmindblog
 Google AI Blog,https://blog.google/technology/ai/,11,65,012,001/002/003/004/005/006/007/009/010/011/012,google googleaiblog
-Google Research Blog,https://research.google/blog/,6,12,013,002/003/010/011/012/013,googleresearchblog research
+Google Research Blog,https://research.google/blog/,7,13,014,002/003/010/011/012/013/014,googleresearchblog research
 Meta AI Blog,https://ai.meta.com/blog/,0,0,,,metaaiblog
 Microsoft AI Blog,https://blogs.microsoft.com/ai/,0,0,,,blogs microsoftaiblog
 Microsoft Research,https://www.microsoft.com/en-us/research/blog/,0,0,,,microsoft microsoftresearch
@@ -39,35 +39,35 @@ Cohere Blog,https://cohere.com/blog,4,7,012,002/008/010/012,cohere cohereblog
 Midjourney,https://www.midjourney.com/showcase,1,1,008,008,midjourney
 Runway,https://runwayml.com/news,5,13,008,001/002/003/005/008,runway runwayml
 Perplexity Blog,https://www.perplexity.ai/hub/blog,5,8,011,001/002/003/005/011,perplexity perplexityblog
-Cursor Changelog,https://cursor.com/changelog,4,12,012,004/009/011/012,cursor cursorchangelog
+Cursor Changelog,https://cursor.com/changelog,5,21,014,004/009/011/012/014,cursor cursorchangelog
 Cognition (Devin),https://cognition.ai/blog,0,0,,,cognition cognitiondevin
 Apple Machine Learning Research,https://machinelearning.apple.com/research,0,0,,,applemachinelearningresearch machinelearning
 AWS Machine Learning Blog,https://aws.amazon.com/blogs/machine-learning/,0,0,,,awsmachinelearningblog
-IBM Research,https://research.ibm.com/blog,6,12,013,002/003/010/011/012/013,ibmresearch research
+IBM Research,https://research.ibm.com/blog,7,13,014,002/003/010/011/012/013/014,ibmresearch research
 Stability AI,https://stability.ai/news,0,0,,,stability stabilityai
-🆕 TypeSafe AI（typesafe.ai / console.typesafe.ai）,https://typesafe.ai/,7,41,013,007/008/009/010/011/012/013,typesafe typesafeai typesafeaitypesafeaiconsoletypesafeai
-DeepSeek 研究与动态,https://www.deepseek.com/zh/news,13,165,013,001/002/003/004/005/006/007/008/009/010/011/012/013,deepseek deepseek研究与动态
+🆕 TypeSafe AI（typesafe.ai / console.typesafe.ai）,https://typesafe.ai/,8,45,014,007/008/009/010/011/012/013/014,typesafe typesafeai typesafeaitypesafeaiconsoletypesafeai
+DeepSeek 研究与动态,https://www.deepseek.com/zh/news,14,176,014,001/002/003/004/005/006/007/008/009/010/011/012/013/014,deepseek deepseek研究与动态
 阿里云百炼·新模型发布,https://help.aliyun.com/zh/model-studio/models,2,3,007,004/007,help 阿里云百炼新模型发布
-阿里 Qwen 官方博客,https://qwen.ai/blog,11,377,013,002/004/005/006/007/008/009/010/011/012/013,qwen 阿里qwen官方博客
+阿里 Qwen 官方博客,https://qwen.ai/blog,12,392,014,002/004/005/006/007/008/009/010/011/012/013/014,qwen 阿里qwen官方博客
 月之暗面 Kimi,https://platform.moonshot.cn/docs,3,5,011,001/010/011,platform 月之暗面kimi
-智谱 GLM,https://docs.bigmodel.cn/cn/guide/start/model-overview,10,44,013,001/002/003/004/005/006/008/011/012/013,bigmodel 智谱glm
-MiniMax,https://www.minimaxi.com/news,13,35,013,001/002/003/004/005/006/007/008/009/010/011/012/013,minimax minimaxi
+智谱 GLM,https://docs.bigmodel.cn/cn/guide/start/model-overview,11,50,014,001/002/003/004/005/006/008/011/012/013/014,bigmodel 智谱glm
+MiniMax,https://www.minimaxi.com/news,14,37,014,001/002/003/004/005/006/007/008/009/010/011/012/013/014,minimax minimaxi
 火山引擎 / 豆包,https://www.volcengine.com/docs,4,4,005,001/002/003/005,volcengine 火山引擎豆包
-字节 Seed 团队,https://seed.bytedance.com/,13,76,013,001/002/003/004/005/006/007/008/009/010/011/012/013,seed 字节seed团队
-百度文心,https://cloud.baidu.com/doc/index.html,13,77,013,001/002/003/004/005/006/007/008/009/010/011/012/013,cloud 百度文心
-腾讯混元,https://hunyuan.tencent.com/,13,62,013,001/002/003/004/005/006/007/008/009/010/011/012/013,hunyuan 腾讯混元
+字节 Seed 团队,https://seed.bytedance.com/,14,82,014,001/002/003/004/005/006/007/008/009/010/011/012/013/014,seed 字节seed团队
+百度文心,https://cloud.baidu.com/doc/index.html,14,83,014,001/002/003/004/005/006/007/008/009/010/011/012/013/014,cloud 百度文心
+腾讯混元,https://hunyuan.tencent.com/,14,68,014,001/002/003/004/005/006/007/008/009/010/011/012/013/014,hunyuan 腾讯混元
 腾讯研究院,https://www.tisi.org/,0,0,,,tisi 腾讯研究院
 讯飞星火,https://xfyun.cn/doc/,8,15,008,001/002/003/004/005/006/007/008,xfyun 讯飞星火
-小米 MiMo,https://www.xiaomiev.com/,6,17,013,001/002/005/011/012/013,xiaomiev 小米mimo
+小米 MiMo,https://www.xiaomiev.com/,7,18,014,001/002/005/011/012/013/014,xiaomiev 小米mimo
 华为云 / 盘古,https://www.huaweicloud.com/product/pangu.html,0,0,,,huaweicloud 华为云盘古
 面壁智能 MiniCPM,https://www.minicpm.cn/,1,4,008,008,minicpm 面壁智能minicpm
-阶跃星辰,https://www.stepfun.com/,7,41,013,006/007/009/010/011/012/013,stepfun 阶跃星辰
-快手可灵 (Kling),https://klingai.com/,2,2,013,012/013,klingai 快手可灵 快手可灵kling
+阶跃星辰,https://www.stepfun.com/,8,43,014,006/007/009/010/011/012/013/014,stepfun 阶跃星辰
+快手可灵 (Kling),https://klingai.com/,3,3,014,012/013/014,klingai 快手可灵 快手可灵kling
 智源研究院 BAAI,https://www.baai.ac.cn/,1,2,008,008,baai 智源研究院baai
 昆仑万维 / 零一万物,https://www.singularis.ltd/,0,0,,,singularis 昆仑万维零一万物
 蚂蚁 / 美团 / 京东 AI,https://www.antgroup.com/news/media,0,0,,,antgroup 蚂蚁美团京东ai
-🆕 中国电信人工智能科技公司 / XingChen-AGI,https://huggingface.co/XingChen-AGI · https://modelscope.cn/organization/XingChen-AGI,10,54,013,004/005/006/007/008/009/010/011/012/013,huggingface 中国电信人工智能科技公司xingchenagi
-国家网信办,https://www.cac.gov.cn,2,3,013,012/013,国家网信办
+🆕 中国电信人工智能科技公司 / XingChen-AGI,https://huggingface.co/XingChen-AGI · https://modelscope.cn/organization/XingChen-AGI,11,56,014,004/005/006/007/008/009/010/011/012/013/014,huggingface 中国电信人工智能科技公司xingchenagi
+国家网信办,https://www.cac.gov.cn,3,4,014,012/013/014,国家网信办
 工业和信息化部,https://www.miit.gov.cn,0,0,,,miit 工业和信息化部
 国家数据局,https://www.nda.gov.cn,0,0,,,国家数据局
 中国信通院 CAICT,https://www.caict.ac.cn,0,0,,,caict 中国信通院caict
@@ -89,13 +89,13 @@ LMArena Leaderboard,https://lmarena.ai/leaderboard,0,0,,,lmarena lmarenaleaderbo
 LMArena Image Arena,https://lmarena.ai/leaderboard/image,0,0,,,lmarena lmarenaimagearena
 LMArena Video Arena,https://lmarena.ai/leaderboard/video,0,0,,,lmarena lmarenavideoarena
 LMArena WebDev Arena,https://lmarena.ai/leaderboard/webdev,0,0,,,lmarena lmarenawebdevarena
-Artificial Analysis,https://artificialanalysis.ai/,7,29,013,006/008/009/010/011/012/013,artificialanalysis
+Artificial Analysis,https://artificialanalysis.ai/,8,31,014,006/008/009/010/011/012/013/014,artificialanalysis
 llm-stats.com,https://llm-stats.com/,0,0,,,llm-stats llmstatscom
-LiveBench,https://livebench.ai/,0,0,,,livebench
+LiveBench,https://livebench.ai/,1,1,014,014,livebench
 SWE-bench Verified,https://www.swebench.com/,2,6,011,006/011,swebench swebenchverified
-Terminal-bench,https://www.tbench.ai/leaderboards/terminal-bench,3,24,012,006/011/012,tbench terminalbench
+Terminal-bench,https://www.tbench.ai/leaderboards/terminal-bench,4,25,014,006/011/012/014,tbench terminalbench
 OSWorld,https://os-world.github.io/,0,0,,,os-world osworld
-Epoch AI,https://epoch.ai/,4,48,013,007/008/012/013,epoch epochai
+Epoch AI,https://epoch.ai/,5,58,014,007/008/012/013/014,epoch epochai
 Vals AI,https://www.vals.ai/,1,1,011,011,vals valsai
 Scale SEAL Leaderboard,https://scale.com/leaderboard,2,2,010,008/010,scale scalesealleaderboard
 OpenCompass 司南,https://opencompass.org.cn/,0,0,,,opencompass opencompass司南
@@ -103,19 +103,19 @@ SuperCLUE,https://www.superclue.ai/,1,4,012,012,superclue
 智源 FlagEval,https://flageval.baai.ac.cn/,0,0,,,flageval 智源flageval
 C-Eval / CMMLU,https://cevalbenchmark.com/,0,0,,,cevalbenchmark cevalcmmlu
 X / Twitter,https://x.com,1,1,004,004,xtwitter
-Reddit r/LocalLLaMA,https://www.reddit.com/r/LocalLLaMA/,5,8,013,007/010/011/012/013,reddit redditrlocalllama
-Reddit r/MachineLearning,https://www.reddit.com/r/MachineLearning/,5,5,013,007/010/011/012/013,reddit redditrmachinelearning
-Reddit r/artificial,https://www.reddit.com/r/artificial/,5,5,013,007/010/011/012/013,reddit redditrartificial
-Reddit r/OpenAI / r/ClaudeAI / r/singularity,https://www.reddit.com/r/singularity/,5,5,013,007/010/011/012/013,reddit redditropenairclaudeairsingularity
-Reddit r/StableDiffusion,https://www.reddit.com/r/StableDiffusion/,5,5,013,007/010/011/012/013,reddit redditrstablediffusion
-Hacker News,https://news.ycombinator.com/,10,70,013,004/005/006/007/008/009/010/011/012/013,hackernews news
+Reddit r/LocalLLaMA,https://www.reddit.com/r/LocalLLaMA/,6,10,014,007/010/011/012/013/014,reddit redditrlocalllama
+Reddit r/MachineLearning,https://www.reddit.com/r/MachineLearning/,6,6,014,007/010/011/012/013/014,reddit redditrmachinelearning
+Reddit r/artificial,https://www.reddit.com/r/artificial/,6,6,014,007/010/011/012/013/014,reddit redditrartificial
+Reddit r/OpenAI / r/ClaudeAI / r/singularity,https://www.reddit.com/r/singularity/,6,6,014,007/010/011/012/013/014,reddit redditropenairclaudeairsingularity
+Reddit r/StableDiffusion,https://www.reddit.com/r/StableDiffusion/,6,6,014,007/010/011/012/013/014,reddit redditrstablediffusion
+Hacker News,https://news.ycombinator.com/,11,75,014,004/005/006/007/008/009/010/011/012/013/014,hackernews news
 HN 关键词 RSS (hnrss.org),https://hnrss.org/newest?q=AI,0,0,,,hnrss hn关键词rss hn关键词rsshnrssorg
 知乎 · AI 话题,https://www.zhihu.com/topic/19556664/hot,0,0,,,zhihu 知乎ai话题
 掘金 · 人工智能,https://juejin.cn/ai,0,0,,,juejin 掘金人工智能
 微信公众号（AI 类）,https://mp.weixin.qq.com/,1,1,003,003,微信公众号 微信公众号ai类
 微博（AI 官方账号+话题）,https://s.weibo.com/,3,3,011,006/010/011,weibo 微博 微博ai官方账号话题
 B 站（发布会+测评）,https://www.bilibili.com/,0,0,,,bilibili b站发布会测评
-小红书（AI 工具玩法）,https://www.xiaohongshu.com/,11,97,013,003/004/005/006/007/008/009/010/011/012/013,xiaohongshu 小红书 小红书ai工具玩法
+小红书（AI 工具玩法）,https://www.xiaohongshu.com/,12,103,014,003/004/005/006/007/008/009/010/011/012/013/014,xiaohongshu 小红书 小红书ai工具玩法
 Bluesky,https://bsky.app/,0,0,,,bluesky bsky
 LinkedIn,https://www.linkedin.com/,1,3,004,004,linkedin
 LessWrong,https://www.lesswrong.com/,0,0,,,lesswrong
@@ -129,7 +129,7 @@ Ben's Bites,https://www.bensbites.co/,0,0,,,bensbites
 Latent Space,https://www.latent.space/,1,2,010,010,latent latentspace
 Ahead of AI (Raschka),https://magazine.sebastianraschka.com/,2,3,007,005/007,aheadofai aheadofairaschka magazine
 AI Snake Oil,https://www.aisnakeoil.com/,0,0,,,aisnakeoil
-Simon Willison's Blog,https://simonwillison.net/,6,7,013,008/009/010/011/012/013,simonwillison simonwillisonsblog
+Simon Willison's Blog,https://simonwillison.net/,7,16,014,008/009/010/011/012/013/014,simonwillison simonwillisonsblog
 The Sequence,https://thesequence.substack.com/,0,0,,,thesequence
 Interconnects,https://www.interconnects.ai/,1,1,011,011,interconnects
 Stratechery,https://stratechery.com/,0,0,,,stratechery
@@ -180,11 +180,11 @@ RSSHub,https://docs.rsshub.app/,0,0,,,rsshub
 Inoreader / Feedly / FreshRSS,https://www.inoreader.com/,0,0,,,inoreader inoreaderfeedlyfreshrss
 HN Algolia API,https://hn.algolia.com/api,0,0,,,hnalgoliaapi
 Google Alerts,https://www.google.com/alerts,11,65,012,001/002/003/004/005/006/007/009/010/011/012,google googlealerts
-GitHub Actions 定时抓取,https://docs.github.com/en/actions,11,60,013,001/002/003/006/007/008/009/010/011/012/013,github githubactions定时抓取
+GitHub Actions 定时抓取,https://docs.github.com/en/actions,12,108,014,001/002/003/006/007/008/009/010/011/012/013/014,github githubactions定时抓取
 daily.dev,https://daily.dev/,3,10,011,005/008/011,daily dailydev
-AI-HOT（168 信源分级）· 主理人「数字生命卡兹克」,https://aihot.virxact.com/ · **新域名 https://aihot.news/**,9,75,013,005/006/007/008/009/010/011/012/013,aihot aihot168信源分级主理人数字生命卡兹克
-🆕 OVHcloud AI Endpoints,https://endpoints.ai.cloud.ovh.net,5,25,013,009/010/011/012/013,endpoints ovhcloudaiendpoints
-🆕 LLM7.io,https://llm7.io,5,36,013,009/010/011/012/013,llm7 llm7io
+AI-HOT（168 信源分级）· 主理人「数字生命卡兹克」,https://aihot.virxact.com/ · **新域名 https://aihot.news/**,10,80,014,005/006/007/008/009/010/011/012/013/014,aihot aihot168信源分级主理人数字生命卡兹克
+🆕 OVHcloud AI Endpoints,https://endpoints.ai.cloud.ovh.net,6,27,014,009/010/011/012/013/014,endpoints ovhcloudaiendpoints
+🆕 LLM7.io,https://llm7.io,6,40,014,009/010/011/012/013/014,llm7 llm7io
 RadarAI,https://radarai.top/,0,0,,,radarai
 AITOP100,https://aitop100.cn/,0,0,,,aitop100
 BestBlogs.dev,https://www.bestblogs.dev/,0,0,,,bestblogs bestblogsdev
@@ -193,4 +193,5 @@ Product Hunt AI,https://www.producthunt.com/topics/artificial-intelligence,0,0,,
 🆕 DataLearner,https://www.datalearner.com/,1,4,011,011,datalearner
 🆕 AI 日历 / 每日简报类站点（marketfinch AI Calendar、64bit Daily Brief、AIToolsRecap 等）,https://marketfinch.com/ai-calendar-2026-09-21 · https://64bit.co.uk/,1,1,011,011,ai日历每日简报类站点 ai日历每日简报类站点marketfinchaicalendar64bitdailybriefaitoolsrecap等 marketfinch
 🆕 Local Model Watch（localmodelwatch.tsuchitsuchi.com）,https://localmodelwatch.tsuchitsuchi.com/,2,5,011,010/011,localmodelwatch localmodelwatchlocalmodelwatchtsuchitsuchicom
-🆕 freetokens.custats.info,https://freetokens.custats.info/,6,32,013,008/009/010/011/012/013,freetokens freetokenscustatsinfo
+🆕 freetokens.custats.info,https://freetokens.custats.info/,7,47,014,008/009/010/011/012/013/014,freetokens freetokenscustatsinfo
+🆕 ClawLabsAI/free-ai-models,https://github.com/ClawLabsAI/free-ai-models,12,115,014,001/002/003/006/007/008/009/010/011/012/013/014,clawlabsaifreeaimodels github
