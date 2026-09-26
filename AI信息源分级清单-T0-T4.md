@@ -36,7 +36,7 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 | arXiv cs.CL | https://arxiv.org/list/cs.CL/recent | ✅ | 语言模型、长上下文进展 | 005 | 3 |
 | arXiv cs.CV | https://arxiv.org/list/cs.CV/recent | ✅ | 图像/视频生成，免费出图工具的能力源头 | 005 | 3 |
 | arXiv cs.LG / stat.ML | https://arxiv.org/list/cs.LG/recent | ✅ | 训练与推理成本下降的信号 | 005 | 3 |
-| Hugging Face Daily Papers | https://huggingface.co/papers | — | 每日精选，省去通读 arXiv | 014 | 53 |
+| Hugging Face Daily Papers | https://huggingface.co/papers | — | 每日精选，省去通读 arXiv | 015 | 54 |
 | OpenReview | https://openreview.net | — | 顶会审稿态，抢先看到未正式接收的工作 | — | 0 |
 | Papers with Code | https://paperswithcode.com | — | 论文 → 代码 → 权重，判断能否白嫖 | — | 0 |
 | Semantic Scholar API | https://api.semanticscholar.org | — | 程序化检索，适合自动化 | — | 0 |
@@ -51,13 +51,13 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 
 | 信源 | 地址 | RSS | 对本报告的用途 | 上次命中 | 命中次数 |
 | --- | --- | --- | --- | --- | --- |
-| Hugging Face Models (trending) | https://huggingface.co/models?sort=trending | — | **免费权重第一发现地**（005 期 Qwen3.8-27B 登顶历史最受欢迎榜；006 期 ZDTaichu5.0-9B） | 014 | 60 |
-| Hugging Face Blog | https://huggingface.co/blog | ✅ | 平台政策变动（免费层、推理供应商） | 014 | 51 |
-| Hugging Face Spaces | https://huggingface.co/spaces | — | 免费在线 Demo，可直接试模型 | 014 | 51 |
-| ModelScope 魔搭 | https://modelscope.cn/models | — | 国内权重镜像，下载快；**006 期 ZDTaichu5.0-9B、Atria Dawn Preview、书生-S2 的一手发布页** | 014 | 22 |
-| GitHub Trending | https://github.com/trending | — | 开源工具热度，判断哪些值得进报告 | 014 | 112 |
-| GitHub Releases (各项目 atom) | https://docs.github.com/en/rest/releases | ✅ | 版本号级更新，抓"免费额度调整" | 014 | 108 |
-| OpenRouter Models | https://openrouter.ai/models | — | 一个 Key 试几百个模型，免费档清单。**⚠️ 006 期起升级为 T0 级发布地**：匿名/隐身模型（Ox Alpha、Union Alpha）**只在这里有规格、条款与实时性能数据**，模型厂商官网查不到。查条款认 `Stealth Model Terms` | 014 | 124 |
+| Hugging Face Models (trending) | https://huggingface.co/models?sort=trending | — | **免费权重第一发现地**（005 期 Qwen3.8-27B 登顶历史最受欢迎榜；006 期 ZDTaichu5.0-9B） | 015 | 61 |
+| Hugging Face Blog | https://huggingface.co/blog | ✅ | 平台政策变动（免费层、推理供应商） | 015 | 52 |
+| Hugging Face Spaces | https://huggingface.co/spaces | — | 免费在线 Demo，可直接试模型 | 015 | 52 |
+| ModelScope 魔搭 | https://modelscope.cn/models | — | 国内权重镜像，下载快；**006 期 ZDTaichu5.0-9B、Atria Dawn Preview、书生-S2 的一手发布页** | 015 | 23 |
+| GitHub Trending | https://github.com/trending | — | 开源工具热度，判断哪些值得进报告 | 015 | 135 |
+| GitHub Releases (各项目 atom) | https://docs.github.com/en/rest/releases | ✅ | 版本号级更新，抓"免费额度调整" | 015 | 131 |
+| OpenRouter Models | https://openrouter.ai/models | — | 一个 Key 试几百个模型，免费档清单。**⚠️ 006 期起升级为 T0 级发布地**：匿名/隐身模型（Ox Alpha、Union Alpha）**只在这里有规格、条款与实时性能数据**，模型厂商官网查不到。查条款认 `Stealth Model Terms` | 015 | 131 |
 | Gitee AI / GitCode | https://ai.gitee.com | — | 国内开源托管 | — | 0 |
 | 始智AI wisemodel | https://wisemodel.cn | — | 国内模型社区 | — | 0 |
 | 硅基流动 SiliconFlow 模型广场 | https://siliconflow.cn/models | — | 免费/低价推理，常驻免费额度来源。**010 期旁证**：硅基流动完成 B+ 轮二期及 C 轮融资，2026 年内累计近 29 亿元（中国互联网投资基金 / 国新基金 / 中国移动链长基金） | 005 | 2 |
@@ -67,13 +67,13 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 
 | 信源 | 地址 | RSS | 对本报告的用途 | 上次命中 | 命中次数 |
 | --- | --- | --- | --- | --- | --- |
-| OpenAI News | https://openai.com/news | ✅ | 定价与免费档变动 | 014 | 112 |
-| OpenAI Research | https://openai.com/research | — | 能力边界 | 014 | 112 |
-| Anthropic News | https://www.anthropic.com/news | ✅ | Claude 免费档、速率 | 014 | 67 |
-| Anthropic Engineering | https://www.anthropic.com/engineering | — | Agent 工程实践 | 014 | 67 |
+| OpenAI News | https://openai.com/news | ✅ | 定价与免费档变动 | 015 | 121 |
+| OpenAI Research | https://openai.com/research | — | 能力边界 | 015 | 121 |
+| Anthropic News | https://www.anthropic.com/news | ✅ | Claude 免费档、速率 | 015 | 74 |
+| Anthropic Engineering | https://www.anthropic.com/engineering | — | Agent 工程实践 | 015 | 74 |
 | Google DeepMind Blog | https://deepmind.google/discover/blog | ✅ | Gemini 系列 | 006 | 2 |
 | Google AI Blog | https://blog.google/technology/ai/ | ✅ | 产品侧免费入口（AI Studio、NotebookLM） | 012 | 65 |
-| Google Research Blog | https://research.google/blog/ | ✅ | 论文一手 | 014 | 13 |
+| Google Research Blog | https://research.google/blog/ | ✅ | 论文一手 | 015 | 14 |
 | Meta AI Blog | https://ai.meta.com/blog/ | ✅ | Llama 系列权重 | — | 0 |
 | Microsoft AI Blog | https://blogs.microsoft.com/ai/ | ✅ | Copilot 免费层；⚠️ **GitHub Models 已于 2026-07-30 全面退役**（游乐场/目录/推理 API/BYOK 全关，端点 410），原「GitHub Models 免费档」表述作废——CI/agent 工作流改用 OpenRouter / Cloudflare Workers AI / 直接厂商 API Key（014 期避坑 61） | — | 0 |
 | Microsoft Research | https://www.microsoft.com/en-us/research/blog/ | — | 研究向 | — | 0 |
@@ -84,13 +84,13 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 | Midjourney | https://www.midjourney.com/showcase | — | 图像，免费档稀缺 | 008 | 1 |
 | Runway | https://runwayml.com/news | — | 视频，一次性积分陷阱源 | 008 | 13 |
 | Perplexity Blog | https://www.perplexity.ai/hub/blog | — | 免费搜索额度 | 011 | 8 |
-| Cursor Changelog | https://cursor.com/changelog | — | 编辑器免费档 | 014 | 21 |
+| Cursor Changelog | https://cursor.com/changelog | — | 编辑器免费档 | 015 | 24 |
 | Cognition (Devin) | https://cognition.ai/blog | — | Agent 产品 | — | 0 |
 | Apple Machine Learning Research | https://machinelearning.apple.com/research | — | 端侧模型，本地免费路线 | — | 0 |
 | AWS Machine Learning Blog | https://aws.amazon.com/blogs/machine-learning/ | — | 云侧免费层 | — | 0 |
-| IBM Research | https://research.ibm.com/blog | — | 企业级 | 014 | 13 |
+| IBM Research | https://research.ibm.com/blog | — | 企业级 | 015 | 14 |
 | Stability AI | https://stability.ai/news | — | 开源图像权重 | — | 0 |
-| 🆕 TypeSafe AI（typesafe.ai / console.typesafe.ai） | https://typesafe.ai/ | — | **「决策模型」这一新形态的第一发布地**：Jev 的开放状态、免费额度、定价与适用边界只在自家页与帮助文档里。**010 期首次命中**——「全面开放、无需候补、注册送 $5、输出免费、端到端 70–500ms」全部出自这里（第三方媒体只转述了「送 1.2 亿 token」这一层） | 014 | 45 |
+| 🆕 TypeSafe AI（typesafe.ai / console.typesafe.ai） | https://typesafe.ai/ | — | **「决策模型」这一新形态的第一发布地**：Jev 的开放状态、免费额度、定价与适用边界只在自家页与帮助文档里。**010 期首次命中**——「全面开放、无需候补、注册送 $5、输出免费、端到端 70–500ms」全部出自这里（第三方媒体只转述了「送 1.2 亿 token」这一层） | 015 | 49 |
 
 > 本期命中：NVIDIA Blog（9/3 宣布收购 Hugging Face，$129.3 亿）。
 
@@ -98,27 +98,27 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 
 | 信源 | 地址 | RSS | 对本报告的用途 | 上次命中 | 命中次数 |
 | --- | --- | --- | --- | --- | --- |
-| DeepSeek 研究与动态 | https://www.deepseek.com/zh/news | — | **全免费路线**，V4.1 Flash（9/10 多模态 + MIT） | 014 | 176 |
+| DeepSeek 研究与动态 | https://www.deepseek.com/zh/news | — | **全免费路线**，V4.1 Flash（9/10 多模态 + MIT） | 015 | 189 |
 | 阿里云百炼·新模型发布 | https://help.aliyun.com/zh/model-studio/models | — | 免费额度规则（**只认 help 页，不认活动页**） | 007 | 3 |
-| 阿里 Qwen 官方博客 | https://qwen.ai/blog | — | Qwen 开源权重 | 014 | 392 |
+| 阿里 Qwen 官方博客 | https://qwen.ai/blog | — | Qwen 开源权重 | 015 | 408 |
 | 月之暗面 Kimi | https://platform.moonshot.cn/docs | — | 免费额度、上下文 | 011 | 5 |
-| 智谱 GLM | https://docs.bigmodel.cn/cn/guide/start/model-overview | — | **GLM-4.7-Flash 永久免费**、夜间限免 | 014 | 50 |
-| MiniMax | https://www.minimaxi.com/news | — | 海螺视频免费次数 | 014 | 37 |
+| 智谱 GLM | https://docs.bigmodel.cn/cn/guide/start/model-overview | — | **GLM-4.7-Flash 永久免费**、夜间限免 | 015 | 55 |
+| MiniMax | https://www.minimaxi.com/news | — | 海螺视频免费次数 | 015 | 39 |
 | 火山引擎 / 豆包 | https://www.volcengine.com/docs | — | 日均 200 万 Token、高校 1 亿 | 005 | 4 |
-| 字节 Seed 团队 | https://seed.bytedance.com/ | — | Seedance / Seedream，即梦免费额度来源 | 014 | 82 |
-| 百度文心 | https://cloud.baidu.com/doc/index.html | — | 文心 4.0 全月免费、Comate 限免 | 014 | 83 |
-| 腾讯混元 | https://hunyuan.tencent.com/ | — | Hy3 / Hy4 限免窗口 | 014 | 68 |
+| 字节 Seed 团队 | https://seed.bytedance.com/ | — | Seedance / Seedream，即梦免费额度来源 | 015 | 88 |
+| 百度文心 | https://cloud.baidu.com/doc/index.html | — | 文心 4.0 全月免费、Comate 限免 | 015 | 88 |
+| 腾讯混元 | https://hunyuan.tencent.com/ | — | Hy3 / Hy4 限免窗口 | 015 | 74 |
 | 腾讯研究院 | https://www.tisi.org/ | — | 行业判断 | — | 0 |
 | 讯飞星火 | https://xfyun.cn/doc/ | — | Spark Lite 永久免费、X2.5 开源 | 008 | 15 |
-| 小米 MiMo | https://www.xiaomiev.com/ | — | MiMo Code 免注册 | 014 | 18 |
+| 小米 MiMo | https://www.xiaomiev.com/ | — | MiMo Code 免注册 | 015 | 27 |
 | 华为云 / 盘古 | https://www.huaweicloud.com/product/pangu.html | — | 盘古免费试用 | — | 0 |
 | 面壁智能 MiniCPM | https://www.minicpm.cn/ | — | 端侧开源 | 008 | 4 |
-| 阶跃星辰 | https://www.stepfun.com/ | — | Step 系列 | 014 | 43 |
-| 快手可灵 (Kling) | https://klingai.com/ | — | **66 积分/天**免费视频主力 | 014 | 3 |
+| 阶跃星辰 | https://www.stepfun.com/ | — | Step 系列 | 015 | 45 |
+| 快手可灵 (Kling) | https://klingai.com/ | — | **66 积分/天**免费视频主力 | 015 | 4 |
 | 智源研究院 BAAI | https://www.baai.ac.cn/ | — | FlagEval 榜单、开源 | 008 | 2 |
 | 昆仑万维 / 零一万物 | https://www.singularis.ltd/ | — | 开源权重 | — | 0 |
 | 蚂蚁 / 美团 / 京东 AI | https://www.antgroup.com/news/media | — | CatPaw 等新产品免费额度；**012 期补充：蚂蚁 inclusionAI 的 Ming-Image-0.1-Design 家族（两个 6.15B、MIT）也在此发布** | — | 0 |
-| 🆕 中国电信人工智能科技公司 / XingChen-AGI | https://huggingface.co/XingChen-AGI · https://modelscope.cn/organization/XingChen-AGI | — | **星火 / Xing 系列开源模型的第一发布地**。**012 期首次命中**——Xing4.0-29B-A4B 正式版权重与配置在此开放（29B 总参 / 4B 激活、256K 可扩 512K、**该规模上第一个完全在昇腾 NPU + MindSpore 上训练的模型**）。**它补的是"国内运营商系（电信）开源发布地"这一格**——此前表内只有互联网大厂（阿里 / 腾讯 / 百度 / 字节 / 小米）与 AI 公司（智谱 / 阶跃 / 面壁 / MiniMax），**未覆盖电信系** | 014 | 56 |
+| 🆕 中国电信人工智能科技公司 / XingChen-AGI | https://huggingface.co/XingChen-AGI · https://modelscope.cn/organization/XingChen-AGI | — | **星火 / Xing 系列开源模型的第一发布地**。**012 期首次命中**——Xing4.0-29B-A4B 正式版权重与配置在此开放（29B 总参 / 4B 激活、256K 可扩 512K、**该规模上第一个完全在昇腾 NPU + MindSpore 上训练的模型**）。**它补的是"国内运营商系（电信）开源发布地"这一格**——此前表内只有互联网大厂（阿里 / 腾讯 / 百度 / 字节 / 小米）与 AI 公司（智谱 / 阶跃 / 面壁 / MiniMax），**未覆盖电信系** | 015 | 58 |
 
 > **012 期命中（本层为发布线主力）**：**小米 XiaomiMiMo**（MiMo-V2.6 Pro/Flash 权重 MIT 开源 + OpenCode 平台 Flash 免费一周）、**蚂蚁 inclusionAI / AntLing**（Ming-Image-0.1-Design 与 Design-Layer，MIT）、**中国电信人工智能科技公司 / XingChen-AGI**（Xing4.0-29B-A4B 正式版权重与配置）、**腾讯混元**（Hy Image3.5 preview）、**智谱 AI**（Coding Plan 双节促销；ZCode / BigModel 新用户 5 天试用）、**抖音**（创作者大会四大扶持计划口径；电商精选计划报名动作；AIGC 标识与虚拟人实名规则）、**B站**（觉醒漫剧计划 2.0 参与方式与算力积分）、**快手**（可灵「看见微光」）、**国家网信办 / 中央网信办**（清朗·整治 AI 应用乱象第二阶段）、**广西商务厅等 8 部门**（"人工智能+消费"20 条）、**佛山市文广旅体局**（2026 年度微短剧扶持申报指南）、**国新办**（微短剧行业基线数字，沿用）。
 > 往期命中：讯飞（X2.5-1.7B/4B，9/1 开源 Apache-2.0）、DeepSeek（V4.1 Flash 9/10 发布）。
@@ -127,7 +127,7 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 
 | 信源 | 地址 | RSS | 对本报告的用途 | 上次命中 | 命中次数 |
 | --- | --- | --- | --- | --- | --- |
-| 国家网信办 | https://www.cac.gov.cn | — | 生成式 AI 备案、合规红线 | 014 | 4 |
+| 国家网信办 | https://www.cac.gov.cn | — | 生成式 AI 备案、合规红线 | 015 | 5 |
 | 工业和信息化部 | https://www.miit.gov.cn | — | 产业政策 | — | 0 |
 | 国家数据局 | https://www.nda.gov.cn | — | 数据要素 | — | 0 |
 | 中国信通院 CAICT | https://www.caict.ac.cn | — | 白皮书、标准 | — | 0 |
@@ -156,13 +156,13 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 | LMArena Image Arena | https://lmarena.ai/leaderboard/image | — | 图像排名 | — | 0 |
 | LMArena Video Arena | https://lmarena.ai/leaderboard/video | — | 视频排名 | — | 0 |
 | LMArena WebDev Arena | https://lmarena.ai/leaderboard/webdev | — | 前端/网页生成 | — | 0 |
-| Artificial Analysis | https://artificialanalysis.ai/ | — | 性价比、吞吐、延迟 | 014 | 31 |
+| Artificial Analysis | https://artificialanalysis.ai/ | — | 性价比、吞吐、延迟 | 015 | 33 |
 | llm-stats.com | https://llm-stats.com/ | — | 多榜聚合 | — | 0 |
-| LiveBench | https://livebench.ai/ | — | 防污染评测 | 014 | 1 |
+| LiveBench | https://livebench.ai/ | — | 防污染评测 | 015 | 2 |
 | SWE-bench Verified | https://www.swebench.com/ | — | 代码 Agent | 011 | 6 |
-| Terminal-bench | https://www.tbench.ai/leaderboards/terminal-bench | — | 终端 Agent | 014 | 25 |
+| Terminal-bench | https://www.tbench.ai/leaderboards/terminal-bench | — | 终端 Agent | 015 | 26 |
 | OSWorld | https://os-world.github.io/ | — | 计算机使用 | — | 0 |
-| Epoch AI | https://epoch.ai/ | — | 算力与趋势 | 014 | 58 |
+| Epoch AI | https://epoch.ai/ | — | 算力与趋势 | 015 | 66 |
 | Vals AI | https://www.vals.ai/ | — | Agent 评测 | 011 | 1 |
 | Scale SEAL Leaderboard | https://scale.com/leaderboard | — | 企业级评测 | 010 | 2 |
 | OpenCompass 司南 | https://opencompass.org.cn/ | — | 中文开源评测 | — | 0 |
@@ -177,19 +177,19 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 | 信源 | 地址 | RSS | 对本报告的用途 | 上次命中 | 命中次数 |
 | --- | --- | --- | --- | --- | --- |
 | X / Twitter | https://x.com | — | 最快信号，需交叉验证 | 004 | 1 |
-| Reddit r/LocalLLaMA | https://www.reddit.com/r/LocalLLaMA/ | ✅ | 本地/免费模型实测，**翻车预警第一现场** | 014 | 10 |
-| Reddit r/MachineLearning | https://www.reddit.com/r/MachineLearning/ | ✅ | 论文讨论 | 014 | 6 |
-| Reddit r/artificial | https://www.reddit.com/r/artificial/ | ✅ | 泛 AI 新闻 | 014 | 6 |
-| Reddit r/OpenAI / r/ClaudeAI / r/singularity | https://www.reddit.com/r/singularity/ | ✅ | 产品体验 | 014 | 6 |
-| Reddit r/StableDiffusion | https://www.reddit.com/r/StableDiffusion/ | ✅ | 出图工具实测 | 014 | 6 |
-| Hacker News | https://news.ycombinator.com/ | — | 技术圈热点 | 014 | 75 |
+| Reddit r/LocalLLaMA | https://www.reddit.com/r/LocalLLaMA/ | ✅ | 本地/免费模型实测，**翻车预警第一现场** | 015 | 12 |
+| Reddit r/MachineLearning | https://www.reddit.com/r/MachineLearning/ | ✅ | 论文讨论 | 015 | 7 |
+| Reddit r/artificial | https://www.reddit.com/r/artificial/ | ✅ | 泛 AI 新闻 | 015 | 7 |
+| Reddit r/OpenAI / r/ClaudeAI / r/singularity | https://www.reddit.com/r/singularity/ | ✅ | 产品体验 | 015 | 7 |
+| Reddit r/StableDiffusion | https://www.reddit.com/r/StableDiffusion/ | ✅ | 出图工具实测 | 015 | 7 |
+| Hacker News | https://news.ycombinator.com/ | — | 技术圈热点 | 015 | 80 |
 | HN 关键词 RSS (hnrss.org) | https://hnrss.org/newest?q=AI | ✅ | **可程序化订阅的 AI 关键词流** | — | 0 |
 | 知乎 · AI 话题 | https://www.zhihu.com/topic/19556664/hot | — | 中文深度讨论 | — | 0 |
 | 掘金 · 人工智能 | https://juejin.cn/ai | — | 开发者实践 | — | 0 |
 | 微信公众号（AI 类） | https://mp.weixin.qq.com/ | — | 厂商首发渠道之一 | 003 | 1 |
 | 微博（AI 官方账号+话题） | https://s.weibo.com/ | — | 国内厂商公告 | 011 | 3 |
 | B 站（发布会+测评） | https://www.bilibili.com/ | — | 发布会回放、实测 | — | 0 |
-| 小红书（AI 工具玩法） | https://www.xiaohongshu.com/ | — | **发布玩法 + 平台原生 AI 生态（RED Skill / Builder Hub）** | 014 | 103 |
+| 小红书（AI 工具玩法） | https://www.xiaohongshu.com/ | — | **发布玩法 + 平台原生 AI 生态（RED Skill / Builder Hub）** | 015 | 109 |
 | Bluesky | https://bsky.app/ | — | 研究者聚集地 | — | 0 |
 | LinkedIn | https://www.linkedin.com/ | — | 企业级动态 | 004 | 3 |
 | LessWrong | https://www.lesswrong.com/ | ✅ | 理性主义视角长文 | — | 0 |
@@ -210,7 +210,7 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 | Latent Space | https://www.latent.space/ | — | 深度访谈 | 010 | 2 |
 | Ahead of AI (Raschka) | https://magazine.sebastianraschka.com/ | ✅ | 技术细节讲得最清楚 | 007 | 3 |
 | AI Snake Oil | https://www.aisnakeoil.com/ | ✅ | **祛魅视角**，避坑素材来源 | — | 0 |
-| Simon Willison's Blog | https://simonwillison.net/ | ✅ | 实操、本地模型 | 014 | 16 |
+| Simon Willison's Blog | https://simonwillison.net/ | ✅ | 实操、本地模型 | 015 | 18 |
 | The Sequence | https://thesequence.substack.com/ | ✅ | 企业级 | — | 0 |
 | Interconnects | https://www.interconnects.ai/ | — | 训练与推理经济学 | 011 | 1 |
 | Stratechery | https://stratechery.com/ | ✅ | 商业战略 | — | 0 |
@@ -282,11 +282,11 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 | Inoreader / Feedly / FreshRSS | https://www.inoreader.com/ | — | 统一阅读与去重 | — | 0 |
 | HN Algolia API | https://hn.algolia.com/api | — | 程序化检索 HN 历史 | — | 0 |
 | Google Alerts | https://www.google.com/alerts | — | 关键词邮件推送 | 012 | 65 |
-| GitHub Actions 定时抓取 | https://docs.github.com/en/actions | — | **自动化骨架** | 014 | 108 |
+| GitHub Actions 定时抓取 | https://docs.github.com/en/actions | — | **自动化骨架** | 015 | 131 |
 | daily.dev | https://daily.dev/ | — | 开发者信息流 | 011 | 10 |
-| AI-HOT（168 信源分级）· 主理人「数字生命卡兹克」 | https://aihot.virxact.com/ · **新域名 https://aihot.news/** | — | **T4 里用途最高的一条**：按天归档 + 精确到分钟的时间戳、每条带 **AI 评分（0–100）+ 推荐理由**、标注**「另有 N 家信源报道」**（天然跨源交叉）、按主题频道追溯（`/topics/trends`）、条目永久链接 `aihot.news/items/<id>` 可跳原文。用法：**当每日扫描的入口层**，再由它跳去 T0 原文定事实。⚠️ 它的"AI 评分"是**模型打分，不是事实核查**，结论仍须回 T0。**⚠️ 能力边界（010 期第六次逐期计数确认，视为定论）：它不覆盖"限时免费额度/权益"类条目**——006 期 6 条里额度相关仅 1 条、007 期 14 条里同样仅 1 条（Codex 额度节省工作流）、**008 期 9/19 的 10 条里额度相关为 0 条**、**009 期（9/19 的 10 条 + 9/20 至 14:40 的 2 条）额度相关为 0 条**、**010 期（9/19 全天 10 条 + 9/20 全天 4 条 + 9/21 至 09:20 的 2 条）额度相关仍为 0 条**。**权益类信息必须走 T0 帮助中心 + 垂直免费额度站 + 平台方创作者招募稿，AIHOT 不能替代**。它的可用输出是"**免费内容生成工具**"与"**厂商发布事件**"这两类。**008 期补充一条正面证据**：ZCode 逆向贴（评分 86）与 OpenRouter 图像模型成本实测（评分 70）都是先在这一层被高分条目带出来的——**它的强项是"当日技术事件"，弱项是"当日商业权益"**。**009 期再补两条**：① **正面**——Step 5 Preview（挂 2 家）、Gemini 越界（**挂 8 家**，跨源数最高）都是先在这一层被带出来的；② **⚠️ 新增的结构性观察（重要）——它的当日条目是"滚动发布"的，且日间分布不均**：9/18 全天 7 条、9/19 全天 10 条、**9/20 至 14:40 只有 2 条**（本期头条 Step 5 出现在 9/20 10:20）。**这意味着"某天条目少"只等于"到那个时点还没出"，而"出刊时点"会直接决定内容完整性**——报告必须写明扫描截止时点，关键条目宁可等当天中午再定稿（见 009 期避坑 40）。**010 期新增第三条结论（重要）：「当日条数」这个指标本身不该被引用为「新闻密度」**——010 期扫描截止 09:20 时当日仅 2 条，**但这不代表 9/21 没有新闻，只代表「到 09:20 为止出了 2 条」**；反证是 009 期的头条 Step 5 Preview 出现在 10:20，**若 009 期也按 09:20 定稿就会整个漏掉**。**处置：刊头固定标注扫描截止时点；跨源计数时把「当日条数」排除在外。** 010 期正面证据：**Google 确认 Gemini 在 Irregular 测试中访问 3 家真实公司系统**（评分 78，**首次把四家实验室的同类事故并置**）与 **ChatGPT `__obi` 跨站 Cookie 独立流量取证**（评分 76）均出自这一层。**⚠️ 011 期第七次逐期计数确认（边界已固化为定论）+ 新增「同日反差」观察**：9/22 全天（至 17:30）该源条目数回升到 **20 条上下**，**但其中与「免费额度 / 领取 / 权益活动」直接相关的仍为 0 条**——本期新增的全部免费额度（智谱夜间免费延期、Hy Image3.5 免两周、Seedance 折扣、Nemotron 免费端点、MiMo 的 MIT 权重）**没有一条来自这一层**。**更有价值的是横向对比**：**同一个源，9/21 到 09:20 只有 2 条，9/22 到 17:30 有约 20 条**——**这个天壤之别不是新闻密度变了，是扫描时点变了**。**结论（对 009/010 期的第二次实证）：「当日条数」应当从所有判断里彻底剔除**，它衡量的是「我们扫描的那个时点」，与「今天发生了多少事」没有稳定关系。**处置：011 期起本报告不再引用「当日条数」作为任何论据，只在说明扫描完整度时才提；同时把扫描截止从 09:20 推到 17:30（云栖大会开幕主论坛在上午才开，按早间出刊会整个漏掉——这已是同一类失误的第三次预警）**。**011 期正面证据**：云栖大会 Qwen4 家族与 Hy Image3.5 均首发于这一层。**⚠️ 012 期第八次逐期计数确认 + 013 期第九次 + 014 期第十次逐期计数确认（边界第三次以定论形式复用）+ 新增第三类内容「可复算的行业研究」**：9/23 至 13:20 该源约 **20 条**，其中**本期两条头条（Claude Opus 5.5、GPT-6 Sol/Luna 的降价）确实首发于这一层**，**但其中与「免费额度 / 领取 / 权益活动」直接相关的仍为 0 条**——本期全部免费额度新增（ZCode / BigModel 5 天试用、Kilo Code 免费网关、MiMo 在 OpenCode 免费一周、Ling 3.0 Flash VL 窗口收口、佛山申报）**没有一条来自这一层**。**边界固化为定论**：**强项稳定在"当日技术事件"（模型发布、评测、研究报告），弱项稳定在"当日商业权益"（额度、领取、活动规则）**。**⚠️ 本期新增一条价值高于前几期的正面证据**：**Epoch AI 的"成本每季度下降约 47%"报告同样首发于这一层**——**它既不是模型发布也不是权益活动，属于第三类内容「可复算的行业研究」**（同层候选：Nathan Lambert 的开源权重格局综述、Tomer Tunguz 的生产替换实验）。**这一类输出的是"判断的基准"而不是"一条新闻"，在本报告里的价值正在上升** | 014 | 80 |
-| 🆕 OVHcloud AI Endpoints | https://endpoints.ai.cloud.ovh.net | — | **免注册匿名档免费 API**（OpenAI 兼容、9 个开源模型、匿名 2 RPM、欧盟托管 GDPR 合规、冷启动 5–10 秒）。**009 期首次命中**——「匿名档」这一类免费 API 形态的第一条硬样本 | 014 | 27 |
-| 🆕 LLM7.io | https://llm7.io | — | **匿名档免费 API**：10 RPM / 60 req·hr，**注册后 120 RPM**；含 gemini-3.1-flash-lite、DeepSeek-V4-Flash-0731 等 6 个模型；小型独立供应商、无 SLA。**009 期首次命中** | 014 | 40 |
+| AI-HOT（168 信源分级）· 主理人「数字生命卡兹克」 | https://aihot.virxact.com/ · **新域名 https://aihot.news/** | — | **T4 里用途最高的一条**：按天归档 + 精确到分钟的时间戳、每条带 **AI 评分（0–100）+ 推荐理由**、标注**「另有 N 家信源报道」**（天然跨源交叉）、按主题频道追溯（`/topics/trends`）、条目永久链接 `aihot.news/items/<id>` 可跳原文。用法：**当每日扫描的入口层**，再由它跳去 T0 原文定事实。⚠️ 它的"AI 评分"是**模型打分，不是事实核查**，结论仍须回 T0。**⚠️ 能力边界（010 期第六次逐期计数确认，视为定论）：它不覆盖"限时免费额度/权益"类条目**——006 期 6 条里额度相关仅 1 条、007 期 14 条里同样仅 1 条（Codex 额度节省工作流）、**008 期 9/19 的 10 条里额度相关为 0 条**、**009 期（9/19 的 10 条 + 9/20 至 14:40 的 2 条）额度相关为 0 条**、**010 期（9/19 全天 10 条 + 9/20 全天 4 条 + 9/21 至 09:20 的 2 条）额度相关仍为 0 条**。**权益类信息必须走 T0 帮助中心 + 垂直免费额度站 + 平台方创作者招募稿，AIHOT 不能替代**。它的可用输出是"**免费内容生成工具**"与"**厂商发布事件**"这两类。**008 期补充一条正面证据**：ZCode 逆向贴（评分 86）与 OpenRouter 图像模型成本实测（评分 70）都是先在这一层被高分条目带出来的——**它的强项是"当日技术事件"，弱项是"当日商业权益"**。**009 期再补两条**：① **正面**——Step 5 Preview（挂 2 家）、Gemini 越界（**挂 8 家**，跨源数最高）都是先在这一层被带出来的；② **⚠️ 新增的结构性观察（重要）——它的当日条目是"滚动发布"的，且日间分布不均**：9/18 全天 7 条、9/19 全天 10 条、**9/20 至 14:40 只有 2 条**（本期头条 Step 5 出现在 9/20 10:20）。**这意味着"某天条目少"只等于"到那个时点还没出"，而"出刊时点"会直接决定内容完整性**——报告必须写明扫描截止时点，关键条目宁可等当天中午再定稿（见 009 期避坑 40）。**010 期新增第三条结论（重要）：「当日条数」这个指标本身不该被引用为「新闻密度」**——010 期扫描截止 09:20 时当日仅 2 条，**但这不代表 9/21 没有新闻，只代表「到 09:20 为止出了 2 条」**；反证是 009 期的头条 Step 5 Preview 出现在 10:20，**若 009 期也按 09:20 定稿就会整个漏掉**。**处置：刊头固定标注扫描截止时点；跨源计数时把「当日条数」排除在外。** 010 期正面证据：**Google 确认 Gemini 在 Irregular 测试中访问 3 家真实公司系统**（评分 78，**首次把四家实验室的同类事故并置**）与 **ChatGPT `__obi` 跨站 Cookie 独立流量取证**（评分 76）均出自这一层。**⚠️ 011 期第七次逐期计数确认（边界已固化为定论）+ 新增「同日反差」观察**：9/22 全天（至 17:30）该源条目数回升到 **20 条上下**，**但其中与「免费额度 / 领取 / 权益活动」直接相关的仍为 0 条**——本期新增的全部免费额度（智谱夜间免费延期、Hy Image3.5 免两周、Seedance 折扣、Nemotron 免费端点、MiMo 的 MIT 权重）**没有一条来自这一层**。**更有价值的是横向对比**：**同一个源，9/21 到 09:20 只有 2 条，9/22 到 17:30 有约 20 条**——**这个天壤之别不是新闻密度变了，是扫描时点变了**。**结论（对 009/010 期的第二次实证）：「当日条数」应当从所有判断里彻底剔除**，它衡量的是「我们扫描的那个时点」，与「今天发生了多少事」没有稳定关系。**处置：011 期起本报告不再引用「当日条数」作为任何论据，只在说明扫描完整度时才提；同时把扫描截止从 09:20 推到 17:30（云栖大会开幕主论坛在上午才开，按早间出刊会整个漏掉——这已是同一类失误的第三次预警）**。**011 期正面证据**：云栖大会 Qwen4 家族与 Hy Image3.5 均首发于这一层。**⚠️ 012 期第八次逐期计数确认 + 013 期第九次 + 014 期第十次逐期计数确认（边界第三次以定论形式复用）+ 新增第三类内容「可复算的行业研究」**：9/23 至 13:20 该源约 **20 条**，其中**本期两条头条（Claude Opus 5.5、GPT-6 Sol/Luna 的降价）确实首发于这一层**，**但其中与「免费额度 / 领取 / 权益活动」直接相关的仍为 0 条**——本期全部免费额度新增（ZCode / BigModel 5 天试用、Kilo Code 免费网关、MiMo 在 OpenCode 免费一周、Ling 3.0 Flash VL 窗口收口、佛山申报）**没有一条来自这一层**。**边界固化为定论**：**强项稳定在"当日技术事件"（模型发布、评测、研究报告），弱项稳定在"当日商业权益"（额度、领取、活动规则）**。**⚠️ 本期新增一条价值高于前几期的正面证据**：**Epoch AI 的"成本每季度下降约 47%"报告同样首发于这一层**——**它既不是模型发布也不是权益活动，属于第三类内容「可复算的行业研究」**（同层候选：Nathan Lambert 的开源权重格局综述、Tomer Tunguz 的生产替换实验）。**这一类输出的是"判断的基准"而不是"一条新闻"，在本报告里的价值正在上升** | 015 | 86 |
+| 🆕 OVHcloud AI Endpoints | https://endpoints.ai.cloud.ovh.net | — | **免注册匿名档免费 API**（OpenAI 兼容、9 个开源模型、匿名 2 RPM、欧盟托管 GDPR 合规、冷启动 5–10 秒）。**009 期首次命中**——「匿名档」这一类免费 API 形态的第一条硬样本 | 015 | 29 |
+| 🆕 LLM7.io | https://llm7.io | — | **匿名档免费 API**：10 RPM / 60 req·hr，**注册后 120 RPM**；含 gemini-3.1-flash-lite、DeepSeek-V4-Flash-0731 等 6 个模型；小型独立供应商、无 SLA。**009 期首次命中** | 015 | 44 |
 | RadarAI | https://radarai.top/ | — | 中文聚合 | — | 0 |
 | AITOP100 | https://aitop100.cn/ | — | 中文榜单 | — | 0 |
 | BestBlogs.dev | https://www.bestblogs.dev/ | — | 优质博客聚合 | — | 0 |
@@ -295,8 +295,8 @@ T0 内部分类复核：论文与预印本 12、**模型与开源 11**、**官�
 | 🆕 DataLearner | https://www.datalearner.com/ | — | **模型规格 / 许可证 / 定价的速查站**：逐模型给出总参数、激活参数、上下文、输入输出模态、发布日、**代码与权重开源状态 + 许可证名称 + 是否可免费商用**。**011 期首次命中**——它补的是本报告「**这个模型到底能不能商用**」这一问的快速核验入口（011 期核对 MiMo-V2.6-Flash 的 MIT 许可即用它） | 011 | 4 |
 | 🆕 AI 日历 / 每日简报类站点（marketfinch AI Calendar、64bit Daily Brief、AIToolsRecap 等） | https://marketfinch.com/ai-calendar-2026-09-21 · https://64bit.co.uk/ | — | **「哪天有什么事」的结构化台账**：把官方日程（DevDay 逐场议程、Anthropic IPO 时间表、Google / AWS / NVIDIA 活动）、**API 弃用与下线截止日**、以及模型发布观察（**明确分「已官方 / 传闻 / 低置信」三档**）合并成按日索引。**011 期首次命中**——DevDay 的完整议程与「现场报名已关闭」、**GPT-5.5 下线「API 不受影响」这条关键边界**、Harvey 离开闭源前沿模型的毛利率数字均出自这一层 | 011 | 1 |
 | 🆕 Local Model Watch（localmodelwatch.tsuchitsuchi.com） | https://localmodelwatch.tsuchitsuchi.com/ | — | **开源模型与推理栈的逐周总账**：把同一周的新模型（含各家量化 / 衍生版）与推理层版本（ggml / llama.cpp / llamafile / SGLang / Unsloth / koboldcpp / ComfyUI / LocalAI）**合并成一张表、同事件去重**。**010 期首次命中**——本期「免费开源内容资产」一节的多数条目（Intern-S2-397B-GGUF、WeVisDoc、Realtime-Venus、Needle 3、Splash Engine、Ternary-Bonsai 三档分发）都出自它。**它补的是本清单的一个结构性缺口：没有人逐周统计「哪些权重真的能下载」** | 011 | 5 |
-| 🆕 freetokens.custats.info | https://freetokens.custats.info/ | — | **逐条带 `Last checked` 日期的免费 AI 额度条目库**。逐条给出**数量 / 类别 / 是否需要注册 / 结束条件（`ongoing` 或固定截止日）/ 验证状态**六栏。**012 期首次命中**——本期 OpenRouter 免费档的 24 个在线模型、Gemini 免费档"官方不再公布统一配额"、ZCode 的"5 天 × 800 万 token（不是持续额度）"三处结构性事实均出自这一层。**它补的是"免费额度库"这一类里最缺的两个字段：核对日期与结束条件类型**——**`Ends: ongoing / fixed date` 这一栏，正是本报告第四章三态（生效中 / 换挡日 / 已结束）在做的事** | 014 | 47 |
-| 🆕 ClawLabsAI/free-ai-models | https://github.com/ClawLabsAI/free-ai-models | — | **每日更新的免费模型清单 + 实时健康度（up/retiring）+ 速率/上下文/模态/质量分**；直接给出「⏳ retiring YYYY-MM-DD」字段。**014 期首次命中**——Nex AGI 5-Pro / Nex-N2.5-Mini 两档标 ⏳ retiring 2026-09-25、OpenRouter「整批免费模型已替换」。它补的是「免费模型清单」这一类里最缺的字段：**核对日期与退役日**（对应 011 期 Q14 / 012 期 freetokens.custats.info 的「动态目录」问题，与 freetokens 互补：一个盯额度库、一个盯模型榜） | 014 | 115 |
+| 🆕 freetokens.custats.info | https://freetokens.custats.info/ | — | **逐条带 `Last checked` 日期的免费 AI 额度条目库**。逐条给出**数量 / 类别 / 是否需要注册 / 结束条件（`ongoing` 或固定截止日）/ 验证状态**六栏。**012 期首次命中**——本期 OpenRouter 免费档的 24 个在线模型、Gemini 免费档"官方不再公布统一配额"、ZCode 的"5 天 × 800 万 token（不是持续额度）"三处结构性事实均出自这一层。**它补的是"免费额度库"这一类里最缺的两个字段：核对日期与结束条件类型**——**`Ends: ongoing / fixed date` 这一栏，正是本报告第四章三态（生效中 / 换挡日 / 已结束）在做的事** | 015 | 58 |
+| 🆕 ClawLabsAI/free-ai-models | https://github.com/ClawLabsAI/free-ai-models | — | **每日更新的免费模型清单 + 实时健康度（up/retiring）+ 速率/上下文/模态/质量分**；直接给出「⏳ retiring YYYY-MM-DD」字段。**014 期首次命中**——Nex AGI 5-Pro / Nex-N2.5-Mini 两档标 ⏳ retiring 2026-09-25、OpenRouter「整批免费模型已替换」。它补的是「免费模型清单」这一类里最缺的字段：**核对日期与退役日**（对应 011 期 Q14 / 012 期 freetokens.custats.info 的「动态目录」问题，与 freetokens 互补：一个盯额度库、一个盯模型榜） | 015 | 140 |
 
 ---
 
