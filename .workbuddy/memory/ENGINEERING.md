@@ -134,3 +134,4 @@
   ```
   **三个要点**：① `-c credential.helper=`（**空值**）必须显式写上，先把 `helper-selector` 清空，否则它仍会被调用；② `git-credential-manager get` 本身是好用的（011 期返回 `gho_` 40 位令牌，`api.github.com/user` → 200），**只有通过 git 调用它才出问题**；③ 令牌只走环境变量、命令里写的是 `$GH_TOK` 字面量，**不进 ps 列表、不落盘**。另：`timeout` 在 Git Bash 里会解析到 `C:\Windows\System32\TIMEOUT.EXE`（报"无效语法"），**要用 `/usr/bin/timeout`**。
 - **Pages 构建要等，抓一次会误判**：推送后 `repos/<o>/<r>/pages/builds/latest` 会先返回 `building`（011 期：`created 10:06:03Z` → `built`，同 commit `3f73edc`）。**在此之前带 `?t=<ts>` 抓首页，拿到的仍是上一期**（011 期首次抓取显示「更新至 第 010 期」，本地/线上体积 16879/16533 B 不一致即为此故）。**正确顺序：push → API 核 sha → 轮询 `pages/builds/latest` 到 `built` → 再抓线上页**（完成后体积与本地 `index.html` 逐字节一致）。
+- ⚠️ **`pages/builds/latest` 会 404（019、022 两期实测，连续 6 次）**，此时**不要卡在轮询上**——直接改走**抓线上页比对**：带 `?t=<ts>` 抓 `index.html`，与本地 `index.html` 比**字节数**（一致即已上线），再 grep「更新至」确认期号；单期页也抓一次核 `http=200` 与字节数。**「等 built」不是必需步骤，「线上页与本地逐字节一致」才是真正的判据。**
