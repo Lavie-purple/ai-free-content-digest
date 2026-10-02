@@ -554,7 +554,7 @@
 
 ## 2026-10-02 第 021 期（10/1 双节点收口 + 10/2 真实增量 8 条）· 020 同期补提
 
-- 状态: 正文+网页+索引 全部 ALL GREEN；**Git push 被沙箱出口代理 502 拦截（待补推）**
+- 状态: 正文+网页+索引 全部 ALL GREEN；**Git push 当时被沙箱出口代理 502 拦截，但 020+021 已于 2026-10-03 由同一自动化的并行实例随 022 一并推送成功（见下条 022 记录），远程 main 现已含本期的 499eca2**
 - 假设: 用户再次附上同一份 T0–T4 清单（含 aihot.news）。按"只做增量+纠错+日期推进"定位，本期是 10/1 双节点收口日 + 10/2 真实技术事件流。
 - 扫描截止: **2026-10-02 19:33（GMT+8）**——晚间出刊，刊头显式声明（避坑 40 纪律）。
 - 交付物:
@@ -578,8 +578,8 @@
 - 本期新增避坑 **96–100**：**96** 评测总分第一掩盖每任务成本最高（AA Coding Agent Index Sonnet 5.5 $14.19）/ **97** "开放权重数周后发布"是路线图话术（FLUX 3 现在只能走商用权重）/ **98** 音频 beta 全员开放带质量代价（Suno Speech 口音漂移）/ **99** 免费工具入口平台侧反复迁移（FLUX 3 在 Krea/OpenRouter/官网三处条款各不同）/ **100** 监管把 agent 自主入侵从头条变传票（加州 AG 传唤 OpenAI）
 - 校验方式: 全部脚本实跑——`check_frozen` 🔴 **0** / **exit 0**（库 203 条，首登 4：FLUX 3 Image/Suno Speech beta/Claude Code mods/GPT-6 Astra Ultrafast）；`check_tables` **18 表 0 异常** + 避坑 96–100 连续；`extract_deadlines` **73 行** → `check_deadlines --today 2026-10-02` **A1+B11+C26+D24+E11=73** 一致（色标 🔴2/🟠4/🟡2/🟢38/⚪27；⚪27 = C26 已解析日期 + D24 中 GitHub Models 行 YYYY-MM-DD 写法未被解析归 D，差 1 为正确，勿"修正"）；`build_web` → `verify_web` **ALL GREEN**；`build_source_hits` 回写 **198 行**（101 命中/97 零命中）；`build_index` 收录 **21 期**；`build_index_web` 重建首页（21 期·22,187 B）；`check_site_freshness` **ALL GREEN**（INDEX/index/最新卡片均 021）
 - **台账与结构化数据**: `frozen_items.md` **首登 4 条**（FLUX 3 Image/Suno Speech beta/Claude Code mods/GPT-6 Astra Ultrafast），**覆盖区间更新为 第 001–021 期**（库 203 条）；`open_questions.md` 无新增升级；`AI信息源分级清单-T0-T4.md` **196 → 198 条**（新增 Black Forest Labs / Suno，手写计数行同步：T0 模型与开源 12、官方一手·国外 25、T0 合计 105、全表 198）；`deadlines.csv` 重建 73 行；`source_hits.csv` 回写 198 行
-- **Git 与发布**: commit `499eca2`（12 文件，+3732/−195）含 **020+021 同提**（020 此前未推送，HEAD 原在 019）；**push 三次均败**——沙箱出口代理 `HTTP_PROXY/HTTPS_PROXY=http://127.0.0.1:52669` 对 GitHub 返 `502`（curl 7 CONNECT tunnel failed, response 502），早先 `git ls-remote` 能过、稍后 `fetch/push` 均 502，判定为**代理临时故障，非凭据/仓库问题**。本地提交完整，**待代理恢复后 `git push origin main` 补推（GCM 内联助手或常规 push 均可），再核线上期号**。注意 `live_now.html` 为未跟踪残留、不在流水线，本次未纳入提交、按"禁止删除"留着未动。
-- **下次执行建议**: ① 复核 **10/4（掘金第二期截止）**、**10/7（智谱双节三线收口 + Claude Code 云会话 credit 领取截止·剩 5 天）**、10/10（Hy4 preview 新用户窗口）、**10/14（GPT-5.5 下线，⚠️ 可能提前）**、**10/15（Step 5 开源权重）**、10/18（AgentCore 限免结束）、10/20（佛山微短剧申报）；② **追 ZCode 开源仓库 + 信通院/绿盟审计报告是否公开**（连续多期）；③ 追 **Sonnet 5.5 免费层覆盖** + AA Coding Agent Index 成本口径落地；④ 追 **FLUX 3 开放权重实际发布日**（避坑 97）；⑤ 追 **Suno Speech 口音漂移质量**（避坑 98）；⑥ 回扫"已结束"栏（避坑 47）；⑦ 逐期记账 **ClawLabsAI / freetokens / freellm.net 计数器漂移**；⑧ **补推本次被代理拦截的 push** 并核线上期号
+- **Git 与发布**: commit `499eca2`（12 文件，+3732/−195）含 **020+021 同提**（020 此前未推送，HEAD 原在 019）。**本会话当场 push 三次均败**——沙箱出口代理 `HTTP_PROXY/HTTPS_PROXY=http://127.0.0.1:52669` 对 GitHub 返 `502`（curl 7 CONNECT tunnel failed, response 502），早先 `git ls-remote` 能过、稍后 `fetch/push` 均 502，判定为**代理临时故障，非凭据/仓库问题**。但**事后（2026-10-03）同一自动化的并行实例已将 `499eca2` 连同 022 一并推送成功**：远端 `7ab8790..d240d91 main -> main`（从 019 直跳 022），本地/远程现均停在 `64de8e6`，本地 `rev-parse 499eca2` 确认 020+021 内容已在远程历史中（远端首页经另一实例核为「更新至 第 022 期」，含本期）。**故本期无需再补推**。注意 `live_now.html` 为未跟踪残留、不在流水线，本次未纳入提交、按"禁止删除"留着未动。
+- **下次执行建议**: ① 复核 **10/4（掘金第二期截止）**、**10/7（智谱双节三线收口 + Claude Code 云会话 credit 领取截止·剩 5 天）**、10/10（Hy4 preview 新用户窗口）、**10/14（GPT-5.5 下线，⚠️ 可能提前）**、**10/15（Step 5 开源权重）**、10/18（AgentCore 限免结束）、10/20（佛山微短剧申报）；② **追 ZCode 开源仓库 + 信通院/绿盟审计报告是否公开**（连续多期）；③ 追 **Sonnet 5.5 免费层覆盖** + AA Coding Agent Index 成本口径落地；④ 追 **FLUX 3 开放权重实际发布日**（避坑 97）；⑤ 追 **Suno Speech 口音漂移质量**（避坑 98）；⑥ 回扫"已结束"栏（避坑 47）；⑦ 逐期记账 **ClawLabsAI / freetokens / freellm.net 计数器漂移**；⑧ 补推已**由 2026-10-03 并行实例完成**（020+021+022 同批）；下期基线 = `d240d91`
 
 ## 2026-10-03 第 022 期（两条延期反转纠错 + 四件开源资产 + 两条补登）· 020/021/022 同批补推
 
