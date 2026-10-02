@@ -31,7 +31,7 @@ def pit_range(text):
     m = re.search(r"(?ms)^##+[^\n]*避坑[^\n]*\n(.*?)(?=^## |\Z)", text)
     if not m:
         return "—"
-    nums = [int(x) for x in re.findall(r"(?m)^\s*(?:\*\*)?(\d{1,2})[\.、)]", m.group(1))]
+    nums = [int(x) for x in re.findall(r"(?m)^\s*(?:\*\*)?(\d{1,3})[\.、)]", m.group(1))]
     return "%d–%d" % (min(nums), max(nums)) if nums else "—"
 
 

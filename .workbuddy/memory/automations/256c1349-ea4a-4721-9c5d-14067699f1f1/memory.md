@@ -551,3 +551,59 @@
 - 校验方式: 全部脚本实跑——`check_frozen` 🔴 **0** / exit 0（库 192+7=199 条）；`check_tables` **18 表 0 异常** + 避坑 86–90 连续；`extract_deadlines` **82 行** → `check_deadlines --today 2026-09-30` **A0+B21+C25+D24+E12=82** 一致（三态 crit2/switch4/pending13/live37/over26 与第四章脚注一致）；`build_web` 10 节/16 h3/159,577 B；`verify_web` **ALL GREEN**；`build_source_hits` 回写 **196 行**（AIHOT 命中列 019/111）；`build_index` 收录 **19 期**；`build_index_web` 重建首页；`check_site_freshness` **ALL GREEN**（INDEX/index/最新卡片均 019）
 - **Git 与发布**: commit `7ab8790`（9 文件，+2026/−236）；push 遇坏 helper（`could not read Username`）→ **GCM 取令牌 + 内联助手推送成功**（`8cd6c9a..7ab8790`）；GitHub API 核 sha 一致；⚠️ **`pages/builds/latest` 本次返回 404**（018 期尚可用）——改走**直接抓线上**：主页与 index.html（带 `?t=` 绕缓存）均确认「第 019 期」「更新至 第 019 期」。下期轮询若再 404，直接抓页为准。
 - **下次执行建议**: ① **10/1 回扫 9/30 十条**（哪些真到期/静默延期）+ 核 Claude Tag Credits 生效 + **老混元是否已停服（高危窗口正式开启，Q04 连续第 8 期）**；② 核 **Q17**：developers.openai.com/codex/models 是否把迁移目标更新为 GPT-6.1 Sol；③ 核 **Sonnet 5.5 免费层覆盖** + Agents API 预览条款 + Sign in with ChatGPT 免费层是否有份（三条"待核"）；④ 10/4（掘金第二期截止）、10/7（三线收口）、10/10（Hy4 新用户窗口）、10/14（GPT-5.5 下线+核是否提前）、10/15（Step 5 权重）、10/18（AgentCore）、10/20（佛山申报）；⑤ 追 ZCode 开源仓库 + 信通院/绿盟审计（连续多期）、GPT-6 Cyber 额度条款、Space Bunny Alpha 认领、Hermes 绑卡条款；⑥ 回扫"已结束"栏（避坑 47）；⑦ 逐期记账 ClawLabsAI/freetokens/freellm.net 计数器漂移
+
+## 2026-10-02 第 021 期（10/1 双节点收口 + 10/2 真实增量 8 条）· 020 同期补提
+
+- 状态: 正文+网页+索引 全部 ALL GREEN；**Git push 被沙箱出口代理 502 拦截（待补推）**
+- 假设: 用户再次附上同一份 T0–T4 清单（含 aihot.news）。按"只做增量+纠错+日期推进"定位，本期是 10/1 双节点收口日 + 10/2 真实技术事件流。
+- 扫描截止: **2026-10-02 19:33（GMT+8）**——晚间出刊，刊头显式声明（避坑 40 纪律）。
+- 交付物:
+  1. `AI免费内容与权益速递-第021期-2026-10-02.md`（72,867 B / **18 个表格**；避坑编号 **96–100** 与 020 期 91–95 连续）
+  2. `AI免费内容与权益速递-第021期-2026-10-02.html`（149,808 B；`verify_web` **ALL GREEN**）
+  3. `AI信息源分级清单-T0-T4.md`（就地 **196 → 198 条**，新增 Black Forest Labs / Suno；AIHOT 边界**第十六次逐期计数确认**）
+- **020 期补提说明**: 020（2026-10-01）此前已生成但**从未推送**（HEAD 原停在 019 的 `7ab8790`）；本期同 commit `499eca2` 一并补提——9/30 单日 10 条回扫收口 + Claude Tag Credits 10/1 实为「过期」(019 看反) + 老混元高危窗口开启(Q04 第 8 期) + Claude Code 云会话 credit 新额度 + 免费开源资产(TeleOCR/Index-Translate/1,337 Chart Prompts/Holo4)；避坑 91–95；台账 196 维持。
+- 本期硬新增（下期不要再当新发现）:
+  - **FLUX 3 Image**（Black Forest Labs，本期走商用权重；"开放权重数周后"=路线图话术，避坑 97）
+  - **Suno Speech beta**（音频 beta 全员开放带口音漂移质量代价，避坑 98）
+  - **Claude Code mods**（稳定，新入口）
+  - **AA Coding Agent Index**：Sonnet 5.5 评测总分第一但每任务成本最高（$14.19），总分第一掩盖成本，避坑 96
+  - **Qwen-Image-2.1 登顶开源图像**（Artificial Analysis 开源图像榜第一）
+  - **MiMo-VII.6 登 Agent Arena**（智源，agent 榜）
+  - **GPT-6 Astra Ultrafast**（新发布，稳定）
+  - **加州 AG 传唤 OpenAI**（监管把 agent 自主入侵从头条变传票，避坑 100）
+- **重要纠错（下期别再写错）**:
+  1. **Claude Tag Credits 闭环**：020 翻为「⚪ 已结束」(10/1 太平洋时间 23:59 过期)，021 维持 ⚪ 收口闭环，勿再写「生效」
+  2. **9/30 单日 10 条回扫**：基于 10/2 技术事件流**无静默延期信号**，维持 ⚪ 已结束（避坑 78 纪律：无信号即默认收口）
+  3. **老混元高危窗口已开启第 1 天**（Q04 连续第 9 期，厂商仍只给「9 月底」无确切停服日）
+- 本期新增避坑 **96–100**：**96** 评测总分第一掩盖每任务成本最高（AA Coding Agent Index Sonnet 5.5 $14.19）/ **97** "开放权重数周后发布"是路线图话术（FLUX 3 现在只能走商用权重）/ **98** 音频 beta 全员开放带质量代价（Suno Speech 口音漂移）/ **99** 免费工具入口平台侧反复迁移（FLUX 3 在 Krea/OpenRouter/官网三处条款各不同）/ **100** 监管把 agent 自主入侵从头条变传票（加州 AG 传唤 OpenAI）
+- 校验方式: 全部脚本实跑——`check_frozen` 🔴 **0** / **exit 0**（库 203 条，首登 4：FLUX 3 Image/Suno Speech beta/Claude Code mods/GPT-6 Astra Ultrafast）；`check_tables` **18 表 0 异常** + 避坑 96–100 连续；`extract_deadlines` **73 行** → `check_deadlines --today 2026-10-02` **A1+B11+C26+D24+E11=73** 一致（色标 🔴2/🟠4/🟡2/🟢38/⚪27；⚪27 = C26 已解析日期 + D24 中 GitHub Models 行 YYYY-MM-DD 写法未被解析归 D，差 1 为正确，勿"修正"）；`build_web` → `verify_web` **ALL GREEN**；`build_source_hits` 回写 **198 行**（101 命中/97 零命中）；`build_index` 收录 **21 期**；`build_index_web` 重建首页（21 期·22,187 B）；`check_site_freshness` **ALL GREEN**（INDEX/index/最新卡片均 021）
+- **台账与结构化数据**: `frozen_items.md` **首登 4 条**（FLUX 3 Image/Suno Speech beta/Claude Code mods/GPT-6 Astra Ultrafast），**覆盖区间更新为 第 001–021 期**（库 203 条）；`open_questions.md` 无新增升级；`AI信息源分级清单-T0-T4.md` **196 → 198 条**（新增 Black Forest Labs / Suno，手写计数行同步：T0 模型与开源 12、官方一手·国外 25、T0 合计 105、全表 198）；`deadlines.csv` 重建 73 行；`source_hits.csv` 回写 198 行
+- **Git 与发布**: commit `499eca2`（12 文件，+3732/−195）含 **020+021 同提**（020 此前未推送，HEAD 原在 019）；**push 三次均败**——沙箱出口代理 `HTTP_PROXY/HTTPS_PROXY=http://127.0.0.1:52669` 对 GitHub 返 `502`（curl 7 CONNECT tunnel failed, response 502），早先 `git ls-remote` 能过、稍后 `fetch/push` 均 502，判定为**代理临时故障，非凭据/仓库问题**。本地提交完整，**待代理恢复后 `git push origin main` 补推（GCM 内联助手或常规 push 均可），再核线上期号**。注意 `live_now.html` 为未跟踪残留、不在流水线，本次未纳入提交、按"禁止删除"留着未动。
+- **下次执行建议**: ① 复核 **10/4（掘金第二期截止）**、**10/7（智谱双节三线收口 + Claude Code 云会话 credit 领取截止·剩 5 天）**、10/10（Hy4 preview 新用户窗口）、**10/14（GPT-5.5 下线，⚠️ 可能提前）**、**10/15（Step 5 开源权重）**、10/18（AgentCore 限免结束）、10/20（佛山微短剧申报）；② **追 ZCode 开源仓库 + 信通院/绿盟审计报告是否公开**（连续多期）；③ 追 **Sonnet 5.5 免费层覆盖** + AA Coding Agent Index 成本口径落地；④ 追 **FLUX 3 开放权重实际发布日**（避坑 97）；⑤ 追 **Suno Speech 口音漂移质量**（避坑 98）；⑥ 回扫"已结束"栏（避坑 47）；⑦ 逐期记账 **ClawLabsAI / freetokens / freellm.net 计数器漂移**；⑧ **补推本次被代理拦截的 push** 并核线上期号
+
+## 2026-10-03 第 022 期（两条延期反转纠错 + 四件开源资产 + 两条补登）· 020/021/022 同批补推
+
+- 状态: 正文+网页+索引 全部 ALL GREEN；**本次 push 连同此前被拦的 020+021 一并补推**
+- 假设: 用户再次附上同一份 T0–T4 清单（含 aihot.news）。按"只做增量+纠错+日期推进"定位，本期主线是**两条「到期日反转」纠错**（比新增更重要）+ 四件开源资产 + 两条 020/021 漏登回填。
+- 扫描截止: **2026-10-03 02:00（GMT+8）**——**凌晨出刊**，刊头显式声明（避坑 40 纪律）。⚠️ 提示：凌晨定稿对"当天上午晚些时候才发布的节点"天然失明（009 期踩过），本期已把 10/3 当天可能发布项全部按"下期回扫"挂账。
+- 交付物:
+  1. `AI免费内容与权益速递-第022期-2026-10-03.md`（91,426 B / **18 个表格**；避坑编号 **101–105** 与 021 期 96–100 连续）
+  2. `AI免费内容与权益速递-第022期-2026-10-03.html`（173,440 B；10 节 / 16 h3；`verify_web` **ALL GREEN**）
+  3. `AI信息源分级清单-T0-T4.md`（就地 **198 → 202 条**，新增 IFM / Ai2 / AWS Strands Labs / ELYZA；AIHOT 边界**第十七次逐期计数确认**）
+- 本期四条主线:
+  - **① 两条「到期反转」纠错（本期最重要，下期别再按旧口径写）**：
+    - **Qoder Qwen3.8-Flash 0.0× 未在 9/30 收口**——官方口径改为 **2026-10-01 起继续免费、结束日期待定**（此前 020/021 按"9/30 到期"写）。来源：阿里云开发者社区 + IT之家 9/29 + 什么值得买。
+    - **腾讯 WorkBuddy 限免延至 10/31**——Hy3 限免 + Hy4 preview 夜间限免**双双顺延到 10/31**。来源：驱动中国 / 手机同花顺 10/2。
+  - **② 四件开源资产（均含许可证口径）**：Ai2 **AstaBrief 8B**（Apache-2.0）/ AWS **Strands Decider 2B**（Apache-2.0）/ ELYZA **Thinking 1.0-llm-jp-4**（Apache-2.0）/ **IFM K2 Horizon**（0.9B–375B 全开放）。**「开放」四问已逐条拆**（能用/能下载/能跑/能商用）。
+  - **③ 两条 020/021 漏登回填**：**Gemini 4 Argon**（blog.google + 二手源）、**腾讯混元 Hy3 正式版**（10/1 今日头条）。**漏登原因已记入纠错清单**（020/021 只扫了"限免/额度"没扫"版本转正"）。
+  - **④ 倒计时**：掘金第二期 10/4（剩 1 天）、10/7 六线收口（剩 4 天）。
+- 本期新增避坑 **101–105**：**101** 别用「当日技术事件流」(AIHOT) 去回扫权益/额度到期（021 期据此误判过）/ **102** 到期权益常把「延期」伪装成「活动调整」，且**批次不共命运**（要逐条读，别按批一刀切）/ **103** 开源决策模型 ≠ 生产可安全决策（AstaBrief=摘要辅助，不是 agent 决策层）/ **104** 「排名第一」先问是谁在什么口径下跑的（K2 Horizon 类榜单要追跑分方）/ **105** 「首发优惠价」本身是限时项 + **开源完整度 ≠ 任务适配度**
+- **重要纠错（下期别再写错）**:
+  1. **Qoder 不再按 9/30 口径写**——改「10/1 起继续免费、结束日待定」(Q 编号挂 open_questions)
+  2. **腾讯 WorkBuddy 两条限免统一按 10/31**（此前 10/7 / 10/10 口径作废）
+  3. **020/021 漏登**：Gemini 4 Argon、Hy3 正式版——已回填 frozen_items，勿再当新发现
+- 校验方式: 全部脚本实跑——`check_frozen` 🔴 **0** / **exit 0**（库 215 条，首登 12：Ai2 AstaBrief 8B / AWS Strands Decider 2B / ELYZA Thinking 1.0 / IFM K2 Horizon / Laya / Apodex 1.1 Mini / Clef / Gemini 4 Argon / Hy3 正式版 / MAI-Transcribe-2-Streaming / DGX Spark / 全网 AI 产品免费权益清单）；`check_tables` **18 表 0 异常** + 避坑 101–105 连续；`extract_deadlines` **81 行** → `check_deadlines --today 2026-10-03` **A1+B15+C27+D25+E13=81** 一致（色标 🔴2/🟠6/🟡2/🟢44/⚪27）；`build_web` 10 节/16 h3/173,440 B；`verify_web` **ALL GREEN**（表 18/18 · 保真缺失 0 · 未闭合 0 · 外部引用 0）；`build_source_hits` 回写 **202 行**（108 命中/94 零命中，**双跑逐字节一致**）；`build_index` 收录 **22 期**；`build_index_web` 重建首页（22 期 · 678,787 字 · 368 张表 · 信源 202 条）；`check_site_freshness` **ALL GREEN**（INDEX/index/最新卡片均 022）
+- **工程侧修复**: `.workbuddy/build_index.py` 的 `pit_range()` 正则 `\d{1,2}` → **`\d{1,3}`**——避坑编号进入 3 位数（101+）后旧正则**匹配不到**（021 行还被误截成 `96–99`）；改后 021 显示 `96–100`、022 显示 `101–105`。**下期若避坑进入 4 位数（1000+）需再放宽。**
+- **台账与结构化数据**: `frozen_items.md` **首登 12 条**，**覆盖区间更新为 第 001–022 期**（库 215 条）；`AI信息源分级清单-T0-T4.md` **198 → 202 条**（新增 IFM 入「模型与开源」12→13、Ai2/AWS Strands Labs/ELYZA 入「官方一手·国外」25→28，手写计数行同步：T0 合计 105→**109**、全表 **202**；加行同时改了清单章节标题里的手写计数——**否则站点首页"信源 N 条"会显示旧数字**）；`deadlines.csv` 重建 81 行；`source_hits.csv` 回写 202 行
+- **Git 与发布**: commit 含 **020+021+022 同批补推**（020/021 停在 `499eca2` 未推送，本次一并推）；push 用 **GCM 取令牌 + 内联助手**（`-c credential.helper=` 先清空 → `-c credential.helper='!f(){…}'`）；推送后调 GitHub API 核 sha，轮询 `pages/builds/latest` 到 `built`（构建期间带 `?t=` 抓到的仍是上一期——**011 期据此误判过**），再抓线上页确认「更新至 第 022 期」
+- **下次执行建议**: ① **10/4 回扫掘金第二期截止**（当日）；② 复核 **10/7 六线收口**（剩 4 天，含 Claude Code 云会话 credit 领取截止）；③ **10/14 GPT-5.5 下线（⚠️ 可能提前）**；④ **10/15 Step 5 开源权重**；⑤ 复核 **Qoder 免费结束日是否公布**（本期改口径后新挂）；⑥ 追 **ZCode 开源仓库 + 信通院/绿盟审计报告是否公开**（连续多期）；⑦ 追 **Sonnet 5.5 免费层覆盖** + Agents API 预览条款；⑧ 回扫"已结束"栏（避坑 47）；⑨ 逐期记账 **ClawLabsAI / freetokens / freellm.net 计数器漂移**；⑩ 核**老混元是否已停服**（Q04 连续第 10 期，高危窗口第 3 天）
