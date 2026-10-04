@@ -3,7 +3,7 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **22 期**（2026-09-14 ~ 2026-10-03），Markdown 合计 **1469147 B ≈ 1435 KB**。
+共 **23 期**（2026-09-14 ~ 2026-10-04），Markdown 合计 **1579719 B ≈ 1543 KB**。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -29,11 +29,12 @@
 | **020** | 2026-10-01 | 9/30 单日 10 条回扫（全部收口）+ Claude Tag Credits 10/1 实为「过期」而非「生效」（019 期看反）+ 老混元高危窗口正式开启 + Claude Code 云会话 $250/$100 新免费额度 + 一批免费开源内容生成资产上线 | 66,395 B | 18 | 142665 B | 91–95 |
 | **021** | 2026-10-02 | 10/1 双节点收口（Claude Tag 翻 ⚪ 已结束 · 老混元高危窗口已开启第 1 天）+ 10/2 真实增量（FLUX 3 Image / Suno Speech beta / Claude Code mods / AA Coding Agent Index / Qwen-Image-2.1 登顶开源图像 / MiMo-VII.6 登 Agent Arena / GPT-6 Astra Ultrafast / 加州 AG 传唤 OpenAI）+ 智谱双节倒计时第 5 天 + 9/30 十条回扫无延期信号 | 72,867 B | 18 | 149808 B | 96–100 |
 | **022** | 2026-10-03 | 10/2 晚间–10/3 凌晨真实增量（Ai2 AstaBrief 8B / AWS Strands Decider 2B / ELYZA Thinking 1.0 / IFM K2 Horizon / Microsoft MAI 语音三件套 / NVIDIA DGX Spark 64GB / OpenAI GPT-6 家族指南）+ 两条「延期反转」纠错（Qoder Qwen3.8-Flash 10/1 起继续免费 · 腾讯 WorkBuddy Hy3 + Hy4 夜间限免延至 10/31）+ 两条补登（Gemini 4 Argon / 腾讯混元 Hy3 正式版）+ 掘金第二期进入最后一天（明天截止）+ 智谱三线收口与 Claude Code 云会话 credit 各剩 4 天 | 91,426 B | 18 | 173440 B | 101–105 |
+| **023** | 2026-10-04 | Google 开始收免费桌（Gemini 免费档 10/9 起只剩 Flash-Lite、AI Plus 连 Pro 也丢）+ 两条新开源权重（Aleph Alpha Kolibri 78B MoE / Cloudflare Clef 决策模型双档）+ 一条补全（Lightricks LTX-2.5 多模态音视频）+ 决策模型从「一个新词」变成「一个品类」（Jev → OpenAI Decisions API → Cloudflare → llama.cpp `/v1/systemone`）+ 微软 ThinkingBox 507 题把「跑通过一次」与「每次都能跑通」拆成两个指标 + 掘金第二期今晚 24:00 截止（最后一天）+ 10/7 六线收口剩 3 天 | 110,572 B | 20 | 198618 B | 106–110 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：202 条（T0 109 / T1 19 / T2 18 / T3 37 / T4 19）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：81 条（由 `extract_deadlines.py` 从最新一期重建）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：206 条（T0 113 / T1 19 / T2 18 / T3 37 / T4 19）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：87 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
