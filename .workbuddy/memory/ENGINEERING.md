@@ -132,6 +132,10 @@
   export GH_TOK="$(printf 'protocol=https\nhost=github.com\n\n' | git-credential-manager get 2>/dev/null | sed -n 's/^password=//p' | tr -d '\r\n')"
   git -c credential.helper= -c credential.helper='!f() { echo username=Lavie-purple; echo "password=$GH_TOK"; }; f' push origin main
   ```
-  **三个要点**：① `-c credential.helper=`（**空值**）必须显式写上，先把 `helper-selector` 清空，否则它仍会被调用；② `git-credential-manager get` 本身是好用的（011 期返回 `gho_` 40 位令牌，`api.github.com/user` → 200），**只有通过 git 调用它才出问题**；③ 令牌只走环境变量、命令里写的是 `$GH_TOK` 字面量，**不进 ps 列表、不落盘**。另：`timeout` 在 Git Bash 里会解析到 `C:\Windows\System32\TIMEOUT.EXE`（报"无效语法"），**要用 `/usr/bin/timeout`**。
+  **四个要点**：① `-c credential.helper=`（**空值**）必须显式写上，先把 `helper-selector` 清空，否则它仍会被调用；② `git-credential-manager get` 本身是好用的（011 期返回 `gho_` 40 位令牌，`api.github.com/user` → 200），**只有通过 git 调用它才出问题**；③ 令牌只走环境变量、命令里写的是 `$GH_TOK` 字面量，**不进 ps 列表、不落盘**；④ **`export` 不能漏（023 期实测）**——`"password=$GH_TOK"` 是**字面量**，由 git 派生的 sh 展开，只认**已导出**的环境变量。漏 `export` 时展开为空串，GitHub 回报
+  `remote: Invalid username or token. Password authentication is not supported for Git operations.`
+  **这条报错极容易被误读成"令牌过期"**，实际令牌是好的。**判据：`curl -s -H "Authorization: Bearer $GH_TOK" https://api.github.com/user` 返回 200（能看到 `login`）而 push 仍报 invalid token ⇒ 100% 是变量没 export（或要点 ① 那半句漏写），不是凭据问题**，别去重新取令牌、更别去动 GCM 配置。
+  另：`timeout` 在 Git Bash 里会解析到 `C:\Windows\System32\TIMEOUT.EXE`（报"无效语法"），**要用 `/usr/bin/timeout`**。
 - **Pages 构建要等，抓一次会误判**：推送后 `repos/<o>/<r>/pages/builds/latest` 会先返回 `building`（011 期：`created 10:06:03Z` → `built`，同 commit `3f73edc`）。**在此之前带 `?t=<ts>` 抓首页，拿到的仍是上一期**（011 期首次抓取显示「更新至 第 010 期」，本地/线上体积 16879/16533 B 不一致即为此故）。**正确顺序：push → API 核 sha → 轮询 `pages/builds/latest` 到 `built` → 再抓线上页**（完成后体积与本地 `index.html` 逐字节一致）。
-- ⚠️ **`pages/builds/latest` 会 404（019、022 两期实测，连续 6 次）**，此时**不要卡在轮询上**——直接改走**抓线上页比对**：带 `?t=<ts>` 抓 `index.html`，与本地 `index.html` 比**字节数**（一致即已上线），再 grep「更新至」确认期号；单期页也抓一次核 `http=200` 与字节数。**「等 built」不是必需步骤，「线上页与本地逐字节一致」才是真正的判据。**
+- ⚠️ **`pages/builds/latest` 会间歇性 404（019、022 两期实测，连续 6 次）**，此时**不要卡在轮询上**——直接改走**抓线上页比对**：带 `?t=<ts>` 抓 `index.html`，与本地 `index.html` 比**字节数**（一致即已上线），再 grep「更新至」确认期号；单期页也抓一次核 `http=200` 与字节数。**「等 built」不是必需步骤，「线上页与本地逐字节一致」才是真正的判据。**
+  · **023 期该接口已恢复 200**（`status=building` 带 `commit=<本地 HEAD>` → 轮询 4 次转 `built`）。**恢复后仍应走"先轮询到 built 再抓页"**，因为构建期抓到的会是上一期；但**别把 404 当故障**——两种情形下的共同收口都是「线上页与本地逐字节一致」。
