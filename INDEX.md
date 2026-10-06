@@ -3,7 +3,7 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **24 期**（2026-09-14 ~ 2026-10-05），Markdown 合计 **1696834 B ≈ 1657 KB**。
+共 **25 期**（2026-09-14 ~ 2026-10-06），Markdown 合计 **1806665 B ≈ 1764 KB**。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -31,11 +31,12 @@
 | **022** | 2026-10-03 | 10/2 晚间–10/3 凌晨真实增量（Ai2 AstaBrief 8B / AWS Strands Decider 2B / ELYZA Thinking 1.0 / IFM K2 Horizon / Microsoft MAI 语音三件套 / NVIDIA DGX Spark 64GB / OpenAI GPT-6 家族指南）+ 两条「延期反转」纠错（Qoder Qwen3.8-Flash 10/1 起继续免费 · 腾讯 WorkBuddy Hy3 + Hy4 夜间限免延至 10/31）+ 两条补登（Gemini 4 Argon / 腾讯混元 Hy3 正式版）+ 掘金第二期进入最后一天（明天截止）+ 智谱三线收口与 Claude Code 云会话 credit 各剩 4 天 | 91,426 B | 18 | 173440 B | 101–105 |
 | **023** | 2026-10-04 | Google 开始收免费桌（Gemini 免费档 10/9 起只剩 Flash-Lite、AI Plus 连 Pro 也丢）+ 两条新开源权重（Aleph Alpha Kolibri 78B MoE / Cloudflare Clef 决策模型双档）+ 一条补全（Lightricks LTX-2.5 多模态音视频）+ 决策模型从「一个新词」变成「一个品类」（Jev → OpenAI Decisions API → Cloudflare → llama.cpp `/v1/systemone`）+ 微软 ThinkingBox 507 题把「跑通过一次」与「每次都能跑通」拆成两个指标 + 掘金第二期今晚 24:00 截止（最后一天）+ 10/7 六线收口剩 3 天 | 110,572 B | 20 | 198618 B | 106–110 |
 | **024** | 2026-10-05 | 决策模型从「新品类」直接进入价格战（Perplexity `pplx-decider-v1-27b` 上 Hugging Face、Apache 2.0、$0.04/百万输入且输出免费；上海 StartLux 三天做出五档开源决策模型，27B 在 Decision Index 0.2.1 的 38 项里 31 项高于 Jev）+ 阿里在假期最后一天放出端侧多模态开源（Qwen3-VL-30B-A3B-Instruct / -Thinking 双档 + 235B-A22B FP8）+ Kimi K3 成为首个进入 OpenAI 企业付费结算通道的中国开源模型 + 美国本月「开源月」：Reflection AI 首款开放权重模型将发 + 一项新研究把「AI 汇报会系统性报喜不报忧」量化了（GPT-5.5 在 200 份摘要里只提了 2 次「新方法输给基线」）+ 掘金第二期已按期收口 + 10/7 同日收口 7 项、剩 2 天 | 117,115 B | 19 | 208250 B | 111–115 |
+| **025** | 2026-10-06 | 美系开放权重同一天双响（Mistral Large 4「Le Chonk」1T 总参 / 49B 激活公开预览、权重定档月底；Reflection AI「Beam」501B / 23B 落地并承诺 Apache 2.0）+ 决策模型线继续内卷（Liquid AI d1 加视觉，$0.04/百万输入、按"问题 × 图"重复计费的坑今天第一次写清）+ 免费编码入口两条新通道（Together Link 一条命令把开源模型塞进 Claude Code/Codex、Freebuff 广告资助的免费编码 agent）+ OpenAI 在欧盟上隐形文本水印（textGrain，同义词替换 10% 就能把检出率从 92% 打到 66%）+ 10/7 同日收口 4 项只剩 1 天 | 109,831 B | 20 | 201838 B | 116–120 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：209 条（T0 115 / T1 19 / T2 18 / T3 37 / T4 20）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：90 条（由 `extract_deadlines.py` 从最新一期重建）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：212 条（T0 118 / T1 19 / T2 18 / T3 37 / T4 20）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：97 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）

@@ -71,7 +71,11 @@ def main():
     high, ref, fresh, absent = [], [], [], []
     for it in lib:
         first = it["seen"]
-        if first == no:
+        # 「首见期」列允许带注解（如 `025（存疑）`）——只取期号比对，否则该条会被
+        # 误判成「往期条目」进而扫出假 🔴；注解本身不参与判定，也不掩盖真重复。
+        first_no = re.match(r"^(\d{3})", first or "")
+        first_no = first_no.group(1) if first_no else first
+        if first_no == no:
             fresh.append(it); continue
         hits = [(i + 1, ln.strip()) for i, ln in enumerate(md.split("\n")) if it["kw"] in ln]
         if not hits:

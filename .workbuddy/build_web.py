@@ -328,8 +328,14 @@ def build():
                 break
             buf.append(t)
             i += 1
-        if buf:
-            body.append("<p>%s</p>" % inline(" ".join(buf)))
+        if not buf:
+            # 防御：走到这里说明本行既没被上面的分支认领、又会被本分支的跳出条件
+            # 拦住（历史踩坑：`#### ` 四级标题——`# `/`## `/`### ` 三个分支都不匹配，
+            # 段落分支又因 `startswith("#")` 立刻 break，`i` 不前进 → 外层 while 死循环，
+            # 025 期实测挂死 8 分钟无产出）。宁可渲染成一段朴素文本，也不要静默挂死。
+            buf.append(s)
+            i += 1
+        body.append("<p>%s</p>" % inline(" ".join(buf)))
 
     # 收尾：闭合最后一个 section
     if sec_open:
