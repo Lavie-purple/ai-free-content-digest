@@ -781,3 +781,12 @@
   3. ⚠️ **占位符残留是本期唯一一次「自伤」**：md 里留了 `<<<TABLE4>>>`（表格注入占位）与两处正文错字（「对 427 分那一档…」「T2I 偏好分 1,050 vs 974…」），在后续一遍 Python 替换时才清理掉。**`verify_web` 的「占位符 0」这条守卫就是为这类残留设的**（本期最终 0）——**生成式写法（先占位、后注入）必须配一条「占位符计数 = 0」的守卫，否则极易漏。**
   4. ⚠️ **第九章「计数必须与明细同源」本期第三次加固**：沿用 027 期定下的**三组同源数字**写法（**表体 109 → 120 行（净增 11）/ 新增 11 个行名（全部全新条目、无改名）/ 既有行 7 处内容更新 + 17 行「距今 N 天」按新基准日重算**），**继续禁用「状态变更共 N 处」句式**。**加总核对写进正文：109 + 11 = 120 ✓。**
   5. ⚠️ **`check_frozen` 本期 0 误报**（027 期曾连挡 8 行）——**原因是本期登记动作先做、写作时已按「本期登记 / 本期补入信源」的既定措辞避开「新增 / 🆕」**。**既有纪律仍生效：凡行内出现早期品牌关键词，一律不用「新增 / 🆕」，改「本期登记 / 本期补入信源 / 不作当期条目登记」。**
+
+
+### 发布回写 · 第 028 期（2026-10-09）
+
+- **commit**: `6ff0b74`（**13 files changed, 2,388 insertions(+), 255 deletions(-)**；新增 5 个文件：md / html / gen_table028.py / update_ledger028.py / memory/2026-10-09.md）
+- **push**: `85fface..6ff0b74  main -> main` 成功（**内联凭据助手路线第四次生效**；`git-credential-manager get` 取到 40 位令牌，`-c credential.helper=` 清空 + 内联 `!f(){...}` + `export GH_TOK` 四要点全按 ENGINEERING.md §九 执行）→ `git remote -v` 与推送目标均为 `Lavie-purple/ai-free-content-digest`。
+- **远端三重核实**：① GitHub API `repos/Lavie-purple/ai-free-content-digest/commits/main` → **sha `6ff0b74e2bca5c0c69bd326908273147606aafc0`**，与本地 `git rev-parse HEAD` **完全一致**；② Pages `pages/builds/latest` 轮询 3 次（每次间隔 20s）：`building` → `building` → **`built`，commit = `6ff0b74`**（**先轮询到 built 再抓页面，避免 011 期「带 ?t= 抓到的仍是上一期」的误判**）；③ 抓线上页面（带 `?t=<ts>` 绕 `max-age=600` 缓存）：**线上 `index.html` 27,920 B 与本地 `cmp` 逐字节一致**、**线上 028 单期页 190,151 B 与本地 `cmp` 逐字节一致**，线上首页已显示「第 028 期」。
+- **暂存口径**：显式列路径 `git add` 13 条（含 `.workbuddy/gen_table028.py` 与 `.workbuddy/update_ledger028.py`，与 027 期把 `gen_table027.py` / `update_ledgers027.py` 入库一致）；`live_now.html`、`.workbuddy/_build026/`、`.workbuddy/_live027/` **保持 untracked**；本期线上比对脚手架放在 `.workbuddy/tmp_live028/`（命中 `.gitignore` 的 `.workbuddy/tmp_*`，**不产生新的未跟踪目录**——027 期的 `_live027/` 就是没走这一步才留下噪声，**本期起统一改放 `tmp_*`**）。
+- **两条可留档的本期工程小结**：① **「脚本生成第四章表」第三次落地即视为定型流程**—— `gen_table028.py` 的 **「先断言行数 → 应用 REWRITE 字典 → 正则重算『距今 N 天』 → 插在 ⚪ 存档块之前 → 再断言总数」五步**，从源头消灭「手抄掉行」与「倒计时不重算」两类历史错误；② **「生成式写法必须配占位符守卫」**——本期 `<<<TABLE4>>>` 残留是靠 `verify_web` 的「占位符 0」查出来的，**先占位后注入的写作法一定要在交付前跑一次该守卫**。
