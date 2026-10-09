@@ -3,7 +3,7 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **27 期**（2026-09-14 ~ 2026-10-08），Markdown 合计 **1948366 B ≈ 1903 KB**。
+共 **28 期**（2026-09-14 ~ 2026-10-09），Markdown 合计 **2047928 B ≈ 2000 KB**。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -34,11 +34,12 @@
 | **025** | 2026-10-06 | 美系开放权重同一天双响（Mistral Large 4「Le Chonk」1T 总参 / 49B 激活公开预览、权重定档月底；Reflection AI「Beam」501B / 23B 落地并承诺 Apache 2.0）+ 决策模型线继续内卷（Liquid AI d1 加视觉，$0.04/百万输入、按"问题 × 图"重复计费的坑今天第一次写清）+ 免费编码入口两条新通道（Together Link 一条命令把开源模型塞进 Claude Code/Codex、Freebuff 广告资助的免费编码 agent）+ OpenAI 在欧盟上隐形文本水印（textGrain，同义词替换 10% 就能把检出率从 92% 打到 66%）+ 10/7 同日收口 4 项只剩 1 天 | 109,831 B | 20 | 201838 B | 116–120 |
 | **026** | 2026-10-07 | 凌晨增补轮 —— Anthropic 把「创业公司权益包」抬到最高 $45,000（Claude Startup Stack + 一次性 $1,000 API 额度 + 免费一年 Claude Team 最多 5 席），10/6 12:30 ET 落地、正好落在 025 期截止线之后 45 分钟；今天是 10/7 六项同日收口的最后一天 | 57,767 B | 10 | 135872 B | 121–121 |
 | **027** | 2026-10-08 | 节后第一天 —— Anthropic 一天两件套（Haiku 5.5 发布 + Max/Team 月度 API 额度开领 + Sonnet 5.5 缓存读取减半）；10/7 六项同日收口的回扫结果是「四项确认收口、一项转为渠道常态、一项挂账」；决策模型线从「只能调 API」变「可以下载权重」（Liquid AI 开源 d1-3B / d1-omni-600M）；明天 10/9 Gemini 免费档正式收缩为只剩 Flash-Lite | 83,934 B | 12 | 169715 B | 122–125 |
+| **028** | 2026-10-09 | Gemini 免费档今天正式只剩 Flash-Lite；Anthropic 同一天给开源生态两件免费的东西（OSS Scanner + Docs/Slides/Design 全计划开放）；阶跃 Step 5 Preview 上线 OpenRouter 并开放一周免费；Nano Banana 2.1 是一次漏了三期的图像线补登 | 99,562 B | 15 | 190151 B | 126–129 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：215 条（T0 118 / T1 19 / T2 18 / T3 38 / T4 22）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：109 条（由 `extract_deadlines.py` 从最新一期重建）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：217 条（T0 118 / T1 19 / T2 18 / T3 39 / T4 23）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：120 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）

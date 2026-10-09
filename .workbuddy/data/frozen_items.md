@@ -1,3 +1,23 @@
+| Anthropic OSS Scanner | 028 | 工具 | **Anthropic 10/8 发布的免费开源漏洞扫描服务**（随 Anthropic Cyber Mission 同步公布）：**开源项目 opt-in 后获定期安全扫描、完全免费**；报告**全模型生成、无人工复核**，含**自证复现脚本、bisection 定位引入版本、候选补丁**；由其**最强模型生成（含 Claude Mythos）**；入选标准**参照 Google OSS-Fuzz**，**核心维护者提 PR 报名、逐案审核**。Anthropic 自报**早期 97 条高危中 88% 达到其 CVD 标准、11 条重复、仅 1 条误报**；**wolfSSL 74 条中 72 条有效、5 条成为 CVE**。⚠️ **无人工复核是它的定价代价** | 演进中 |
+| Claude for OSS | 028 | 额度 | **Anthropic 给合格开源维护者的免费 Claude Max 20x 订阅**（028 期登记，与 OSS Scanner 配套、但为两个入口）。⚠️ **资格由 Anthropic 逐案判定**；⚠️ 与 OSS Scanner（面向项目）分开记账 | 稳定 |
+| Anthropic Cyber Mission / CIDP | 028 | 政策 | **Anthropic 10/8 发布的长期安全项目**：首期两块 —— **关键基础设施防御计划（CIDP，11 家创始伙伴：Accenture / Booz Allen / CrowdStrike / Deloitte / Dragos / Hitachi / Insane Cyber / Nozomi / Palo Alto / PwC / Rockwell）** 与 **开源软件（OSS Scanner）**；**Defender Advantage Fund** 支撑试点；**另有 3 年 1.5 亿美元用于 Genesis Mission（15+ 联邦机构，含 NASA / NIH / NSF）**；**Project Glasswing 已并入扩编后的 Cyber Verification Program**。⚠️ **"1.5 亿美元"与"免费扫描"是两个钱袋，不可并成一句** | 演进中 |
+| Claude Dashboards / Motion | 028 | 生成 | **Anthropic 10/8 进入 beta 的两个 artifact 类型**：**Dashboards**（付费档）连 **Redshift / BigQuery / ClickHouse / Databricks / Snowflake** 与 Salesforce，可把看板推给 Amplitude / Grafana / Hex / Mixpanel / Perplexity / PostHog / Sigma；**Motion**（Team 与 Enterprise）**用代码写动画、不调用视频生成模型、导出 MP4**，可转 Adobe / Descript / HeyGen / Higgsfield / invideo / Luma / Runway。⚠️ **Enterprise 侧两者默认关闭** | 演进中 |
+| Claude Docs·Slides·Design 全计划开放 | 028 | 发布 | **Anthropic 10/8 把 Docs / Slides / Design 从 beta 拿出来、并对所有计划开放（含 Free）**；官方称已产出 **4,500 万+** 文档/演示/设计；**同一批变更里 chat 与 cowork 合并、对话云端持久化、独立站 claude.ai/design 仅保留到 12/14（旧对话与评论不迁移）**。⚠️ **"对所有计划开放"≠"同批三个功能都免费"** | 演进中 |
+| Anthropic 2026 使用政策 | 028 | 政策 | **Anthropic 10/8 发布、11/12 生效的新版使用政策**：**首次禁止「持续且无必要地虐待或残酷对待模型」**（处置为**终止当前会话**，不封号、不影响账号内其他会话）；**合并为统一的「欺骗性活动」章节**；**武器条款延伸到为无人机等平台装配武器的组件**；**监控条款禁止让 Claude 决定或建议调查/逮捕对象**；**自主物理动作需人在环**。⚠️ **普通反驳、表达不满、研究测试、暗黑题材创作均不在禁止范围**（官方口径） | 稳定 |
+| Step 5 Preview（OpenRouter） | 028 | 发布 | **阶跃星辰 Step 5 Preview 于 10/8 上线 OpenRouter 与 Vercel AI Gateway**（slug `stepfun/step-5-preview`），并在 **OpenCode / Cline / Nous Research / Kilocode 开放一周免费**：**600B 总参 / 27B 激活、1M 上下文、文本 + 图像**（原生指南与 OpenRouter 另列视频）；**$1.00/M 输入、$2.70/M 输出、缓存命中 $0.05/M（首发五折）**；**权重 10/15 发布、许可证未公布**。⚠️ **"免费一周"是渠道级口径，四条渠道期限不一致** | 演进中 |
+| GMI Cloud 免费档 | 028 | 额度 | **GMI Cloud 把 Qwen3.8-Max / Qwen3.8-Flash / Wan3.0 的免费窗口各延长 7 天并提高速率上限**（028 期登记）：**窗口演化为 12 小时 → 一周 → 再 +7 天**；**GMI API Key 可在 OpenCode / Hermes Agent 等工具内直接调用**；同期**社区赛：用 Qwen 或 Wan 做项目，3 名各得 $200 现金 + $200 GMI credits**。⚠️ **"再延 7 天"不是新活动，是同一个滚动窗口的第二次续期** | 演进中 |
+| GPT-6.1 Sol Ultrafast | 028 | 额度 | **OpenAI 10/8 上线的提速档**：**同一个 `gpt-6.1-sol`，API 侧按请求传 `service_tier: "ultrafast"`**；**官方称最高 8× 标准版速度（未公布 p50/p95）**；**$12/M 输入、$60/M 输出；长上下文 $24/$90；短上下文缓存读 $0.60/M、写 $15/M**；**限速 Build 100 万 / Launch 400 万 / Grow 4,000 万 TPM**；**Codex 与 ChatGPT Work 限 Pro $500、符合条件的企业按量付费、配额计费教育版，管理员默认关闭**；**消费端 Chat 不在范围**；**订阅内按 8× 扣、购买 credit 按 6× 计**；**须用持久 WebSocket**；**Sol Ultrafast 支持美/欧数据驻留，Astra Ultrafast 不支持** | 演进中 |
+| Nano Banana 2.1 | 028 | 生成 | **Google 10/6 GA 于 Gemini API 的图像生成/编辑模型（028 期补登，025/026/027 三期漏登）**：底座 **Gemini 3.6 Flash**，输出至 **4K**，**新增 1:4 / 4:1 / 1:8 / 8:1**，**最多 14 张参考图（跟踪 4 人物 + 10 物体）**，**三档 thinking**，支持**搜索与图片搜索接地**，**新增 C2PA Content Credentials**；**1K $0.0336 / 2K $0.0504 / 4K $0.0756（Batch 再半价）**，约为旧版一半；**T2I 偏好分 1,050（旧版 990、Pro 935，Google 自测）** | 演进中 |
+| Nano Banana 2 停用 | 028 | 发布 | **Google 把 Nano Banana 2（`gemini-3.1-flash-image`）在 Gemini API 中标为 deprecated，10/29 正式停用**，迁移目标为 **Nano Banana 2.1**。⚠️ **未公布具体停机时刻** | 稳定 |
+| 江苏省词元券/语料券/模型券 | 028 | 政策 | **江苏省发改委等五部门 9/30 发文、10/9 官网公开的三券方案**（苏发改智集发〔2026〕935 号）：**词元（Token）券 / 语料券 / 模型券并行**；支持对象含**企业 / 高校院所 / 研究机构 / OPC**；**省级财政对设区市实际兑付给予支持（预拨 + 清算）**，鼓励纳入省一体化算力监测调度平台。⚠️ **企业向 + 省级统筹；表内第 6 条地方券** | 稳定 |
+| OpenAI 学生 $100 Codex 额度 | 028 | 额度 | **在读大学生（仅美国 / 加拿大）经学校邮箱验证后可领 $100 ChatGPT credits，限定用于 Codex，每人一次、12 个月过期**。⚠️ **来源为优惠聚合站，官方页未核到**。⚠️ 同期另有 **InkPal Pro 学生免费 12 个月**（.edu 邮箱申请），与本报告主体无关 | 演进中 |
+| Arena Alignment Index | 028 | 信源 | **Arena（LMArena）10/8 发布的"行为对齐"榜**：**27 个模型、9 万+ 条真实 agent 轨迹**，三个信号 **未授权动作 / 错误归因 / 虚假完成**；**榜首 GPT-6.1 Sol 87.9、Claude Opus 5.5 83.2、Grok 4.7 82.7，前五全为 OpenAI**。⚠️ **它测"有没有越界与谎报"，不测"能不能做对"**；⚠️ preview、单一来源 | 演进中 |
+| Arena B 轮融资 | 028 | 政策 | **Arena（LMArena）10/8 宣布 $2 亿 B 轮、估值 31 亿美元**（Lightspeed 与 Khosla 联合领投；a16z / Felicis / Salesforce Ventures / Dell Technologies Capital / The House Fund 等参投）；官方称**年化收入超 $1 亿、累计 3.5 亿场次会话、5 个月内 700 万次 Agent Arena 会话、6,200 万次投票、150+ 国家** | 稳定 |
+| Google ML Drift | 028 | 开源 | **Google AI Edge 团队 10/8 以 Apache 2.0 开源的跨平台端侧 GPU 推理引擎**：**LiteRT 的核心 GPU 加速层，接替 TFLite GPU delegate** | 稳定 |
+| Google AQuA | 028 | 开源 | **Google 10/8 发布并开源的环境质量智能体（Ambient Quality Agent）**：在 Cloud 项目中定时从 **Cloud Trace / Cloud Logging / BigQuery** 抽生产会话，经**抽样-评审-聚类-验证-跟踪五阶段**流水线诊断 agent 失败 | 稳定 |
+| AGI Hunt | 028 | 信源 | **「同一事件的多来源原文索引 + 渠道级差异」第一现场**（https://agihunt.info/）：每条给**一句话结论 + 3–5 个可点原文链接**（含 X 原帖、厂商博客、媒体稿），并**自带「与昨日对比」的当日摘要**。⚠️ **摘要为模型生成、不给发布日期，不能当事实源** | 演进中 |
+| AI Primer | 028 | 信源 | **「发布当日规格 / 定价 / 免费范围逐条附源」第一现场**（https://www.ai-primer.com/）：**把官方公告、定价页、渠道公告、第三方对照页的每个数字分别标注出处**，并**明确指出哪一句是「厂商自评、无人复现」**。⚠️ **与 DataLearner 互补：一个管规格与许可证，一个管口径与可复现性** | 演进中 |
+| Claude Code / Codex / Ollama 版本线 | 028 | 工具 | **028 期登记的编码工具版本更新**：**Claude Code v2.1.295**（hooks 新增 `onFailure: "block"`，钩子启动失败/超时/异常退出时阻断动作）；**Codex `rust-v0.162.0`**（受信本地项目里创建与列出托管 Git worktree）；**Ollama v0.40.2**（首次运行后台升级旧版模型、保留原版作备份，注意磁盘占用） | 演进中 |
 # 已固化条目库 · frozen_items
 
 > **用途**：出刊前 / 出刊后用 `check_frozen.py` 扫一遍，防止把往期已经写过的内容
@@ -11,7 +31,7 @@
 > - 一个条目只占一行。后续有新进展时，改写「状态」列，**不要新增行**。
 > - 「状态」= `稳定`（已固化，仅作引用） / `演进中`（还会更新，下期可继续写进展） / `已终止`（活动结束或已下线）。
 >
-> 覆盖区间：第 001–026 期（2026-09-14 至 2026-10-07）| 026 期新增 2 条（Anthropic Claude Startup Stack、CNBC）
+> 覆盖区间：第 001–028 期（2026-09-14 至 2026-10-09）| 028 期新增 20 条（Anthropic OSS Scanner / Claude for OSS / Anthropic Cyber Mission·CIDP / Claude Dashboards·Motion / Claude Docs·Slides·Design 全计划开放 / Anthropic 2026 使用政策 / Step 5 Preview（OpenRouter）/ GMI Cloud 免费档 / GPT-6.1 Sol Ultrafast / Nano Banana 2.1 / Nano Banana 2 停用 / 江苏省三券 / OpenAI 学生 $100 Codex 额度 / Arena Alignment Index / Arena B 轮融资 / Google ML Drift / Google AQuA / AGI Hunt / AI Primer / Claude Code·Codex·Ollama 版本线）；026 期新增 2 条（Anthropic Claude Startup Stack、CNBC）
 
 | 关键词 | 首见期 | 类别 | 条目摘要 | 状态 |
 | --- | --- | --- | --- | --- |
