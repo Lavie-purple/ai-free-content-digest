@@ -3,7 +3,7 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **29 期**（2026-09-14 ~ 2026-10-10），Markdown 合计 **2148685 B ≈ 2098 KB**。
+共 **30 期**（2026-09-14 ~ 2026-10-11），Markdown 合计 **2269211 B ≈ 2216 KB**。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -36,11 +36,12 @@
 | **027** | 2026-10-08 | 节后第一天 —— Anthropic 一天两件套（Haiku 5.5 发布 + Max/Team 月度 API 额度开领 + Sonnet 5.5 缓存读取减半）；10/7 六项同日收口的回扫结果是「四项确认收口、一项转为渠道常态、一项挂账」；决策模型线从「只能调 API」变「可以下载权重」（Liquid AI 开源 d1-3B / d1-omni-600M）；明天 10/9 Gemini 免费档正式收缩为只剩 Flash-Lite | 83,934 B | 12 | 169715 B | 122–125 |
 | **028** | 2026-10-09 | Gemini 免费档今天正式只剩 Flash-Lite；Anthropic 同一天给开源生态两件免费的东西（OSS Scanner + Docs/Slides/Design 全计划开放）；阶跃 Step 5 Preview 上线 OpenRouter 并开放一周免费；Nano Banana 2.1 是一次漏了三期的图像线补登 | 99,562 B | 15 | 190151 B | 126–129 |
 | **029** | 2026-10-10 | 决策模型线同日进入「多模态化」（Cloudflare Clef-omni 四模态 + JEV-27B-VL 视觉榜第一）；图像线一天两件（Qwen-Image-2.1-Turbo 8 步开源 + EmbeddingGemma 2 补登）；当日主线其实是安全对齐（Anthropic 向白宫通报 + OpenAI 失准报告）；Hy4 首开窗口与企鹅教师助手今天最后一天 | 100,757 B | 16 | 193481 B | 130–133 |
+| **030** | 2026-10-11 | 决策模型线一天跨两条：按「输入模态」分成文本 / 视觉 / 语音三支（Microsoft-Decision-1 + HAL-X THX-01 + Neuphonic NeuDecide），同时「决策接口」第一次被单独定价；视频线自「四条线各自扫」定编后第一次有内容（Vidu Q4 Preview + Kling 4.0）；工具线两条（腾讯云开源 TeamAI / Amp 接入 Claude 订阅） | 120,526 B | 17 | 220509 B | 134–137 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：220 条（T0 121 / T1 19 / T2 18 / T3 39 / T4 23）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：132 条（由 `extract_deadlines.py` 从最新一期重建）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：223 条（T0 123 / T1 19 / T2 18 / T3 39 / T4 24）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：142 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
