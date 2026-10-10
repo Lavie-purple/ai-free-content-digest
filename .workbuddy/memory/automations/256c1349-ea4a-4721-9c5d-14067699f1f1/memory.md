@@ -862,3 +862,28 @@
   整段本期未覆盖，必须回扫**；⑤ **ZCode 月度安全审计报告连续第 4 期未见**（**若 10 月内仍不出现，需判断承诺是否实质违约**）；
   ⑥ 老混元停服日仍需每期一问（Q04 进入第 19 期）；⑦ Anthropic「切断内部评测实时联网」是否有恢复时间表；
   ⑧ **Reflection AI 与 Nvidia 的交易是否落地**；⑨ **Microsoft-Decision-1 的第三方复现是否出现**。
+
+### 发布回写 · 第 030 期（2026-10-11）
+
+- **commit**：`12430a9`（**20 files changed, 2,964 insertions(+), 309 deletions(-)**；
+  **新增 10 个文件** —— md / html / `.workbuddy/memory/2026-10-11.md` / **7 个脚本**：
+  `gen_table030.py` / `inject030.py` / `fix030_wording.py` / `fix030_wording2.py` /
+  `update_ledger030.py` / `update_frozen030.py` / `update_questions030.py`）。
+- **push**：`bf39ab4..12430a9  main -> main` 成功（**内联凭据助手路线第六次生效**；`git-credential-manager get`
+  取到 **40 位**令牌、`api.github.com/user` → **200**；`-c credential.helper=` 清空 + 内联 `!f(){...}` +
+  **`export GH_TOK`** 四要点全按 `ENGINEERING.md` §九 执行）。
+- **远端三重核实**：① API `repos/Lavie-purple/ai-free-content-digest/commits/main` →
+  **sha `12430a9d462f30bad79370dcc4ceac591150c6de`**，与本地 `git rev-parse HEAD` **完全一致**；
+  ② Pages `pages/builds/latest` 轮询 **4 次**（间隔 6s）：`building ×3` → **`built`，commit = `12430a9`**
+  （`created_at 2026-10-10T22:24:07Z`）——**先轮询到 built 再抓页面**；
+  ③ 带 `?t=<ts>` 抓线上（`https://lavie-purple.github.io/ai-free-content-digest/`）：
+  **`index.html` 29,390 B / md5 `e953011b4eef493686c3ffef55dc2f9c` 与本地 `cmp` 逐字节一致**，
+  **030 单期页 220,509 B / md5 `3cbdded45cc4ffff33d0e6540c31ff67` 与本地逐字节一致**（两处均 `http=200`）；
+  线上首页已显示「**第 030 期**」与「**223**（条信源）」。
+- **交付物 md5 留档**：md **120,526 B** / html **220,509 B**（`3cbdded4…`）/ `index.html` **29,390 B**（`e953011b…`）/
+  `INDEX.md` 30 期 / 台账 **223 条**。
+- ⚠️ **本轮新增一条工程教训（已进 `ENGINEERING.md` §九）**：**`rep()` 追加时新增文本自身可能撞上后续锚点** ——
+  `update_frozen030.py` 给「混元 Hy3」追加的句子复制了「Hy4 preview」行的结尾，**导致下一处 `rep()` 命中数 1→2 断言失败**；
+  **脚本末尾一次性写盘救了它**（断言失败时磁盘文件未被污染）。
+- **下一轮强制动作**（与出刊节一致，此处只列最紧的三个）：**10/12 00:00 北京 AutoClaw / 10/12 17:00 张江三券**
+  → **10/14 GPT-5.5 下线（届时进 3 天窗口，升为摘要最高优先级）** → **10/15 Step 5 权重开放与渠道免费窗口到期**。
