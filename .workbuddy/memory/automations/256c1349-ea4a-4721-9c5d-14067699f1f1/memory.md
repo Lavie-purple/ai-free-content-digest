@@ -1051,3 +1051,23 @@ arXiv 投稿上限 10 月起每月 2 篇）→ **确有硬条目，照常出刊*
 ⑤ **四项长期挂账**：Q04 第 21 期、ZCode 月报（**连续第 6 期未见 → 疑似实质违约候选**）、
    `Drex 1.5` 许可证是否再改、**Q22 首次回核**（`Argon` 官方发布稿日期 + 三批访问日期）；
 ⑥ **美西 10/11 14:45 PT 之后 + 10/12 亚洲白天整段未覆盖，必须回扫**。
+
+---
+
+### 发布回写 · 第 032 期（2026-10-12）
+
+- **commit = `754f5adc046caef811bfc57a7c9691a05ee5a64b`**（18 files changed, **3075 insertions(+), 358 deletions(-)**）
+  · 提交信息首行：**「第 032 期（2026-10-12）· 决策模型线的第六种出现方式：权重先落地、公告只发在 X…」**
+- **推送：内联凭据助手路线第八次生效** —— `export GH_TOK="$(… | git-credential-manager get …)"`（**40 位 `gho_` 令牌、`api.github.com/user` → 200**）
+  → `git -c credential.helper= -c credential.helper='!f() { echo username=Lavie-purple; echo "password=$GH_TOK"; }; f' push origin main`
+  → **`38fb673..754f5ad  main -> main`**。**本轮无 `could not read Username` 报错、无 export 遗漏**（要点 ④ 照旧写全）。
+- **远端三重核实全部通过**：
+  ① **GitHub API `commits/main` sha = `754f5adc…`** 与本地 `HEAD` **逐字一致**；
+  ② **`pages/builds/latest` 轮询 3 次**（`building` → `building` → **`built 754f5ad`**，`created 2026-10-11T22:02:04Z`）——
+     **本期接口正常返回 200，未出现 019 / 022 期那种 404**；
+  ③ **抓线上页逐字节比对**：带 `?t=<ts>` 抓首页 **http=200 / 30962 B**，与本地 `index.html` **`cmp` 完全一致**、
+     并 grep 到 **「第 032 期」**；**单期页 http=200 / 251540 B，与本地文件 `cmp` 完全一致 ✔**
+- **交付数字**：md **145,465 B**；html **251,540 B / md5 见本地**；`index.html` **30,962 B**；
+  `INDEX.md` 32 期；台账 **235 条**；`frozen_items` **338 条**（**032 首登 6 条 + 补登 2 条**）；
+  `open_questions` **22 条**（**新增 Q22**）。
+- **发布后核实的线上首页读数**：**32 期 · 1,187,502 字 · 526 张表 · 信源 235 条 · 网页版可用 28/32 · 最新一期第 032 期**。
