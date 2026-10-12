@@ -1106,3 +1106,15 @@ arXiv 投稿上限 10 月起每月 2 篇）→ **确有硬条目，照常出刊*
 **下一轮强制动作**：① 回扫 10/13 AutoClaw 第二期第 2 日；② **10/14 三件事同日**（GPT-5.5 下线 / 珠海算力券 18:00 / Bolt Forge 50×）；
 ③ **10/15 三个同日节点**（Step 5 权重 + 许可证 / CorelDRAW COREL10 券 / Magnific One）；④ **`Octop` 官方页与许可证（Q23）**；
 ⑤ **Mistral 官方定价页逐项复核**；⑥ **ZCode 月报连续第 7 期未见**；⑦ **美西 10/12 02:55 PT 之后 + 10/13 亚洲白天回扫**。
+
+**记忆归档（本轮收官）**：commit **`3cfb2bf`**（**只含 `.workbuddy/memory/` 三件套 · 111 insertions**）
+→ push **`4628c6e..3cfb2bf`**（**内联凭据助手第十次生效**，token len=40）；
+**远端 API sha 与本地 HEAD 逐字一致**、`pages/builds/latest` → **`built 3cfb2bf`**、
+**线上 `index.html` 31,621 B 与 033 单期页 232,551 B 仍与本地 `cmp` 逐字节一致、首页仍显示「第 033 期」** ——
+**证明「只动 `.workbuddy/memory/` 的 commit」不会破坏站点产物**（这条本轮首次实测）。
+
+**⚠️ 归档时发现并修复：记忆文件被写成 CRLF（第 4 条工程教训的由来）** ——
+`ENGINEERING.md`（278→295 行全部）、automem（1073→1108 行全部）、当日日志（**只有新增的 43 行**）都变成 CRLF，
+`git diff --stat` 因此显示 **1446 插入 / 1351 删除**，**与真实新增 95 行相差近 30 倍**。
+**诊断**：`git diff --ignore-cr-at-eol --stat`（数字骤降到 95 行即证）。
+**教训**：`.workbuddy/memory/` 下 md 全是 LF，**追加必须二进制模式 `'ab'` + `raw.count(13)==0` 断言**。
