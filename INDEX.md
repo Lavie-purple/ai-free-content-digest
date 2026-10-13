@@ -3,7 +3,7 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **33 期**（2026-09-14 ~ 2026-10-12），Markdown 合计 **2682349 B ≈ 2619 KB**。
+共 **34 期**（2026-09-14 ~ 2026-10-13），Markdown 合计 **2833378 B ≈ 2767 KB**。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -40,11 +40,12 @@
 | **031** | 2026-10-11 | 决策模型线再落一子但「开放」两个字要打问号（Nace AI `Drex 1.5` 许可证在 10/9 从 MIT 改成 Open RAIL-M 变体、公开集与全榜差 7.24 分）；Google 把水印检测器开给所有人（`SynthID Detector` 公众开放）；开源权重与工具线一天多件（星动纪元 VPP2 / JetBrains Mellum2.1 / Speridlabs Iris-3B / Talorys / Cloudflare 收购 Deno）；额度线最重要的一条是「AutoClaw 不是收口，是无缝续期」 | 138,773 B | 15 | 244252 B | 138–141 |
 | **032** | 2026-10-12 | 决策模型线的第六种出现方式：权重先落地、公告只发在 X（vLLM-SR `Decision 3.0` 六档 Apache-2.0，10/10 传完、10/11 才有一条转推）；世界模型一天两件（`Odyssey-3` 免费公开研究预览 / LeCun 的 AMI 开源 `H-JEPA` 代码与权重）；而本期最该补的一条是 —— **`Gemini 4 Argon` 已经发布了，而 028 / 029 / 030 三期全篇未出现 `Argon`** | 145,465 B | 14 | 251540 B | 142–145 |
 | **033** | 2026-10-12 | 同日第二轮（增补轮）· 阶跃 Step 5 Preview 接入腾讯 WorkBuddy 并开启「10/12–10/25 独家限免」；腾讯把「开源版 WorkBuddy」`Octop` 放了出来；同一天里 Mistral 的免费档一边砍额度、一边把 Vibe CLI 与 Vibe for IDE 开给免费用户 —— 这是本期最该记的一条「既降又升」 | 128,900 B | 9 | 232551 B | 146–149 |
+| **034** | 2026-10-13 | 阶跃星辰「三日三动作」的第一天：今晚发布智能体手机 `STEPX Neo`、明天 00:30 `Step 5 Preview` 缓存命中价翻倍（**带祖父条款**）、10/15 权重开源而**许可证至今未在任何官方渠道发布**；同日 Meta 把 `Muse Wonder` 放上 API、OpenAI 把 `Auto-review` 开成免费 | 151,029 B | 10 | 260055 B | 150–153 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：239 条（T0 135 / T1 19 / T2 18 / T3 39 / T4 28）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：166 条（由 `extract_deadlines.py` 从最新一期重建）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：245 条（T0 140 / T1 19 / T2 18 / T3 39 / T4 29）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：173 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
