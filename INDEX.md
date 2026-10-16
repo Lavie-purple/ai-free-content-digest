@@ -3,7 +3,7 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **36 期**（2026-09-14 ~ 2026-10-15），Markdown 合计 **3199603 B ≈ 3125 KB**。
+共 **37 期**（2026-09-14 ~ 2026-10-16），Markdown 合计 **3439184 B ≈ 3359 KB**。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -43,11 +43,12 @@
 | **034** | 2026-10-13 | 阶跃星辰「三日三动作」的第一天：今晚发布智能体手机 `STEPX Neo`、明天 00:30 `Step 5 Preview` 缓存命中价翻倍（**带祖父条款**）、10/15 权重开源而**许可证至今未在任何官方渠道发布**；同日 Meta 把 `Muse Wonder` 放上 API、OpenAI 把 `Auto-review` 开成免费 | 151,029 B | 10 | 260055 B | 150–153 |
 | **035** | 2026-10-14 | 谷歌把 `Gemini 4 Argon` 的「分级访问」收口到「付费 API + AI Ultra」，首发价只有竞品五分之一但 11 月底就恢复；同日 OpenAI 让 GPT-6 下沉到免费档、GPT-5.5 从 ChatGPT / Codex 退场；阶跃 `STEPX Neo` 以 3999 元「软硬模」全栈定价开卖，腾讯把 `A.I.G` 开源进 ClawHub 安全审核 | 172,742 B | 9 | 288000 B | 154–157 |
 | **036** | 2026-10-15 | 阶跃 `Step 5 Preview` 权重按原定日期真的放出了（HF + ModelScope 三档检查点），`StepFun Model License 1.0` 同日公布——035 期「许可证未在任何官方渠道发布」的挂账当天兑现；同日 OpenCode 把 `DeepSeek V4.1 Flash` 全免但只给 200K 上下文，DeepSeek 自己则经历了 4 小时 52 分的全线故障并按 7 日消耗全额返赠金；昆仑万维把 480p/60FPS 的世界模型 `Matrix-Game 4.0` 装进一张 RTX 5090 并同步开源 | 193,483 B | 11 | 310211 B | 158–161 |
+| **037** | 2026-10-16 | Meta 开放 816B 的 `Muse Spark Open` 权重，但许可证不是 Apache、HF 还要填出生日期才能下；同一天蚂蚁百灵把 `Ling-3.1-flash` 以 MIT 放出、OpenCode 把 `GLM-5.3-Flash` 全免只给 200K 上下文；另有一条运营硬节点：腾讯元器 11/9 停服，Google AI Plus 11/13 起失去 Pro 模型 | 239,581 B | 14 | 365468 B | 162–165 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：253 条（T0 145 / T1 19 / T2 18 / T3 40 / T4 31）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：185 条（由 `extract_deadlines.py` 从最新一期重建）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：256 条（T0 147 / T1 19 / T2 18 / T3 41 / T4 31）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：193 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
