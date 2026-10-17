@@ -3,7 +3,7 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **38 期**（2026-09-14 ~ 2026-10-17），Markdown 合计 **3642318 B ≈ 3557 KB**。
+共 **39 期**（2026-09-14 ~ 2026-10-17），Markdown 合计 **3951720 B ≈ 3859 KB**。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -45,11 +45,12 @@
 | **036** | 2026-10-15 | 阶跃 `Step 5 Preview` 权重按原定日期真的放出了（HF + ModelScope 三档检查点），`StepFun Model License 1.0` 同日公布——035 期「许可证未在任何官方渠道发布」的挂账当天兑现；同日 OpenCode 把 `DeepSeek V4.1 Flash` 全免但只给 200K 上下文，DeepSeek 自己则经历了 4 小时 52 分的全线故障并按 7 日消耗全额返赠金；昆仑万维把 480p/60FPS 的世界模型 `Matrix-Game 4.0` 装进一张 RTX 5090 并同步开源 | 193,483 B | 11 | 310211 B | 158–161 |
 | **037** | 2026-10-16 | Meta 开放 816B 的 `Muse Spark Open` 权重，但许可证不是 Apache、HF 还要填出生日期才能下；同一天蚂蚁百灵把 `Ling-3.1-flash` 以 MIT 放出、OpenCode 把 `GLM-5.3-Flash` 全免只给 200K 上下文；另有一条运营硬节点：腾讯元器 11/9 停服，Google AI Plus 11/13 起失去 Pro 模型 | 239,581 B | 14 | 365468 B | 162–165 |
 | **038** | 2026-10-17 | Reflection 把 501B 的 `Beam` 权重按 Apache 2.0 放出来，Vercel 同一天给了两个收尾方式完全相反的免费 slug 且不公布结束日期；OpenCode 把它也免了；另有一条更硬的线：商务部拟把 23 项 AI 技术增列进出口管制目录并同步启动出口前登记 | 203,134 B | 9 | 322131 B | 166–170 |
+| **039** | 2026-10-17 | 同日第二轮（增补轮）· 本期把 038 期自己挂着的两个「未核到」当场核完：`OpenCode` 的 `Beam` 免费档**中国大陆不可用**、数据留存 30 天、且不占套餐额度；同一模型在 `Ollama Cloud` 也限免且是全量零留存 —— 上一期写「只核到 Vercel 一家」，实为两家 | 309,402 B | 9 | 451449 B | 171–174 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：259 条（T0 149 / T1 19 / T2 18 / T3 41 / T4 32）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：197 条（由 `extract_deadlines.py` 从最新一期重建）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：261 条（T0 151 / T1 19 / T2 18 / T3 41 / T4 32）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：201 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
