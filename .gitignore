@@ -2,8 +2,24 @@
 .workbuddy/_shot/
 .workbuddy/_probe/
 .workbuddy/tmp_*
+.workbuddy/tmp0*/
+tmp_live*/
 .workbuddy/*.tmp
 *tmp_verify_*
+
+# 线上页抓取快照（比对用，内容不删、只是不入库）
+.workbuddy/_live_*.html
+.workbuddy/_build*/
+.workbuddy/_live*/
+_live_*.html
+live_now.html
+
+# 台账与冻结库的历史备份（文件按用户约定保留，只是不进仓库）
+.workbuddy/data/.frozen_bak*.md
+.workbuddy/data/.open_questions_bak*.md
+.workbuddy/data/*.bak0*
+.workbuddy/data/tmp_*_bak*.md
+.workbuddy/data/ledger.bak*
 
 # 本地评审与对话存档（含内部口径与自评，不进公开站点）
 对话记录.md
