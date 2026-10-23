@@ -57,8 +57,8 @@ def aliases(name, url):
     m = re.match(r"https?://([^/]+)", url)
     if m:
         host = re.sub(r"^(www\.|api\.|docs\.|blog\.|s\.|m\.)", "", m.group(1).lower())
-        root = host.split(".")[0]
-        if len(root) >= 4 and root not in STOP:
+        root = norm(host.split(".")[0])   # 必须过 norm：hf-mirror 这类带连字符域名根
+        if len(root) >= 4 and root not in STOP:   # 否则入集合的是带连字符串，永远 0 命中
             out.add(root)
     return {a for a in out if a and a not in STOP}
 

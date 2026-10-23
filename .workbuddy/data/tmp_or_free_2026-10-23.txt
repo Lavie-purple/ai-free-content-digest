@@ -1,0 +1,17 @@
+cohere/north-mini-code:free | ctx 256000 | created 1781723748
+dots-studio/dots-3-note-preview:free | ctx 512000 | created 1786680361
+google/gemma-4-26b-a4b-it:free | ctx 262144 | created 1775227989
+google/gemma-4-31b-it:free | ctx 262144 | created 1775148486
+liquid/lfm-2.5-2.6b:free | ctx 65536 | created 1786470519
+nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free | ctx 256000 | created 1777393095
+nvidia/nemotron-3-super-120b-a12b:free | ctx 262144 | created 1773245239
+nvidia/nemotron-3-ultra-550b-a55b:free | ctx 1000000 | created 1780551208
+nvidia/nemotron-3.5-content-safety:free | ctx 128000 | created 1780581864
+nvidia/nemotron-3.5-lightning:free | ctx 1000000 | created 1786452751
+nvidia/nemotron-3.5-super-vl:free | ctx 1000000 | created 1792076662
+poolside/laguna-s-2.1:free | ctx 262144 | created 1784652683
+poolside/laguna-xs-2.1:free | ctx 262144 | created 1783002429
+recursive/flint-v1.0:free | ctx 262144 | created 1792622765
+thinkingmachines/inkling-small:free | ctx 1048576 | created 1785443117
+thinkingmachines/inkling:free | ctx 1048576 | created 1784325956
+xingchen-agi/xing4.0-29b-a4b:free | ctx 262144 | created 1792177496

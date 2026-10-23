@@ -1623,3 +1623,60 @@ commit **`1f96e1e`**（**14 files**；已把 `.workbuddy/data/` 下的历史备�
 ⑧ `platform.reflection.ai` 定价（连续第 6 期）⑨ `mistral.ai/news` 抓取恢复 ⑩ 老混元 Q04 连续第 33 期
 ⑪ 商务部登记「通道未开」（11/15 后）⑫ ZCode 月报连续第 19 期未见 ⑬ `anthropic.com/news` 标题渲染恢复
 ⑭ 044 期新登记的 `AutoClaw` 国内站每日登录档（10/25 收口）。
+
+---
+
+## 第 045 期（2026-10-23）· 收口 + 落地 + 纠错三线并行
+
+**窗口**：10/22 12:00 → 10/23 12:00（24.0h 整日整段；逐条核了落在线后的硬条目）。
+
+**窗口内硬条目**：`MiniMax M3.1 Flash` 免费档 10/22 从 `OpenRouter`（**模型页横幅**逐字
+`The free launch period ended Oct 22, 2026.` —— 041 期起「OpenRouter 无任何限免公告页」连续五期结论第一次
+被打破，但打破它的是模型页不是公告页）与 `OpenCode`（两页实访命中 0，官方无任何说明）双双收口；
+`M3.1 Flash` 权重 10/17 已在 `HF`（`gated: false` / `license` 三段：API 空、tags `license:other`、
+README `minimax-community`）—— **043/044 两期「权重未见」判定错误，错在取数方法**（同 URL 加排序参数
+21→22 个仓库，避坑 196）；`Anthropic` 10/22 三连发（捐 `Agent Skills` 给 `AAIF` 含名称/徽标/GitHub 组织/域名、
+生命科学 guest investigators 招募、× `Theorem` 形式化验证 239 入口点/123 库，后者全字段第三方转述）；
+智谱 `AutoClaw` 国内站 `M10W4` 一周 1 亿 Tokens（10/26–11/1，较 M10W3 的 2 亿**降档**）；
+`OpenAI Decisions API` GA（$0.10/$0.01，无免费层）；国办发〔2026〕29 号公布（无个人免费额度入口）；
+`zcode.ai` 域名易主成博彩停放页（避坑 198「消失」形态）；`freellm.net` 六计数器全动
+（520+/520/304/30/438/244）且 `OpenRouter` 专页首次与官方 API 逐条一致。
+
+**一手核查（全部实访）**：`openai.com/news/rss.xml`（**第一次把 RSS 当公告列表一手源** —— 列表页 JS 渲染只得
+9.7KB 空壳、RSS 给全量 1,316 条；本期三条公告从它读到）、`openai.com/index/decisions-api`（GA 全文）、
+`openrouter.ai/api/v1/models`（468/20/17）、`openrouter.ai/minimax/minimax-m3.1-flash:free`（横幅 + 字段区
+`Price Free` 并存）、`opencode.ai/docs/go` + `docs/zen`（两页合起来才构成下架结论，避坑 199）、
+`anthropic.com/news` + 两篇全文、`agentskills.io/`、`minimax.io/blog/minimax-m31f`（定价表 428B/23B/1M/五基准）、
+`hf-mirror.com` 系列（详情端点 `createdAt`/`gated`/`downloads 357`/72 siblings；组织页两种排序 21 vs 22 各实跑两次；
+`MiniMax-H3` downloads `5,011,999`（044 期 5,007,397）；`RecursiveSI` 4 仓库；raw README + LICENSE）、
+`freellm.net` 首页与专页（`Last Updated 2026-10-23`）、`openrouter.ai/docs/faq`（50 vs 200 差 4 倍，第 7 次记账）、
+`autoclaw.zhipuai.cn`、`zcode.ai`（1,043,615 字节）、`aihot.news/`（206,410 字节，15 条只登记 2 条）。
+
+**规模**：表体 **233 行**、`A6+B19+C57+D137+E14 = 233` 对账一致、双口径三态
+⚪58/🟢128/🟡16/🟠5/🔴4/⚠3/空19、classify `over60/live141/pending19/unclear6/switch4/crit3`、差值 4 条
+（o4-mini 改判 ⚪ 后退出，应验 044 期「差值会塌缩」预言）；固化库 **445 条**（+11 首登）、
+台账 **279 条**（+2：`OpenAI News RSS`、`HF` API 详情+raw 端点；官方一手·国外 52→54、T0 166→168、
+模型与开源 35 不变）、待澄清 35 条（无增删）。
+
+**工程侧三修一自纠**：① `build_source_hits.py` 域名根别名不过 `norm()` → `hf-mirror`/`llm-stats`
+两个假阴性（修复后 `045|24` 与 `045|18`；旧 `—|0` 是 bug 不是真零命中）；② `verify_web.py` 的 `None`
+守卫捕到 `HF` API 真实字段值 → 9 处改「为空」不改守卫；③ 表格内 `>` 引用行重置 `in_tbl` → 新行移到
+引用行前（根治待办）；④ **台账大自纠**：初稿「新增 4 条信源」实为「新增 2 条 + 再次取用 2 条」
+（`MiniMax` 博客=043 期 commit `2b289f4`、`OpenCode` 文档=039 期 commit `6b3ddba`，避坑 44 同族：
+改计数前必须 `git show HEAD` 逐行核首登期）。
+
+**守卫全绿**：`check_frozen` 高危 0 / `check_deadlines` 233 对账一致 / `verify_web` ALL GREEN（14 表、
+保真缺失 0、占位符 0、233 状态格多色标 0）/ `build_index_web` 首页信源 279 条 / `check_site_freshness` ALL GREEN。
+**存档先例**：`tmp_or_free_2026-10-23.txt`（17 条 `:free` 全量）入公开仓库，提交前脚本校验与 md 表格 17/17 同源。
+
+**未核到 / 受阻**：`mistral.ai/news` 第 5 次失败；`huggingface.co` 主站不可达；`github.com/trending` 解析规则未命中；
+`platform.reflection.ai` Cloudflare 挑战（定价连续第 7 期未公布）；`lmarena.ai` / `livebench.ai` / `llm-stats.com`
+三站未取得排名数据；`Anthropic × Theorem` 官方页 URL 与逐字引文（全字段第三方）；商务部 48 号附件 `.wps` 未取到。
+
+**下一轮强制动作**：① `OpenRouter` `:free` 清单与本期存档 17 条逐条 diff ② `MiniMax` 官方是否对免费档结束
+发统一说明 ③ `M3.1 Flash` 权重 `region:us` tag 含义 ④ `AutoClaw` 国际站 10/25 后第 6 轮改写、国内站 M10W4
+之后每日登录档是否延续 ⑤ `Anthropic` guest investigators 窗口确切日历日 ⑥ `zcode.ai` 是否在新域名重新上线
+⑦ `platform.reflection.ai` 定价（连续第 8 期）⑧ `mistral.ai/news` 抓取恢复（第 6 次）⑨ 老混元 Q04 连续第 34 期
+⑩ 商务部登记「通道未开」（11/15 后）⑪ ZCode 月报连续第 20 期未见 ⑫ `classify()` 否定式规避措辞误捕修复
+（工程待办）⑬ `parse_sources` 状态机根治 `>` 行重置（工程待办）⑭ `GitHub Trending` 解析规则修复（工程待办）
+⑮ `Claude Duet` 是否扩 `Team`/`Enterprise` 与非美区 ⑯ `LMArena` / `LiveBench` / `llm-stats` 三站排名数据。
