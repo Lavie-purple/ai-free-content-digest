@@ -90,9 +90,12 @@ for l in md.split("\n"):
     if not ls: continue
     parts = ls.strip("|").split("|") if ls.startswith("|") else [ls]
     for p in parts:
-        k = key(p)
+        # 行内链接 `[文字](路径)`：HTML 里只留锚文字，路径进了 href 属性。
+        # 比对前先把 md 侧收敛成锚文字，否则 047 期起的《常驻权益总账》链接会被误报为缺失。
+        p_txt = re.sub(r"\[([^\]]+)\]\([^)\s]*\)", r"\1", p)
+        k = key(p_txt)
         if len(k) >= 12 and k not in html_key:
-            miss.append((p.strip()[:70], k[:70]))
+            miss.append((p_txt.strip()[:70], k[:70]))
 print("2) 保真: 缺失片段 %d" % len(miss))
 for a, b in miss[:8]:
     print("   MISS:", a, "\n         key:", b)

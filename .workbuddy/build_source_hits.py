@@ -95,12 +95,23 @@ def main():
 
     # 按文件名排序即为期次顺序（001 期文件名里没有「第 001 期」字样，故按位置兜底编号）
     files = sorted(fn for fn in os.listdir(WS) if re.match(r"^AI免费内容与权益速递.*\.md$", fn))
+    # 047 期起无截止日的常驻权益移入《常驻权益总账》—— 那里的信源仍属最新一期，
+    # 不算进来会让当期命中数凭空掉十个（实测 HF Daily Papers 404→394），台账被回写倒退。
+    if files and os.path.exists(os.path.join(WS, "常驻权益总账.md")):
+        files.append("常驻权益总账.md")
     issues = []
-    for idx, fn in enumerate(files, 1):
+    ledger_fn = "常驻权益总账.md"
+    regular = [f for f in files if f != ledger_fn]
+    for idx, fn in enumerate(regular, 1):
         m = re.search(r"第\s*(\d{3})\s*期", fn)
         no = m.group(1) if m else "%03d" % idx
         txt = io.open(os.path.join(WS, fn), encoding="utf-8").read()
         issues.append((no, fn, norm(txt)))
+    # 总账里的信源算「最新一期」，期号跟着最新一期走。
+    # 不能按位置编号：files 里它排最后，会凭空造出一个第 048 期。
+    if ledger_fn in files and issues:
+        txt = io.open(os.path.join(WS, ledger_fn), encoding="utf-8").read()
+        issues.append((issues[-1][0], ledger_fn, norm(txt)))
 
     print("信源台账 : %d 条（%d 张表）" % (len(rows), len(set(r[1] for r in rows))))
     print("扫描期次 : %s" % "、".join("第%s期" % n for n, _, _ in issues))

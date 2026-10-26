@@ -79,10 +79,16 @@ def esc(t):
 
 
 def inline(t):
-    """行内 Markdown -> HTML（先转义，再处理 code / bold）"""
+    """行内 Markdown -> HTML（先转义，再处理 code / bold / link）
+
+    链接放最后：047 期起正文要指到《常驻权益总账》与 standing.html，
+    不转的话读者会看到一堆 `[常驻权益总账](常驻权益总账.md)` 原文。
+    只认相对路径与非空白字符，不引入外链。
+    """
     t = esc(t)
     t = re.sub(r"`([^`]+)`", r"<code>\1</code>", t)
     t = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", t)
+    t = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2">\1</a>', t)
     return t
 
 
@@ -111,14 +117,20 @@ def disp_w(s):
     return w
 
 
-def render_table(rows, section_no):
+def render_table(rows, section_no, chips=True):
     head = cells(rows[0])
     body = [cells(r) for r in rows[2:]]
     ncol = len(head)
-    ledger = (section_no == "04")
+    # 截止表判据：**按表头认，不按章节号认**。
+    # 047 期修订后第四章移到文末（仍是「四」），且新增《常驻权益总账》里同样一张表，
+    # 写死 section_no=="04" 会让两张表都失去筛选条。
+    ledger = (ncol == 3 and head[0].strip() == "活动"
+              and "截止" in head[1] and "状态" in head[2])
     cls = "tbl" + (" ledger" if ledger else "") + (" c%d" % ncol)
     out = ['<div class="tblwrap%s">' % (" scrolly" if ledger else "")]
-    if ledger:
+    # chips 只给本章的**第一张**截止表：同一节里第二张（4.2 本期变更）只有十几行、
+    # 状态又单一，再挂一条筛选条是纯噪音，而且 id="ledgerCount" 会重复。
+    if ledger and chips:
         out.append(
             '<div class="chips" role="group" aria-label="按状态筛选">'
             '<span class="chips-label">按状态筛</span>'
@@ -185,9 +197,18 @@ def render_table(rows, section_no):
             tds = []
             for i, c in enumerate(r):
                 if i == ncol - 1:
+                    # 长状态格默认收成 4 行：040 期起表体里出现 2,000+ 字的小作文
+                    # （发布类条目被塞进「截止表」），一行顶一篇文章。
+                    # 全量文字仍在 HTML 里 —— verify_web 的保真检查照常能查到，
+                    # 只是默认折叠，点一下展开，不删任何字。
+                    if len(rest) > 260:
+                        body_html = ('<span class="st-txt cbody clamp" '
+                                     'title="点击展开全文">%s</span>' % inline(rest))
+                    else:
+                        body_html = '<span class="st-txt">%s</span>' % inline(rest)
                     tds.append(
-                        '<td data-col="st"><span class="st st-%s">%s</span>'
-                        '<span class="st-txt">%s</span></td>' % (st, badge or "\u25CB", inline(rest))
+                        '<td data-col="st"><span class="st st-%s">%s</span>%s</td>'
+                        % (st, badge or "\u25CB", body_html)
                     )
                 else:
                     # 手机端会把截止表拆成一张张卡片，靠 data-col 认列——比 nth-child 稳，
@@ -233,6 +254,7 @@ def build():
     cur_no = "00"
     started = False
     sec_open = False
+    ledger_used = False   # 本节是否已经输出过一张带 chips 的截止表
     i = 0
     n = len(lines)
 
@@ -260,6 +282,7 @@ def build():
             started = True
             no, t, sub = h2_title(s[3:].strip())
             cur_no = no
+            ledger_used = False
             aid = "s%s" % no if no != "00" else "s-abs"
             toc.append((aid, no, t, False, sub))
             if sec_open:
@@ -296,7 +319,9 @@ def build():
             while i < n and lines[i].strip().startswith("|"):
                 rows.append(lines[i])
                 i += 1
-            body.append(render_table(rows, cur_no))
+            body.append(render_table(rows, cur_no, chips=not ledger_used))
+            if len(cells(rows[0])) == 3 and cells(rows[0])[0].strip() == "活动":
+                ledger_used = True
             continue
         if re.match(r"^[-*]\s+", s):
             items = []
@@ -362,8 +387,14 @@ def build():
             )
     toc_html = "\n".join(items)
 
+    # 导航条：标题截短（去掉尾部括号里的复核口径），并把「四」标成尾段
+    # —— 047 期修订后第四章物理位置在文末，编号仍是 04，不加分隔读者会以为是排序错了
+    def _nav_t(t):
+        return esc(re.sub(r"（[^）]*）\s*$", "", t))
     nav_html = "".join(
-        '<a href="#%s"><b>%s</b>%s</a>' % (aid, no if no != "00" else "\u00b7\u00b7", esc(t))
+        '<a href="#%s"%s><b>%s</b>%s</a>' % (
+            aid, ' class="tail"' if aid == "s04" else "",
+            no if no != "00" else "\u00b7\u00b7", _nav_t(t))
         for aid, no, t, is_h3, sub in toc if no or aid == "s-abs"
     )
 
@@ -496,6 +527,7 @@ code{
 .tb-nav a:hover{color:var(--ink); background:var(--surface-2)}
 .tb-nav a.active{color:var(--accent-ink); background:var(--accent-soft)}
 .tb-nav a.active b{color:var(--accent-ink)}
+.tb-nav a.tail{margin-left:6px; padding-left:14px; border-left:1px solid var(--rule-2)}
 .tb-tools{display:flex; align-items:center; gap:var(--s2); margin-left:auto}
 .search{position:relative; display:flex; align-items:center; flex:0 0 auto}
 .search input{
@@ -708,6 +740,14 @@ tr[data-st="soon"] .st-txt{color:var(--soon)}
 tr[data-st="live"] .st-txt{color:var(--live)}
 tr[data-st="warn"] .st-txt{color:var(--plan)}
 tr[data-st="over"] .st-txt{color:var(--over)}
+/* 长状态格：默认收 4 行，点一下展开全文。文字一个字都不删，只是不默认铺开。 */
+.st-txt.cbody.clamp{
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical;
+  overflow:hidden; cursor:pointer; border-radius:4px;
+}
+.st-txt.cbody.clamp:hover{background:var(--surface-2)}
+.st-txt.cbody.clamp:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media print{ .st-txt.cbody.clamp{display:block; overflow:visible} }
 .chips{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:10px var(--s3);
   background:var(--surface-2); border-bottom:1.5px solid var(--rule-strong); position:sticky; top:0; z-index:3}
 /* 截止表待在可滚动容器里，容器顶部已经被 chips 占住——表头要吸在它下方，
@@ -1062,7 +1102,7 @@ __BODY__
 
 <footer class="foot">
   <div class="fr"><span>AI 免费内容与权益速递 · 第 __ISSUE__ 期</span><span>__DATELINE__</span></div>
-  <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；第四章「限时活动与截止时间表」支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
+  <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
   <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
 </footer>
 
@@ -1160,6 +1200,22 @@ __BODY__
     });
     apply();
   }
+
+  /* ---------- 长状态格：点击展开全文 ---------- */
+  [].slice.call(document.querySelectorAll(".st-txt.cbody.clamp")).forEach(function(el){
+    el.setAttribute("tabindex","0");
+    el.setAttribute("role","button");
+    el.setAttribute("aria-expanded","false");
+    function open(){
+      el.classList.remove("clamp");
+      el.setAttribute("aria-expanded","true");
+      el.removeAttribute("title");
+    }
+    el.addEventListener("click", open);
+    el.addEventListener("keydown", function(ev){
+      if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); }
+    });
+  });
 
   /* ---------- 全文检索 ---------- */
   var q=document.getElementById("q"), qn=document.getElementById("qn"),

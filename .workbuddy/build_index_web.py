@@ -394,6 +394,15 @@ footer .fr{
 </section>
 
 <section>
+  <div class="slabel">常驻权益总账</div>
+  <p class="lede" style="font-size:15px; max-width:62ch">
+    <strong>没有确切截止日</strong>的长期有效权益（<strong>__LEDGER_N__</strong> 条）单独成册，原文照搬、不逐期重印。
+    要查「某家现在还给不给免费额度 / 什么价 / 什么许可」，查这一册；日报只在变了的时候报一行。
+    <a href="standing.html">打开《常驻权益总账》&#8594;</a>
+  </p>
+</section>
+
+<section>
   <div class="slabel">全部 __CNT__ 期 · 新的在前</div>
   <ul class="list">
 __ROWS__
@@ -418,7 +427,17 @@ __ROWS__
 </html>
 """
 
+    # 常驻权益总账（047 期起）：条数直接数总账文件的表格行，不手写
+    ledger_n = "—"
+    lp = os.path.join(WS, "常驻权益总账.md")
+    if os.path.exists(lp):
+        _lt = io.open(lp, encoding="utf-8").read()
+        _n = sum(1 for _l in _lt.split("\n")
+                 if _l.strip().startswith("|") and not re.match(r"^\|\s*-", _l.strip()))
+        ledger_n = str(max(_n - 1, 0))
+
     doc = (DOC
+           .replace("__LEDGER_N__", ledger_n)
            .replace("__ACCENT__", ACCENT)
            .replace("__CNT__", str(len(issues)))
            .replace("__LATEST__", latest["no"])

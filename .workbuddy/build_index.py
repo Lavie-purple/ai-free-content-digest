@@ -90,6 +90,15 @@ def main():
     L.append("共 **%d 期**（%s ~ %s），Markdown 合计 **%d B ≈ %.0f KB**。"
              % (len(rows), rows[0][1] if rows else "—", rows[-1][1] if rows else "—", tot, tot / 1024.0))
     L.append("")
+    # 常驻权益总账（047 期起）：条数直接数文件，不手写
+    _lp = os.path.join(WS, "常驻权益总账.md")
+    if os.path.exists(_lp):
+        _lt = io.open(_lp, encoding="utf-8").read()
+        _n = sum(1 for _l in _lt.split("\n")
+                 if _l.strip().startswith("|") and not re.match(r"^\|\s*-", _l.strip()))
+        L.append("另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）："
+                 "**%d 条**没有确切截止日的长期权益，全量原文、不逐期重印。" % max(_n - 1, 0))
+        L.append("")
     L.append("| 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |")
     L.append("| --- | --- | --- | --- | --- | --- | --- |")
     for no, d, th, size, tb, html, pit, fn in rows:

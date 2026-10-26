@@ -104,20 +104,48 @@ def main():
 
     md = io.open(src, encoding="utf-8").read().replace("\r\n", "\n")
 
-    # 定位第四章，并取其后第一个表格
+    # 定位第四章。047 期修订后本章拆成 4.1（限时）+ 4.2（本期变更）两张表，
+    # 且无截止日的常驻权益整批移入《常驻权益总账》—— 三处都要抽，否则 CSV 会掉一半行。
     sec = re.search(r"(?m)^##\s*四、[^\n]*\n([\s\S]*?)(?=^##\s|\Z)", md)
     if not sec:
         raise SystemExit("没找到第四章「限时活动与截止时间表」")
-    rows = []
-    for ln in sec.group(1).split("\n"):
-        if ln.strip().startswith("|"):
-            cells = [c.strip() for c in ln.strip().strip("|").split("|")]
-            rows.append(cells)
-    if len(rows) < 3:
-        raise SystemExit("第四章表格只有 %d 行，不像数据表" % len(rows))
-    header, data = rows[0], rows[2:]
-    if len(header) != 3:
-        print("!! 表头列数=%d（预期 3），仍按前三列解析" % len(header))
+
+    def table_blocks(text):
+        """按块返回表格数据行（每块跳过表头与分隔行）。"""
+        res, cur = [], []
+        for ln in text.split("\n"):
+            if ln.strip().startswith("|"):
+                cur.append(ln)
+            else:
+                if cur:
+                    res.append(cur); cur = []
+        if cur:
+            res.append(cur)
+        return [b[2:] for b in res if len(b) >= 3]
+
+    def to_cells(lines_):
+        return [[c.strip() for c in ln.strip().strip("|").split("|")] for ln in lines_]
+
+    data, seen = [], set()
+    sources = [("第四章", sec.group(1))]
+    ledger_path = os.path.join(WS, "常驻权益总账.md")
+    if os.path.exists(ledger_path):
+        sources.append(("常驻权益总账", io.open(ledger_path, encoding="utf-8").read()))
+    for name, text in sources:
+        n0 = len(data)
+        for blk in table_blocks(text):
+            for c in to_cells(blk):
+                c = (c + ["", "", ""])[:3]
+                if len(c) < 3:
+                    continue
+                k = key(plain(EMOJI.sub("", c[0])))
+                if k in seen:
+                    continue          # 第四章优先：4.2 的条目也收在总账里，只记一次
+                seen.add(k)
+                data.append(c)
+        print("  来自 %-8s : %d 行" % (name, len(data) - n0))
+    if not data:
+        raise SystemExit("第四章与总账里都没抽到数据行")
 
     # 继承历史「首次出现」
     first_seen = {}
