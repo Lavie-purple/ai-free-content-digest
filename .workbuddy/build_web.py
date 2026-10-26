@@ -594,6 +594,25 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
 }
 .pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
 .pubnote p:last-child{margin-bottom:0}
+.quickbar{
+  display:flex; align-items:center; gap:var(--s4); justify-content:space-between;
+  margin:var(--s4) 0 0; padding:14px 18px; text-decoration:none;
+  background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--accent);
+  box-shadow:var(--shadow); transition:transform var(--fast),border-color var(--fast);
+}
+.quickbar:hover{transform:translateY(-1px); border-left-color:var(--accent-ink)}
+.quickbar:hover .qb-r{text-decoration:underline; text-underline-offset:3px}
+.qb-l b{display:block; color:var(--ink); font-size:15px; font-weight:700; margin-bottom:3px; line-height:1.4}
+.qb-l span{display:block; font-size:12.5px; color:var(--muted); line-height:1.65; font-family:var(--fu)}
+.qb-r{
+  flex:0 0 auto; font-family:var(--fm); font-size:12.5px; color:var(--accent-ink);
+  font-weight:600; white-space:nowrap;
+}
+@media (max-width:640px){
+  .quickbar{flex-direction:column; align-items:flex-start; gap:8px; padding:12px 14px}
+  .qb-l b{font-size:14px}
+  .qb-l span{font-size:12px}
+}
 .summary-note{}
 
 /* ============================================================ 主栅格 */
@@ -1088,6 +1107,13 @@ mark.hl.cur{background:var(--accent); color:#fff}
   <h1 class="mh-t">__TITLE__</h1>
   <p class="mh-sub">__THEME__</p>
   <div class="pubnote">__NOTE__</div>
+  <a class="quickbar" href="quick.html">
+    <span class="qb-l">
+      <b>只想看「现在有什么免费、到什么时候结束」</b>
+      <span>打开《免费速查》：61 条，一条一行 —— 给什么 / 能拿多少 / 到期日 / 什么门槛。不写沿革、不写论证、不写期号。</span>
+    </span>
+    <span class="qb-r">免费速查 &#8594;</span>
+  </a>
 </header>
 
 <div class="shell">

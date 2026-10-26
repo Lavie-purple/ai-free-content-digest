@@ -394,6 +394,16 @@ footer .fr{
 </section>
 
 <section>
+  <div class="slabel">免费速查 · 一条一行</div>
+  <p class="lede" style="font-size:15px; max-width:62ch">
+    只想看「<strong>现在有什么免费</strong>、<strong>到什么时候结束</strong>」的，从这里进：
+    <strong>__QUICK_N__ 条</strong>，每条只写四个字段 —— 给什么 / 能拿多少 / 到期日 / 什么门槛。
+    不写沿革、不写论证、不写期号。
+    <a href="quick.html">打开《免费速查》&#8594;</a>
+  </p>
+</section>
+
+<section>
   <div class="slabel">常驻权益总账</div>
   <p class="lede" style="font-size:15px; max-width:62ch">
     <strong>没有确切截止日</strong>的长期有效权益（<strong>__LEDGER_N__</strong> 条）单独成册，原文照搬、不逐期重印。
@@ -427,6 +437,12 @@ __ROWS__
 </html>
 """
 
+    # 免费速查（047 期结构改造后新增）：条数直接数 CSV，不手写
+    quick_n = "—"
+    qp = os.path.join(WS, ".workbuddy", "data", "quick_items.csv")
+    if os.path.exists(qp):
+        quick_n = str(max(sum(1 for _ in io.open(qp, encoding="utf-8-sig")) - 1, 0))
+
     # 常驻权益总账（047 期起）：条数直接数总账文件的表格行，不手写
     ledger_n = "—"
     lp = os.path.join(WS, "常驻权益总账.md")
@@ -437,6 +453,7 @@ __ROWS__
         ledger_n = str(max(_n - 1, 0))
 
     doc = (DOC
+           .replace("__QUICK_N__", quick_n)
            .replace("__LEDGER_N__", ledger_n)
            .replace("__ACCENT__", ACCENT)
            .replace("__CNT__", str(len(issues)))

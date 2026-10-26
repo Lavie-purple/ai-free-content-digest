@@ -178,6 +178,25 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
 }
 .pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
 .pubnote p:last-child{margin-bottom:0}
+.quickbar{
+  display:flex; align-items:center; gap:var(--s4); justify-content:space-between;
+  margin:var(--s4) 0 0; padding:14px 18px; text-decoration:none;
+  background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--accent);
+  box-shadow:var(--shadow); transition:transform var(--fast),border-color var(--fast);
+}
+.quickbar:hover{transform:translateY(-1px); border-left-color:var(--accent-ink)}
+.quickbar:hover .qb-r{text-decoration:underline; text-underline-offset:3px}
+.qb-l b{display:block; color:var(--ink); font-size:15px; font-weight:700; margin-bottom:3px; line-height:1.4}
+.qb-l span{display:block; font-size:12.5px; color:var(--muted); line-height:1.65; font-family:var(--fu)}
+.qb-r{
+  flex:0 0 auto; font-family:var(--fm); font-size:12.5px; color:var(--accent-ink);
+  font-weight:600; white-space:nowrap;
+}
+@media (max-width:640px){
+  .quickbar{flex-direction:column; align-items:flex-start; gap:8px; padding:12px 14px}
+  .qb-l b{font-size:14px}
+  .qb-l span{font-size:12px}
+}
 .summary-note{}
 
 /* ============================================================ 主栅格 */
@@ -675,6 +694,13 @@ mark.hl.cur{background:var(--accent); color:#fff}
   <h1 class="mh-t">AI 免费内容与权益速递</h1>
   <p class="mh-sub"></p>
   <div class="pubnote"><p>扫描截止 <strong>2026-10-27 06:30（GMT+8）</strong>，<strong>窗口 = 上一期（046）扫描截止 10/25 12:00 → 本期截止</strong>，约 <strong>42.5 小时（隔日出刊，10/26 未出刊）</strong>。</p><p>⚠️ <strong>窗口换算（美西 / 北京双向）</strong>：<strong>起于北京 10/25 12:00 = 美西 10/24 21:00 PT；止于北京 10/27 06:30 = 美西 10/26 15:30 PT</strong>（北京比美西太平洋时间快 15 小时，夏令时期间；046 期已改正该换算，本期沿用）。</p><p>⚠️ <strong>本轮是「早间出刊」，窗口右端是执行时点、不是当日结束</strong>：<strong>美西 10/26 15:30 PT 之后（＝北京 10/27 06:30 之后）的发布不在本期窗口内</strong> —— <strong>这正是「早间出刊必漏当天上午晚些时候的发布」那条纪律的当期形态，凡未核到的一律记「未核到」，不写「没有」</strong>。</p><p>⚠️ <strong>本轮窗口的形状</strong>：<strong>1 条降价发布线（<code>GPT-6.1 Terra</code>：价格腰斩 + 四档可用 + 无免费档） + 1 条资本市场线（<code>Anthropic</code> <code>S-1</code>，不产生免费条目） + 1 条分发层扩张线（<code>Runware</code> D0 首发 <code>Kling 4.0</code>，且「原生音频」这次在一手页核到了） + 1 条周档开启线（<code>AutoClaw</code> 两站 <code>M10W4</code> 同日开启 + 2.2.0 升级礼） + 1 条清单定位线（<code>OpenRouter</code> <code>467 → 463</code> 的 <code>−4</code> </strong>首次逐条定位<strong>）</strong>。</p><p>与 001–046 期的关系：<strong>只做增量与纠错，不重复已固化内容</strong>。<strong>本期纠错 4 条（见第五章）</strong>，其中<strong>两条是「046 期说做不到、本期做到了」的兑现</strong>（<code>OpenRouter</code> 全量差额定位、<code>Kling 4.0</code> 音频字段核实），<strong>一条是「046 期的观察被本期读数推翻」</strong>（<code>MiniMax</code> 两个 <code>downloads</code> 数的大小关系），<strong>一条是计数口径</strong>（<code>⚠</code> 与 <code>⚠️</code> 的归并）。</p></div>
+  <a class="quickbar" href="quick.html">
+    <span class="qb-l">
+      <b>只想看「现在有什么免费、到什么时候结束」</b>
+      <span>打开《免费速查》：61 条，一条一行 —— 给什么 / 能拿多少 / 到期日 / 什么门槛。不写沿革、不写论证、不写期号。</span>
+    </span>
+    <span class="qb-r">免费速查 &#8594;</span>
+  </a>
 </header>
 
 <div class="shell">

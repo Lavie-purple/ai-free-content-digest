@@ -1,0 +1,62 @@
+分组,名称,量,截止日,截止说明,状态,门槛
+token,AutoClaw 国内站 M10W4 周福利,"1 亿 Tokens（=10,000 积分）",2026-11-01,11/1 23:59 失效,live,登录即领，每账号一次
+token,AutoClaw 国际站 M10W4,40M Tokens,2026-11-01,11/1 23:59 失效,live,登录即领
+token,AutoClaw 2.2.0 升级礼,"5,000 积分（≈5,000 万 tokens）",,领到后 7 天内有效,live,升级客户端
+token,智谱清言 双节积分 100% 返还,上限 15 万积分,2026-10-31,10/31,live,登录自动发放
+token,WorkBuddy 学生版,"1,000 积分",2026-10-31,10/31,live,学生认证
+token,腾讯 WorkBuddy 教师积分普惠,"每月 2,000 积分 × 连续 12 个月",,长期（无申请截止）,live,全国教师
+token,杭州 Token 卡,"约 500 元 / 10,000 积分",,发完即止,live,35 家市级大创园现场
+token,富国基金 × 智谱清言,VIP 月卡 + 积分,,名额有限、抢完即止,live,券商渠道发放
+token,腾讯云 TokenHub 新人免费包,新人包（额度见官方页）,2026-12-31,12/31,live,新用户
+token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
+token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
+token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
+token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
+api,OpenRouter 免费档,全量 463 个模型中 20 个零价 / 17 个 :free,,长期（动态目录）,live,注册，看 :free 后缀
+api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
+api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
+api,OpenCode DeepSeek V4.1 Flash Free,免费，200K 上下文,,未公布,live,仅限平台内
+api,OpenCode 免费模型清单,11 项（2026-10-24 实读）,,未公布（清单动态变动）,live,仅限平台内
+api,MiniMax 开放平台 M3 / M2,免费试用,2026-11-07,11/7,live,注册
+api,DeepSeek Search / Fetch API,免费调用,2026-11-01,11/1 00:00 起按请求计费,pending,直接调用
+api,GMI Cloud 免费档,Qwen3.8-Max / Flash、Wan3.0 全免费,,本次再延 7 天（滚动续期）,live,GMI API Key
+api,NVIDIA Nemotron 3.5 Lightning,免费端点,,未公布,live,注册
+api,OVHcloud AI Endpoints,免费档,,长期,live,匿名档仅 2 RPM
+api,LLM7.io,匿名 10 RPM / 注册后 120 RPM,,长期,live,匿名即可用
+api,Tokenator,每日 3M tokens + 50 请求,,每日 00:00 UTC 重置,live,按 key、按模型分别计数
+api,UnoRouter,56–58 个免费模型（目录页与正文计数不一致）,,长期（动态目录）,live,免绑卡
+api,Vercel AI Gateway,2 个免费模型,,未公布（限免结束日不给）,live,需绑卡
+api,Ollama Cloud,deepseek-v4-pro / flash 免费,,长期,live,注册
+api,Freebuff 免费编码 agent,每天 150 Freebucks ≈ 10 小时 DeepSeek V4.1 Flash,,长期（ongoing）,live,注册，非支持地区限量
+api,Kilo Code 免费网关,10 个免费编码模型,,长期,live,约 200 req/hr，路由不透明
+api,HAL-X AI THX-01,免密钥免费 API（322M 决策模型）,,长期,live,免注册、免付费
+api,Inception Mercury Decide,输出 token 免费，每秒最多 14 次决策,,长期,live,OpenRouter 端点
+api,Perplexity pplx-decider-v1-27b,API 输入 $0.04/M、输出免费；权重 Apache-2.0,,长期,live,自托管需约 49GB 显存
+api,Cloudflare Clef / Clef-flash,免费权重；Workers AI 侧输出不计费,,权重永久,live,可自托管
+api,中国电信 Xing4.0-29B-A4B,OpenRouter 免费档，262K 上下文,,未公布（限免结束日不给）,unclear,走 :free 后缀
+api,商汤 日日新 Token Plan,公测期完全免费（积分制，Free 档 0 元/月）,,未公布（官方称后续可能调整）,live,注册
+api,阶跃 Step 5 Preview 渠道免费周,免费（OpenRouter / OpenCode / Cline / Kilocode / Nous）,,未公布（各渠道期限不一致）,live,走对应渠道
+api,阶跃 Step 5 Preview 新用户套餐,已关闭新增领取通道,,—,unclear,已领用户剩余权益以账户为准
+api,阶跃 Step 5 Preview 线下体验,店内一周免费,,未公布（店内口径约一周）,live,到 AGI Bar 连 WiFi 配 Key
+api,GLM-5.3-FlashX 试用,两周试用（配额消耗 2.5 倍于普通 Flash）,,申请通过后起算,live,申请
+api,Nous Research MISSINGNO,$0.00 / 百万 token，限时免费,,未公布,live,Hermes Portal 目录
+cloud,腾讯轻量云 专家限量,免费领 1 个月轻量应用服务器,2026-11-13,11/13,live,专家认证
+cloud,Talorys 自托管 agent,MIT，整套跑在 Cloudflare 免费层,,长期,live,自部署到自己的账号
+cloud,Odyssey Odyssey-3,免费公开研究预览（14B 世界模型）,,研究预览期免费；API 需申请,live,网页 demo
+cloud,Figma Code Layers,付费计划内创建与编辑代码层免费,2026-11-04,11/4,live,需付费计划账号
+subsidy,江苏省 词元券 / 语料券 / 模型券,词元券上限 500 万元、语料券 100 万元,2027-06-30,政策有效期至 2027-06-30,live,企业 / 高校院所 / OPC
+subsidy,四川省 算力券 / 词元券,最高补 20%、上限 100 万元（OPC 可到 40%）,,未公布,live,企业
+subsidy,辽宁省 算力券,最高补 30%、年度上限 200 万元,,未公布,live,年算力采购需达 25 万元以上
+subsidy,湖北算力券 年度申领,年度申领（企业向）,2026-10-31,10/31,live,企业
+edu,OpenAI 学生 $100 Codex 额度,$100 credits，限 Codex 使用,,领取后 12 个月,live,美加学籍，学校邮箱验证
+oss,Anthropic OSS Scanner,免费漏洞扫描；合格维护者另送 Claude Max 20x,,长期,live,开源项目 opt-in
+oss,OpenAI PHP 版本检查 Codex skill,开源免费（Apache-2.0）,,无结束日,live,GitHub 直接取
+oss,Anthropic Claude Max / Team 月度 API 额度,Max 5x $100/月、Max 20x $200/月、Team 池化上限 $500/月,,按月发放，当月未用作废,live,需在计划内满 7 天
+api,xAI The X Subscription 免费档,$0/月：每日 Grok 访问 + Cursor 起步额度（两者共用按周刷新的池）,,未公布（按周刷新）,live,$0 免费档
+api,火山方舟 Agent Plan 个人版,"1,000 次数据调用（工商 400 + 风险 400 + 宏观 200）",2026-11-08,11/8,live,订阅个人版并开启专业数据集
+over,OpenRouter MiniMax M3.1 Flash (free),免费档,2026-10-22,10/22 结束,over,—
+over,OpenCode MiniMax M3.1 Flash Free,免费模型,2026-10-22,10/22 前后下架,over,—
+over,腾讯 WorkBuddy DeepSeek 故障补偿,500 积分,2026-10-22,10/22 24:00,over,—
+over,AutoClaw 桌面端 v2.1.0 一次性档,"2 亿 Tokens（20,000 积分）",2026-10-21,10/21 可领窗口关闭,over,—
+over,上海青浦 算力券补贴,算力券（金额见原文）,2026-10-23,申报至 10/23,over,—
+over,ZCode / BigModel 新用户试用,—,,域名已易主，登记项失效,over,—

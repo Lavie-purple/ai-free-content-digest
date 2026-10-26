@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>免费速查 · AI 免费内容与权益速递</title>
+<meta name="description" content="AI 免费额度速查：给什么、能拿多少、到什么时候结束，一条一行。">
+<style>
+:root{
+  --bg:#faf8f4; --surface:#ffffff; --surface-2:#f4f1ea; --rule:#e2ddd1; --rule-2:#cfc8b8;
+  --ink:#1b1913; --ink-2:#3a362d; --muted:#5f584a; --faint:#736a5a;
+  --accent:#bf3327; --accent-ink:#a02a20; --accent-soft:rgba(191,51,39,.09);
+  --crit:#8c1a10; --soon:#8f5e12; --live:#3b6a4d; --plan:#38587a; --over:#6e675c;
+  --shadow:0 1px 2px rgba(27,25,19,.06),0 8px 24px -16px rgba(27,25,19,.18);
+  --fs: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --fm:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#14120e; --surface:#1b1813; --surface-2:#221e17; --rule:#332d24; --rule-2:#463e31;
+    --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;
+    --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.13);
+    --crit:#ff3b30; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#9c9387;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -16px rgba(0,0,0,.6);
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--fs); font-size:15px; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px; margin:0 auto; padding:0 20px 72px}
+
+/* ---------- 页头 ---------- */
+header{padding:36px 0 0}
+.kicker{
+  font-family:var(--fm); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent-ink); font-weight:600;
+}
+h1{
+  font-size:30px; line-height:1.2; margin:8px 0 0; letter-spacing:-.02em; font-weight:800;
+}
+.lede{
+  margin:10px 0 0; color:var(--ink-2); font-size:15px; max-width:56ch;
+}
+.lede b{color:var(--ink); font-weight:700}
+hr.rule{border:0; border-top:2px solid var(--ink); margin:22px 0 0}
+
+/* ---------- 数字条 ---------- */
+.stats{
+  display:flex; gap:0; margin:0 0 4px; border-bottom:1px solid var(--rule);
+}
+.stat{flex:1; padding:16px 0 14px; border-right:1px solid var(--rule)}
+.stat:last-child{border-right:0}
+.stat b{
+  display:block; font-family:var(--fm); font-size:28px; line-height:1; font-weight:700;
+}
+.stat.live b{color:var(--live)} .stat.soon b{color:var(--soon)} .stat.over b{color:var(--over)}
+.stat span{display:block; margin-top:5px; font-size:12.5px; color:var(--muted)}
+
+/* ---------- 边界说明 ---------- */
+.boundary{
+  margin:18px 0 0; padding:11px 14px; background:var(--surface-2);
+  border-left:2px solid var(--rule-2); font-size:13px; color:var(--muted); line-height:1.7;
+}
+.boundary b{color:var(--ink-2); font-weight:600}
+
+/* ---------- 分区 ---------- */
+h2{
+  font-size:13px; font-family:var(--fm); letter-spacing:.1em; text-transform:uppercase;
+  color:var(--accent-ink); font-weight:700; margin:38px 0 0; padding-bottom:7px;
+  border-bottom:1px solid var(--rule);
+}
+h2 .cnt{color:var(--faint); font-weight:500; letter-spacing:0; text-transform:none; margin-left:8px}
+h2 .sub{display:block; font-family:var(--fs); font-size:13px; letter-spacing:0; text-transform:none;
+  color:var(--muted); font-weight:400; margin-top:4px}
+h3.gh{
+  font-size:14.5px; margin:26px 0 8px; font-weight:700; display:flex; align-items:baseline; gap:9px;
+  flex-wrap:wrap;
+}
+h3.gh .gd{font-size:12.5px; color:var(--muted); font-weight:400}
+h3.gh .gc{
+  font-family:var(--fm); font-size:11px; color:var(--faint); margin-left:auto;
+}
+
+/* ---------- 表 ---------- */
+table.qt{
+  width:100%; table-layout:fixed; border-collapse:collapse; margin:0; font-size:14px;
+}
+table.qt td,table.qt th{overflow-wrap:anywhere; word-break:break-word}
+table.qt th{
+  text-align:left; font-size:11px; font-family:var(--fm); letter-spacing:.08em;
+  color:var(--faint); font-weight:500; padding:7px 10px 7px 0; border-bottom:1px solid var(--rule);
+  text-transform:uppercase; white-space:nowrap;
+}
+table.qt th:nth-child(2){width:31%} table.qt th:nth-child(3){width:28%}
+table.qt td{
+  padding:8px 10px 8px 0; border-bottom:1px solid var(--rule); vertical-align:top;
+}
+table.qt tr:last-child td{border-bottom:0}
+.nm{color:var(--ink); font-weight:600; display:inline; line-height:1.45}
+.tag{
+  display:inline-block; font-size:10.5px; font-family:var(--fm); color:var(--faint);
+  border:1px solid var(--rule); padding:0 5px; border-radius:2px; margin-left:7px;
+  vertical-align:1px; white-space:nowrap;
+}
+.need{display:block; font-size:11.5px; color:var(--faint); line-height:1.45; margin-top:3px}
+.c-qty{color:var(--ink); font-weight:700; font-size:13.5px; line-height:1.55;
+  font-variant-numeric:tabular-nums}
+.c-when{font-size:12.5px; color:var(--ink-2); line-height:1.55}
+.w-s{display:none}
+.dot{
+  display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:6px;
+  vertical-align:1px; background:var(--live);
+}
+tr[data-t="crit"] .dot{background:var(--crit)} tr[data-t="soon"] .dot{background:var(--soon)}
+tr[data-t="plan"] .dot{background:var(--plan)} tr[data-t="over"] .dot{background:var(--over)}
+tr[data-t="crit"] .c-when{color:var(--crit); font-weight:600}
+tr[data-t="soon"] .c-when{color:var(--soon); font-weight:600}
+tr[data-t="over"] .nm,tr[data-t="over"] .c-qty{color:var(--over); font-weight:500}
+tr[data-t="over"] .c-when{color:var(--over)}
+
+/* ---------- 折叠 ---------- */
+details.fold{margin:36px 0 0; border-top:1px solid var(--rule); padding-top:18px}
+details.fold summary{
+  cursor:pointer; font-size:13px; color:var(--muted); list-style:none; padding:2px 0;
+}
+details.fold summary::-webkit-details-marker{display:none}
+details.fold summary::before{content:"▸ "; color:var(--faint)}
+details.fold[open] summary::before{content:"▾ "}
+details.fold summary .fd{margin-left:10px; color:var(--faint); font-size:12.5px}
+details.fold summary:hover{color:var(--ink)}
+details.fold table{margin-top:12px}
+
+.empty{color:var(--muted); font-size:13.5px; padding:14px 0}
+
+/* ---------- 页脚 ---------- */
+footer{
+  margin:52px 0 0; padding-top:18px; border-top:2px solid var(--ink);
+  font-size:12.5px; color:var(--faint); line-height:1.85;
+}
+footer a{color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--accent-soft)}
+footer a:hover{border-bottom-color:var(--accent)}
+footer p{margin:0 0 6px}
+footer b{color:var(--muted); font-weight:600}
+.back{
+  display:inline-block; margin-top:2px; font-family:var(--fm); font-size:12px;
+  color:var(--accent-ink);
+}
+
+@media (max-width:640px){
+  body{font-size:14px}
+  h1{font-size:24px}
+  .wrap{padding:0 15px 56px}
+  .stat b{font-size:23px}
+  /* 窄屏不再挤三列：一行一条，名称与短日期同行、额度单独一行 */
+  table.qt{display:block}
+  table.qt thead{display:none}
+  table.qt tbody{display:block}
+  table.qt tr{
+    display:grid; grid-template-columns:1fr auto;
+    grid-template-areas:"name when" "qty qty" "need need";
+    column-gap:12px; row-gap:1px; padding:10px 0;
+    border-bottom:1px solid var(--rule);
+  }
+  table.qt tr:last-child{border-bottom:0}
+  table.qt td{display:block; border:0; padding:0 !important}
+  /* display:contents 让 td 透明，名称 / 额度 / 门槛 三行按阅读顺序排 */
+  .c-name{display:contents !important}
+  .nm{grid-area:name}
+  .need{grid-area:need}
+  .c-when{grid-area:when; text-align:right; padding-top:2px !important}
+  .c-qty{grid-area:qty; margin-top:3px}
+  .w-l{display:none} .w-s{display:inline}
+  .c-when{font-size:11.5px; white-space:nowrap}
+  .c-qty{font-size:12.5px}
+  .nm{font-size:13px}
+  .need{font-size:11px; margin-top:2px}
+  .tag{display:none}
+}
+@media print{
+  body{background:#fff; color:#000}
+  .wrap{max-width:none; padding:0}
+  details.fold{display:block} details.fold summary{display:none}
+  table.qt tr{break-inside:avoid}
+  a{color:#000; text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">免费速查 · Free Tier Index</div>
+  <h1>AI 免费额度，一条一行</h1>
+  <p class="lede">只回答四个问题：<b>给什么</b>、<b>能拿多少</b>、<b>到什么时候结束</b>、<b>要什么门槛</b>。不写沿革、不写期号、不写论证过程。</p>
+  <hr class="rule">
+</header>
+
+<div class="stats">
+  <div class="stat live"><b>55</b><span>现在能拿</span></div>
+  <div class="stat soon"><b>6</b><span>其中 7 天内截止</span></div>
+  <div class="stat over"><b>6</b><span>已结束</span></div>
+</div>
+
+<div class="boundary">
+  <b>本页不收什么：</b>模型发布、开源公告、申报通知、停服迁移这类「新闻」不在本页 —— 它们不是「我现在能领什么」。
+  需要看这些，或者要查某条的依据、口径、历史变更，去<a href="index.html">完整版日报</a>。
+  每一条的原文与核对时点都留在那里，本页只做「能不能白拿」的判断。
+</div>
+
+<h2>正在倒计时 <span class="cnt">13 条 · 按剩余天数排</span>
+  <span class="sub">有确切截止日的，先看这一区。橙点 7 天内到期，红点今天或已过。</span>
+</h2>
+<table class="qt"><thead><tr><th>给什么</th><th>能拿多少</th><th>到什么时候</th></tr></thead><tbody>
+<tr data-t="soon"><td class="c-name"><span class="nm">WorkBuddy 学生版</span><span class="tag">Token 与积分</span><span class="need">学生认证</span></td><td class="c-qty">1,000 积分</td><td class="c-when"><span class="dot"></span><span class="w-l">10/31（还有 4 天）</span><span class="w-s">还有 4 天</span></td></tr>
+<tr data-t="soon"><td class="c-name"><span class="nm">智谱清言 双节积分 100% 返还</span><span class="tag">Token 与积分</span><span class="need">登录自动发放</span></td><td class="c-qty">上限 15 万积分</td><td class="c-when"><span class="dot"></span><span class="w-l">10/31（还有 4 天）</span><span class="w-s">还有 4 天</span></td></tr>
+<tr data-t="soon"><td class="c-name"><span class="nm">湖北算力券 年度申领</span><span class="tag">算力券与地方补贴</span><span class="need">企业</span></td><td class="c-qty">年度申领（企业向）</td><td class="c-when"><span class="dot"></span><span class="w-l">10/31（还有 4 天）</span><span class="w-s">还有 4 天</span></td></tr>
+<tr data-t="soon"><td class="c-name"><span class="nm">AutoClaw 国内站 M10W4 周福利</span><span class="tag">Token 与积分</span><span class="need">登录即领，每账号一次</span></td><td class="c-qty">1 亿 Tokens（=10,000 积分）</td><td class="c-when"><span class="dot"></span><span class="w-l">11/1 23:59 失效（还有 5 天）</span><span class="w-s">还有 5 天</span></td></tr>
+<tr data-t="soon"><td class="c-name"><span class="nm">AutoClaw 国际站 M10W4</span><span class="tag">Token 与积分</span><span class="need">登录即领</span></td><td class="c-qty">40M Tokens</td><td class="c-when"><span class="dot"></span><span class="w-l">11/1 23:59 失效（还有 5 天）</span><span class="w-s">还有 5 天</span></td></tr>
+<tr data-t="soon"><td class="c-name"><span class="nm">DeepSeek Search / Fetch API</span><span class="tag">模型 API 免费档</span><span class="need">直接调用</span></td><td class="c-qty">免费调用</td><td class="c-when"><span class="dot"></span><span class="w-l">11/1 00:00 起按请求计费（还有 5 天）</span><span class="w-s">还有 5 天</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Figma Code Layers</span><span class="tag">云资源与工具</span><span class="need">需付费计划账号</span></td><td class="c-qty">付费计划内创建与编辑代码层免费</td><td class="c-when"><span class="dot"></span><span class="w-l">11/4（还有 8 天）</span><span class="w-s">还有 8 天</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">MiniMax 开放平台 M3 / M2</span><span class="tag">模型 API 免费档</span><span class="need">注册</span></td><td class="c-qty">免费试用</td><td class="c-when"><span class="dot"></span><span class="w-l">11/7（还有 11 天）</span><span class="w-s">还有 11 天</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">火山方舟 Agent Plan 个人版</span><span class="tag">模型 API 免费档</span><span class="need">订阅个人版并开启专业数据集</span></td><td class="c-qty">1,000 次数据调用（工商 400 + 风险 400 + 宏观 200）</td><td class="c-when"><span class="dot"></span><span class="w-l">11/8（还有 12 天）</span><span class="w-s">还有 12 天</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">腾讯轻量云 专家限量</span><span class="tag">云资源与工具</span><span class="need">专家认证</span></td><td class="c-qty">免费领 1 个月轻量应用服务器</td><td class="c-when"><span class="dot"></span><span class="w-l">11/13（还有 17 天）</span><span class="w-s">还有 17 天</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">移动云 Token 赠送</span><span class="tag">Token 与积分</span><span class="need">新用户</span></td><td class="c-qty">2,500 万 Token</td><td class="c-when"><span class="dot"></span><span class="w-l">12/31（还有 65 天）</span><span class="w-s">还有 65 天</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">腾讯云 TokenHub 新人免费包</span><span class="tag">Token 与积分</span><span class="need">新用户</span></td><td class="c-qty">新人包（额度见官方页）</td><td class="c-when"><span class="dot"></span><span class="w-l">12/31（还有 65 天）</span><span class="w-s">还有 65 天</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">江苏省 词元券 / 语料券 / 模型券</span><span class="tag">算力券与地方补贴</span><span class="need">企业 / 高校院所 / OPC</span></td><td class="c-qty">词元券上限 500 万元、语料券 100 万元</td><td class="c-when"><span class="dot"></span><span class="w-l">政策有效期至 2027-06-30（还有 246 天）</span><span class="w-s">还有 246 天</span></td></tr>
+</tbody></table>
+
+<h2>长期有效 / 未公布截止日 <span class="cnt">按类型分组</span>
+  <span class="sub">这些不会「过两天就没了」，但额度随时可能调整 —— 拿之前扫一眼右边的说明。</span>
+</h2>
+<h3 class="gh">Token 与积分<span class="gd">登录或注册就能领的额度</span><span class="gc">7 条</span></h3>
+<table class="qt"><thead><tr><th>给什么</th><th>能拿多少</th><th>到什么时候</th></tr></thead><tbody>
+<tr data-t="live"><td class="c-name"><span class="nm">AutoClaw 2.2.0 升级礼</span><span class="need">升级客户端</span></td><td class="c-qty">5,000 积分（≈5,000 万 tokens）</td><td class="c-when"><span class="dot"></span><span class="w-l">领到后 7 天内有效</span><span class="w-s">领到后 7 天内有效</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">腾讯 WorkBuddy 教师积分普惠</span><span class="need">全国教师</span></td><td class="c-qty">每月 2,000 积分 × 连续 12 个月</td><td class="c-when"><span class="dot"></span><span class="w-l">长期（无申请截止）</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">杭州 Token 卡</span><span class="need">35 家市级大创园现场</span></td><td class="c-qty">约 500 元 / 10,000 积分</td><td class="c-when"><span class="dot"></span><span class="w-l">发完即止</span><span class="w-s">发完即止</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">富国基金 × 智谱清言</span><span class="need">券商渠道发放</span></td><td class="c-qty">VIP 月卡 + 积分</td><td class="c-when"><span class="dot"></span><span class="w-l">名额有限、抢完即止</span><span class="w-s">名额有限、抢完即止</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">xAI Grok 新号额度</span><span class="need">新号，需先领取才起算</span></td><td class="c-qty">$25</td><td class="c-when"><span class="dot"></span><span class="w-l">领取后 30 天</span><span class="w-s">领取后 30 天</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">TypeSafe AI Jev</span><span class="need">注册，免绑卡</span></td><td class="c-qty">注册送 $5（≈1.19 亿输入 token）</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Muse 邀请码</span><span class="need">持邀请码</span></td><td class="c-qty">10 亿 tokens / 码，最多 20 人</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布</span><span class="w-s">未公布</span></td></tr>
+</tbody></table>
+<h3 class="gh">模型 API 免费档<span class="gd">能直接调用的免费模型与免费额度</span><span class="gc">27 条</span></h3>
+<table class="qt"><thead><tr><th>给什么</th><th>能拿多少</th><th>到什么时候</th></tr></thead><tbody>
+<tr data-t="live"><td class="c-name"><span class="nm">OpenRouter 免费档</span><span class="need">注册，看 :free 后缀</span></td><td class="c-qty">全量 463 个模型中 20 个零价 / 17 个 :free</td><td class="c-when"><span class="dot"></span><span class="w-l">长期（动态目录）</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">OpenRouter recursive/flint-v1.0:free</span><span class="need">注册</span></td><td class="c-qty">免费，262K 上下文</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">OpenCode GLM-5.3-Flash Free</span><span class="need">仅限平台内，不是通用 API</span></td><td class="c-qty">免费，200K 上下文</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布（官方口径 limited time）</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">OpenCode DeepSeek V4.1 Flash Free</span><span class="need">仅限平台内</span></td><td class="c-qty">免费，200K 上下文</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">OpenCode 免费模型清单</span><span class="need">仅限平台内</span></td><td class="c-qty">11 项（2026-10-24 实读）</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布（清单动态变动）</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">GMI Cloud 免费档</span><span class="need">GMI API Key</span></td><td class="c-qty">Qwen3.8-Max / Flash、Wan3.0 全免费</td><td class="c-when"><span class="dot"></span><span class="w-l">本次再延 7 天（滚动续期）</span><span class="w-s">本次再延 7 天</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">NVIDIA Nemotron 3.5 Lightning</span><span class="need">注册</span></td><td class="c-qty">免费端点</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">OVHcloud AI Endpoints</span><span class="need">匿名档仅 2 RPM</span></td><td class="c-qty">免费档</td><td class="c-when"><span class="dot"></span><span class="w-l">长期</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">LLM7.io</span><span class="need">匿名即可用</span></td><td class="c-qty">匿名 10 RPM / 注册后 120 RPM</td><td class="c-when"><span class="dot"></span><span class="w-l">长期</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Tokenator</span><span class="need">按 key、按模型分别计数</span></td><td class="c-qty">每日 3M tokens + 50 请求</td><td class="c-when"><span class="dot"></span><span class="w-l">每日 00:00 UTC 重置</span><span class="w-s">每日 00:00 UTC</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">UnoRouter</span><span class="need">免绑卡</span></td><td class="c-qty">56–58 个免费模型（目录页与正文计数不一致）</td><td class="c-when"><span class="dot"></span><span class="w-l">长期（动态目录）</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Vercel AI Gateway</span><span class="need">需绑卡</span></td><td class="c-qty">2 个免费模型</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布（限免结束日不给）</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Ollama Cloud</span><span class="need">注册</span></td><td class="c-qty">deepseek-v4-pro / flash 免费</td><td class="c-when"><span class="dot"></span><span class="w-l">长期</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Freebuff 免费编码 agent</span><span class="need">注册，非支持地区限量</span></td><td class="c-qty">每天 150 Freebucks ≈ 10 小时 DeepSeek V4.1 Flash</td><td class="c-when"><span class="dot"></span><span class="w-l">长期（ongoing）</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Kilo Code 免费网关</span><span class="need">约 200 req/hr，路由不透明</span></td><td class="c-qty">10 个免费编码模型</td><td class="c-when"><span class="dot"></span><span class="w-l">长期</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">HAL-X AI THX-01</span><span class="need">免注册、免付费</span></td><td class="c-qty">免密钥免费 API（322M 决策模型）</td><td class="c-when"><span class="dot"></span><span class="w-l">长期</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Inception Mercury Decide</span><span class="need">OpenRouter 端点</span></td><td class="c-qty">输出 token 免费，每秒最多 14 次决策</td><td class="c-when"><span class="dot"></span><span class="w-l">长期</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Perplexity pplx-decider-v1-27b</span><span class="need">自托管需约 49GB 显存</span></td><td class="c-qty">API 输入 $0.04/M、输出免费；权重 Apache-2.0</td><td class="c-when"><span class="dot"></span><span class="w-l">长期</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Cloudflare Clef / Clef-flash</span><span class="need">可自托管</span></td><td class="c-qty">免费权重；Workers AI 侧输出不计费</td><td class="c-when"><span class="dot"></span><span class="w-l">权重永久</span><span class="w-s">权重永久</span></td></tr>
+<tr data-t="plan"><td class="c-name"><span class="nm">中国电信 Xing4.0-29B-A4B</span><span class="need">走 :free 后缀</span></td><td class="c-qty">OpenRouter 免费档，262K 上下文</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布（限免结束日不给）</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">商汤 日日新 Token Plan</span><span class="need">注册</span></td><td class="c-qty">公测期完全免费（积分制，Free 档 0 元/月）</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布（官方称后续可能调整）</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">阶跃 Step 5 Preview 渠道免费周</span><span class="need">走对应渠道</span></td><td class="c-qty">免费（OpenRouter / OpenCode / Cline / Kilocode / Nous）</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布（各渠道期限不一致）</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="plan"><td class="c-name"><span class="nm">阶跃 Step 5 Preview 新用户套餐</span><span class="need">已领用户剩余权益以账户为准</span></td><td class="c-qty">已关闭新增领取通道</td><td class="c-when"><span class="dot"></span><span class="w-l">—</span><span class="w-s">—</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">阶跃 Step 5 Preview 线下体验</span><span class="need">到 AGI Bar 连 WiFi 配 Key</span></td><td class="c-qty">店内一周免费</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布（店内口径约一周）</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">GLM-5.3-FlashX 试用</span><span class="need">申请</span></td><td class="c-qty">两周试用（配额消耗 2.5 倍于普通 Flash）</td><td class="c-when"><span class="dot"></span><span class="w-l">申请通过后起算</span><span class="w-s">申请通过后起算</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Nous Research MISSINGNO</span><span class="need">Hermes Portal 目录</span></td><td class="c-qty">$0.00 / 百万 token，限时免费</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">xAI The X Subscription 免费档</span><span class="need">$0 免费档</span></td><td class="c-qty">$0/月：每日 Grok 访问 + Cursor 起步额度（两者共用按周刷新的池）</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布（按周刷新）</span><span class="w-s">未公布</span></td></tr>
+</tbody></table>
+<h3 class="gh">云资源与工具<span class="gd">服务器、部署额度、工具授权</span><span class="gc">2 条</span></h3>
+<table class="qt"><thead><tr><th>给什么</th><th>能拿多少</th><th>到什么时候</th></tr></thead><tbody>
+<tr data-t="live"><td class="c-name"><span class="nm">Talorys 自托管 agent</span><span class="need">自部署到自己的账号</span></td><td class="c-qty">MIT，整套跑在 Cloudflare 免费层</td><td class="c-when"><span class="dot"></span><span class="w-l">长期</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Odyssey Odyssey-3</span><span class="need">网页 demo</span></td><td class="c-qty">免费公开研究预览（14B 世界模型）</td><td class="c-when"><span class="dot"></span><span class="w-l">研究预览期免费；API 需申请</span><span class="w-s">研究预览期免费；API </span></td></tr>
+</tbody></table>
+<h3 class="gh">算力券与地方补贴<span class="gd">企业向，多数要申报</span><span class="gc">2 条</span></h3>
+<table class="qt"><thead><tr><th>给什么</th><th>能拿多少</th><th>到什么时候</th></tr></thead><tbody>
+<tr data-t="live"><td class="c-name"><span class="nm">四川省 算力券 / 词元券</span><span class="need">企业</span></td><td class="c-qty">最高补 20%、上限 100 万元（OPC 可到 40%）</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布</span><span class="w-s">未公布</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">辽宁省 算力券</span><span class="need">年算力采购需达 25 万元以上</span></td><td class="c-qty">最高补 30%、年度上限 200 万元</td><td class="c-when"><span class="dot"></span><span class="w-l">未公布</span><span class="w-s">未公布</span></td></tr>
+</tbody></table>
+<h3 class="gh">学生与教育<span class="gd">在校师生专属</span><span class="gc">1 条</span></h3>
+<table class="qt"><thead><tr><th>给什么</th><th>能拿多少</th><th>到什么时候</th></tr></thead><tbody>
+<tr data-t="live"><td class="c-name"><span class="nm">OpenAI 学生 $100 Codex 额度</span><span class="need">美加学籍，学校邮箱验证</span></td><td class="c-qty">$100 credits，限 Codex 使用</td><td class="c-when"><span class="dot"></span><span class="w-l">领取后 12 个月</span><span class="w-s">领取后 12 个月</span></td></tr>
+</tbody></table>
+<h3 class="gh">开源与长期权益<span class="gd">没有截止日、长期有效</span><span class="gc">3 条</span></h3>
+<table class="qt"><thead><tr><th>给什么</th><th>能拿多少</th><th>到什么时候</th></tr></thead><tbody>
+<tr data-t="live"><td class="c-name"><span class="nm">Anthropic OSS Scanner</span><span class="need">开源项目 opt-in</span></td><td class="c-qty">免费漏洞扫描；合格维护者另送 Claude Max 20x</td><td class="c-when"><span class="dot"></span><span class="w-l">长期</span><span class="w-s">长期</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">OpenAI PHP 版本检查 Codex skill</span><span class="need">GitHub 直接取</span></td><td class="c-qty">开源免费（Apache-2.0）</td><td class="c-when"><span class="dot"></span><span class="w-l">无结束日</span><span class="w-s">无结束日</span></td></tr>
+<tr data-t="live"><td class="c-name"><span class="nm">Anthropic Claude Max / Team 月度 API 额度</span><span class="need">需在计划内满 7 天</span></td><td class="c-qty">Max 5x $100/月、Max 20x $200/月、Team 池化上限 $500/月</td><td class="c-when"><span class="dot"></span><span class="w-l">按月发放，当月未用作废</span><span class="w-s">按月发放，当月未用作废</span></td></tr>
+</tbody></table>
+
+<details class="fold"><summary>已结束的 6 条<span class="fd">留着做对照，点开看看哪些是刚关掉的</span></summary>
+<table class="qt"><thead><tr><th>给什么</th><th>能拿多少</th><th>到什么时候</th></tr></thead><tbody>
+<tr data-t="over"><td class="c-name"><span class="nm">AutoClaw 桌面端 v2.1.0 一次性档</span><span class="tag">已结束</span><span class="need">—</span></td><td class="c-qty">2 亿 Tokens（20,000 积分）</td><td class="c-when"><span class="dot"></span><span class="w-l">10/21 可领窗口关闭</span><span class="w-s">10/21 可领窗口关闭</span></td></tr>
+<tr data-t="over"><td class="c-name"><span class="nm">OpenRouter MiniMax M3.1 Flash (free)</span><span class="tag">已结束</span><span class="need">—</span></td><td class="c-qty">免费档</td><td class="c-when"><span class="dot"></span><span class="w-l">10/22 结束</span><span class="w-s">10/22 结束</span></td></tr>
+<tr data-t="over"><td class="c-name"><span class="nm">OpenCode MiniMax M3.1 Flash Free</span><span class="tag">已结束</span><span class="need">—</span></td><td class="c-qty">免费模型</td><td class="c-when"><span class="dot"></span><span class="w-l">10/22 前后下架</span><span class="w-s">10/22 前后下架</span></td></tr>
+<tr data-t="over"><td class="c-name"><span class="nm">腾讯 WorkBuddy DeepSeek 故障补偿</span><span class="tag">已结束</span><span class="need">—</span></td><td class="c-qty">500 积分</td><td class="c-when"><span class="dot"></span><span class="w-l">10/22 24:00</span><span class="w-s">10/22 24:00</span></td></tr>
+<tr data-t="over"><td class="c-name"><span class="nm">上海青浦 算力券补贴</span><span class="tag">已结束</span><span class="need">—</span></td><td class="c-qty">算力券（金额见原文）</td><td class="c-when"><span class="dot"></span><span class="w-l">申报至 10/23</span><span class="w-s">申报至 10/23</span></td></tr>
+<tr data-t="over"><td class="c-name"><span class="nm">ZCode / BigModel 新用户试用</span><span class="tag">已结束</span><span class="need">—</span></td><td class="c-qty">—</td><td class="c-when"><span class="dot"></span><span class="w-l">域名已易主，登记项失效</span><span class="w-s">域名已易主，登记项失效</span></td></tr>
+</tbody></table>
+</details>
+
+<footer>
+  <p><b>怎么读这本速查：</b>「能拿多少」一律写官方口径的数字，没写的写「见官方页」或「未公布」，不做估算、不把估算写成确定值。
+     同一家的两笔额度分开列（例如 AutoClaw 的周福利与升级礼），不能相加 —— 计量单位或领取条件不同的额度互换没有意义。</p>
+  <p><b>数字会变。</b>本页基准日 <b>2026-10-27</b>，共 61 条。厂商随时可能降档、提前收口或不公布结束日；
+     看到「未公布」的，按「随时会关」处理，别拿它排长期计划。</p>
+  <p><b>要追证：</b>每一条的原始出处、核对时点、口径变更与避坑记录，都在完整版日报里。
+     <a href="index.html">完整版与历史各期 &#8594;</a></p>
+  <p class="back">AI 免费内容与权益速递 · 免费速查</p>
+</footer>
+
+</div>
+</body>
+</html>

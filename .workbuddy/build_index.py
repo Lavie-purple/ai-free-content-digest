@@ -90,6 +90,15 @@ def main():
     L.append("共 **%d 期**（%s ~ %s），Markdown 合计 **%d B ≈ %.0f KB**。"
              % (len(rows), rows[0][1] if rows else "—", rows[-1][1] if rows else "—", tot, tot / 1024.0))
     L.append("")
+    # 免费速查（047 期结构改造后新增）：条数直接数 CSV，不手写
+    _qp = os.path.join(WS, ".workbuddy", "data", "quick_items.csv")
+    if os.path.exists(_qp):
+        _qn = max(sum(1 for _ in io.open(_qp, encoding="utf-8-sig")) - 1, 0)
+        L.append("只想看「现在有什么免费、到什么时候结束」的："
+                 "**[《免费速查》](quick.html)** —— **%d 条**，一条一行，"
+                 "只写给什么 / 能拿多少 / 到期日 / 门槛。" % _qn)
+        L.append("")
+
     # 常驻权益总账（047 期起）：条数直接数文件，不手写
     _lp = os.path.join(WS, "常驻权益总账.md")
     if os.path.exists(_lp):

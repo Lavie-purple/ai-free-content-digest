@@ -7,6 +7,7 @@
 ## 展示规则（2026-09-16）
 - **`AI信息源分级清单-T0-T4.md` 不对外展示**（内部台账，只用于路由与去重），照旧就地维护。
 - 每次出刊**只 `present_files` 那一份日报**；**只有用户明确要求才展示台账**。
+- **用户问「最简版 / 只看免费」时给 `quick.html`**（不是日报）：那条线只答四个字段，别拿日报顶。
 
 ## 出刊约定（全文见附卷 §十·22）
 - **增量 + 纠错**，不重复往期已固化内容（先跑 `check_frozen.py`，🔴 高危 exit 1）。
@@ -69,6 +70,9 @@
    → **再跑 `prune_table.py --md <本期md> --today <基准日> --issue NNN`**（移出过期 >7 天已收口行并归档；
    **必须在 `build_web` 之前，且移出后要重跑 `extract_deadlines.py` + `check_deadlines.py`，脚注数字随新读数重写**）
 5. `build_web.py` → `verify_web.py`（**必须 ALL GREEN**）
+5b. **`build_quick.py --check`** → 补齐 `.workbuddy/data/quick_items.csv` → **`build_quick.py`**
+   （《免费速查》页。`--check` 用 2-gram 相似度比对 `deadlines.csv`，报出「额度类但没进速查表」的条目；
+   **新增的免费额度条目必须逐条补进去，量要写到具体数字，不许写「见官方页」蒙过去**）
 6. `build_source_hits.py` → `build_index.py` → `build_index_web.py` → `check_site_freshness.py`（后两个每期必跑）
 7. git commit + push → **核实 sha** → 带 `?t=<ts>` 抓线上页**逐字节比对**
    （Pages 延迟 1–2 分钟；构建 API 无 token 返 404，逐字节比对可替代且更强）
