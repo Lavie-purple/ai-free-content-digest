@@ -29,7 +29,14 @@
 - **第四章截止表一律脚本生成**（`gen_tableNNN.py` + `inject0NN.py`），**`<<<TABLE4>>>` 占位符必须为 0**；
   **换挡日不写可被解析的实日期**。
 - **第四章脚注固定四段**：① 三态分布 ② A/B/C/D/E 实跑 ②-补 双口径三态 ③ 逐行 diff + 强制动作；
-  **⚪ 与 C 差 1 是正确口径**；**两套口径数字必须从 `deadlines.csv` 实跑**。
+  **⚪ 与 C 的差额不是常数**（046 差 1 / 047 修订前差 3 / 修订后差 2）→ **必须逐条归因，不许写成「差 N 是正确口径」**；
+  **两套口径数字必须从 `deadlines.csv` 实跑**。
+- **第四章保留规则（047 期修订起 · 用户 2026-10-27 要求「过期太久要及时剔除」）**：
+  **表体只留四类** —— ① 截止日不可解析的长期档（例外）② 未过期 ③ 已过期但未收口（状态非 ⚪：`crit` 必办 / `live` 仍写生效中）
+  ④ 过期 ≤7 天；**过期 >7 天且已收口（⚪）的整行移出表体**，原文逐行归档到 `data/deadline_archive.md`（不截断/不改写/不删）。
+  **固定步骤 `prune_table.py`**，接在 `gen_table` + `inject` 之后、`build_web` 之前；宽限期是参数（`--grace`，默认 7）。
+  **移出 = 换位置不是删除**：表体 + 归档 = 全部历史；**移出前后必须对账**（⚪ 与 `over` 应同步减同一个数，否则说明误伤了亮色行）。
+  **口径一变，与往期一律不可相减**，只报本期读数（047：239 → 185，−8.6% 字数）。
 - **同仓库两种行尾**：`data/` CRLF、`memory/` LF。
 
 ## 内容口径纪律（030–045 期 · 全文见附卷 §十·25）
@@ -45,6 +52,8 @@
 2. `check_frozen.py`（🔴 高危 exit 1；**高危可能只是措辞触发，改措辞不改守卫**）
 3. `extract_deadlines.py` → `check_deadlines.py --today YYYY-MM-DD`
 4. 写 md（增量 + 纠错）；第四章用 `gen_tableNNN.py` + `inject0NN.py` 注入
+   → **再跑 `prune_table.py --md <本期md> --today <基准日> --issue NNN`**（移出过期 >7 天已收口行并归档；
+   **必须在 `build_web` 之前，且移出后要重跑 `extract_deadlines.py` + `check_deadlines.py`，脚注数字随新读数重写**）
 5. `build_web.py` → `verify_web.py`（**必须 ALL GREEN**）
 6. `build_source_hits.py` → `build_index.py` → `build_index_web.py` → `check_site_freshness.py`（后两个每期必跑）
 7. git commit + push → **核实 sha** → 带 `?t=<ts>` 抓线上页**逐字节比对**
