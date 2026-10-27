@@ -4,6 +4,7 @@
 .workbuddy/tmp_*
 .workbuddy/tmp0*/
 tmp_live*/
+tmp_live_net_*.html
 .workbuddy/*.tmp
 *tmp_verify_*
 
