@@ -75,12 +75,18 @@ def main():
     lines = md.split("\n")
 
     st = en = None
+    # 048 期修：第四章自 047 期起移到九章之后（文末），「`## 四、` → `## 五、`」的边界假设失效。
+    # 改成与 split_ledger.find_section 一致：`## 四、` → 下一个 `## ` 行，或文末。
     for i, l in enumerate(lines):
         if l.startswith("## 四、"):
             st = i
-        elif st is not None and l.startswith("## 五、"):
-            en = i
             break
+    if st is not None:
+        en = len(lines)
+        for j in range(st + 1, len(lines)):
+            if lines[j].startswith("## "):
+                en = j
+                break
     assert st is not None and en is not None, "找不到第四章边界"
 
     idx_body = []          # 表体行的行号

@@ -142,7 +142,12 @@ def main():
 
     # ---- 重建第四章 ----
     if move:
-        if "（" in title:
+        # 048 期修：原实现是 `title.replace("（", "（正文之后 · ", 1)` —— **不幂等**，
+        # 同一期重复跑 split_ledger 会叠加成「（正文之后 · 正文之后 · …）」。
+        # 改成「标题里已经有『正文之后』就不再加」。
+        if "正文之后" in title:
+            title_new = title
+        elif "（" in title:
             title_new = title.replace("（", "（正文之后 · ", 1)
         else:
             title_new = title
