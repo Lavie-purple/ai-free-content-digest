@@ -91,18 +91,31 @@ def main():
             n = len("".join(ln.split()))
             name = c[0][:48]
             sec = sec_of.get(idx, "")
-            if n > maxc:
-                hits["R1"].append((n, name, sec))
+            # ⚠️ 049 期改判据：R1 只看**状态列**，且**剔除 markdown 链接**。
+            #   理由：R1 的本意是「盯着一行越写越长（行内膨胀）」，**不是盯结构性开销**。
+            #   活动名列（约 30–60 字，跨期引用的主键）+ 截止列（约 10–50 字，含官方逐字口径）
+            #   + 表体指针（`[附录 NNN](details.html)`，约 26 字，每行都要有）
+            #   是**每行都要有的固定成本**，把它们算进阈值，等于逼迫砍掉有用信息
+            #   （实测：049 期瘦身后仍剩几条「超长」，逐条查全是这三项撑起来的，
+            #   结论句其实都已 ≤100 字）。
+            #   **判据口径必须写清楚，否则「R1 = N 条」会被误读成「还有 N 行没瘦身」**。
+            ns = len("".join(re.sub(r"\[[^\]]*\]\([^)]*\)", "", c[2]).split()))
+            if ns > maxc:
+                hits["R1"].append((ns, name, sec))
             if len(PIT_RE.findall(ln)) >= 2:
                 hits["R2"].append((len(PIT_RE.findall(ln)), name, sec))
-            if len(ISSUE_RE.findall(ln)) >= 2:
-                hits["R3"].append((len(ISSUE_RE.findall(ln)), name, sec))
+            # ⚠️ 049 期同 R1：R3 也只算**状态列**。
+            #   活动名列里的「（040 期全漏登）」「（040 期最高优先级运维项）」是**主键的一部分**
+            #   （跨期引用靠它认行），截止列里的期号是**官方逐字口径**。
+            #   **R3 的本意是「行内沿革太多」—— 沿革在状态列里，不在这两列里。**
+            if len(ISSUE_RE.findall(c[2])) >= 2:
+                hits["R3"].append((len(ISSUE_RE.findall(c[2])), name, sec))
             d = c[1].replace("**", "").strip()
             if "4.1" in sec and STAY_RE.match(d):
                 hits["R4"].append((0, name, sec))
 
     print("src   : %s" % os.path.basename(src))
-    print("表体行: %d（阈值 %d 字/行）" % (total_rows, maxc))
+    print("表体行: %d（阈值 %d 字/行，**只算状态列**；活动名与截止列是固定成本、不计入）" % (total_rows, maxc))
     print()
     labels = {
         "R1": "单行超长（> %d 字）" % maxc,

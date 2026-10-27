@@ -1,4 +1,4 @@
-分组,名称,量,截止日,截止说明,状态,门槛
+﻿分组,名称,量,截止日,截止说明,状态,门槛
 token,AutoClaw 国内站 M10W4 周福利,"1 亿 Tokens（=10,000 积分）",2026-11-01,11/1 23:59 失效,live,登录即领，每账号一次
 token,AutoClaw 国际站 M10W4,40M Tokens,2026-11-01,11/1 23:59 失效,live,登录即领
 token,AutoClaw 2.2.0 升级礼,"5,000 积分（≈5,000 万 tokens）",,领到后 7 天内有效,live,升级客户端
@@ -12,7 +12,7 @@ token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
 token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
 token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
 token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
-api,OpenRouter 免费档,全量 463 个模型中 20 个零价 / 17 个 :free,,长期（动态目录）,live,注册，看 :free 后缀
+api,OpenRouter 免费档,全量 463 个模型中 19 个零价 / 16 个 :free（本期 :free 净减 1）,,长期（动态目录）,live,注册，看 :free 后缀；nemotron-3-super-120b-a12b:free 已从目录消失
 api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
 api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
 api,OpenCode DeepSeek V4.1 Flash Free,免费，200K 上下文,,未公布,live,仅限平台内
@@ -60,4 +60,6 @@ over,腾讯 WorkBuddy DeepSeek 故障补偿,500 积分,2026-10-22,10/22 24:00,ov
 over,AutoClaw 桌面端 v2.1.0 一次性档,"2 亿 Tokens（20,000 积分）",2026-10-21,10/21 可领窗口关闭,over,—
 over,上海青浦 算力券补贴,算力券（金额见原文）,2026-10-23,申报至 10/23,over,—
 over,ZCode / BigModel 新用户试用,—,,域名已易主，登记项失效,over,—
-oss,OpenAI Signals v3.0 数据集,"165 类工作活动 · 近 100 国 · 2025 Q1–2026 Q3 季度序列",,无结束日,live,免登录直接下载；CC BY 4.0 须署名或引用
+oss,OpenAI Signals v3.0 数据集,165 类工作活动 · 近 100 国 · 2025 Q1–2026 Q3 季度序列,,无结束日,live,免登录直接下载；CC BY 4.0 须署名或引用
+api,百度智能云 文档解析（Unlimited-OCR）API,限时免费：个人实名 200 页 / 企业实名 1000 页,,官方未给结束日,live,实名认证；免部署，QPS 2/5
+oss,百度 文心 Unlimited OCR 2 开放权重,MIT 许可 · 权重 + 技术报告 + SGLang wheel 全开放,,无结束日（永久开放）,live,本地跑需 A800-80GB 级显存

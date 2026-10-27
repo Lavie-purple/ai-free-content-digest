@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第四章表体明细附录 · 第 001 期</title>
+<meta name="description" content="">
+<meta name="color-scheme" content="light dark">
+<script>
+/* 防闪烁：先定主题，再渲染 */
+(function(){try{
+  var t=localStorage.getItem("aihs-theme");
+  if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";}
+  document.documentElement.setAttribute("data-theme",t);
+}catch(e){}})();
+</script>
+<style>
+/* ============================================================
+   令牌层 —— 报刊纸（亮） / 夜读（暗），单一强调色：朱红
+   ============================================================ */
+:root{
+  --bg:#f2eee5; --bg-2:#eae4d7; --surface:#fbf9f3; --surface-2:#f6f2e8;
+  --ink:#1b1913; --ink-2:#3a362d; --muted:#5f584a; --faint:#736a5a;
+  --rule:rgba(27,25,19,.16); --rule-2:rgba(27,25,19,.34); --rule-strong:rgba(27,25,19,.62);
+  --accent:#bf3327; --accent-ink:#a02a20; --accent-soft:rgba(191,51,39,.10);
+  --crit:#8c1a10; --soon:#8f5e12; --live:#3b6a4d; --plan:#38587a; --over:#6e675c;
+  --hl:#ffe08a; --shadow:0 1px 2px rgba(40,32,20,.10),0 8px 28px rgba(40,32,20,.07);
+  --grain:.05;
+  --fd:"Source Han Serif SC","Noto Serif SC","Songti SC","STSong","SimSun",Georgia,"Times New Roman",serif;
+  --fu:"Source Han Sans SC","PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  --fm:"JetBrains Mono","Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace;
+  --fs-xs:12px; --fs-sm:13.5px; --fs-tbl:14px; --fs-mid:15px;
+  --fs-base:17px; --fs-lg:19px; --fs-xl:23px;
+  --fs-2xl:30px; --fs-3xl:42px; --fs-4xl:clamp(60px,9.8vw,138px);
+  --s1:4px; --s2:8px; --s3:16px; --s4:24px; --s5:40px; --s6:64px; --s7:96px;
+  --r1:3px; --r2:8px; --r3:14px;
+  --ease:cubic-bezier(.16,1,.3,1); --fast:170ms; --base:340ms;
+  /* 顶栏与筛选条的实际高度：抽屉定位、吸顶偏移都要跟它们对齐。
+     初值只是兜底，页面加载后由 JS 量出真值覆盖（字号/换行都会改变高度）。 */
+  --tb-h:57px; --chips-h:47px;
+}
+html[data-theme="dark"]{
+  --bg:#131210; --bg-2:#191713; --surface:#1c1a16; --surface-2:#232019;
+  --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;
+  --rule:rgba(236,231,220,.15); --rule-2:rgba(236,231,220,.3); --rule-strong:rgba(236,231,220,.55);
+  --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.14);
+  --crit:#ff3b30; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#9c9387;
+  --hl:#6b5a12; --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
+  --grain:.045;
+}
+
+/* ============================================================ 基础层 */
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--fu); font-size:var(--fs-base); line-height:1.9;
+  font-feature-settings:"kern" 1;
+  text-rendering:optimizeLegibility;
+  /* 长英文专名 / URL / 模型 ID 在窄屏会把行撑破（320px 实测溢出 4px）。
+     用 break-word 而不是 anywhere：后者会改变 min-content，连带把表格列宽算歪。 */
+  overflow-wrap:break-word;
+}
+body::before{ /* 氛围层：纸面暖光 */
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(70rem 42rem at 8% -12%, var(--accent-soft), transparent 62%),
+    radial-gradient(56rem 40rem at 102% 4%, rgba(56,88,122,.10), transparent 58%);
+}
+.grain{position:fixed; inset:0; pointer-events:none; z-index:1; opacity:var(--grain); mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+html[data-theme="dark"] .grain{mix-blend-mode:screen}
+a{
+  color:inherit; text-decoration:none;
+  background-image:linear-gradient(var(--accent),var(--accent)); background-size:0% 1px;
+  background-repeat:no-repeat; background-position:0 100%;
+  transition:background-size var(--fast) ease-out,color var(--fast) ease-out;
+}
+a:hover{background-size:100% 1px; color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:2px}
+.skip{position:absolute; left:-9999px; top:0; z-index:99; background:var(--surface); padding:12px 18px; border:1px solid var(--rule-2)}
+.skip:focus{left:12px; top:12px}
+code{
+  font-family:var(--fm); font-size:.87em; padding:.1em .38em; border-radius:var(--r1);
+  background:var(--surface-2); border:1px solid var(--rule); color:var(--ink-2);
+}
+
+/* ============================================================ 顶部条 */
+.topbar{
+  position:sticky; top:0; z-index:30;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(10px) saturate(1.1);
+  border-bottom:1px solid var(--rule);
+}
+@supports not (backdrop-filter:blur(1px)){.topbar{background:var(--bg)}}
+.tb-in{
+  max-width:1240px; margin:0 auto; padding:0 var(--s4);
+  display:flex; align-items:center; gap:var(--s3); min-height:56px;
+}
+.tb-brand{font-family:var(--fd); font-weight:700; letter-spacing:.04em; white-space:nowrap; font-size:var(--fs-sm)}
+.tb-brand .tbb-short{display:none}
+.tb-brand b{color:var(--accent-ink); font-family:var(--fm); font-weight:700; margin-left:6px; letter-spacing:0}
+.tb-nav{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; flex:1}
+.tb-nav::-webkit-scrollbar{display:none}
+.tb-nav a{
+  font-size:var(--fs-xs); color:var(--muted); padding:7px 9px; border-radius:var(--r1); white-space:nowrap;
+  background-image:none; transition:color var(--fast),background var(--fast);
+}
+.tb-nav a b{font-family:var(--fm); margin-right:5px; color:var(--faint); font-weight:600}
+.tb-nav a:hover{color:var(--ink); background:var(--surface-2)}
+.tb-nav a.active{color:var(--accent-ink); background:var(--accent-soft)}
+.tb-nav a.active b{color:var(--accent-ink)}
+.tb-nav a.tail{margin-left:6px; padding-left:14px; border-left:1px solid var(--rule-2)}
+.tb-tools{display:flex; align-items:center; gap:var(--s2); margin-left:auto}
+.search{position:relative; display:flex; align-items:center; flex:0 0 auto}
+.search input{
+  font-family:var(--fu); font-size:var(--fs-sm); color:var(--ink);
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:99px;
+  padding:8px 14px 8px 32px; width:220px;
+  transition:width var(--base) var(--ease),border-color var(--fast);
+}
+.search input::placeholder{color:var(--faint)}
+/* 计数与上下条按钮只在「有输入」时占位，空态下把这段内边距还给占位符 */
+.search input:not(:placeholder-shown){padding-right:76px}
+.search input:focus{width:280px; border-color:var(--accent); outline:none}
+.search .si{position:absolute; left:11px; font-size:13px; color:var(--faint); pointer-events:none}
+.search .sc{
+  position:absolute; right:8px; font-family:var(--fm); font-size:11px; color:var(--faint);
+  display:flex; gap:4px; align-items:center; opacity:0; pointer-events:none;
+  transition:opacity var(--fast);
+}
+.search input:not(:placeholder-shown) ~ .sc,
+.search input:focus ~ .sc{opacity:1; pointer-events:auto}
+.search .sc button{
+  border:1px solid var(--rule); background:var(--surface-2); color:var(--ink-2); cursor:pointer;
+  border-radius:var(--r1); font-size:11px; padding:2px 5px; line-height:1.4;
+}
+.search .sc button:hover{border-color:var(--accent); color:var(--accent-ink)}
+.iconbtn{
+  width:38px; height:38px; display:inline-grid; place-items:center; cursor:pointer;
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:99px;
+  color:var(--ink-2); font-size:15px; transition:transform var(--fast),border-color var(--fast),color var(--fast);
+}
+.iconbtn:hover{border-color:var(--accent); color:var(--accent-ink); transform:translateY(-1px)}
+#menuBtn{display:none}
+#searchBtn{display:none}   /* 只在手机端露出来：点开一条全宽搜索栏 */
+.progress{position:fixed; top:0; left:0; height:2px; width:0; background:var(--accent); z-index:31; transition:width 90ms linear}
+
+/* ============================================================ 刊头 */
+.masthead{position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:var(--s6) var(--s4) var(--s4)}
+.mh-top{
+  display:flex; justify-content:space-between; align-items:baseline; gap:var(--s3);
+  font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.14em; color:var(--muted);
+  text-transform:uppercase; padding-bottom:var(--s2); flex-wrap:wrap;
+  /* 窄屏换行时避免把「…增量与纠错口径」拆成只剩一个「径」字的孤行 */
+  text-wrap:pretty;
+}
+.mh-top em{font-style:normal; color:var(--accent-ink)}
+.mh-rule{height:0; border-top:3px solid var(--ink); border-bottom:1px solid var(--ink); padding-top:3px; margin-bottom:var(--s4)}
+h1.mh-t{
+  font-family:var(--fu); font-weight:800; letter-spacing:-.005em;
+  font-size:clamp(34px,5.4vw,62px); line-height:1.06; margin:0 0 var(--s3); text-wrap:balance;
+}
+.mh-sub{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted); letter-spacing:.06em; margin:0 0 var(--s5)}
+.mh-sub b{color:var(--ink-2); font-weight:600}
+.mh-num{
+  position:absolute; right:var(--s4); top:clamp(74px,7.4vw,106px);
+  font-family:var(--fd); font-weight:700; font-size:var(--fs-4xl); line-height:.8;
+  color:transparent; -webkit-text-stroke:1.5px var(--rule);
+  letter-spacing:-.03em; pointer-events:none; user-select:none; z-index:-1;
+}
+@supports not (-webkit-text-stroke:1px #000){.mh-num{color:var(--bg-2)}}
+html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
+.pubnote{
+  border-left:3px solid var(--accent); background:var(--surface); box-shadow:var(--shadow);
+  padding:var(--s3) var(--s4); margin:0 0 var(--s5); border-radius:0 var(--r2) var(--r2) 0;
+}
+.pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
+.pubnote p:last-child{margin-bottom:0}
+
+.vs{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  margin:18px 0 20px; border:1px solid var(--rule); background:var(--surface);
+  box-shadow:var(--shadow);
+}
+.vs-i{
+  display:block; padding:10px 14px; text-decoration:none; color:var(--ink-2);
+  border-right:1px solid var(--rule); transition:background 120ms ease;
+}
+.vs-i:last-child{border-right:0}
+.vs-i:hover{background:var(--surface-2)}
+.vs-k{display:block; font-size:13.5px; font-weight:600; line-height:1.45}
+.vs-k i{font-style:normal; margin-right:5px; opacity:.75}
+.vs-d{display:block; font-size:11.5px; color:var(--faint); line-height:1.5; margin-top:1px}
+.vs-i.is-on{background:var(--ink); color:var(--bg); cursor:default}
+.vs-i.is-on .vs-d{color:var(--bg); opacity:.6}
+.vs-i.is-on .vs-k i{opacity:.85}
+/* 只给「极速」的图标上强调色：整行标红会盖过当前页的实心块，反而让人以为它才是当前页 */
+.vs-quick .vs-k i{color:var(--accent-ink); opacity:1}
+.vs-quick.is-on .vs-k i{color:var(--bg)}
+@media (max-width:640px){
+  /* 窄屏不要三行堆叠：日报页顶已有固定导航条 + 刊头 + 说明框，
+     再来三行切换器会把首屏全占掉。压成单行三格，副标题不出。 */
+  .vs{grid-template-columns:repeat(3,1fr); margin-top:14px}
+  .vs-i{
+    padding:9px 6px; text-align:center;
+    border-right:1px solid var(--rule); border-bottom:0;
+  }
+  .vs-i:last-child{border-right:0}
+  .vs-k{font-size:12px; line-height:1.3}
+  .vs-k i{margin-right:3px}
+  .vs-d{display:none}
+}
+@media print{.vs{display:none !important}}
+
+.summary-note{}
+
+/* ============================================================ 主栅格 */
+.shell{
+  position:relative; z-index:2; max-width:1240px; margin:0 auto;
+  padding:0 var(--s4) var(--s7); display:grid; grid-template-columns:196px minmax(0,1fr); gap:var(--s6);
+}
+.rail{position:sticky; top:78px; align-self:start; max-height:calc(100vh - 110px); overflow:auto; padding-bottom:var(--s4)}
+.drawerwrap{min-width:0}
+.rail-t{
+  font-family:var(--fm); font-size:10.5px; letter-spacing:.18em; color:var(--faint);
+  text-transform:uppercase; padding-bottom:var(--s2); margin-bottom:var(--s2); border-bottom:1px solid var(--rule);
+}
+.toc-a{
+  display:grid; grid-template-columns:26px 1fr; gap:6px; align-items:baseline;
+  font-size:var(--fs-sm); color:var(--muted); padding:7px 0 7px 8px; border-left:2px solid transparent;
+  background-image:none; line-height:1.45;
+}
+.toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+.toc-a:hover{color:var(--ink); border-left-color:var(--rule-2)}
+.toc-a.active{color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft)}
+.toc-a.active .toc-n{color:var(--accent-ink)}
+
+main{min-width:0}
+.sec{scroll-margin-top:76px; padding-top:var(--s5)}
+.sec h2{
+  font-family:var(--fu); font-weight:800; font-size:var(--fs-2xl); line-height:1.24;
+  margin:0 0 var(--s4); display:flex; align-items:baseline; gap:var(--s3);
+  padding-bottom:var(--s3); border-bottom:2px solid var(--ink); flex-wrap:wrap;
+}
+.sn{font-family:var(--fm); font-size:var(--fs-sm); color:var(--accent-ink); letter-spacing:.08em; font-weight:700}
+.h2sub{font-family:var(--fu); font-size:var(--fs-sm); font-weight:400; color:var(--muted); letter-spacing:.04em}
+h3{
+  font-family:var(--fu); font-weight:700; font-size:var(--fs-lg); line-height:1.5;
+  margin:var(--s5) 0 var(--s3); text-wrap:balance;
+}
+.h3n{
+  font-family:var(--fm); font-size:var(--fs-sm); color:var(--surface); background:var(--ink);
+  padding:1px 7px; border-radius:var(--r1); margin-right:9px; vertical-align:2px;
+}
+main p{margin:0 0 var(--s3); font-family:var(--fd); font-size:var(--fs-base); line-height:1.92; color:var(--ink-2)}
+main p:last-child{margin-bottom:0}
+main strong{font-weight:700; color:var(--ink)}
+.sec>p{margin-bottom:var(--s4)}
+
+/* 摘要区：要点卡片 */
+.summary .ul{list-style:none; margin:0 0 var(--s4); padding:0; display:grid; gap:var(--s2)}
+.summary .ul li{
+  position:relative; background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2);
+  padding:var(--s3) var(--s4) var(--s3) 58px; font-family:var(--fu); font-size:15.5px; line-height:1.8;
+  color:var(--ink-2); box-shadow:var(--shadow);
+  transition:transform var(--base) var(--ease),border-color var(--fast);
+}
+.summary .ul li:hover{transform:translateX(4px); border-color:var(--rule-2)}
+.summary .ul li::before{
+  counter-increment:sum;
+  content:"0" counter(sum);
+  position:absolute; left:var(--s3); top:var(--s3);
+  font-family:var(--fm); font-size:20px; font-weight:700; color:var(--accent); line-height:1.1;
+  white-space:nowrap;   /* 窄屏下「01」会被折成上下两个数字，竖排数字看着像排版事故 */
+}
+.summary .ul{counter-reset:sum}
+
+/* 列表 */
+.ul{margin:0 0 var(--s4); padding-left:0; list-style:none}
+.ul li{position:relative; padding-left:22px; margin-bottom:var(--s2); font-family:var(--fd); line-height:1.9; color:var(--ink-2)}
+.ul li::before{content:""; position:absolute; left:4px; top:.82em; width:7px; height:1.5px; background:var(--accent)}
+.ol{list-style:none; margin:0 0 var(--s4); padding:0; display:grid; gap:var(--s3)}
+.ol li{display:grid; grid-template-columns:34px 1fr; gap:var(--s3); align-items:start; font-family:var(--fd); line-height:1.9; color:var(--ink-2)}
+.lin{font-family:var(--fm); font-weight:700; color:var(--accent); font-size:var(--fs-sm); padding-top:.42em; letter-spacing:.02em}
+.ol.big li{
+  background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4); box-shadow:var(--shadow);
+}
+.ol.big .lin{font-size:22px; color:var(--accent); padding-top:.1em; line-height:1.1}
+ol.ol:not(.big) li{margin-bottom:0}
+
+/* 引用块（编者按 / 读法 / 免责声明） */
+.bq{
+  margin:0 0 var(--s4); padding:var(--s3) var(--s4);
+  border-left:2px solid var(--rule-strong); background:var(--surface-2);
+  border-radius:0 var(--r2) var(--r2) 0;
+}
+.bq p{
+  margin:0 0 8px; font-family:var(--fd); font-size:15.5px; line-height:1.85; color:var(--muted);
+}
+.bq p:last-child{margin-bottom:0}
+.bq p::before{content:"“"; color:var(--accent); font-family:var(--fd); font-size:1.5em; line-height:0; vertical-align:-.18em; margin-right:.12em}
+.bq p::after{content:"”"; color:var(--accent); font-family:var(--fd); font-size:1.5em; line-height:0; vertical-align:-.18em; margin-left:.12em}
+.bq strong{color:var(--ink-2)}
+
+/* 引用块 */
+blockquote{margin:0}
+
+/* 表格 */
+.tblwrap{position:relative; margin:0 0 var(--s5)}
+.tblwrap.scrolly{max-height:74vh; overflow:auto; border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface); box-shadow:var(--shadow)}
+.tbl{
+  width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
+  background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
+}
+.tblwrap.scrolly .tbl{border:0; border-radius:0}
+.tbl thead th{
+  position:sticky; top:0; z-index:2; text-align:left; vertical-align:bottom;
+  font-family:var(--fm); font-size:11.5px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; padding:12px var(--s3);
+  background:var(--surface-2); border-bottom:1.5px solid var(--rule-strong); white-space:nowrap;
+}
+.tbl tbody td{padding:11px var(--s3); border-bottom:1px solid var(--rule); vertical-align:top; color:var(--ink-2)}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl tbody tr{transition:background var(--fast)}
+.tbl tbody tr:hover{background:var(--surface-2)}
+.tbl td:first-child{color:var(--ink); font-weight:600}
+/* 首列条目名被压到逐字换行时，给一个按内容算出的下限（由编译器写入 --w1） */
+.tbl.w1 tbody td:first-child{min-width:var(--w1,120px); overflow-wrap:break-word}
+.tbl code{background:transparent; border-color:var(--rule); padding:.05em .3em}
+.tbl strong{color:var(--ink)}
+.tbl tr[hidden]{display:none}
+
+/* 截止时间表：状态色条 + 筛选 */
+.ledger{border-left:3px solid transparent}
+/* 固定列宽：状态列原先 nowrap 会把该列 min-content 撑到整句宽（实测 779px），
+   把「活动」列榨到 126px 逐字换行。改为固定布局 + 状态列允许换行。 */
+.tbl.ledger{table-layout:fixed}
+.tbl.ledger th[data-col="date"]{width:76px}
+.tbl.ledger th[data-col="st"]{width:190px}
+.ledger tbody tr{box-shadow:inset 3px 0 0 var(--rule-2)}
+.ledger tbody tr[data-st="crit"]{box-shadow:inset 3px 0 0 var(--crit)}
+.ledger tbody tr[data-st="soon"]{box-shadow:inset 3px 0 0 var(--soon)}
+.ledger tbody tr[data-st="live"]{box-shadow:inset 3px 0 0 var(--live)}
+.ledger tbody tr[data-st="warn"]{box-shadow:inset 3px 0 0 var(--plan)}
+.ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over)}
+.ledger tbody tr[data-st="over"] td{color:var(--muted)}
+.ledger td[data-col="st"]{white-space:normal; overflow-wrap:anywhere}
+.st{
+  display:inline-block; width:9px; height:9px; border-radius:99px; margin-right:8px; vertical-align:1px;
+  background:var(--rule-2);
+}
+.st-crit{background:var(--crit)} .st-soon{background:var(--soon)} .st-live{background:var(--live)}
+.st-warn{background:var(--plan)} .st-over{background:var(--over)}
+.st-txt{font-weight:600}
+tr[data-st="crit"] .st-txt{color:var(--crit)}
+tr[data-st="soon"] .st-txt{color:var(--soon)}
+tr[data-st="live"] .st-txt{color:var(--live)}
+tr[data-st="warn"] .st-txt{color:var(--plan)}
+tr[data-st="over"] .st-txt{color:var(--over)}
+/* 长状态格：默认收 4 行，点一下展开全文。文字一个字都不删，只是不默认铺开。 */
+.st-txt.cbody.clamp{
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical;
+  overflow:hidden; cursor:pointer; border-radius:4px;
+}
+.st-txt.cbody.clamp:hover{background:var(--surface-2)}
+.st-txt.cbody.clamp:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media print{ .st-txt.cbody.clamp{display:block; overflow:visible} }
+.chips{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:10px var(--s3);
+  background:var(--surface-2); border-bottom:1.5px solid var(--rule-strong); position:sticky; top:0; z-index:3}
+/* 截止表待在可滚动容器里，容器顶部已经被 chips 占住——表头要吸在它下方，
+   否则两者都 top:0、chips 的 z-index 更高，表头第一行会被整个盖住。 */
+.tblwrap.scrolly .tbl thead th{top:var(--chips-h)}
+.chips-label{font-family:var(--fm); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin-right:4px}
+.chip{
+  font-family:var(--fu); font-size:12.5px; color:var(--ink-2); cursor:pointer;
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:99px;
+  padding:4px 11px; display:inline-flex; align-items:center; gap:6px; transition:all var(--fast) ease-out;
+}
+.chip b{font-family:var(--fm); font-size:10.5px; color:var(--faint); font-weight:600}
+.chip:hover{border-color:var(--accent); color:var(--accent-ink)}
+.chip.on{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.chip.on b{color:var(--bg); opacity:.7}
+.chips-count{margin-left:auto; font-family:var(--fm); font-size:11px; color:var(--faint)}
+.scrollhint{display:none; font-family:var(--fm); font-size:11px; color:var(--faint); text-align:right; margin:6px 0 0}
+
+/* 页脚 */
+.foot{
+  position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:var(--s5) var(--s4) var(--s6);
+  border-top:2px solid var(--ink); font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+}
+.foot .fr{display:flex; justify-content:space-between; gap:var(--s3); flex-wrap:wrap; padding-bottom:var(--s2);
+  border-bottom:1px solid var(--rule); margin-bottom:var(--s3); font-family:var(--fm); font-size:11px; letter-spacing:.1em; text-transform:uppercase}
+.foot p{margin:0 0 8px; line-height:1.8}
+.foot strong{color:var(--ink-2)}
+
+/* 悬浮控件 */
+.fab{position:fixed; right:18px; bottom:18px; z-index:32; display:flex; flex-direction:column; gap:8px; opacity:.72; transition:opacity var(--fast)}
+.fab:hover,.fab:focus-within{opacity:1}
+@media (hover:none){.fab{opacity:1}}
+.fab .iconbtn{width:44px; height:44px; box-shadow:var(--shadow); background:var(--surface)}
+
+/* 搜索高亮 */
+mark.hl{background:var(--hl); color:var(--ink); padding:0 .1em; border-radius:2px}
+mark.hl.cur{background:var(--accent); color:#fff}
+
+/* 入场：一次编排好的序列 */
+@media (prefers-reduced-motion:no-preference){
+  .rise{opacity:0; transform:translateY(18px)}
+  .rise.in{opacity:1; transform:none; transition:opacity var(--base) var(--ease),transform var(--base) var(--ease)}
+  .masthead{animation:mhIn 760ms var(--ease) both}
+  @keyframes mhIn{from{opacity:0; transform:translateY(22px)}to{opacity:1;transform:none}}
+  .masthead .mh-top{animation:mhIn 620ms 80ms var(--ease) both}
+  .masthead .mh-t{animation:mhIn 700ms 140ms var(--ease) both}
+  .masthead .pubnote{animation:mhIn 700ms 220ms var(--ease) both}
+  .shell{animation:mhIn 700ms 300ms var(--ease) both}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
+
+/* ============================================================ 响应式 */
+@media (max-width:1080px){
+  .shell{grid-template-columns:minmax(0,1fr); gap:0}
+  /* 抽屉：外层 fixed + overflow:hidden 当裁剪盒，内层才平移。
+     若直接平移 fixed 的 .rail，它会把文档 scrollWidth 撑宽 326px（实测）。 */
+  .drawerwrap{
+    position:fixed; inset:var(--tb-h) 0 0 0; overflow:hidden; z-index:29;
+    visibility:hidden; pointer-events:none; transition:visibility 0s linear var(--base);
+  }
+  body.nav-open .drawerwrap{visibility:visible; pointer-events:auto; transition-delay:0s}
+  .rail{
+    position:absolute; top:0; right:0; bottom:0; width:min(86vw,320px);
+    max-height:none; background:var(--surface); border-left:1px solid var(--rule-2);
+    padding:var(--s4); overflow:auto; box-shadow:var(--shadow);
+    transform:translateX(102%); transition:transform var(--base) var(--ease);
+  }
+  body.nav-open .rail{transform:none}
+  #menuBtn{display:inline-grid}
+  .tb-nav{display:none}
+}
+@media (max-width:820px){
+  :root{--fs-base:16.5px; --fs-2xl:25px; --s5:32px; --s6:44px}
+  .tb-in{padding:0 var(--s3); gap:var(--s2)}
+  .search input{width:168px}
+  .search input:focus{width:206px}
+  .tb-brand .tbb-long{display:none}
+  .tb-brand .tbb-short{display:inline}
+  .tbl.ledger{min-width:600px}
+  .tbl.ledger th[data-col="st"]{width:150px}
+  .masthead,.shell,.foot{padding-left:var(--s3); padding-right:var(--s3)}
+  .mh-num{right:var(--s3); -webkit-text-stroke-width:1px}
+  .tblwrap:not(.scrolly){overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .tblwrap:not(.scrolly) .tbl{min-width:640px}
+  .scrollhint{display:block}
+  .ol.big li{padding:var(--s3)}
+  .ol.big li{grid-template-columns:26px 1fr; gap:var(--s2)}
+  .summary .ul li{padding-left:52px}
+}
+/* ---------- 手机（<=600px）：换一套阅读形态，不是把桌面版等比缩小 ----------
+   三处结构性改动，都对着实测出来的毛病改：
+   ① 搜索不再隐藏。原先 <=520px 直接 display:none，手机上等于没有搜索；
+      现在收成一个图标，点开是一条全宽搜索栏（绝对定位挂在顶栏下沿，不撑高顶栏）。
+   ② 2 列表改成纵向堆叠卡片。手机上横滑表格很难用，而 2 列表堆叠后既不用滑、
+      又刚好把「名称 → 说明」的层级关系表达出来。
+   ③ 3 列及以上继续横滑，但首列粘住——横滑时不丢参照物，知道自己看的是哪一行。
+   另外把触控目标放大到 44px（图标按钮原 38px、筛选 chip 原 26px 高，都偏小）。
+*/
+@media (max-width:600px){
+  :root{--fs-base:17px; --s3:14px; --s4:20px; --s5:26px; --s6:34px; --s7:48px}
+  .mh-num{display:none}
+
+  /* 顶栏与搜索 */
+  .tb-in{min-height:52px}
+  #searchBtn{display:inline-grid}
+  .iconbtn{width:44px; height:44px; font-size:16px}
+  .tb-tools{gap:6px}
+  .search{
+    position:absolute; left:0; right:0; top:100%; z-index:35;
+    display:none; padding:10px var(--s3);
+    background:var(--surface); border-bottom:1px solid var(--rule-2); box-shadow:var(--shadow);
+  }
+  body.search-open .search{display:flex}
+  .search input{width:100%; font-size:16px; padding:11px 14px 11px 34px; -webkit-appearance:none; appearance:none}
+  .search input:focus{width:100%}
+  .search .si{left:calc(var(--s3) + 12px)}
+  .search input:not(:placeholder-shown){padding-right:104px}
+  /* 计数与上下条按钮要能点得中：原尺寸 11px/18px 高，手机上根本按不准 */
+  .search .sc{right:10px; gap:6px; font-size:13px}
+  .search .sc button{min-width:34px; min-height:34px; font-size:14px; border-radius:6px}
+
+  /* 刊头 */
+  h1.mh-t{font-size:27px; line-height:1.22}
+  .mh-top{font-size:10.5px; letter-spacing:.1em; gap:var(--s2)}
+  .mh-sub{font-size:13.5px; margin-bottom:var(--s4)}
+  .pubnote{padding:var(--s3)}
+  .pubnote p{font-size:14.5px}
+
+  /* 目录抽屉条目放大 */
+  .toc-a{padding:11px var(--s2)}
+
+  /* 章节 */
+  .sec{scroll-margin-top:calc(var(--tb-h) + 10px)}
+  .sec h2{font-size:21px}
+  h3{font-size:17px; margin:var(--s4) 0 var(--s3)}
+
+  /* 摘要卡片 */
+  .summary .ul li{padding:13px var(--s3) 13px 46px; font-size:15px; line-height:1.78}
+  .summary .ul li::before{font-size:17px; top:13px}
+
+  /* 列表 */
+  .ul li{padding-left:19px}
+  .ol{gap:var(--s2)}
+  .ol li{grid-template-columns:28px 1fr; gap:10px}
+  .ol.big li{padding:13px 14px; grid-template-columns:24px 1fr; gap:10px}
+  .ol.big .lin{font-size:19px}
+
+  /* 表格：3 列以上横滑 + 首列粘住 */
+  /* 先解开 .tbl 自己的 overflow:hidden。它原本只为了裁圆角，但 overflow:hidden
+     同样会把自己变成「滚动容器」，于是 td 的 sticky 以 table 为参照（而 table
+     并不滚动）——首列粘性会静默失效，横滑时首列照样滚走（实测截图确认）。
+     手机上优先保首列粘住，圆角让位（表格改直角，肉眼几乎无感）。 */
+  .tbl{overflow:visible; border-radius:0}
+  .tblwrap:not(.scrolly){overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .tblwrap:not(.scrolly) .tbl{min-width:600px}
+  .tblwrap:not(.scrolly) .tbl:not(.c2) tbody td:first-child,
+  .tblwrap.scrolly .tbl tbody td:first-child{
+    position:sticky; left:0; z-index:1;
+    background:var(--surface); box-shadow:1px 0 0 var(--rule-2);
+  }
+  .tblwrap:not(.scrolly) .tbl:not(.c2) thead th:first-child,
+  .tblwrap.scrolly .tbl thead th:first-child{left:0; z-index:4; background:var(--surface-2)}
+  /* 首列装长专名的表（桌面端放不下、只给了手机端下限）：放宽，别压成逐字竖排 */
+  .tblwrap:not(.scrolly) .tbl.w1m:not(.c2) tbody td:first-child,
+  .tblwrap.scrolly .tbl.w1m tbody td:first-child{
+    min-width:var(--w1m); overflow-wrap:break-word;
+  }
+  .scrollhint{text-align:left}
+
+  /* 表格：2 列纵向堆叠成卡片，彻底不横滑 */
+  .tblwrap:not(.scrolly) .tbl.c2,
+  .tblwrap.scrolly .tbl.c2{
+    display:block; min-width:0; border:0; background:transparent; border-radius:0;
+  }
+  .tbl.c2 thead{display:none}
+  .tbl.c2 tbody{display:block}
+  .tbl.c2 tbody tr{
+    display:block; background:var(--surface); border:1px solid var(--rule);
+    border-radius:var(--r2); padding:12px 14px; margin-bottom:10px; box-shadow:var(--shadow);
+  }
+  .tbl.c2 tbody tr:last-child{margin-bottom:0}
+  .tbl.c2 tbody tr:hover{background:var(--surface)}
+  .tbl.c2 tbody td{display:block; border:0; padding:0; background:transparent; box-shadow:none}
+  .tbl.c2 tbody td:first-child{
+    position:relative; padding-left:15px; margin-bottom:5px;
+    font-family:var(--fu); font-weight:700; font-size:14.5px; color:var(--ink);
+  }
+  .tbl.c2 tbody td:first-child::before{
+    content:""; position:absolute; left:0; top:.62em; width:7px; height:1.5px; background:var(--accent);
+  }
+
+  /* 截止表筛选条：改成一行横滑，避免换行成三四排把表格挤下去 */
+  .chips{
+    flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; padding:9px var(--s3); gap:7px;
+    border-radius:var(--r2) var(--r2) 0 0;
+  }
+  .chips::-webkit-scrollbar{display:none}
+  .chips-label,.chips-count{display:none}
+  .chip{flex:0 0 auto; padding:9px 14px; font-size:13px; min-height:40px}
+  .chip b{font-size:11px}
+
+  /* 截止表：手机上拆成一张张卡片，不再横滑。
+     两个理由：① 它最关键的信息是「什么时候到期」，而截止列在横滑视口之外，
+        用户得先横滑才看得到，跟这张表的用途正好相反；
+     ② 横滑时行高被状态列的长文本撑开，首列只有一行字、下面一大片空白。
+     拆成卡片后「活动 / 截止 / 状态」三行一屏读完，状态色条也还在。
+     列定位靠编译期打好的 data-col，不依赖第几列。 */
+  .tblwrap.scrolly{
+    max-height:none; overflow:visible; border:0; background:transparent; box-shadow:none;
+  }
+  .tblwrap.scrolly .chips{top:var(--tb-h)}   /* 吸在顶栏下沿，滚到哪都能筛 */
+  .tbl.ledger{display:block; min-width:0; border:0; background:transparent; table-layout:auto}
+  .tbl.ledger thead{display:none}
+  .tbl.ledger tbody{display:block}
+  .tbl.ledger tbody tr{
+    /* 日期列用 max-content：状态列文字很长时，若两列是 1fr/auto，
+       状态列会把日期列挤到几乎为 0，日期被压成「9
+/
+1
+7」逐字竖排 */
+    display:grid; grid-template-columns:max-content minmax(0,1fr); gap:5px 10px; align-items:baseline;
+    background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2);
+    padding:12px 14px; margin-bottom:9px;
+  }
+  .tbl.ledger tbody tr:last-child{margin-bottom:0}
+  .tbl.ledger tbody td{display:block; border:0; padding:0; background:transparent; box-shadow:none}
+  .tbl.ledger tbody td[data-col="body"]{grid-column:1 / -1; color:var(--ink); font-weight:600; font-size:14.5px}
+  .tbl.ledger tbody td[data-col="date"]{
+    grid-column:1; white-space:nowrap;
+    font-family:var(--fm); font-size:12.5px; color:var(--muted);
+  }
+  .tbl.ledger tbody td[data-col="st"]{grid-column:2; text-align:right; font-size:13px}
+  .tbl.ledger tbody tr:hover{background:var(--surface)}
+  /* 截止表已经拆成卡片、不再横滑，滑动提示在这里是错的 */
+  .tblwrap.scrolly .scrollhint{display:none}
+
+  /* 悬浮控件与刘海/小白条 —— env() 在不支持时整条声明被丢弃，自动退回上面的值 */
+  .fab{right:calc(14px + env(safe-area-inset-right)); bottom:calc(14px + env(safe-area-inset-bottom))}
+  .tb-in{padding-left:calc(var(--s3) + env(safe-area-inset-left));
+         padding-right:calc(var(--s3) + env(safe-area-inset-right))}
+  .masthead,.shell,.foot{
+    padding-left:calc(var(--s3) + env(safe-area-inset-left));
+    padding-right:calc(var(--s3) + env(safe-area-inset-right));
+  }
+  .foot{padding-bottom:calc(var(--s6) + env(safe-area-inset-bottom))}
+  .search{padding-left:calc(var(--s3) + env(safe-area-inset-left));
+          padding-right:calc(var(--s3) + env(safe-area-inset-right))}
+}
+/* 超窄屏（<=360px：iPhone SE 一代、小屏安卓）再收一档。
+   断点取 360 而不是 380，是为了把 375/390/414 这些在售机型都留在上面那一档
+   用 27px 主标题——375 恰恰是 iPhone SE 2/3 的宽度，也是相当常见的屏幕。 */
+@media (max-width:360px){
+  h1.mh-t{font-size:24px}
+  .mh-top{font-size:9.5px}
+  .tblwrap:not(.scrolly) .tbl{min-width:560px}
+  .tblwrap:not(.scrolly) .tbl.c2{min-width:0}
+  .summary .ul li{padding-left:42px}
+  .summary .ul li::before{font-size:16px}
+}
+
+/* ============================================================ 打印 */
+@media print{
+  :root{
+    --bg:#fff; --bg-2:#fff; --surface:#fff; --surface-2:#fff;
+    --ink:#000; --ink-2:#000; --muted:#333; --faint:#555;
+    --rule:rgba(0,0,0,.25); --rule-2:rgba(0,0,0,.5); --rule-strong:#000;
+    --accent:#000; --accent-ink:#000; --accent-soft:#fff; --shadow:none; --grain:0;
+    --crit:#000; --soon:#000; --live:#000; --plan:#000; --over:#666;
+  }
+  body{border:0; background:#fff}
+  body::before,.grain,.topbar,.fab,.rail,.drawerwrap,.chips,.scrollhint,.progress,[data-no-print]{display:none !important}
+  .shell{display:block; max-width:none; padding:0}
+  .masthead{padding:0 0 12px}
+  .mh-num{display:none}
+  main p,.ul li,.ol li,.tbl,.foot{font-size:10.5pt}
+  .sec{padding-top:14px; break-inside:auto}
+  .sec h2{font-size:16pt; border-bottom:1.5pt solid #000}
+  h3{font-size:12pt}
+  .tblwrap,.tblwrap.scrolly{max-height:none; overflow:visible; border:0; box-shadow:none}
+  .tbl{min-width:0 !important; border:1pt solid #000}
+  .tbl thead{display:table-header-group}
+  .tbl thead th{position:static; background:#fff; color:#000; border-bottom:1pt solid #000; font-size:8pt}
+  .tbl tbody td{border-bottom:.5pt solid #666; padding:5px 7px}
+  .tbl tbody tr{box-shadow:none !important; opacity:1 !important; break-inside:avoid}
+  /* 手机端那套堆叠/粘性样式在纸上要退回成真表格（窄屏下打印时两条媒体查询会同时命中，
+     print 在后面所以能覆盖；仍加 !important 防字号相关的特异性意外） */
+  .tbl.c2{display:table !important; border:1pt solid #000 !important}
+  .tbl.c2 thead{display:table-header-group !important}
+  .tbl.c2 tbody{display:table-row-group !important}
+  .tbl.c2 tbody tr{display:table-row !important; margin-bottom:0 !important; padding:0 !important}
+  .tbl.c2 tbody td{display:table-cell !important; padding:5px 7px !important}
+  .tbl.c2 tbody td:first-child::before{content:none !important}
+  .tbl.ledger{display:table !important; border:1pt solid #000 !important}
+  .tbl.ledger thead{display:table-header-group !important}
+  .tbl.ledger tbody{display:table-row-group !important}
+  .tbl.ledger tbody tr{display:table-row !important; margin:0 !important; padding:0 !important}
+  .tbl.ledger tbody td{display:table-cell !important; padding:5px 7px !important}
+  .tbl tbody td:first-child,.tbl thead th:first-child{position:static !important; box-shadow:none !important}
+  .st{background:#000 !important; border:0}
+  .ledger tbody tr{box-shadow:none !important}
+  .tbl a,.tbl a:hover{color:#000}
+  tr,.ol.big li,.summary .ul li,.pubnote{break-inside:avoid}
+  a{background-image:none}
+  @page{size:A4 portrait; margin:12mm}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="topbar" data-no-print>
+  <div class="tb-in">
+    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#001</b></span>
+    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>第 049 期</a></nav>
+    <div class="tb-tools">
+      <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">⌕</button>
+      <div class="search">
+        <span class="si" aria-hidden="true">⌕</span>
+        <input id="q" type="search" placeholder="全文检索…" aria-label="全文检索" autocomplete="off">
+        <span class="sc"><span id="qn">0</span><button id="qprev" type="button" aria-label="上一个">↑</button><button id="qnext" type="button" aria-label="下一个">↓</button></span>
+      </div>
+      <button class="iconbtn" id="menuBtn" type="button" aria-label="打开目录" aria-expanded="false">≡</button>
+      <button class="iconbtn" id="themeBtn" type="button" aria-label="切换明暗主题">◑</button>
+    </div>
+  </div>
+</header>
+
+<header class="masthead">
+  <span class="mh-num" aria-hidden="true">001</span>
+  <div class="mh-top">
+    <span>AI 免费内容与权益速递 · 第 001 期</span>
+    <span><em>增量与纠错口径</em></span>
+  </div>
+  <div class="mh-rule" aria-hidden="true"></div>
+  <h1 class="mh-t">第四章表体明细附录</h1>
+  <p class="mh-sub"></p>
+  <div class="pubnote"><p><strong>这是什么</strong>：日报第四章表体在「瘦身」时被裁掉的长论证原文，<strong>逐字保存、不改写、不删条</strong>。</p></div>
+  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">64 条 · 一条一行</span></a><span class="vs-i vs-full is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 001 期 · 十节</span></span><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">132 条 · 无截止日</span></a></nav>
+</header>
+
+<div class="shell">
+  <div class="drawerwrap" id="drawerwrap"><aside class="rail" id="rail" aria-label="目录">
+    <p class="rail-t">本期目录</p>
+    <nav><a class="toc-a" href="#s-abs"><span class="toc-n">··</span>第 049 期</a></nav>
+  </aside></div>
+  <main id="main">
+<section id="s-abs" class="sec summary">
+<h2><span class="sn">··</span><span class="h2t">第 049 期</span><span class="h2sub">（2026-10-27）</span></h2>
+<blockquote class="bq"><p><strong>本期共 65 行被瘦身</strong>，表体行只留「谁 / 到什么时候 / 要不要动手」+ 一句边界；下面的原文一字未改。</p></blockquote>
+<h3 id="h3-1">🔴 腾讯老混元大模型平台停服</h3>
+<p><strong>表体精简后</strong>：🔴 必办（已过期，Q04 连续第 36 期未决 · 高危窗口第 27 天）。⚠️ （048 期）本轮仍未实访 <code>cloud.tencent.com/document/product/1729</code>（046 期同为未实访）—— 故本行不更新任何事实字段，只按基准日推进「连续第 36 期 / 第 27 天」两个由脚本重算的数（避坑 180）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🔴 <strong>必办（已过期，Q04 连续第 36 期未决 · 高危窗口第 27 天）</strong>。<strong>厂商仍只给「9 月底」这一模糊口径，未给确切停服日；按避坑 47/164，本报告只做迁移提示、不替它排一个日</strong>。<strong>⚠️ （048 期）本轮仍未实访 <code>cloud.tencent.com/document/product/1729</code></strong>（046 期同为未实访）—— <strong>故本行不更新任何事实字段，只按基准日推进「连续第 36 期 / 第 27 天」两个由脚本重算的数</strong>（避坑 180）。<strong>迁移方向见 040 期起的既有结论，不重复。</strong> <strong>⚠️ 本期基准日与 047 期同为 10/27 —— 「高危窗口第 27 天」不变是对的：天数按「截止日 − 基准日」算，期数按「连续第 N 期」算，两者是两套计数器</strong>（避坑 208 同源：<strong>同一个数字，两种口径，别混</strong>）。</p></blockquote>
+<h3 id="h3-2">🟢 腾讯 WorkBuddy Hy3 限免 + Hy4 preview 夜间限免（已延期）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中。⚠️ 官方确认繁忙时进入排队。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中。已体验用户夜间 23:00–8:00 免费；未体验用户首开享 14 天每日免费（首开资格窗口已于 10/10 23:59 收口）；⚠️ <strong>官方确认繁忙时进入排队</strong>。⚠️ <strong>（035 期）新增一条同体系事实（不同主体）</strong>：<strong>腾讯朱雀实验室开源的 <code>A.I.G</code> 以「混元 <code>Hy4 preview</code>」为底座进入 <code>ClawHub</code> 安全审核</strong> —— <strong>「Hy4 preview 夜间限免」「Hy4 preview 作为第三方工具底座」「Hy4 完整权重计划年内开源」是三条不同的账</strong>（避坑 148）；⚠️ <strong>WorkBuddy 内同期还有 <code>Step 5 Preview</code> 独家限免（10/12–10/25），两者不要合并</strong></p></blockquote>
+<h3 id="h3-3">🟢 Claude Code 云会话 credit（Max $250 / Pro $100）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中。⚠️ （029 期）把"领取截止"由 10/7 改为"以账户内显示为准"（024 期口径为 10/7，（029 期）未见官方 10/7 硬截止的独立佐证）</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中。仅限云会话；⚠️ <strong>（029 期）把"领取截止"由 10/7 改为"以账户内显示为准"</strong>（024 期口径为 10/7，（029 期）未见官方 10/7 硬截止的独立佐证）</p></blockquote>
+<h3 id="h3-4">🟢 GLM-5.3-FlashX 试用（两周）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中。⚠️ 消耗 2.5 倍于普通 Flash 的配额；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中。⚠️ <strong>消耗 2.5 倍于普通 Flash 的配额</strong>；⚠️ <strong>它不是开源模型，只是 API 加速档</strong></p></blockquote>
+<h3 id="h3-5">🟢 Mistral Large 4 公开预览（含 OpenRouter 五折）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（025 期登记）。⚠️ 许可证仍未公布（避坑 42）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（025 期登记）。1T 总参 / 49B 激活、原生多模态；⚠️ <strong>许可证仍未公布</strong>（避坑 42）。⚠️ <strong>第三方实测两条</strong>：<strong>Artificial Analysis 智能指数 38 分，被评「中美以外最强智能模型」</strong>；<strong>Arena Agent Arena 净改进分 −6.6%、总排名第 43</strong> —— <strong>两句话都要写</strong>（避坑 116）。⚠️ <strong>（036 期）状态：Mistral 免费档 / 定价口径出现三源互斥</strong>（<strong>一家价格比对站、一位第三方整理者、033 期起跟踪的 diff 站三者不一致</strong>）→ <strong>已建 Q26，三个数全部带来源登记、不取中间值</strong>；<strong>官方定价页仍未逐项复核，挂账第四期</strong>（避坑 147/161）</p></blockquote>
+<h3 id="h3-6">🟢 Reflection Beam 开放权重</h3>
+<p><strong>表体精简后</strong>：🟢 已于 10/16 按 10/5 承诺兑现。⚠️ 038 期纠错三条（维持，不重复展开）：① 「10/16 发布」是错的 —— 10/5 已宣布是开放权重模型、只是权重未放；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>已于 10/16 按 10/5 承诺兑现</strong>。501B 总参 / 23B 激活、<strong>1M 上下文</strong>、<strong>Apache 2.0</strong>（模型卡明确不禁止蒸馏 / 用输出训练 / 微调或合并）。<strong>⚠️ 038 期纠错三条（维持，不重复展开）</strong>：<strong>① 「10/16 发布」是错的 —— 10/5 已宣布是开放权重模型、只是权重未放；② <code>Terminal-Bench 2.1</code>（官方 80.1%）与独立评测 3.0% 的落差本期有新进展（见下）；</strong>③ 「Apache 2.0」不等于「没有闸门」<strong>（避坑 162）。</strong>⚠️ （040 期）本期首次登记 <code>Artificial Analysis</code> 官方文章的六组评测对比（第三方口径，逐条带来源）<strong>：</strong>① <code>Intelligence Index</code>（v4.3）得 <code>30</code> 分，美国开放权重第 2（次于 <code>Muse Spark Open</code> 的 <code>39</code>），全部开放权重总榜第 10<strong>（落后阿联酋 <code>K2 Horizon</code>（<code>31</code>）一分）；</strong>② token 效率：每任务约 <code>26k</code> 输出 token（约 <code>19k</code> 推理 + <code>7k</code> 回答），其中仅 <code>26%</code> 用于最终答案，在 v4.3 测过的 219 个模型中排第 28 低 —— 而领先一分的 <code>K2 Horizon</code> 用 token 是其两倍（约 <code>52k</code>）<strong>；</strong>③ 智能体强、终端弱：<code>AutomationBench-AA</code> <code>48.5%</code>（领先 <code>K2 Horizon</code> 的 <code>37.2%</code> 11 个百分点、与 <code>Qwen3.8 27B</code> 的 <code>48.2%</code> 持平），而 <code>Terminal-Bench 4.0</code> 仅 <code>3.0%</code>（落后 <code>Qwen3.8 27B</code> 的 <code>5.6%</code> 与 <code>Muse Spark Open</code> 的 <code>8.1%</code>）<strong>；</strong>④ 知识与幻觉：<code>AA-Omniscience</code> 正确率 <code>33%</code>（<code>K2 Horizon</code> <code>18%</code>、<code>Qwen3.8 27B</code> <code>16%</code>），但幻觉率 <code>47%</code>（<code>K2 Horizon</code> <code>26%</code>、<code>Qwen3.8 27B</code> <code>30%</code>），净指数得分 <code>1.5</code> 领先两个同类（<code>−3.0</code> 与 <code>−10.0</code>）<strong>；</strong>⑤ <code>Cyber Index</code> 完成 <code>34%</code> 任务，位于「Cyber Index vs 每任务输出 token」前沿曲线上，与 <code>GPT-6 Sol</code> 并列<strong>；</strong>⑥ 编程（<code>Mirror</code> CLI）：<code>Coding Agent Index</code> 得 <code>28</code>，落后 <code>Claude Code</code> + <code>Qwen3.8 Max</code>（<code>43</code>）15 分、落后领先者（<code>68</code>）40 分，但只有 <code>Codex</code> + <code>GPT-6 Astra</code> 与 <code>Codex</code> + <code>GPT-6.1 Sol</code> 用得比它少<strong>。</strong>⚠️ 本期最需写下的一个落差（039 期的解释被修正）<strong>：039 期把「官方 <code>Terminal-Bench 2.1</code> 80.1%」与「独立 <code>Terminal-Bench 4.0</code> 3.0%」归因为「两个版本的同名基准」；</strong>而本期 <code>Artificial Analysis</code> 官方文章明确 3.0% 出自 <code>Terminal-Bench 4.0</code><strong> —— </strong>若 <code>Reflection</code> 官方那张表确为 4.0，则同一基准上会出现 80.1% 与 3.0% 两个数、相差约 26 倍，「版本不同」这个解释至少是不完整的<strong>。⚠️ </strong>本报告不裁决谁对，只把「官方那张表的确切版本号」列为未核项<strong>（避坑 178）。</strong>⚠️ 同期两条推理栈支持（均为 10/16 一手源）<strong>：</strong><code>vLLM</code> day-0 支持<strong>（官方摘要逐字：501B total / 23B active、「agent-driven optimization that </strong>cut decode latency 2.71×<strong>」、<code>DFlash2</code> speculative decoding with adaptive verification —— </strong><code>2.71×</code> 是相对值、官方未给并发度与输入输出长度<strong>）；</strong><code>SGLang</code> 宣布原生支持并以其驱动 <code>Reflection</code> 的生产 <code>API</code><strong>。</strong>即同一权重在 24 小时内被两家推理栈声明支持 —— 这是「权重交付日」与「生态就绪日」可以不同的一条样本<strong>（避坑 150）。</strong>⚠️ 跑起来要什么<strong>：</strong>BF16 约 1 TB / NVFP4 约 280 GB、官方建议至少 4 张 B200（720 GB 显存口径）<strong> —— 不是「人人本地跑」的模型（避坑 41 第三层）。</strong>⚠️ Reflection 自家 API 免费 beta 结束后的价格仍未公布（连续第 2 期）<strong> —— </strong><code>platform.reflection.ai</code> 本轮实访仍需登录才见模型与价格**</p></blockquote>
+<h3 id="h3-7">🟢 Laya 决策模型（Convai，Vercel AI Gateway）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（022 期登记 + 023 期补许可）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（022 期登记 + 023 期补许可）。<strong>HF 上已明确 Apache 2.0 全商用</strong></p></blockquote>
+<h3 id="h3-8">🟢 <code>百度智能云</code>「文档解析（Unlimited-OCR）」API（基于 <code>文心 Unlimited OCR 2</code> · 限时免费 · 个人实名 200 页 / 企业实名 1000 页 · 免部署）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（官方文档标注「更新时间：2026-10-27」· 本期新上线）。」⚠️ 四层开放（避坑 41）：① 能用 —— 免部署、免训练、官方 API 直连，限时免费且有明确免费页数额度（个人实名 <code>200</code> 页 / 企业实名 <code>1,000</code> 页）② 能下载 —— 对应权重另见上一行（<code>MIT</code> 开放）③ 能跑 —— 免部署、异步提交 + 轮询（QPS 2 / 5），本地无需 GPU ④ 能商用 —— API 侧官方未写商用条款，权重侧 <code>MIT</code> 覆盖商用（两者是不同物、不可混）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>生效中（官方文档标注「更新时间：2026-10-27」· 本期新上线）</strong>。<strong>官方一手（<code>cloud.baidu.com/doc/OCR/s/fmr1p39gb</code>，本轮实访 <code>200</code> / <code>229,454</code> 字节）逐字</strong>：「<strong>更新时间：2026-10-27</strong>」；「<strong>文档解析（Unlimited-OCR）：基于最新 文心Unlimited-OCR 2 ，提供开箱即用、免部署的API调用服务，跨页表格、段落自动合并，标题层级精准解析，可直接返回 JSON/Markdown 结构化输出</strong>」；「<strong>接口限时免费，欢迎进行体验与咨询反馈！个人实名可获取免费测试资源 200 页，企业实名可获取免费测试资源 1000 页。</strong>」；「<strong>文档解析（Unlimited-OCR）API服务为异步接口，需要先调用提交请求接口获取 task_id，然后调用获取结果接口进行结果轮询，建议提交请求后 5～10 秒轮询。提交请求接口 QPS为2，获取结果接口 QPS为5。</strong>」<strong>⚠️ 四层开放（避坑 41）</strong>：<strong>① 能用 —— 免部署、免训练、官方 API 直连，</strong>限时免费且有明确免费页数额度<strong>（个人实名 <code>200</code> 页 / 企业实名 <code>1,000</code> 页）② 能下载 —— 对应权重另见上一行（<code>MIT</code> 开放）③ 能跑 —— 免部署、异步提交 + 轮询（QPS 2 / 5），</strong>本地无需 GPU<strong> ④ 能商用 —— API 侧官方未写商用条款，</strong>权重侧 <code>MIT</code> 覆盖商用（两者是不同物、不可混）<strong>。</strong>⚠️ 三条必须写清的边界<strong>：</strong>① 官方只写「限时免费」、没给结束日 —— 本行不替它排日<strong>（避坑 154/166）；</strong>② 免费资源是「页数」不是「次数」<strong> —— 与 <code>OpenRouter</code> 的「50 次/日」是两种计量，不可换算（避坑 41/161）；</strong>③ 实名认证是前置门槛<strong> —— </strong>个人实名 <code>200</code> 页、企业实名 <code>1,000</code> 页<strong>，</strong>企业额度是个人额度的 5 倍<strong>；</strong>「免费测试资源」这个措辞本身暗示它是测试额度而非长期免费额度<strong>（避坑 154）。</strong>⚠️ 本行与权重行是两条独立的开放路径<strong> —— </strong>权重是永久 <code>MIT</code> 开放、API 是限时免费且有额度<strong>，</strong>不可合并成一句「免费无限用」**。</p></blockquote>
+<h3 id="h3-9">🟢 <code>Runware</code> 分发层 <code>Kling 4.0</code> 促销 <code>15% OFF</code>（官方 <code>pricing</code> 页促销数组 · 一手核到 · 截止 <code>10/29</code> —— 与社媒口径的「7 天」不同）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（本期新核到一手 · 距结束 2 天）。⚠️ 这是「打 85 折」、不是免费 —— 进价格位、不进免费额度位；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>生效中（本期新核到一手 · </strong>距结束 2 天<strong>）</strong>。<strong>官方一手（<code>runware.ai/pricing</code>，本轮实访）逐字</strong>：<code>"id":"klingai-video-4-0-launch-promo","title":"15% OFF","description":"15% off all generations until October 29, 2026","models":["klingai-video-4-0"],"endsAt":"2026-10-29"</code>。<strong>⚠️ 这是「打 85 折」、不是免费</strong> —— <strong>进价格位、不进免费额度位</strong>；<strong>且是 <code>Runware</code> 分发层的价格活动、不是厂商侧（快手）的免费政策</strong>（避坑 41：多站点口径要拆开写）。<strong>⚠️ 与社媒口径的差异（避坑 213）</strong>：社媒口径是「<strong>未来 7 天</strong>在常定期价上再享 <code>15%</code> 折扣」（相对、从首发日算），官方促销数组给的是绝对日期 <code>October 29, 2026</code> 且带机器可读 <code>endsAt</code> —— <strong>两者对不上（首发 10/26 前后 +7 天 ≈ 11/2，官方写 10/29，差 3–4 天）</strong>；<strong>本报告以官方 <code>endsAt</code> 为准、社媒口径原样引录、不取中间值、不擅自换算</strong>（避坑 161）。<strong>⚠️ 更正 047、048 两期</strong>：那两期连续写下「一手未核到、不进价格位」—— <strong>本期证实 <code>048</code> 期自己的快照 <code>tmp_048/runware_pricing.html</code> 里就写着这条促销</strong>（两份文件字节数完全相同 <code>744,814</code>、促销数组 <code>12</code> 条逐条一致）—— <strong>那是「抓到了却没读出来」，不是「这期没找到」</strong>（避坑 212）。<strong>⚠️ <code>Runware</code> 的新用户免费额度（本轮一手，<code>pricing</code> 页 FAQ）逐字</strong>：「<strong>Yes. New users who sign up with a business email receive $2 in free credits to explore the platform and test various models.</strong>」 —— <strong>注册商业邮箱得 <code>$2</code> 免费额度</strong>（<strong>这是另一条线，不要与本行的 <code>15%</code> 折扣相加</strong>）。</p></blockquote>
+<h3 id="h3-10">⚪ 上海青浦算力券补贴</h3>
+<p><strong>表体精简后</strong>：⚪ 已过期（申报截止 10/23，本期基准日 10/27 已过 4 天）。⚠️ 状态迁移路径：045 期「🔴 今日截止」→ 046 期「⚪ 已过期」→ 本期仅推进天数 —— 「今天到期」类条目的标准两步处理，不跳过「今日截止」直接写「已结束」（避坑 198 同族）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已过期（申报截止 10/23，本期基准日 10/27 已过 4 天）</strong>。<strong>⚠️ 状态迁移路径：045 期「🔴 今日截止」→ 046 期「⚪ 已过期」→ 本期仅推进天数</strong> —— <strong>「今天到期」类条目的标准两步处理，不跳过「今日截止」直接写「已结束」</strong>（避坑 198 同族）。<strong>⚠️ 官方未写补报通道，本行不写「可补报」</strong>（避坑 154）；<strong>申报类权益 ≠ 领取类权益，不写到账日</strong>（避坑 182）。</p></blockquote>
+<h3 id="h3-11">⚪ 佛山 2026 年度网络微短剧扶持申报</h3>
+<p><strong>表体精简后</strong>：⚪ 已结束（申报截止 10/20，本期基准日 10/27 已过 7 天）。⚠️ 事实字段不变：AI 微短剧首次入列；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已结束（申报截止 10/20，本期基准日 10/27 已过 7 天）</strong>。<strong>⚠️ 事实字段不变</strong>：AI 微短剧首次入列；主体不限佛山本地；「佛山扶持通」线上填报。<strong>⚠️ 未核到延期或补报公告 —— 不写「可补报」，也不写「已彻底关闭」</strong>（避坑 154/161）。</p></blockquote>
+<h3 id="h3-12">🟢 Gemini 3.8 Flash 促销价（$0.75 / $3.75 每百万 token）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（距今 65 天）。⚠️ 这是付费价而非免费额度；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（****<strong>距今 65 天</strong>****）。⚠️ 这是付费价而非免费额度；到期后涨回 $1.50 / $7.50</p></blockquote>
+<h3 id="h3-13">⚪ ZCode / BigModel 新用户试用</h3>
+<p><strong>表体精简后</strong>：⚪ 登记项已失效（域名变更，非活动截止）。⚠️ 本行的处置：状态列改为「登记项已失效（域名变更）」而不是「已结束」 —— 「活动到期」与「产品消失」是两件不同的事，混写会让读者以为厂商正常收口（避坑 198 同族：降档/收口/消失三种形态必须分开写）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>登记项已失效（域名变更，非活动截止）</strong>。<strong>（048 期）本轮实访 <code>zcode.ai/</code></strong>：<strong>返回 <code>993,914</code> 字节，但正文是体育博彩类停放页内容</strong>（页面标题与正文均与 AI 编程工具无关，出现 <code>AI + Sports Betting</code>、<code>sports betting revolution</code> 等字样）—— <strong>即该域名已易主/停放，不再是本报告 026 期起跟踪的那个 <code>ZCode</code> 产品</strong>。<strong>⚠️ 本行的处置</strong>：<strong>状态列改为「登记项已失效（域名变更）」而不是「已结束」</strong> —— <strong>「活动到期」与「产品消失」是两件不同的事，混写会让读者以为厂商正常收口</strong>（避坑 198 同族：<strong>降档/收口/消失三种形态必须分开写</strong>）。<strong>⚠️ <code>ZCode 月报连续第 19 期未见</code>这条待办本期有了新解释</strong>：<strong>不是厂商没发月报，是域名已经没有了</strong> —— <strong>本报告因此把这条待办从「等月报」改为「等域名/产品是否重新上线」，并不再每期重复记为「未见」</strong>。<strong>⚠️ 与 <code>智谱 ZCode 免费额度包</code>那一行（⚪，10/7 截止）的关系</strong>：<strong>两行是同一个产品的两个阶段，均随域名变更失效</strong>。 <strong>⚠️ （048 期）复读结论：字节数由 045 期的 <code>1,043,615</code> 变为 <code>993,914</code>（</strong>变的是页面体积，不是站点性质<strong> —— 正文仍是体育博彩停放页，<code>sports betting</code> 相关字样 199 处），</strong>「登记项已失效（域名变更）」这一状态不变<strong>。</strong>⚠️ 本行那句「<code>ZCode 月报连续第 19 期未见</code>」是 045 期写入的历史表述<strong>：047 期已把该待办改为「等域名/产品是否重新上线」，</strong>本期起不再续计「未见」的期数**（续计一个已经不存在的产物的期数没有意义）。</p></blockquote>
+<h3 id="h3-14">🟢 腾讯云 TokenHub 国际站促销 · GLM-5.3-Flash / GLM-5.2 / Kimi K3</h3>
+<p><strong>表体精简后</strong>：🟢 生效中。⚠️ 这是国际站，与国内 WorkBuddy / 国内 TokenHub 的限免是两条线，不可混算</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中。<strong>按积分（credits）计价</strong>：GLM-5.3-Flash 输入 17 / 输出 55 / 缓存 4；GLM-5.2 99 / 310 / 19；<strong>Kimi K3 352 / 1758 / 36（每百万 token）</strong>。⚠️ <strong>这是国际站，与国内 WorkBuddy / 国内 TokenHub 的限免是两条线，不可混算</strong></p></blockquote>
+<h3 id="h3-15">🟢 智谱清言「双节消耗积分 100% 返还」</h3>
+<p><strong>表体精简后</strong>：🟢 生效中。⚠️ 过期未登不补；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中。<strong>10/8–10/31 期间登录即自动发放</strong>（chatglm.cn / App），<strong>9/25–10/7 期间花掉的积分按 100% 返</strong>，<strong>单账号上限 15 万</strong>；<strong>返还积分到账后约 30 天有效</strong>。⚠️ <strong>过期未登不补</strong>；⚠️ <strong>与已收口的「登录翻 10 倍」是两条不同的线</strong>（避坑 52 同源）</p></blockquote>
+<h3 id="h3-16">🟢 江苏省词元（Token）券 / 语料券 / 模型券</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（省发改委等五部门 10/9 印发、10/9 官网公开）。⚠️ 企业向 + 省级统筹，且门槛对小微与个人开发者不友好（避坑 53 三层问法）——这是本报告表内第 6 条地方券（青浦 / 湖北 / 珠海 / 上海张江 / 龙湖区政府词元券 + 江苏）——地方券聚合入口仍缺（第 3 类清单缺口维持）</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（<strong>省发改委等五部门 10/9 印发、10/9 官网公开</strong>）。<strong>省级三券并行</strong>，支持对象含<strong>企业 / 高校院所 / 研究机构 / OPC</strong>。<strong>（031 期）补上细则（030 期只登记了「有三张券」）</strong>：<strong>词元券</strong>省市合计补贴<strong>不超过实际支付费用的 50%、单家主体上限 500 万元</strong>（覆盖智能算力租赁与词元调用）；<strong>语料券</strong>单主体上限 <strong>100 万元</strong>（高质量数据集 / 语料采购）；<strong>模型券</strong>按<strong>实际研发投入 30%</strong> 支持、上限 <strong>100 万元</strong>；<strong>申领门槛：算力支出不少于 1 万元、合同起始时间需在 2026/7/1 之后</strong>；依托<strong>江苏省一体化算力监测调度平台</strong>线上提交合同 / 发票 / 付款凭证 / 词元计量材料，<strong>据实结算</strong>；<strong>省级资金按「预拨 + 清算」下达、地市配套兑付</strong>。⚠️ <strong>企业向 + 省级统筹，且门槛对小微与个人开发者不友好</strong>（避坑 53 三层问法）——<strong>这是本报告表内第 6 条地方券</strong>（青浦 / 湖北 / 珠海 / 上海张江 / 龙湖区政府词元券 + 江苏）——<strong>地方券聚合入口仍缺</strong>（第 3 类清单缺口维持）</p></blockquote>
+<h3 id="h3-17">🟢 Google Nano Banana 2 停用（Gemini API）</h3>
+<p><strong>表体精简后</strong>：🟢 未开始（距今 2 天）。⚠️ Google 未公布具体停机时刻；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 未开始（****<strong>距今 2 天</strong>**<strong>）。</strong>Nano Banana 2（<code>gemini-3.1-flash-image</code>）在 Gemini API 中已 deprecated，10/29 正式停用<strong>，迁移目标为 </strong>Nano Banana 2.1<strong>。⚠️ </strong>Google 未公布具体停机时刻<strong>；⚠️ </strong>（029 期）「图像模型线漏登链条」上的第一个明确运维节点<strong>（027 期补登混元图像 3.0、029 期补登 Nano Banana 2.1，两次同源，见避坑 129）；⚠️ </strong>（037 期）同日提醒<strong>：</strong>10/29 还有腾讯元器「不再支持新建智能体与分发 API Key」<strong>（见下表）—— </strong>两个同日节点性质完全不同：一个是模型停用需迁移调用，一个是平台功能关闭需停止新建<strong>，</strong>不要合并成「10/29 大限」**（避坑 148）</p></blockquote>
+<h3 id="h3-18">🟢 OpenAI 学生 $100 Codex 额度（美国 / 加拿大）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中。⚠️ 仅美加学籍；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中。<strong>在读大学生经学校邮箱验证后可领 $100 ChatGPT credits，限定用于 Codex，每人一次、12 个月过期</strong>。⚠️ <strong>仅美加学籍</strong>；⚠️ <strong>来源为优惠聚合站（DealSelected / Hunt4Freebies 等），官方页未核到</strong>（避坑 44 同族）。⚠️ 同期另有一条：<strong>InkPal Pro 学生免费 12 个月</strong>（.edu 邮箱申请）——<strong>与本报告主体无关，仅登记</strong></p></blockquote>
+<h3 id="h3-19">🟢 Anthropic 新版使用政策（含首次禁止虐待模型）</h3>
+<p><strong>表体精简后</strong>：🟢 未开始（距今 16 天）。⚠️ 官方明确：普通反驳、表达不满、研究测试、暗黑题材创作都不在禁止范围；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 未开始（**<strong>距今 16 天</strong><strong>）。</strong>新增「禁止持续且无必要地虐待或残酷对待模型」<strong>，处置方式为</strong>终止当前会话<strong>（不影响账号内其他会话、不封号）；把分散的选举 / 欺诈 / 隐私 / 虚假信息条款</strong>合并为统一的「欺骗性活动」章节<strong>；</strong>武器与监控条款收紧<strong>；</strong>自主物理动作需人在环、可随时介入<strong>。⚠️ </strong>官方明确：普通反驳、表达不满、研究测试、暗黑题材创作都不在禁止范围<strong>；⚠️ </strong>与额度无关，但改变「能不能用」的边界**（避坑 41 第一问）</p></blockquote>
+<h3 id="h3-20">🟢 火山方舟 Agent Plan 个人版 × 专业数据集 1000 次免费调用</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（距今 12 天）。⚠️ 它是「数据调用次数」不是「模型 token」——两类额度不能相加（避坑 54 同源：计量单位不同就不能合并）</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（****<strong>距今 12 天</strong>**<strong>）。</strong>订阅 Agent Plan 个人版（Small / Medium / Large / Max 四档）并在控制台「配置 Harness」开启专业数据集，即得 1000 次免费调用<strong>：</strong>企业工商 400 次 + 企业风险 400 次 + 宏观经济 200 次<strong>；活动期 </strong>10/8–11/8<strong>；</strong>资格按账号维度发放，新购 / 续费 / 升配共享同一资格<strong>。⚠️ </strong>它是「数据调用次数」不是「模型 token」——两类额度不能相加**（避坑 54 同源：计量单位不同就不能合并）</p></blockquote>
+<h3 id="h3-21">⚪ OpenAI <code>o4-mini</code> API 停用</h3>
+<p><strong>表体精简后</strong>：⚪ 已结束（停用日 10/23，本期基准日 10/27 已过 4 天）。⚠️ 状态列由 🟢 改为 ⚪ 的判据只有一条：截止日 ≤ 基准日 —— 044 期该行写「距今 1 天」、047 期重算为 <code>0</code>，048 期与 049 期按基准日 10/27 距停用日 4 天，仍归 <code>over</code> 档（<code>check_deadlines.py --today 2026-10-23</code> 实跑）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已结束（停用日 10/23，本期基准日 10/27 已过 4 天）</strong>。<strong>⚠️ 状态列由 🟢 改为 ⚪ 的判据只有一条：截止日 ≤ 基准日</strong> —— <strong>044 期该行写「距今 1 天」、047 期重算为 <code>0</code>，048 期与 049 期按基准日 10/27 距停用日 4 天，仍归 <code>over</code> 档</strong>（<code>check_deadlines.py --today 2026-10-23</code> 实跑）。<strong>⚠️ 本报告不写「停用当天是否仍可调用」</strong> —— <strong>官方未给「当天几点截止」的钟点，本行不填</strong>（避坑 154 / 166）。 <strong>⚠️ （049 期）本行仍需显式改写</strong>：状态列里那句「044 期记为『距今 1 天』」是<strong>引述历史</strong>，<strong>不是本行的活倒计时</strong> —— 脚本的 <code>DAYS_RE</code> 会把它当成活字段重算成一个负值天数。<strong>内嵌形态脚本管不到，由每期显式 <code>REWRITE</code> 兜底</strong>（与 <code>AgentCore</code> 同一处置）。<strong>⚠️ 本期顺手修掉 048 期留下的一处自伤</strong>：048 期把改写理由写成「会把它算成『距今 −4 天』（负值）」—— <strong>那句里的负值字面量本身就会被本期脚本的负值断言当成真负值</strong>，<strong>本行因此连续两期被显式改写</strong>。<strong>教训</strong>（避坑 217）：<strong>在一行里写出「某个数是负的」这句话，那个数就会真的被读成负数</strong> —— <strong>说明性文字里的数字照样会被解析器看见</strong>。</p></blockquote>
+<h3 id="h3-22">🟢 HeyGen Voice（AA 语音合成榜首，促销五折）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（距今 4 天）。⚠️ 榜首为单一榜单口径（避坑 116）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（****<strong>距今 4 天</strong>**<strong>）。</strong>HeyGen Voice 首发即登 Artificial Analysis 受控语音 TTS 榜首（Elo 1,201）<strong>；</strong>10/31 前 API 五折、$15 / 百万字符<strong>。⚠️ </strong>榜首为单一榜单口径<strong>（避坑 116）；⚠️ </strong>本报告主体是文本 / 图像 / 视频线，语音类只作登记**</p></blockquote>
+<h3 id="h3-23">🟢 生数科技 Vidu Q4 Preview（视频 · 首发 0.09 元/秒）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（10/10 发布）。⚠️ 对照：国内主流视频模型 API 普遍 0.5–3 元/秒——但「单价最低」不等于「单条最便宜」（避坑 137）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（<strong>10/10 发布</strong>）。<strong>当前只支持「图生视频」与「参考生视频」两种模式（纯文生视频不在内）</strong>；<strong>最多 15 张参考图 + 3 段参考音频</strong>（音频用于<strong>跨镜头锁定角色音色</strong>）；<strong>输出 540P / 720P / 1080P / 2K / 4K，10 bit 色深，单次最长 16 秒</strong>；<strong>主打动态运镜、切镜与复杂镜头衔接</strong>；<strong>官方 SaaS 首发优惠 0.09 元/秒起（10 秒片 &lt; 1 元）</strong>。⚠️ <strong>对照：国内主流视频模型 API 普遍 0.5–3 元/秒</strong>——<strong>但「单价最低」不等于「单条最便宜」</strong>（避坑 137）；⚠️ <strong>标准价未公布</strong>（避坑 117）；⚠️ <strong>全量版发布日期未公布</strong>；⚠️ <strong>画质评价为单一媒体实测、非基准分</strong>（避坑 116）</p></blockquote>
+<h3 id="h3-24">⚪ 智谱 AutoClaw「每日登录领 credits」第二期</h3>
+<p><strong>表体精简后</strong>：⚪ 已按原定日期收口（10/18 回扫未见延期或提前收口公告）。⚠️ （048 期）第三期是否接上：本期仍未见公告 —— 连续第 5 期未见（037、038、039 期已连续记三次「本期未见公告」）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已按原定日期收口（10/18 回扫未见延期或提前收口公告）</strong>。<strong>（037 期登记的档位表口径全部不变）</strong>：<strong>10/12 首日全体 10,000 Credits（1 亿 GLM-5.3-Flash Tokens）；10/13–10/16 每日全体 800 Credits（800 万 Tokens）</strong>；<strong>付费会员额外每日奖励按档位（AutoClaw 月度订阅 Lite/Base/Pro/Max = 500 / 5,000 / 7,000 / 8,000 Credits；<code>GLM Coding Plan</code> 个人版 Lite/Pro/Max = 5,000 / 7,000 / 8,000 Credits）</strong>。<strong>⚠️ （048 期）第三期是否接上：本期仍未见公告 —— 连续第 5 期未见</strong>（037、038、039 期已连续记三次「本期未见公告」）。<strong>按 032 期定的「疑似实质违约候选」判据：厂商承诺的交付物按期是否出现是可判定的，超过一个自然周期就换档</strong> —— <strong>注意这条不适用于本条（第二期本身按期兑现了），只适用于「第三期是否存在」这个待定问题</strong>。⚠️ <strong>每日奖励当天午夜过期、当日领当日用；每账号每日限领一次；多重会员只取最高档、不可叠加</strong>（避坑 52） <strong>⚠️ （048 期）本轮未实访该站公告列表 —— 「连续第 5 期」是按期数推进的，不是按本轮实访结果重数的；</strong>本轮实访的是国内站 <code>M10W4</code> 活动页（见下），不是第三期公告页**（避坑 180）。</p></blockquote>
+<h3 id="h3-25">🟠 Cloudflare 收购 Deno（Deno Deploy 进入关停倒计时）</h3>
+<p><strong>表体精简后</strong>：🟠 未开始（距今约 6 个月，本行按官宣日推算、非官方给出的日期）。⚠️ 三条会咬人的迁移时间线：① Deno Deploy 再运营 6 个月后关停（付费客户获迁移协助到 Workers）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟠 <strong>未开始（距今约 6 个月，本行按官宣日推算、非官方给出的日期）</strong>。<strong>10/9 两家同步发帖官宣、10/10 媒体报道</strong>（031 期补登）。<strong>收购标的是 <code>celld</code></strong>（Deno 8 月发的 Rust 单二进制，可在自有服务器上跑 Workers 与 Durable Objects）；<strong>全团队并入 Cloudflare 的 Workers / Durable Objects 组</strong>，目标是把 <strong>celld 与 workerd 合流</strong>、让自托管与托管行为一致。⚠️ <strong>三条会咬人的迁移时间线</strong>：① <strong>Deno Deploy 再运营 6 个月后关停</strong>（付费客户获迁移协助到 Workers）；② <strong>Deno runtime 再发 1 年月度 bug / 安全更新后停止官方开发</strong>（保持开源，交给社区）；③ <strong>JSR 继续运营、基础设施迁到 Cloudflare</strong>。<strong>凡是把生产挂在 Deno Deploy 上的团队，本季度就要排迁移</strong>（避坑 77：官方定档 ≠ 节点冻结）</p></blockquote>
+<h3 id="h3-26">🟠 Google <code>Gemini 4 Argon</code>（前沿模型 · 10/14 全球 GA → 10/15 新增 <code>Argon for Robotics</code>）</h3>
+<p><strong>表体精简后</strong>：🟠 GA 已生效、首发优惠价倒计时中。⚠️ 免费档与 $5 的 Plus 档仍拿不到。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟠 <strong>GA 已生效、首发优惠价倒计时中</strong>。<strong>10/14 起经付费版 <code>Gemini API</code>、<code>AI Studio</code>、<code>Antigravity</code> 与 Gemini 应用，向 <code>AI Pro</code> / <code>AI Ultra</code> 订阅用户与付费 API 客户开放</strong>；⚠️ <strong>免费档与 $5 的 Plus 档仍拿不到</strong>。⚠️ <strong>价格三件</strong>：<strong>首发优惠价输入 $2 / 输出 $10 每百万 token（缓存输入按原价 5% 计）→ 11 月底恢复 $4 / $20</strong>（避坑 154）。<strong>输出上限 100 万 token</strong>（上一代 6.4 万；<strong>「100 万」是输出上限、不是上下文窗口</strong>，031 期纪律）。⚠️ <strong>能力线（10/15 开发者博客）</strong>：<strong><code>Gemini 4 Argon for Robotics</code> —— <code>Embodied Reasoning（ERQA）</code>纯推理 87%，官方称超过所有其他前沿模型</strong>；<strong>四类用法：机器人控制 / Real2Sim / 物理理解 / 研究与自我改进</strong>。⚠️ <strong>87% 是单一基准、纯推理口径、官方自披露</strong>（避坑 116）；⚠️ <strong>拿到机器人能力不等于拿到免费额度</strong>（避坑 152）。⚠️ <strong>（037 期）新增一条订阅档归属事实</strong>：<strong><code>Argon</code> 被明确纳入 AI Pro 与 AI Ultra 方案，不再向 AI Plus 提供</strong> —— <strong>这与「Google AI Plus 11/13 起失去 Pro 模型」是同一条政策的两面，两行要一起读</strong>（见下表「Google AI Plus 失去 Pro」）。⚠️ <strong>基准全部为谷歌自披露</strong>：<code>DeepSWE v1.1</code> 77.9% / <code>AutomationBench</code> 51.3% / <code>LVBench</code> 91.7% / <code>CWE-bench v1</code> 68% 并列第一；<strong>AA Intelligence Index（High）52.6、最高推理档 53</strong>（避坑 116）</p></blockquote>
+<h3 id="h3-27">⚪ 腾讯 <code>Step 5 Preview</code> × WorkBuddy 独家限免</h3>
+<p><strong>表体精简后</strong>：⚪ 已结束（截止 10/25，本期基准日 10/27 已过 2 天）。⚠️ 状态迁移：046 期写「🟢 今日截止（截止日即基准日 10/25）」→ 本期按「截止日 &lt; 基准日」改 ⚪ —— 这正是 046 期立的「今日到期只允许出现在截止日等于基准日那一期」纪律的第一次正常兑现 ✔⚠️ 零积分限免 600B MoE、原生 1M 上下文（038 期口径不变）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已结束（截止 10/25，本期基准日 10/27 已过 2 天）</strong>。<strong>⚠️ 状态迁移：046 期写「🟢 今日截止（截止日即基准日 10/25）」→ 本期按「截止日 &lt; 基准日」改 ⚪</strong> —— <strong>这正是 046 期立的「今日到期只允许出现在截止日等于基准日那一期」纪律的第一次正常兑现</strong> ✔<strong>⚠️ 零积分限免 600B MoE、原生 1M 上下文（038 期口径不变）；权重 10/15 已按承诺兑现、这条限免 10/25 到期，两者不可混成一句</strong>（避坑 148/150）。<strong>⚠️ （047 期）本轮未实访该产品页，只按截止列推进状态 —— 「未实访」如实写，不写「已复核」</strong>（避坑 030/180）。</p></blockquote>
+<h3 id="h3-28">🔴 腾讯智能体平台「元器」停止服务（040 期最高优先级运维项）</h3>
+<p><strong>表体精简后</strong>：🔴 倒计时中，四个日期必须分开排（049 期逐行手算，不用脚本）。⚠️ 本行是「脚本解析不到状态列倒计时」的标准样本：截止列有三个日期，而 <code>DAYS_RE.sub</code> 会把状态列三个「距今」全部替换成截止列第一个日期算出的同一个值，故每期显式 <code>REWRITE</code>、按基准日 10/27 逐条手算：① <code>10/29</code> 起不再支持新建智能体与分发 API Key（距今 2 天）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🔴 <strong>倒计时中，四个日期必须分开排（049 期逐行手算，不用脚本）</strong>。<strong>⚠️ 本行是「脚本解析不到状态列倒计时」的标准样本</strong>：<strong>截止列有三个日期，而 <code>DAYS_RE.sub</code> 会把状态列三个「距今」全部替换成截止列第一个日期算出的同一个值</strong>，故每期显式 <code>REWRITE</code>、按基准日 10/27 逐条手算：<strong>① <code>10/29</code> 起不再支持新建智能体与分发 API Key（距今 2 天）；② <code>11/9</code> 平台停止全部服务（距今 13 天）；③ 数据导出窗口开到 <code>2027 年 1 月 9 日</code>（距今 74 天 —— ⚠️ 比停服日晚两个月，最容易漏的一个日期）</strong>。<strong>⚠️ 与 046 期的 diff（逐条对得上才写）</strong>：<strong>046 期写 <code>4 / 15 / 76</code>（基准日 10/25），本期 <code>2 / 13 / 74</code>，各 −2，逐条对得上</strong> ✔（<strong>三个数全部由「截止日 − 基准日」现算，不是「推进两天就各减一」</strong>）。<strong>⚠️ 官方公告口径不变</strong>：<strong>2026-11-09 停止服务；停服后智能体不再可用；平台访问、数据读写、API 调用、后台控制台全部关闭；发布到公众号、微信客服等渠道的智能体也停止响应</strong>。<strong>迁移方向：官方推荐腾讯云智能体开发平台 <code>ADP</code></strong>（<code>元器</code> 偏 C 端 / 与元宝结合，<code>ADP</code> 面向 B 端）。<strong>⚠️ 本行量级高于任何额度到期（避坑 164）：「优惠窗口结束」损失的是钱，「平台停服」损失的是存在本身。</strong> <strong>⚠️ （048 期）本期基准日与 047 期同为 10/27，故三个「距今」数（<code>2 / 13 / 74</code>）全部不变 —— </strong>这是「同基准日就不变」的正常结果，不是漏改<strong>。</strong>⚠️ 本行仍是「脚本解析不到状态列倒计时」的标准样本<strong>：截止列有三个日期，<code>DAYS_RE.sub</code> 会把状态列三个「距今」全部替换成截止列第一个日期算出的同一个值，</strong>故每期显式 <code>REWRITE</code>、按基准日逐条手算<strong>。 </strong>⚠️ （049 期）本期基准日与 048 期同为 10/27，故三个「距今」数（<code>2 / 13 / 74</code>）全部不变 —— <strong>这是「同基准日就不变」的正常结果，不是漏改</strong>。<strong>⚠️ 本行仍是「脚本解析不到状态列倒计时」的标准样本</strong>：截止列有三个日期，<code>DAYS_RE.sub</code> 会把状态列三个「距今」全部替换成截止列第一个日期算出的同一个值，<strong>故每期显式 <code>REWRITE</code>、按基准日逐条手算</strong>。</p></blockquote>
+<h3 id="h3-29">🟠 Google AI Plus 失去 Pro 模型选择权（订阅档降级）</h3>
+<p><strong>表体精简后</strong>：🟠 倒计时中（距今 17 天）。⚠️ （037 期）纠错要点：本行与「Google Gemini 免费档收缩」不是同一件事 —— 后者是 10/9 生效、针对「个人未订阅账号」的永久性收缩；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟠 <strong>倒计时中（</strong>**<strong>距今 17 天</strong>**<strong>）</strong>。<strong>Google 已开始向 Gemini AI Plus 订阅者发送通知邮件，确认自 2026-11-13 起调整模型访问权限</strong>：<strong>AI Plus 用户将无法在 Gemini 应用及 Google 搜索的 AI 模式中选择 Pro 模型，仅可使用 Flash-Lite 和 Flash 两款模型</strong>。<strong>四条边界</strong>：<strong>① 不是取消订阅而是降档可用</strong> —— <strong>此前使用 Pro 创建的对话不会被删除，但后续需切换至其他可用模型继续交流（即「历史可读、后续由较轻量引擎接管」）</strong>；<strong>② 继续用 Pro 只有两条路且月费涨约 4 倍</strong> —— <strong>升级到每月 19.99 美元的 Google AI Pro，或每月 99.99 美元的 AI Ultra</strong>；<strong>升级到 Pro 档的额外好处是使用额度从免费标准版的两倍提升至四倍</strong>；<strong>③ 免费档仍保留</strong> —— <strong>免费用户可继续使用 Flash-Lite；AI Plus 保留 Flash-Lite + Flash</strong>；<strong>其他订阅权益（Google Workspace 云存储、YouTube Premium 等）不受本次调整影响</strong>；<strong>④ <code>Gemini 4 Argon</code> 的归属一并确认</strong> —— <strong>该模型被纳入 AI Pro 与 AI Ultra，不再向 AI Plus 提供</strong>。⚠️ <strong>（037 期）纠错要点</strong>：<strong>本行与「Google Gemini 免费档收缩」不是同一件事</strong> —— <strong>后者是 10/9 生效、针对「个人未订阅账号」的永久性收缩；本行是 11/13、针对「付费最低档 AI Plus」</strong>。<strong>两个日期、两个档位，勿合并</strong>（避坑 142）。⚠️ <strong>ITBear 口径本身记录了日期差</strong>：「Google 此前于 10 月更新 Gemini 支持文档，曾预计相关限制于 10/9 生效，此次邮件则明确了 11/13 这一新日期，但未说明调整原因」</p></blockquote>
+<h3 id="h3-30">🟡 商务部 / 科技部 2026 年第 48 号公告 · AI 领域 23 项技术增列 + 出口前登记</h3>
+<p><strong>表体精简后</strong>：🟡 生效中（义务已成立、通道未开的状态维持）。」⚠️ 本期回扫结论（与 044 期相同，但多了一条交叉证据）：未见实施日公告、也未见任何一家厂商就「已启动登记」发出办理指引 —— 受影响主体仍处在「义务已成立、通道未开」的状态（Q27 三项仍未定）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟡 <strong>生效中（义务已成立、通道未开的状态维持）</strong>。<strong>（045 期）距征求意见截止 </strong>23 天<strong>（基准日 10/23，由脚本重算）。</strong>官方一手（<code>mofcom.gov.cn</code> 安全与管制局，<code>发文日期 2026年10月16日</code>，页面发布时间 <code>2026-10-16 16:00</code>）逐字<strong>：「</strong>人工智能领域包括大模型、智能体、算力集群、信息处理相关 23 项技术；对已通过开源、发表学术论文等方式进入公共领域的技术，不纳入管理范围。<strong>」「</strong>自本公告发布之日起，至《中国禁止出口限制出口技术目录》正式修订并实施之日止，技术出口经营者在出口本公告附件所列技术前，应当在商务部业务系统统一平台技术贸易管理信息应用（https://ecomp.mofcom.gov.cn）登记。已经开始但尚未完成的出口，在登记范围内。<strong>」</strong>⚠️ 本期回扫结论（与 044 期相同，但多了一条交叉证据）<strong>：</strong>未见实施日公告、也未见任何一家厂商就「已启动登记」发出办理指引<strong> —— </strong>受影响主体仍处在「义务已成立、通道未开」的状态<strong>（Q27 三项仍未定）。</strong>⚠️ 本期新记一条与本报告 044 期头条直接相关的第三方口径（不采信为官方）<strong>：</strong>附件技术范围（征求意见稿）以 <code>.wps</code> 附件形式发布，本报告未取到附件正文<strong>；</strong>第三方（百度百科词条转述附件）称「拟禁止出口 14 项」中含「<strong>人工智能驱动的恶意代码生成与变异技术</strong>」、「拟限制出口 26 项」中含「<strong>人工智能辅助漏洞挖掘技术</strong>」<strong> —— </strong>⚠️ 这两项若属实，与 <code>OpenAI</code> <code>Patch the Planet</code> / <code>PHP2Shell</code>（AI 协助发现 <code>PHP</code> 核心漏洞）是同一条线上的两端，但本报告只登记为「第三方转录、未经官方附件核实」，不写成官方口径<strong>（避坑 44 / 116）。</strong>⚠️ 不得写成「AI 技术出口已被管制」<strong> —— </strong>登记生效日与管制实施日是两件事**（避坑 167）。</p></blockquote>
+<h3 id="h3-31">🟡 <code>DeepSeek Search</code> / <code>Fetch</code> 两个 API 开放（10/17 · 服务端调用免费到 11/1）</h3>
+<p><strong>表体精简后</strong>：🟡 生效中（免费窗口内 · 距今 5 天）。⚠️ 该页 10/17 条目里有一段与免费无关但影响成本判断的厂商自报（官方逐字）：「While improving performance, we also reduced the model’s task runtime and output length, enabling users to complete tasks at lower cost and higher speed and achieving a new performance–cost Pareto optimum across multiple harnesses. We specifically optimized for DeepSeek Harness, Tencent CodeBuddy, WorkBuddy, and other platforms.」—— 「更低成本」是厂商结论，且优化对象点名了具体平台，本报告不转写为普适结论（避坑 116 / 165）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟡 <strong>生效中（免费窗口内 · 距今 5 天）</strong>。<strong>（045 期）回扫 <code>api-docs.deepseek.com/updates</code>（Change Log）实访；048/049 两期均未复访该页</strong>：<strong>最新条目仍是 <code>Date: 2026-10-17</code>（<code>Opening up the in-house search API</code> + <code>DeepSeek-V4.1-Flash-1017 Update</code>），其后无任何新条目</strong> —— <strong>即 <code>DeepSeek</code> 侧连续第 8 期无新发布</strong>。<strong>⚠️ 该页 10/17 条目里有一段与免费无关但影响成本判断的厂商自报</strong>（官方逐字）：「<strong>While improving performance, we also reduced the model’s task runtime and output length, enabling users to complete tasks at lower cost and higher speed and achieving a new performance–cost Pareto optimum across multiple harnesses. We specifically optimized for DeepSeek Harness, Tencent CodeBuddy, WorkBuddy, and other platforms.</strong>」—— <strong>「更低成本」是厂商结论，且优化对象点名了具体平台，本报告不转写为普适结论</strong>（避坑 116 / 165）。<strong>⚠️ 「开源框架不改变 API 价格」这条既有结论本期不变</strong>：<strong>10/20 开源的 <code>DeepInfer</code> 与官方 API 计费是两本账</strong>。 <strong>⚠️ （049 期）本轮仍未实访该 Change Log —— 「连续第 8 期」按期数推进，不按实访结果重数</strong>（避坑 180）。 <strong>⚠️ （049 期）本行的「距今 N 天」是 048 期漏重算的继承误差，本期由 <code>gen_table</code> 的 diff 输出抓出并修正</strong>：<strong>截止列 <code>11/1</code>、基准日 <code>10/27</code> → 真值 <code>5</code> 天，而 048 期写的是 <code>9</code> 天（那是 047 期基准日 <code>10/23</code> 算出来的值）</strong>。<strong>⚠️ 这是「基准日没变 ≠ 不用重算」的第二个样本</strong> —— <strong>基准日没变不代表上期算对了，上期可能压根没算</strong>；<strong><code>gen_table</code> 的 diff 输出是唯一发现手段</strong>（040 期滚雪球教训，048 期脚注已立，本期再度实测命中）。</p></blockquote>
+<h3 id="h3-32">🟢 <code>WorkBuddy Intl</code> 的 <code>DeepSeek-V4.1-Flash-1017</code> 限免（10/31）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（距今 4 天 · 工作区自有产品线）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>生效中（</strong><strong>距今 4 天</strong><strong> · 工作区自有产品线）</strong>。<strong>（045 期）本轮未实访到该产品页的新变化，本行只按基准日推进天数</strong> —— <strong>「连续 N 期未变」不等于「已确认无变化」，本报告不写「已复核」</strong>（避坑 030 / 180）。</p></blockquote>
+<h3 id="h3-33">⚪ 智谱 <code>AutoClaw</code> 国际站 <code>M10W3</code> 每日登录送 Token（<code>z.ai</code> · 10/19–10/25 · 连续第 6 次未被改回）</h3>
+<p><strong>表体精简后</strong>：⚪ 已结束（活动期 10/19–10/25 已收口，本期基准日 10/27 已过 2 天）。⚠️ 收口后本轮复读（<code>autoclaw.z.ai/blog/news/M10W3/</code>，读于 2026-10-27 06:2x）：标题仍为 <code>Get 85M Tokens: Daily Login Event</code>、正文规则表仍未改（<code>Oct 19-20</code> 每天 <code>3,000 credits (30M tokens)</code>、<code>Oct 21–25</code> 每天 <code>500 credits (5M tokens)</code>）—— 活动已过期、页面仍不改，是「官方不回收历史活动页」的又一例；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已结束（活动期 10/19–10/25 已收口，本期基准日 10/27 已过 2 天）</strong>。<strong>⚠️ 收口后本轮复读（<code>autoclaw.z.ai/blog/news/M10W3/</code>，读于 2026-10-27 06:2x）</strong>：<strong>标题仍为 <code>Get 85M Tokens: Daily Login Event</code>、正文规则表仍未改</strong>（<code>Oct 19-20</code> 每天 <code>3,000 credits (30M tokens)</code>、<code>Oct 21–25</code> 每天 <code>500 credits (5M tokens)</code>）—— <strong>活动已过期、页面仍不改，是「官方不回收历史活动页」的又一例</strong>；<strong>「连续第 6 次未被改回」的旧结论到此封存，本期不再续计</strong>（活动已结束，续计无意义）。<strong>⚠️ 取料纪律继续生效（避坑 194）</strong>：<strong>不带尾斜杠会 <code>301</code>，不跟随重定向会拿到 0 字节空文件 —— 空页 ≠ 活动已撤。</strong></p></blockquote>
+<h3 id="h3-34">⚪ <code>AutoClaw</code> 桌面端 v2.1.0 一次性 2 亿 Tokens（国内站 <code>zhipuai.cn</code> · 可领窗口已关闭）</h3>
+<p><strong>表体精简后</strong>：⚪ 已结束（可领窗口 10/21 关闭 · 044 期已判，本期不变）。⚠️ 第②档今天（10/23）仍在窗口内，10/25 收口 —— 与第①档的「已结束」是两个日期，不要合并（避坑 142 第二层：「可领窗口」与「奖励有效期」是两件事）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已结束（可领窗口 10/21 关闭 · 044 期已判，本期不变）</strong>。<strong>（045 期）本轮实访 <code>autoclaw.zhipuai.cn/blog/news/Weekly-Perks-M10W3/</code>（读于 2026-10-23）确认两档规则未变</strong>：<strong>① <code>10.15–10.21</code> 任意一天登录领 2 亿 Tokens（20,000 积分），每账号限领一次，领取后 7 天有效；② <code>10.15–10.25</code> 每日登录，普通用户每日 <code>500</code> 积分、付费会员每日 <code>800</code> 积分（付费会员含连续包月订阅、<code>AutoClaw</code> 团购订阅及 <code>GLM Coding Plan</code> 个人套餐用户），每日限领一次</strong>。<strong>⚠️ 第②档今天（10/23）仍在窗口内，10/25 收口</strong> —— <strong>与第①档的「已结束」是两个日期，不要合并</strong>（避坑 142 第二层：「可领窗口」与「奖励有效期」是两件事）。<strong>⚠️ 下一轮一次性档已公告且已降档</strong>：<strong><code>M10W4</code> 为 10/26–11/1 一次性 </strong>1 亿<strong> Tokens（10,000 积分），</strong>较本周的 2 亿少一半<strong>（详见本表新增行；避坑 198）。</strong>⚠️ 中间有四天空窗（10/22–10/25）没有一次性档<strong>，</strong>只有每日登录档<strong> —— </strong>官方未写每日档是否延续到 11/1 之后，本报告不替它续期**（避坑 154 / 161）。</p></blockquote>
+<h3 id="h3-35">⚠️ MiniMax <code>M2.5</code> / <code>M2.7</code> 系列退役（042 期新拿到确切日期的三条之一）</h3>
+<p><strong>表体精简后</strong>：⚠️ ⚠️ 分两个节点、不是一天（见下）。官方公告（<code>platform.minimax.io</code> Models 页，本轮实访逐字）：<code>As we roll out newer models, we'll be retiring the MiniMax M2.5 and M2.7 model families.</code>⚠️ 三个必须分开读的日期与条件：① <code>October 19, 2026</code>：These models will no longer be available to new users.（新用户闸门，本轮已生效）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚠️ <strong>⚠️ 分两个节点、不是一天</strong>（见下）。<strong>官方公告（<code>platform.minimax.io</code> Models 页，本轮实访逐字）</strong>：<strong><code>As we roll out newer models, we'll be retiring the MiniMax M2.5 and M2.7 model families.</code></strong><strong>⚠️ 三个必须分开读的日期与条件</strong>：<strong>① <code>October 19, 2026</code>：These models will no longer be available to new users.</strong>（<strong>新用户闸门，本轮已生效</strong>）；<strong>② <code>November 18, 2026</code>：These models will be retired.</strong>（<strong>存量按量付费用户的彻底下线日</strong>）；<strong>③ 官方给存量用户留的窗口是「until their retirement on November 18, 2026」，且明确「Once retired, API requests to these models will no longer work」</strong> —— <strong>即这不是「停止服务但还能跑」，是「到期后请求直接不工作」</strong>（避坑 164）。<strong>⚠️ 套餐用户走的是另一条路径（易漏）</strong>：<strong>官方写「Starting October 19, 2026, all requests to M2.5 and M2.7 models under these plans will automatically be routed to M3.1 Flash Preview」</strong> —— <strong>即 <code>M Plan</code> / <code>Token Plan</code> 用户今天起请求这两个模型会被自动改路由到 <code>M3.1 Flash Preview</code>，且「Existing model names will continue to work for backward compatibility」、「Your plan's usage allowances will remain unchanged」（套餐额度不变）</strong>。<strong>⚠️ 「自动改路由」对做对比测试的人是陷阱</strong>：<strong>你以为在测 M2.7，实际测的是 M3.1 Flash Preview，而两者的价格不同档</strong>（避坑 186）。<strong>⚠️ 本行与本表「腾讯老混元大模型平台停服」那行是本报告至今最鲜明的一组对照</strong>：<strong>同一条「老模型要下线」的事实，厂商一侧给了两个精确到日的日期、另一侧连一个日期都不给</strong> —— <strong>这恰好证明避坑 47 与避坑 164 是两条互补纪律：「厂商不发确切日期」要按已停服对待，「厂商给了确切日期」要按两个节点分别排期</strong>。<strong>⚠️ 归类</strong>：本行是<strong>产品退役时间表</strong>，不是免费额度活动，但<strong>它决定了「现在能不能用某档免费额度试旧模型」</strong></p></blockquote>
+<h3 id="h3-36">🟡 天猫「AI 空间站」Token 充值中心双 11 开卖（10/20 20:00 · 新渠道，本报告首次登记）</h3>
+<p><strong>表体精简后</strong>：🟡 生效中（距开卖 0 天 · 本轮出刊时点 10/20 午间，尚未开卖）。⚠️ 这是本报告第一次把「电商大促」登记为一条额度渠道，此前所有额度线条目都来自厂商自有站。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟡 <strong>生效中（距开卖 0 天 · </strong>本轮出刊时点 10/20 午间，尚未开卖<strong>）</strong>。<strong>⚠️ 这是本报告第一次把「电商大促」登记为一条额度渠道</strong>，此前所有额度线条目都来自厂商自有站。<strong>口径（中文聚合站转述天猫双 11 发布会与站内活动页，⚠️ 本轮未取到站内一手规则页）</strong>：<strong>① 时间：<code>10 月 20 日 20:00</code> 正式开卖</strong>；<strong>② 形态：AI 服务首次作为独立品类参与大促</strong>，智谱、<code>MiniMax</code>、阿里云、千问办公、<code>Qoder</code> 等厂商已在站内开设旗舰店；<strong>③ 售卖形态：Token 以月卡 / 季卡 / 年卡 / 充值包形式销售，与实物商品同台参与跨店满减、前 N 件折扣</strong>；<strong>④ 站内价（对比官网价）：<code>Lite 39</code> / <code>Standard 139</code> / <code>Pro 499</code>，官网价 <code>60 / 180 / 600</code></strong>，此前公示最便宜一档月卡约 <code>38.99</code> 元；<strong>⑤ 价保：<code>11 月 28 日 23:59</code> 统一，买贵可去淘宝价保中心申请退差价</strong>。<strong>⚠️ 读这一条要先分清它是什么、不是什么</strong>：<strong>它卖的是「Token 充值卡」，不是「免费额度」—— 本行不产生任何免费权益，只有折扣与价保</strong>；<strong>且它是 <code>C</code> 端订阅的聚合销售渠道，与厂商官网直购是两条独立的价格口径，不能互相代入</strong>（避坑 126 的多站点面）。<strong>⚠️ 「大促当天有额外折扣」这句话本报告不做正向预期</strong> —— 转述方同时记录了天猫总裁在发布会上明确今年「<strong>不可能回到全平台粗暴打 5 折</strong>」，且商务部等七部门 10 月 10 日《品质电商「五优」行动》针对「自动跟价」「全网最低价」在做纠治 —— <strong>即折扣力度受平台规则约束，不宜按历史大促的幅度做规划</strong>。<strong>⚠️ 本行取料面窄（避坑 143）</strong>：<strong>站内活动规则页本轮未实访成功</strong>，<strong>六个字段全部来自二手转述，读者下单前必须以站内活动页为准</strong></p></blockquote>
+<h3 id="h3-37">⚪ 腾讯 <code>WorkBuddy</code> 国内版 <code>DeepSeek</code> 故障补偿 <code>500</code> 积分（10/22 24:00 截止 · 工作区自有产品）</h3>
+<p><strong>表体精简后</strong>：⚪ 已结束（领取截止 10/22 24:00，本期基准日 10/27 已过 5 天）。⚠️ 既有口径不变（避坑 126：工作区自有产品与厂商条目分开放）：① 必须手动领取，不会自动到账（官网头像 → 个人主页 → 用量管理 → 点击领取）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已结束（领取截止 10/22 24:00，本期基准日 10/27 已过 5 天）</strong>。<strong>⚠️ 既有口径不变（避坑 126：工作区自有产品与厂商条目分开放）</strong>：<strong>① 必须手动领取，不会自动到账</strong>（官网头像 → 个人主页 → 用量管理 → 点击领取）；<strong>② 领到后 1 个月有效</strong>；<strong>③ 另一笔自动到账的账（10/8–14 消耗返还）7 个工作日内到账、不用领</strong> —— <strong>两笔账不可互推</strong>（避坑 117 同族）。</p></blockquote>
+<h3 id="h3-38">⚪ <code>OpenRouter</code> 的 <code>MiniMax M3.1 Flash (free)</code> 免费档（10/19 上线 · 免费期已于 10/22 结束）</h3>
+<p><strong>表体精简后</strong>：⚪ 已结束（本报告跟踪 <code>OpenRouter</code> 免费档以来，官方第一次给出确切结束日）。048 期复读官方目录结论一致）：页面顶部横幅逐字：「The free launch period ended Oct 22, 2026. MiniMax M3.1 Flash is now served at list price ($0.15/M input, $0.60/M output, $0.015/M cached input).」⚠️ 一个必须写清的取料陷阱（本期新记，升格避坑 199）：同一个页面的字段区仍然写着 <code>Price</code> <code>Free</code>、<code>Context</code> <code>1.0M</code>、<code>Released</code> <code>Oct 19, 2026</code>，与横幅直接矛盾 —— 即「字段区写 Free、横幅写免费期已结束」同时出现在一页上。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已结束（本报告跟踪 <code>OpenRouter</code> 免费档以来，官方第一次给出确切结束日）</strong>。<strong>（045 期）本轮实访 <code>openrouter.ai/minimax/minimax-m3.1-flash:free</code>（读于 2026-10-23；048 期复读官方目录结论一致）</strong>：<strong>页面顶部横幅逐字</strong>：「<strong>The free launch period ended Oct 22, 2026. MiniMax M3.1 Flash is now served at list price ($0.15/M input, $0.60/M output, $0.015/M cached input).</strong>」<strong>⚠️ 一个必须写清的取料陷阱（本期新记，升格避坑 199）</strong>：<strong>同一个页面的字段区仍然写着 <code>Price</code> <code>Free</code>、<code>Context</code> <code>1.0M</code>、<code>Released</code> <code>Oct 19, 2026</code>，与横幅直接矛盾</strong> —— <strong>即「字段区写 Free、横幅写免费期已结束」同时出现在一页上。只读字段区会把它当成仍在免费；只读横幅会漏掉它曾经的规格。两个都必须读</strong>。<strong>⚠️ 官方 API 目录同步收口</strong>：<strong><code>openrouter.ai/api/v1/models</code> 本轮实跑已不含 <code>minimax/minimax-m3.1-flash:free</code>，只剩付费档 <code>minimax/minimax-m3.1-flash</code>（<code>$0.15</code> / <code>$0.60</code> 每 1M）</strong> —— <strong>这就是 <code>OpenRouter</code> 官方目录 <code>:free</code> 由 <code>18</code> 降为 <code>17</code> 的那一个差额</strong>（详见 <code>OpenRouter 免费档</code> 行）。<strong>⚠️ 聚合站口径与一手源的关系本期反转</strong>：<strong>044 期记为「聚合站称免费 <code>72</code> 小时、约至 10/22 20:01，官方公告页未核到、故不采信」；本期官方横幅确认的结束日是 <code>10/22</code>（未给钟点）</strong> —— <strong>即聚合站的「日期」这次与官方一致，但「72 小时」与「20:01 钟点」仍无官方依据，本报告继续不采信这两项</strong>（避坑 191：猜对的日期不等于猜对的口径）。<strong>⚠️ 该模型页另有两个既有字段本期仍成立</strong>：<code>Not currently available through EU in-region routing.</code>；模型描述写 <code>It is an open-weight mixture-of-experts model with 23B active / 428B total parameters.</code><strong>⚠️ 「open-weight」这个词在 <code>OpenRouter</code> 页面上的含义与本报告第四章的许可口径不是一回事</strong> —— <strong>权重可下载 ≠ 可商用，见 <code>M3.1 Flash 开放权重</code> 行与避坑 197。</strong> <strong>⚠️ （048 期）本轮复读 <code>openrouter.ai/api/v1/models</code> 全量 <code>463</code> 条：付费档 <code>minimax/minimax-m3.1-flash</code> 仍在，<code>:free</code> 后缀仍不在 <code>:free</code> 清单 <code>17</code> 条里 —— </strong>免费档结束状态延续，结论不变<strong>。</strong>⚠️ 但本期新立避坑 211：<code>created</code> 是「加入目录时间」不是「厂商发布时间」<strong> —— </strong>判断「什么时候免费」要看官方横幅（<code>The free launch period ended Oct 22, 2026.</code>），不看目录字段**。</p></blockquote>
+<h3 id="h3-39">⚪ <code>OpenCode</code> 的 <code>MiniMax M3.1 Flash Free</code>（<code>limited time</code> · 已于 10/22 前后从两页下架）</h3>
+<p><strong>表体精简后</strong>：⚪ 已结束（本轮两页实访，<code>M3.1 Flash Free</code> 字样计数为 <code>0</code>）。⚠️ 本行的收口判据是「两页同时不再出现该免费档字样」，不是「官方公告」 —— <code>OpenCode</code> 两侧都没有发布任何关于本条下架的说明，本报告因此不写「官方宣布结束」，只写「已从两页下架」（避坑 154：上游没给的不替它写）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>⚪ <strong>已结束（本轮两页实访，<code>M3.1 Flash Free</code> 字样计数为 <code>0</code>）</strong>。<strong>（045 期）本轮实访两页（读于 2026-10-23）</strong>：<strong>① <code>opencode.ai/docs/go</code>（订阅页）</strong> —— 模型列表里现在是 <code>MiniMax M3.1 Flash</code>（<strong>无 <code>Free</code> 后缀、无 <code>(limited time)</code> 标注</strong>），与 <code>MiniMax M3</code> 并列；<strong>② <code>opencode.ai/docs/zen</code>（按量付费页）</strong> —— <code>Free models</code> 说明段逐条列了 <code>GLM-5.3-Flash Free</code>、<code>DeepSeek V4.1 Flash Free</code>、<code>Exo Free</code>、<code>MiMo-V2.6-Flash Free</code>、<code>MiMo-V2.5 Free</code>、<code>Nemotron 3 Ultra Free</code>、<code>Nemotron 3.5 Lightning Free</code>、<code>Nemotron 3.5 Super VL Free</code>、<code>Big Pickle</code>、<code>Beam Free</code> —— <strong>其中没有 <code>M3.1 Flash Free</code>（本轮全文检索 <code>M3.1 Flash Free</code> 命中 <code>0</code> 次）</strong>。<strong>⚠️ 本行的收口判据是「两页同时不再出现该免费档字样」，不是「官方公告」</strong> —— <strong><code>OpenCode</code> 两侧都没有发布任何关于本条下架的说明</strong>，<strong>本报告因此不写「官方宣布结束」，只写「已从两页下架」</strong>（避坑 154：上游没给的不替它写）。<strong>⚠️ 与 <code>OpenRouter</code> 的关系</strong>：<strong>两边同在 10/22 前后收口，但 <code>OpenRouter</code> 给了确切日期（<code>ended Oct 22, 2026</code>）、<code>OpenCode</code> 什么都没给</strong> —— <strong>本报告不把 <code>OpenRouter</code> 的日期借用到 <code>OpenCode</code> 这一行</strong>（避坑 161：同类源之间也要标口径；未核到 ≠ 不存在）。<strong>⚠️ 044 期在本行记的三条结论（<code>Unlimited</code> 是聚合平台自估、留存口径落第一档、两页均未标 <code>limited regions</code>）随本条收口一并归档，本报告不重复往期已固化内容。</strong></p></blockquote>
+<h3 id="h3-40">🟡 <code>Anthropic</code> 生命科学 guest investigators 开放申请（10/22 · 官方逐字 <code>at no cost to them</code>）</h3>
+<p><strong>表体精简后</strong>：🟡 生效中（申请窗口开放中 · 审批类权益，不是领取类）。官方一手（<code>anthropic.com/news/open-call-guest-investigators-life-sciences</code>，<code>Published Oct 22, 2026</code> · <code>Category Announcements</code>）逐字：「We’re looking for proposals from principal investigators and their research groups at academic institutions, nonprofits, or government labs who want to use Claude to investigate key questions in causal human biology, structural and computational molecular biology, medicinal chemistry, drug discovery, and clinical science.」「Over 8–12 weeks, guest investigators will work directly with Anthropic researchers on a problem of interest.」「Our team will run our models and harnesses at no cost to them.」「We’ll work together to publish these outputs and open-source the accompanying data and code.」「Guest investigators retain the rights to their data at every step during their project.」「Applications will be open for approximately 14 days, and we’ll strive to notify selected participants by email approximately 14 days after applications close.」⚠️ 这是「免费」的第③层：身份权益 + 定向补贴（避坑 193）—— 「<code>at no cost</code>」免的是算力与模型使用成本，不是一笔可以随便花的额度；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟡 <strong>生效中（申请窗口开放中 · 审批类权益，不是领取类）</strong>。<strong>官方一手（<code>anthropic.com/news/open-call-guest-investigators-life-sciences</code>，<code>Published Oct 22, 2026</code> · <code>Category Announcements</code>）逐字</strong>：「<strong>We’re looking for proposals from principal investigators and their research groups at academic institutions, nonprofits, or government labs who want to use Claude to investigate key questions in causal human biology, structural and computational molecular biology, medicinal chemistry, drug discovery, and clinical science.</strong>」「<strong>Over 8–12 weeks, guest investigators will work directly with Anthropic researchers on a problem of interest.</strong>」「<strong>Our team will run our models and harnesses at no cost to them.</strong>」「<strong>We’ll work together to publish these outputs and open-source the accompanying data and code.</strong>」「<strong>Guest investigators retain the rights to their data at every step during their project.</strong>」「<strong>Applications will be open for approximately 14 days, and we’ll strive to notify selected participants by email approximately 14 days after applications close.</strong>」<strong>⚠️ 这是「免费」的第③层：身份权益 + 定向补贴</strong>（避坑 193）—— <strong>「<code>at no cost</code>」免的是算力与模型使用成本，不是一笔可以随便花的额度；拿到资格的是被选中的研究组，不是所有注册用户</strong>。<strong>⚠️ 三个不能省的限定</strong>：<strong>① 申请主体限「学术机构 / 非营利 / 政府实验室的 PI 及其研究组」；② 官方明写「不要给我们数据」（<code>We aren’t asking for guest investigators to give us their data</code>），且要求申请材料只含公开信息；③ 窗口是「约 14 天」不是确切日期</strong> —— <strong>本行「截止」列因此写「约 14 天」而不写 11/5</strong>（避坑 154 / 166）。<strong>⚠️ 与 <code>Claude Duet</code> 的对照</strong>：<strong>两者同在 10/21–10/22 发布、都带候补/申请制，但 <code>Duet</code> 官方一字未提免费，本条官方逐字写了 <code>at no cost</code></strong> —— <strong>「官方有没有写」这件事本身就是口径</strong>（避坑 195）</p></blockquote>
+<h3 id="h3-41">🟢 智谱 <code>AutoClaw</code> 国内站 <code>M10W4</code> 一周福利：登录领 1 亿 Tokens（10/26–11/1 · 已开启 · 较 <code>M10W3</code> 的 2 亿降档）</h3>
+<p><strong>表体精简后</strong>：🟢 已开启（活动第 2 天）。」⚠️ 降档三样写全（避坑 198）：上一档 <code>M10W3</code> 国内站一次性档 2 亿 Tokens（20,000 积分，10.15–10.21）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>已开启（活动第 2 天）</strong>。<strong>官方一手（<code>autoclaw.zhipuai.cn/blog/news/M10W4/</code>，页面标注 <code>2026年10月23日</code>）逐字未变</strong>：「<strong>活动规则：登录 AutoClaw，即可领取 1 亿 Tokens（相当于 10,000 积分），每个账号限领一次。</strong>」；「<strong>奖励将在 11 月 1 日 23:59（北京时间）失效，越早领取，使用时间越充足哦。</strong>」<strong>⚠️ 降档三样写全（避坑 198）</strong>：<strong>上一档 <code>M10W3</code> 国内站一次性档 2 亿 Tokens（20,000 积分，10.15–10.21）；这一档 1 亿（10,000 积分）；中间 10/22–10/25 四天没有一次性档</strong>。<strong>⚠️ （049 期）本轮已实访该页正文（<code>autoclaw.zhipuai.cn/blog/news/M10W4/</code>，同样需带尾斜杠），</strong>规则逐字未变<strong> —— 048 期记的「未复访」本期补上</strong>（避坑 180）。<strong>⚠️ 国际站同日同题不同额</strong>：<strong>国际站 <code>M10W4</code> 为 <code>40M Tokens</code>（＝4,000 credits），与国内站 1 亿不可互相推算</strong>（避坑 163）。 <strong>⚠️ （048 期）本轮实访清单：本轮抓取了该站与国际站的列表页，但 <code>M10W4</code> 的活动正文页本轮未取到可读文本 —— </strong>故本行一个事实字段都不更新，只推进「活动第 3 天」<strong>（避坑 180）。 </strong>⚠️ （049 期）本期实访销项（048 期挂账项②）：<code>autoclaw.zhipuai.cn/blog/news/M10W4/</code> 正文页本轮实访成功<strong> —— </strong>取到 <code>120,337</code> 字节<strong>，逐字：「</strong>10 月 26 日至 11 月 1 日，登录 AutoClaw，即得 1 亿 Tokens。<strong>」／「</strong>活动时间：10 月 26 日（周一）00:00—11 月 1 日（周日）23:59（北京时间）<strong>」／「</strong>活动规则：登录 AutoClaw，即可领取 1 亿 Tokens（相当于 10,000 积分），每个账号限领一次。<strong>」；</strong>国内站同页无「40M vs 100M」那处矛盾<strong>（结尾句「1 亿 Tokens 等你领取！」与正文一致）。</strong>⚠️ 048 期那句「本轮实访清单：抓取了列表页但正文页未取到可读文本」本期更正为「正文页已实访」**（避坑 194 同族）。</p></blockquote>
+<h3 id="h3-42">🟢 <code>Moonshot</code> <code>Kimi K3.1 Pro</code> 发布（10/23 晚–10/24 · 3T 级开放权重旗舰 · 权重定于 11/4 前）</h3>
+<p><strong>表体精简后</strong>：🟢 已发布可用、权重未落地（第 ④ 级未到）。⚠️ 中英文页面对同一指标给出四个不同数字（本期新立避坑 201 的直接样本）：英文技术博客 vs 中文文档（<code>platform.kimi.com/docs/guide/kimi-k3-1-pro-quickstart.md</code>） —— 幻觉率 <code>8.3%</code> vs <code>6.85%</code>（前值 <code>23.4%</code> vs <code>23.35%</code>）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>已发布可用、权重未落地（第 ④ 级未到）</strong>。<strong>官方一手（<code>kimi.com/blog/kimi-k3-1</code>，研究博客索引标注 <code>Kimi K3.1 Pro 2026-10-24</code>）逐字</strong>：「<strong>We’re introducing Kimi K3.1 Pro, the first model in our new K3.1 series and our most capable 3T-class open-weight model to date, with a 1-million-token context window.</strong>」「<strong>We are also releasing Kimi K3.1 Pro Highspeed, which delivers 2-3× the speed of K3.1 Pro.</strong>」「<strong>Kimi K3.1 Pro and Kimi K3.1 Pro Highspeed are available today on Kimi.ai, Kimi Work, Kimi Code, and the Kimi API. The full model weights will be released by Nov 4.</strong>」<strong>官方基准（全部厂商自报，避坑 116）</strong>：<code>Terminal-Bench 4.0</code> <strong><code>65.7%</code></strong>（<code>GPT-6 Astra</code> <code>58.2%</code>、<code>Claude Opus 5.5</code> <code>66.4%</code>）；<code>Kimi Code Bench 3.0 Long-horizon</code> <strong><code>61.2%</code></strong>（<code>K3</code> <code>55.95%</code>）；<code>BenchCAD</code> <strong><code>92.7%</code></strong>（<code>Opus 5.5</code> <code>96.2%</code>、<code>GPT-6 Astra</code> <code>95.9%</code>）；<code>OfficeQA Pro v2</code> <code>64.4</code>；<code>Financial Modeling</code> 较 <code>K3</code> <strong>+7.2 分</strong>、<code>Financial Research</code> <strong>+11.6 分</strong>、<code>Business Operation</code> 约 <strong>4.2×</strong>；<code>Kimi Hallu Bench Hard</code> 单项事实陈述错误率 <code>23.4%</code> → <strong><code>8.3%</code></strong>、「含至少一处事实错误的回答比例」为前代的 <strong><code>42.4%</code></strong>；<code>xdev-bench-hard</code> 未做风险削减的 checkpoint <code>90.5%</code> → 正式版 <strong><code>81.0%</code></strong>。<strong>⚠️ 中英文页面对同一指标给出四个不同数字（本期新立避坑 201 的直接样本）</strong>：<strong>英文技术博客 vs 中文文档（<code>platform.kimi.com/docs/guide/kimi-k3-1-pro-quickstart.md</code>）</strong> —— 幻觉率 <code>8.3%</code> vs <code>6.85%</code>（前值 <code>23.4%</code> vs <code>23.35%</code>）；含错回答比例 <code>42.4%</code> vs <code>46.4%</code>；财务建模 <code>+7.2 分</code> vs <code>+14%</code>；金融研究 <code>+11.6 分</code> vs <code>+20%</code>。<strong>⚠️ 参数口径两个数</strong>：<strong>官方英文博客与中文文档都写「3T 级 / 3 万亿级」</strong>，<strong>而聚合站转引的官方社媒帖写「2.8T 总参数 / 104B 激活」</strong> —— <strong>「级」是约数、社媒数未经本报告一手核实，两个都写、不合并</strong>（避坑 161）。<strong>⚠️ 价格与解锁门槛（中文文档一手逐字）</strong>：「<strong>在开放平台完成充值（最低充值金额 10 元）后即可解锁调用。新用户注册认证赠送的 15 元代金券不可用于 Kimi K3.1 Pro。</strong>」FAQ 亦逐字「<strong>不可以。</strong>」<strong>⚠️ 文件接口限时免费</strong>（定价页逐字）：「<strong>文件相关接口（文件内容抽取/文件存储）限时免费</strong>」—— <strong>官方未给结束日，本行不替它排一个日</strong>（避坑 154/166）。<strong>⚠️ <code>OpenRouter</code> 侧一手（读于 2026-10-25）</strong>：<code>moonshotai/kimi-k3.1-pro</code>，上下文 <code>1,048,576</code>，定价 <strong><code>$2.00</code> / <code>$10.00</code> / 缓存读 <code>$0.20</code></strong> 每 1M，<code>created</code> <code>2026-10-23T17:56:28Z</code>（＝北京 10/24 01:56，<strong>落在本窗口内</strong>）；模型页挂 <code>Artificial Analysis</code> 基准（<code>Intelligence Index</code> <code>55.1</code>、<code>HLE</code> <code>52.5%</code>、<code>AA-LCR</code> <code>86.3%</code>、<code>GDPval-AA</code> <code>67.3%</code>、<code>CritPt</code> <code>24.6%</code>、<code>SciCode</code> <code>60.8%</code>、<code>Terminal-Bench 4.0</code> <code>67.2%</code> —— <strong>与厂商自报的 <code>65.7%</code> 不同口径，两个都写</strong>）。<strong>⚠️ 权重现状（<code>HF</code> 一手实跑）</strong>：<code>hf-mirror.com/api/models?author=moonshotai&amp;limit=100</code> 返回 <strong><code>19</code> 个仓库、无任何 <code>K3.1</code></strong>（10/24、10/25 两轮一致；直接取 <code>moonshotai/Kimi-K3.1-Pro</code> 详情返回 <code>401</code>）—— <strong>与官方「11/4 前发布」的表述一致，不是矛盾</strong>（避坑 196 同族：<strong>列表里没有 ≠ 不存在，但详情端点取不到时本报告只写「未落地」</strong>）。<strong>⚠️ 企业版口径</strong>（官方逐字）：「<strong>Kimi Enterprise administrators can enable K3.1 Pro for their organization; access is off by default at launch.</strong>」<strong>⚠️ 官方未写任何免费额度、免费期或试用钟点</strong>（避坑 154）。</p></blockquote>
+<h3 id="h3-43">🔴 <code>Moonshot</code> <code>K2</code> 系列模型停新注册与计划下线（公告见于 <code>Kimi</code> 定价页 · 10/31 停新 / 12 月底计划下线）</h3>
+<p><strong>表体精简后</strong>：🔴 生效中（义务性变更，不是活动）。」⚠️ 三条必须拆开的口径：① 「停止向新注册用户开放」≠「下线」 —— 两个日期、两类影响面，已注册用户在前一个日期不受影响、在后一个日期才受影响；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🔴 <strong>生效中（义务性变更，不是活动）</strong>。<strong>官方一手（<code>platform.kimi.com/docs/pricing/chat</code> 页面 callout，10/24 与 10/25 06:24 两轮实访均在）逐字</strong>：「<strong>尊敬的 Kimi 用户，K2 系列模型将于 2026 年 10 月 31 日起停止向新注册用户开放，已注册用户不受影响；我们计划在 12 月底下线所有 K2 系列模型，请提前做好迁移准备。</strong>」<strong>⚠️ 三条必须拆开的口径</strong>：<strong>① 「停止向新注册用户开放」≠「下线」</strong> —— <strong>两个日期、两类影响面，已注册用户在前一个日期不受影响、在后一个日期才受影响</strong>；<strong>② 「计划在 12 月底」是计划口径，不是确切日</strong> —— <strong>本行截止列因此写「12 月底（计划）」而不写 <code>12/31</code></strong>（避坑 154/166）；<strong>③ 「下线」的官方含义未定义</strong>（停 API？停权重下载？停客户端内调用？）—— <strong>本报告不代官方定义</strong>。<strong>⚠️ 受影响范围（一手列表）</strong>：<code>K2</code> 系列在 <code>HF</code> <code>moonshotai</code> 组织下现有 <code>Kimi-K2</code>、<code>Kimi-K2-Instruct</code>、<code>Kimi-K2-Instruct-0905</code>、<code>Kimi-K2-Base</code>、<code>Kimi-K2-Thinking</code>、<code>Kimi-K2.5</code>、<code>Kimi-K2.6</code>、<code>Kimi-K2.7-Code</code> <strong>共 8 个权重仓库</strong>（10/25 实跑 <code>19</code> 个仓库中逐条点出）—— <strong>但公告说的是「K2 系列模型」，未逐一列名，本报告不把 8 个仓库当作官方清单</strong>（避坑 154）。<strong>⚠️ 迁移指向（公告内链）</strong>：官方给的「迁移准备」链接指向 <code>Kimi K3.1 Pro</code> 快速开始文档。<strong>⚠️ 与 <code>K3.1 Pro</code> 新发布的关系</strong>：<strong>两者同在 10/23–10/24 出现，但一个是新产品、一个是旧产品退场</strong> —— <strong>不可合并成一句「Kimi 换代」</strong>（避坑 134）。</p></blockquote>
+<h3 id="h3-44">🟢 智谱 <code>AutoClaw</code> 国际站 <code>M10W4</code> <code>Weekly Perk</code>：登录领 40M Tokens（10/26–11/1 · 国际站首次跟进周档）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（活动第 2 天 · 046 期该行记「距开始 1 天」，本期按活动期推进）。「claim 40 million Tokens (worth 4,000 credits) — one claim per account.」⚠️ 同页「正文 40 million vs 结尾句 100 million」的矛盾第 3 次实读仍未改正（避坑 202 追踪项，本期已实访该页正文，追踪项不销项）—— 判定仍以结构化规则（<code>40M</code> + <code>4,000 credits</code>）为准，结尾句原样引录、不取中间值。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>生效中（活动第 2 天 · 046 期该行记「距开始 1 天」，本期按活动期推进）</strong>。<strong>官方一手（<code>autoclaw.z.ai/blog/news/M10W4</code>，<code>By AutoClaw Team Oct 23 2026</code>）逐字未变</strong>：「<strong>From October 26 to November 1, log in to AutoClaw and get 40 million Tokens.</strong>」；「<strong>Event period: October 26 (Mon) 00:00 – November 1 (Sun) 23:59 (UTC+8)</strong>」；「<strong>claim 40 million Tokens (worth 4,000 credits) — one claim per account.</strong>」<strong>⚠️ 同页「正文 40 million vs 结尾句 100 million」的矛盾第 3 次实读仍未改正</strong>（避坑 202 追踪项，<strong>本期已实访该页正文</strong>，<strong>追踪项不销项</strong>）—— <strong>判定仍以结构化规则（<code>40M</code> + <code>4,000 credits</code>）为准，结尾句原样引录、不取中间值</strong>。<strong>⚠️ 与国内站同题不同额</strong>：<strong>国内站 1 亿（<code>10,000</code> 积分）/ 国际站 <code>40M</code>（<code>4,000</code> 积分）</strong>，<strong>两站 credits↔tokens 汇率不同，本报告不做跨站换算</strong>（避坑 41/163）。<strong>⚠️ 国内站同页无此矛盾</strong>（结尾句「1 亿 Tokens 等你领取！」与正文一致）。 <strong>⚠️ （048 期）本轮未实访该活动正文页 —— 「矛盾第几次」这个计数本期</strong>不推进<strong>（避坑 180：</strong>未实访就不许把观察计数加一<strong>）。 </strong>⚠️ （049 期）本期实访销项（048 期挂账项②）：<code>autoclaw.z.ai/blog/news/M10W4/</code> 正文页本轮实访成功<strong> —— </strong>注意尾斜杠：不带尾斜杠会 <code>301</code>，不跟随重定向会拿到 0 字节空文件；空页 ≠ 活动已撤<strong>（避坑 194）。</strong>本轮取到 <code>116,957</code> 字节、正文规则逐字可读<strong>：「</strong>From October 26 to November 1, log in to AutoClaw and get 40 million Tokens.<strong>」／「</strong>Log in to AutoClaw during the event to claim 40 million Tokens (worth 4,000 credits) — one claim per account.<strong>」；</strong>结尾句仍是「<strong>Remember to log in to AutoClaw on October 26 — 100 million Tokens are waiting for you!</strong>」—— 同页两处数字打架，第 3 次实读未改<strong>。</strong>判定仍以结构化规则（<code>40M</code> + <code>4,000 credits</code>）为准，结尾句原样引录、不取中间值<strong>。</strong>⚠️ 048 期那句「本轮未实访该页、矛盾是否已改本轮未核到」本期更正为「已实访、矛盾仍在」**。</p></blockquote>
+<h3 id="h3-45">🟢 <code>AutoClaw</code> 2.2.0 升级礼：升级即领 <code>5,000</code> 积分（约 <code>5,000</code> 万 tokens · 10/26 新增）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（第 1 天）。」⚠️ 三条边界：① 这是「升级礼」不是「每周福利」—— 与同站 <code>M10W4</code>（1 亿 Tokens）是两笔账，不可相加（避坑 117）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>生效中（第 1 天）</strong>。<strong>官方一手（<code>autoclaw.zhipuai.cn/blog/news</code>，条目日期 <code>2026年10月26日</code>）逐字</strong>：「<strong>现在升级至最新的 2.2.0 版本，旧版数据可轻松迁移，还能领取 5000 积分（约 5000 万 tokens）。积分发放后 7 天内有效。</strong>」<strong>⚠️ 三条边界</strong>：<strong>① 这是「升级礼」不是「每周福利」—— 与同站 <code>M10W4</code>（1 亿 Tokens）是两笔账，不可相加</strong>（避坑 117）；<strong>② 「积分发放后 7 天内有效」是相对日期，官方未给活动结束日，本行不替它写截止日</strong>（避坑 154）；<strong>③ <code>5,000 积分</code> 与官方同页 <code>约 5000 万 tokens</code> 的换算是官方自己给的，本报告不另做换算</strong>（避坑 41）。</p></blockquote>
+<h3 id="h3-46">🟢 Figma <code>Code Layers</code> 付费计划免费（Config India 2026）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（10/14 发布会、10/15 发版说明；⚠️ 「免费」只覆盖「在 code layer 内生成与编辑代码」这一件事 —— 官方原话：如果一个提示词同时做了两件事，生成 code layer 是免费的，其他所有设计与 AI 工作照常消耗 AI credits；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（<strong>10/14 发布会、10/15 发版说明</strong>；****<strong>距今 8 天</strong>**<strong>）。</strong><code>Code Layers</code> 转入全计划 open beta<strong>：</strong>把可运行代码放到画布上做交互式、代码支撑的原型<strong>，</strong>创建方式四种（转换设计帧 / 导入 GitHub 仓库 / Figma Chrome 扩展抓网站 / 从零提示）<strong>；</strong>经 MCP 创建需 Full seat，导入可能耗时 10 分钟以上<strong>。</strong>免费口径<strong>：</strong>创建与编辑 code layer 在付费计划上免费至 2026-11-04<strong>。⚠️ </strong>「免费」只覆盖「在 code layer 内生成与编辑代码」这一件事<strong> —— </strong>官方原话：如果一个提示词同时做了两件事，生成 code layer 是免费的，其他所有设计与 AI 工作照常消耗 AI credits<strong>；</strong>11/4 之后所有与 code layer 相关的任务都按其他智能体式 AI 功能一样消耗 credits，用量随任务复杂度而变<strong>。⚠️ </strong>同批发布的 <code>Figma Specs</code> 为付费计划 open beta，不用 AI 创建 / 编辑免费、用 agent 则耗 credits<strong>；⚠️ </strong>Figma 的 agent 本身已于 10/6 转 GA 并自此消耗 credits<strong> —— </strong>「Specs 免费」≠「用 Specs 的流程免费」<strong>（避坑 41 第一问）；⚠️ </strong>定价时点仍未公布**：官方承诺「先公布定价与打包方式再生效」的是 <code>Payload</code> 托管（避坑 126）</p></blockquote>
+<h3 id="h3-47">🟢 <code>百度</code> 开源 <code>文心 Unlimited OCR 2</code>（MIT 许可 · 权重 <code>HF</code> 已上架 · 官方模型卡 Release 行 <code>[2026/10/27]</code> · <code>SR-SWA</code> 任意页数文档解析）</h3>
+<p><strong>表体精简后</strong>：🟢 已开放权重（第 ④ 级已到 · 本期新发布）。官方模型卡逐字（<code>## Release</code> 首行）：「We release Unlimited OCR 2, achieving unlimited-horizon parsing with SR-SWA.」⚠️ 四层开放（避坑 41）：① 能用 —— 权重免登录直接下载、<code>gated: false</code> ② 能下载 —— 两个 <code>safetensors</code> 分片 + 技术报告 + <code>ModelScope</code> 同步上架（<code>PaddlePaddle/Unlimited-OCR-2</code>，<code>license: mit</code>）③ 能跑 —— 官方逐字「supports Transformers (native, for quick tests) and SGLang (recommended for serving)」，实测环境逐字「Tested with Python 3.10, <code>torch==2.13.0</code>, <code>transformers==4.52.1</code>, <code>huggingface-hub==0.36.0</code>, <code>tokenizers==0.21.4</code>, on an NVIDIA A800-80GB」④ 能商用 —— <code>MIT</code>（<code>HF</code> 模型卡与 <code>GitHub</code> API 两处独立来源一致）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>已开放权重（第 ④ 级已到 · 本期新发布）</strong>。<strong>官方一手（<code>huggingface.co/baidu/Unlimited-OCR-2</code>，本轮实访）</strong>：<code>license: mit</code>、<code>gated: false</code>、<strong><code>26</code> 个文件</strong>（含 <code>model-00001-of-00002.safetensors</code>、<code>model-00002-of-00002.safetensors</code>、技术报告 <code>Unlimited-OCR-2.pdf</code>、<code>wheel/</code> 下的 <code>SGLang</code> 定制 wheel）、<code>createdAt 2026-10-26T03:57:46Z</code>（＝北京 10/26 11:57）、<code>lastModified 2026-10-26T14:05:44Z</code>、<code>pipeline_tag image-text-to-text</code>、tags 含 <code>baidu</code> / <code>vision-language</code> / <code>ocr</code> / <code>custom_code</code>。<strong>官方一手（<code>github.com/baidu/Unlimited-OCR</code> 与 <code>api.github.com/repos/baidu/Unlimited-OCR</code>）</strong>：<code>license.spdx_id = MIT</code>、<code>stargazers_count 28,923</code>、<code>forks_count 3,067</code>、<code>open_issues_count 93</code>、<strong><code>pushed_at 2026-10-27T02:47:43Z</code>（＝北京 10/27 10:47，落在本期窗口内）</strong>。<strong>官方模型卡逐字（<code>## Release</code> 首行）</strong>：「<strong>We release Unlimited OCR 2, achieving unlimited-horizon parsing with SR-SWA.</strong>」<strong>⚠️ 四层开放（避坑 41）</strong>：<strong>① 能用 —— 权重免登录直接下载、<code>gated: false</code> ② 能下载 —— 两个 <code>safetensors</code> 分片 + 技术报告 + <code>ModelScope</code> 同步上架（<code>PaddlePaddle/Unlimited-OCR-2</code>，<code>license: mit</code>）③ 能跑 —— 官方逐字「</strong>supports Transformers (native, for quick tests) and SGLang (recommended for serving)<strong>」，实测环境逐字「</strong>Tested with Python 3.10, <code>torch==2.13.0</code>, <code>transformers==4.52.1</code>, <code>huggingface-hub==0.36.0</code>, <code>tokenizers==0.21.4</code>, on an NVIDIA A800-80GB<strong>」④ 能商用 —— <code>MIT</code>（<code>HF</code> 模型卡与 <code>GitHub</code> API 两处独立来源一致）</strong>。<strong>⚠️ 机制与官方逐字</strong>：<strong><code>Sparse Reference Sliding Window Attention (SR-SWA)</code></strong> —— 「<strong>Compresses text-visual attention interactions from ultra-long sequences down to a fixed-size set of working references (e.g., 512 tokens). This bounds computational complexity, keeping per-step decoding latency and memory footprint nearly constant regardless of document length.</strong>」；「<strong>achieves true, unbounded document parsing within a finite context window</strong>」。<strong>⚠️ 三条边界</strong>：<strong>① 「任意页数」≠「无限上下文」</strong> —— 官方自己写的是「有限上下文窗口内的无界解析」；<strong>② 官方基准分只在 <code>assets/leaderboard.png</code> 图片里，正文无数字</strong> —— 「<code>MPDocBench</code> / <code>MarathonDocBench</code> 达 SOTA」是官方定性表述，「<code>84.6</code> / <code>77.1</code> 分」与被超越模型清单目前只有媒体转述（避坑 116）；<strong>③ <code>HF</code> 上 <code>downloads 0</code> 是仓库创建不足一天，不是没人用</strong>（避坑 165；对照上一代 <code>baidu/Unlimited-OCR</code> 已 <code>2,771,148</code> 下载 / <code>4,901</code> like）<strong>。</strong>⚠️ 显存调参（官方逐字，对本报告读者最有用的一段）<strong>：「</strong><code>--mem-fraction-static</code> … <code>0.75</code> leaves too little headroom at 32+ concurrent requests; <code>0.7</code> is stable.<strong>」／「</strong><code>--max-prefill-tokens</code> … <code>4096 -&gt; 2048</code> halves that peak.<strong>」／「</strong>The built-in default (512) allows a single ~462 MiB allocation and can OOM; 64 is equivalent with a lower peak.<strong>」。</strong>⚠️ 窗口归属<strong>：<code>HF</code> 仓库 <code>createdAt</code> 是 10/26 11:57（</strong>落在 048 期窗口内<strong>），但</strong>官方 Release 行、<code>GitHub</code> <code>pushed_at</code>（10/27 10:47）、百度云文档「更新时间：2026-10-27」三处一致落在本期窗口内<strong> —— </strong>发布日以厂商一手为准（避坑 211）**。</p></blockquote>
+<h3 id="h3-48">🟢 <code>OpenAI</code> <code>Signals v3.0</code> 数据集（165 类工作活动 · 近 100 国 · 2025 Q1–2026 Q3 季度序列 · <code>CC BY 4.0</code> · 047 期漏登，本期补登· 官方发布日 10/26）</h3>
+<p><strong>表体精简后</strong>：🟢 已公开可下载（本期补登 · 四层全通）。⚠️ 四层开放（避坑 41）：① 能用 —— 免登录直接下载，未要求注册/订阅/填表（订阅提醒表单在页面下半部，与下载口分离）② 能下载 —— CSV + 数据字典 + AI Jobs Transition Framework 数据 ③ 能跑 —— CSV 可直接用 Excel/R/Python 打开 ④ 能商用 —— <code>CC BY 4.0</code> 允许使用/分享/改编，但须署名或引用（官方逐字 <code>requires attribution or citation</code>）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>已公开可下载（本期补登 · 四层全通）</strong>。<strong>官方一手（<code>openai.com/index/chatgpt-expanding-world-of-work</code>，页面标注 <code>October 26, 2026</code>）逐字</strong>：「<strong>Today, we are releasing OpenAI Signals data that explores 165 work activities across nearly 100 countries, revealing how consumers use ChatGPT for work.</strong>」<strong>官方一手（<code>openai.com/signals/data-download/</code>，读于 2026-10-27 10:2x）逐字</strong>：「<strong>Download CSV files of the data</strong>」／「<strong>Data dictionary</strong>」／「<strong>All Signals data is licensed for use under the Creative Commons <code>CC BY 4.0</code> license, which allows you to use, share, and adapt the data but requires attribution or citation.</strong>」；另给引用格式 <code>@online{openaiecon2026signalsdata, …, title = {OpenAI} Signals v3.0, year = {2026}, urldate = {2026-10-26}, note = {Data download and methodology}}</code>，以及第二个下载口「<strong>Download data for the AI Jobs Transition Framework</strong>」。<strong>⚠️ 四层开放（避坑 41）</strong>：<strong>① 能用 —— 免登录直接下载，未要求注册/订阅/填表（订阅提醒表单在页面下半部，与下载口分离）② 能下载 —— CSV + 数据字典 + AI Jobs Transition Framework 数据 ③ 能跑 —— CSV 可直接用 Excel/R/Python 打开 ④ 能商用 —— <code>CC BY 4.0</code> 允许使用/分享/改编，</strong>但须署名或引用<strong>（官方逐字 <code>requires attribution or citation</code>）</strong>。<strong>⚠️ 覆盖范围有限（官方逐字）</strong>：<strong>「covers work-related messages on individual ChatGPT plans and does not include enterprise messages or Codex messages」—— 不含企业版消息、不含 <code>Codex</code> 消息</strong>。<strong>⚠️ 两个厂商自报的可核对数（避坑 116）</strong>：<strong>① 「Across 74 countries observed in every quarter, the ten most common activities represented an average of 51.1% of each country's classified work messages in Q3 2026, down from 56.0% in Q1 2025」—— 74 国头部 10 类活动占比均值 <code>56.0% → 51.1%</code>（−4.9 个百分点）；② 「about 43% of the employment-weighted task mix for mapped U.S. occupations falls into Other IWAs」—— </strong>约 <code>43%</code> 的美国就业加权任务结构落在「Other IWAs」（搬运物料、操作车辆、维护健康或病历等），因未达一致性门槛而未单独报出<strong>。</strong>⚠️ 期号与窗口归属必须写清<strong>：</strong>官方发布日 <code>2026-10-26</code>（下载页 <code>urldate</code> 逐字为 <code>2026-10-26</code>）落在 <strong>047 期窗口</strong>内，<strong>047 期正文与表格均未登记它</strong>（本期经 <code>git show HEAD</code> 与全文检索逐行核过，047 期 md 中 <code>Signals</code> 命中 0 次）—— <strong>故本行是「往期漏项补登」，不是「048 期新发布」</strong>（避坑 44）。<strong>⚠️ 「免费数据」不等于「官方结论」</strong>：本行登记的是「可下载、许可清晰」这个事实，数据能读出什么结论是研究者的事（避坑 116）。</p></blockquote>
+<h3 id="h3-49">🟢 OpenRouter 免费档（官方 API 目录口径 · <code>463/19/16</code>）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中。⚠️ （049 期）官方 API 目录重取（<code>openrouter.ai/api/v1/models</code>，读于 2026-10-27 19:4x，本轮连抓三次、三次读数完全一致）：全量 <code>463</code> / 零价 <code>19</code> / <code>:free</code> <code>16</code>；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中。<strong>⚠️ （049 期）官方 API 目录重取（<code>openrouter.ai/api/v1/models</code>，读于 2026-10-27 19:4x，</strong>本轮连抓三次、三次读数完全一致<strong>）</strong>：<strong>全量 <code>463</code> / 零价 <code>19</code> / <code>:free</code> <code>16</code></strong>；<strong>与 048 期（463/20/17）比：全量同值、零价 <code>−1</code>、<code>:free</code> <code>−1</code></strong>。<strong>⚠️ 本期是「全量差额第一次被完全定位」的一期</strong>（046 期补存全量存档的兑现）：<strong>新增 <code>2</code> 条 = <code>openai/gpt-6.1-terra</code> 与 <code>openai/gpt-6.1-terra:batch</code></strong>；**消失 <code>6</code> 条 = <code>arcee-ai/trinity-large-thinking</code> 与 5 个 <code>mistralai/*:batch</code>（<code>codestral-2508</code> / <code>ministral-8b-2512</code> / <code>mistral-large-2512</code> / <code>mistral-medium-3.1</code> / <code>mistral-small-2603</code>）<strong>；</strong>+2 −6 = −4，与总数差逐条对得上<strong> ✔（避坑 100 的存档版：</strong>要 diff 什么，就先存档什么<strong>）。</strong>⚠️ <code>:free</code> 16 条逐条 diff：消失 <code>1</code> 条 —— <code>nvidia/nemotron-3-super-120b-a12b:free</code>、无新增<strong>；</strong>「零价 19」与「<code>:free</code> 16」差 <code>3</code> 个 —— <code>google/lyria-3-pro-preview</code>、<code>google/lyria-3-clip-preview</code>、<code>openrouter/free</code>（路由器）<strong>（避坑 161）。</strong>⚠️ （049 期）销项：这条三期待办的「差额归属」本期第一次说清 —— 本轮实跑逐条定位差额为 <code>google/lyria-3-clip-preview</code>（<code>ctx 1,048,576</code>）、<code>google/lyria-3-pro-preview</code>（<code>ctx 1,048,576</code>）、<code>openrouter/free</code>（<code>ctx 200,000</code>）—— <strong>前两条是 <code>google</code> 的预览档、第三条是 <code>OpenRouter</code> 自己的路由别名、不是第三方模型</strong>；<strong>另已验证反向差集为空 —— 所有 <code>:free</code> 后缀模型的 <code>prompt</code> 与 <code>completion</code> 都确实是 <code>0</code>，没有「挂着 <code>:free</code> 名字但按量收费」的条目</strong> ✔。<strong>⚠️ <code>gpt-6.1-terra</code> 字段（一手）</strong>：<code>ctx 1,050,000</code>、<code>$1 / $5</code>（输入/输出）每 1M、缓存输入 <code>$0.05</code>、<code>created 2026-10-26T18:13:29Z</code>（＝北京 10/27 02:13）；<strong>有 <code>:batch</code> 半价档，无 <code>:free</code> 档</strong>。<strong>⚠️ <code>freellm.net</code> 首页计数器（读于 2026-10-27 19:5x）逐项记账</strong>：<strong>Hero <code>531+ → 534+</code>；<code>Models Tracked</code> <code>300 → 303</code>（升 <code>3</code>）；<code>Providers</code> <code>31 → 31</code>；<code>No Credit Card</code> <code>449 → 452</code>（升 <code>3</code>）；「经实时 API 验证」<code>243 → 243</code></strong> —— <strong>一升一降一升两同值，五种结果都写，不写趋势</strong>（避坑 029）。<strong>⚠️ <code>Models Tracked −9</code> 本报告定位不到具体是哪 9 条</strong>（<code>freellm</code> 不提供可存档的模型 ID 清单，只有计数）—— <strong>如实记「未定位」，不猜</strong>（避坑 44）。<strong>⚠️ （049 期）更正 048 期的判断</strong>：048 期记「<code>Models Tracked</code> 本期维持 <code>300</code>、未回升」—— <strong>本期已回升到 <code>303</code>，该判断本期就地更正</strong>（避坑 216：<strong>「未见回升」是有时效的判断，不是永久结论</strong>）。<strong>⚠️ 但口径必须写清</strong>：<code>−9</code> 是 046→047 的一次性落差、<code>+3</code> 是 048→049 的逐期回升，<strong>两者不是同一口径、不能相减成一个净值</strong> —— <strong>正确表述是「一次性落差未逐条归因」</strong>。<strong>⚠️ 额度口径仍是三源三个数、都带来源，不可取中间值</strong>（避坑 161）。<strong>⚠️ <code>openrouter.ai/announcements</code> 本轮实访仍停在 <code>October 14, 2026</code></strong>（041–047 连续七期无新限免公告）。 <strong>⚠️ （048 期）本期最重要的一条：三个数全部同值，但成分换了 —— 逐条 diff 定位到 </strong>新增 <code>openai/gpt-6.1-terra-pro</code>、消失 <code>ibm-granite/granite-4.0-h-micro</code>，<code>+1 −1 = 0</code> 与总数一致<strong> ✔（046 期立的存档机制连续第二期生效；</strong>「总量同值」绝不等于「没变化」，必须逐条 diff 才敢说这句话<strong>）。</strong>⚠️ 新条目 <code>gpt-6.1-terra-pro</code> 的一手字段<strong>：与 <code>gpt-6.1-terra</code> </strong>同价<strong>（<code>$1</code> 输入 / <code>$5</code> 输出 每 1M、缓存输入 <code>$0.05</code>、<code>ctx 1,050,000</code>）、</strong>API 侧无 <code>:free</code> 档<strong>、目录里也</strong>没有<strong> <code>gpt-6.1-terra-pro:batch</code>。</strong>⚠️ 新立避坑 211：它的 <code>created</code> 是 <code>2026-10-26T18:15:56Z</code>（＝北京 10/27 02:15），落在 047 期窗口内<strong> —— </strong>即「047 期窗口内发布、048 期才在目录层挂出」，<code>created</code> 是「加入目录的时间」不是「厂商发布的时间」<strong>。</strong>⚠️ 消失的 <code>ibm-granite/granite-4.0-h-micro</code>：本轮该 ID 已不在全量目录中，但本报告不写「下线」「停服」「退役」<strong> —— </strong>目录层消失 ≠ 厂商撤下模型，官方 <code>IBM</code> 侧状态本轮未实访，如实记「未核到」<strong>（避坑 154/161）。</strong>⚠️ <code>freellm.net</code> 首页六项计数器（读于 2026-10-27 09:2x）<strong>：</strong>六项<strong>全部与 047 期同值</strong> —— <code>531+</code> / <code>300</code> / <code>31</code> / <code>449</code> / <code>243</code>，<code>Latest free LLM API model update: 2026-10-26</code>。<strong>⚠️ 同值也要记账（避坑 029），但「同值」只说明这六个数没动</strong>（避坑 207 同族）；<strong>047 期记的 <code>Models Tracked</code> <code>−9</code> 本期维持 <code>300</code>、未回升，那 9 条仍定位不到</strong>（<code>freellm</code> 不提供 ID 清单，不猜）。<strong>⚠️ <code>openrouter.ai/announcements</code> 本轮实访仍停在 <code>October 14, 2026</code></strong>（041–049 连续九期无新限免公告）。 <strong>⚠️ （049 期）本期最重要的一条：<code>nemotron-3-super-120b-a12b:free</code> 从目录消失，而它的付费档仍在</strong> —— <strong>仍在目录中</strong>：<code>nvidia/nemotron-3-super-120b-a12b</code>（<code>created 1773245239</code>、<code>prompt $0.30</code> / <code>completion $2.40</code> 每 1M、缓存读 <code>$0.15</code>、<code>ctx 262,144</code>）；<strong>消失的</strong>：<code>nvidia/nemotron-3-super-120b-a12b:free</code>（048 期时是 <code>prompt 0</code> / <code>completion 0</code>）。<strong>同系列其余 <code>:free</code> 档全部健在</strong>（<code>nemotron-3-nano-omni-30b-a3b-reasoning:free</code>、<code>nemotron-3-ultra-550b-a55b:free</code>、<code>nemotron-3.5-content-safety:free</code>、<code>nemotron-3.5-lightning:free</code>、<code>nemotron-3.5-super-vl:free</code>）—— <strong>消失的是这一系列里唯一「没有付费替身」的那一条</strong>（避坑 214）。<strong>⚠️ 本报告不写「下架」「停服」「退役」</strong>：<strong>目录层消失 ≠ 厂商撤下模型</strong>，<code>NVIDIA</code> 官方侧状态本轮未实访，如实记「未核到」（避坑 154/161）。<strong>⚠️ 全量清单同期 <code>+1 −1</code>：新增 <code>openai/gpt-6.1-terra-pro:batch</code>（<code>$0.50</code> / <code>$2.50</code> 每 1M，是 <code>terra-pro</code> 的半价批处理档、与 <code>terra:batch</code> 同价）、消失 <code>nvidia/nemotron-3-super-120b-a12b:free</code></strong> —— <strong><code>+1 −1 = 0</code> 与全量总数同值一致</strong> ✔（046 期立的存档机制连续第三期生效）。<strong>⚠️ 新立避坑 215：差集个数不变 ≠ 没变化</strong> —— 零价 <code>20</code> vs <code>:free</code> <code>17</code> 变成零价 <code>19</code> vs <code>:free</code> <code>16</code>，<strong>差额个数都是 <code>3</code>、但两个集合的绝对值各降了 <code>1</code></strong>（掉的那条同时在两个集合里）；<strong>报差集时必须同时报两个集合的绝对值</strong>。</p></blockquote>
+<h3 id="h3-50">🟢 快手可灵 Kling 4.0（<code>fal</code> 四端点 + 官网可体验 + <code>Runware</code> D0 上线 · 权重/开源口径未见）</h3>
+<p><strong>表体精简后</strong>：🟢 已上线（本期新增一条分发层：<code>Runware</code>）。⚠️ （048 期）更正 047 期的取数路径（一手：<code>runware.ai/kling-4</code>，读于 2026-10-27 10:2x，两次抓取长度与关键字段完全一致）：<code>Kling 4.0</code> 的真实模型页路径是 <code>runware.ai/kling-4</code>（<code>200</code>，529,847 字节），其中 <code>native audio</code> 11 处、<code>audio</code> 89 处；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>已上线（本期新增一条分发层：<code>Runware</code>）</strong>。<strong>⚠️ （048 期）更正 047 期的取数路径（一手：<code>runware.ai/kling-4</code>，读于 2026-10-27 10:2x，两次抓取长度与关键字段完全一致）</strong>：<strong><code>Kling 4.0</code> 的真实模型页路径是 <code>runware.ai/kling-4</code>（<code>200</code>，529,847 字节），其中 <code>native audio</code> 11 处、<code>audio</code> 89 处</strong>；<strong>047 期记的「8 处 / 79 处」取自已失效的旧路径 <code>runware.ai/models/klingai</code></strong> —— <strong>「8 → 11」是换了 URL，不是内容增加</strong>（本期新立避坑 210） —— <strong>这是本报告第一次在「可读取的一手模型页」上核到「原生音频」</strong>；<strong>046 期记「带音频仅见聚合站转引、未核到」，本期就地更正为「已核到」</strong>（更正对象是 <code>fal</code> 端点描述仍无音频字段这一事实不变：<strong><code>fal</code> 侧四个端点描述里依旧没有音频字段</strong>，两家分发层字段不同步）。<strong>⚠️ 但价格与折扣仍是一手缺口（避坑 44）</strong>：<strong><code>Runware</code> 官方社媒（经 <code>aihot.news</code> 10/26 12:49 转引）称「输出低至每秒 <code>$0.133</code>、未来 7 天在常规定价上再享 <code>15%</code> 折扣、最长 30 秒 1080p、多关键帧、单请求最多 15 个输入、可基于提示词编辑已有片段」，并称其 API 上已有 19 个 Kling 模型</strong> —— <strong>本轮在正确路径 <code>runware.ai/kling-4</code> 上 <code>0.133</code> 与 <code>7 days</code> 仍各 <code>0</code> 处</strong>（<strong>模型页本身没有这两个数</strong>），<strong>但 <code>runware.ai/pricing</code> 的促销数组里逐字读到了 <code>15%</code> 折扣条目 —— <code>"id":"klingai-video-4-0-launch-promo","title":"15% OFF","description":"15% off all generations until October 29, 2026","models":["klingai-video-4-0"],"endsAt":"2026-10-29"</code></strong>（本期新立避坑 212）。<strong>⚠️ 更正 047、048 两期的取数方式</strong>：那两期用的是「在页面上数关键词出现几次」，<strong>而 <code>048</code> 期自己的快照 <code>tmp_048/runware_pricing.html</code> 里就写着这条促销</strong>（本期对比：两份文件字节数完全相同 <code>744,814</code>、促销数组 <code>12</code> 条逐条一致、<code>15%</code> 两版各出现 <code>2</code> 次）—— <strong>那两期是「抓到了却没读出来」，不是「这期没找到」</strong>（避坑 212：<strong>关键词计数法会漏掉嵌在 JSON 数组里的结构化字段</strong>）。<strong>⚠️ 官方给的截止日是 <code>10 月 29 日</code>，不是社媒口径的「7 天」</strong> —— 社媒说的是「未来 7 天在常规定价上再享 15% 折扣」（相对、从首发日算），官方促销数组写的是绝对日期 <code>October 29, 2026</code> 且带机器可读的 <code>endsAt</code> —— <strong>两个口径对不上，本报告以官方 <code>endsAt</code> 为准、社媒口径原样引录、不取中间值</strong>（本期新立避坑 213）。<strong>⚠️ 但这是「打 85 折」、不是免费 —— 本行进价格位、不进免费额度位</strong>；<strong>且该折扣是 <code>Runware</code> 分发层的价格活动、不是厂商侧的免费政策</strong>。<strong>⚠️ 本期新立避坑 209 并更正 047 期的理由</strong>：<strong><code>$0.133</code> 在一手页上其实出现了 —— 但它属于 <code>sync-3</code>（唇形同步）模型，不是 <code>Kling 4.0</code></strong>：该页 JSON 逐字 <code>"pricingRates":[{"amount":0.133,"unit":"durationSecond"}]</code>，其同一条记录的 <code>coverImage</code> 指向 <code>sync-3.jpg</code>、<code>capabilities</code> 含 <code>io:audio-to-video</code>、<code>pricingExamples</code> 的两个配置是 <code>segmented-lip-sync</code> 与 <code>audio-driven</code>。<strong>故结论不变（不进价格位），但理由从「页面上没有这个数」改成「这个数属于另一个模型」</strong> —— <strong>前者会诱导下期反复重抓，后者是已经抓到并确认了归属</strong>。<strong>⚠️ <code>fal</code> 侧口径不变（046 期已固化，本期复读一致）</strong>：四端点 <code>status public</code> / <code>licenseType commercial</code>、<strong><code>$0.157 / $0.235</code>（720p/1080p）与带参考档 <code>$0.094 / $0.141</code>（最少 2 倍产出计费）</strong>、3–30 秒、最高 1080p；<strong>图像线仍停在 Kling 3</strong>（避坑 134：视频 4.0 与图像 3.0 是两条线）。<strong>⚠️ （048 期）旧路径 <code>runware.ai/models/klingai</code> 本轮返回 HTTP <code>404</code>，但返回体仍是 845,983 字节的完整 SPA 页面</strong> —— <strong>这是「软 404」：状态码说没有、正文说有</strong>（本期新立避坑 209）；<strong>该返回体里 <code>native audio</code> 47 处 / <code>audio</code> 631 处 是整站页量级，与本行记的 11 / 89 不同源、不可相减</strong>。<strong>⚠️ 三条分发层的同步差（本期可直接观察）</strong>：<strong><code>fal</code> 端点已公开但官网导航仍列 3.0；<code>klingai.com</code> 首页已可体验；<code>Runware</code> 走 D0 首发</strong> —— <strong>「同一模型、三个分发层、三种上线节奏」，按端点找不要按导航找</strong>（避坑 199）。 <strong>⚠️ <code>fal</code> 侧口径（046 期已固化，本期未复访，沿用并标注）</strong>：四端点 <code>status public</code> / <code>licenseType commercial</code>、<strong><code>$0.157 / $0.235</code>（720p/1080p）与带参考档 <code>$0.094 / $0.141</code>（最少 2 倍产出计费）</strong>、3–30 秒、最高 1080p。 <strong>⚠️ （049 期）本轮一手复读（<code>runware.ai/kling-4</code>，读于 2026-10-27 19:5x）</strong>：<strong><code>200</code>、<code>529,811</code> 字节、<code>native audio</code> 11 处 / <code>audio</code> 89 处 / <code>0.133</code> 0 处 / <code>7 days</code> 0 处 / <code>15%</code> 0 处</strong> —— <strong>与 048 期读数一致</strong>（048 期为 <code>529,847</code> 字节，<strong>字节数有微差、字段计数完全一致</strong>，<strong>按避坑 210 只在同 URL 同取法内比</strong>）。<strong>⚠️ 旧路径 <code>runware.ai/models/klingai</code> 本轮返回 <code>404</code> + <code>844,236</code> 字节完整 SPA（软 404 延续）</strong> —— <strong>该返回体里 <code>0.133</code> 仍指向 <code>sync-3</code>（<code>coverImage</code> 为 <code>sync-3.jpg</code>、<code>capabilities</code> 含 <code>io:audio-to-video</code>），归属不变</strong>。<strong>⚠️ 本轮新查：<code>runware.ai/sync-3</code> 独立路径返回 <code>404</code>（该路径不存在）</strong> —— <strong><code>sync-3</code> 的定价只能从整站返回体里读到，这正是「按端点找、不要按路径找」的又一例</strong>（避坑 199 同族）。<strong>⚠️ <code>Runware</code> 的新用户额度（本轮一手，<code>pricing</code> 页 FAQ）</strong>：逐字「<strong>Yes. New users who sign up with a business email receive $2 in free credits to explore the platform and test various models.</strong>」—— <strong>注册商业邮箱得 <code>$2</code> 免费额度</strong>。</p></blockquote>
+<h3 id="h3-51">🟢 OpenAI <code>Decisions API</code>（10/22 GA · 基于 <code>GPT‑6 Luna</code> · 无免费层）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（10/6 公测 → 10/22 正式 GA，030 期补登、045 期状态推进）。官方一手（<code>openai.com/index/decisions-api</code>，页面标注 <code>October 22, 2026</code> · <code>Category Product</code>）逐字：「Today, we’re making the Decisions API generally available.」「Built with GPT‑6 Luna, the Decisions API focuses Luna’s intelligence on questions with bounded answers, helping applications and agents make near real-time decisions from text, images, and structured inputs up to 10x faster than GPT‑6 Luna through the Responses API.」「Since public beta, we’ve added a native GPT‑Live integration, prompt caching for reused context, and inference residency in the US and EU.」「Developers can also pass native JSON inputs, include images in question instructions, and ask up to 400 questions per request, twice the previous limit.」「We’ve also continued to improve latency, including additional capacity in several regions in Asia.」定价（官方逐字）：「Decisions API costs $0.10 per million input tokens. Cached input costs $0.01 per million tokens.」「You only pay for input tokens: there are no output-token charges.」⚠️ 三条必须写清的口径：① 「输出免费」是因为它不生成文本、只返回选项/分数 —— 这不是聊天模型的免费替代品（避坑 118/119 同源）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>生效中（10/6 公测 → </strong>10/22 正式 GA<strong>，030 期补登、045 期状态推进）</strong>。<strong>官方一手（<code>openai.com/index/decisions-api</code>，页面标注 <code>October 22, 2026</code> · <code>Category Product</code>）逐字</strong>：「<strong>Today, we’re making the Decisions API generally available.</strong>」「<strong>Built with GPT‑6 Luna, the Decisions API focuses Luna’s intelligence on questions with bounded answers, helping applications and agents make near real-time decisions from text, images, and structured inputs up to 10x faster than GPT‑6 Luna through the Responses API.</strong>」「<strong>Since public beta, we’ve added a native GPT‑Live integration, prompt caching for reused context, and inference residency in the US and EU.</strong>」「<strong>Developers can also pass native JSON inputs, include images in question instructions, and ask up to 400 questions per request, twice the previous limit.</strong>」「<strong>We’ve also continued to improve latency, including additional capacity in several regions in Asia.</strong>」<strong>定价（官方逐字）</strong>：「<strong>Decisions API costs $0.10 per million input tokens. Cached input costs $0.01 per million tokens.</strong>」「<strong>You only pay for input tokens: there are no output-token charges.</strong>」<strong>⚠️ 三条必须写清的口径</strong>：<strong>① 「输出免费」是因为它不生成文本、只返回选项/分数</strong> —— <strong>这不是聊天模型的免费替代品</strong>（避坑 118/119 同源）；② <strong>全页没有任何 <code>free tier</code> / 试用额度 / 免费钟点</strong> —— <strong>本行不写「有免费额度」</strong>（避坑 154）；③ <strong><code>10x faster</code> 是厂商自报、对照系是「走 Responses API 的 <code>GPT‑6 Luna</code>」，不是对照别的厂商</strong>（避坑 116）。<strong>⚠️ 客户引语里的数字同样是厂商自报</strong>（官方页逐字）：<code>Box</code>「<code>~5x faster route selection</code>」、<code>Datadog</code>「<code>40x faster p95</code>」、<code>Ramp</code>「<code>4x faster and 30% cheaper</code>」、<code>Sierra</code>「<code>under 280 ms p95, about 3× faster and 90% lower cost per call</code>」—— <strong>五家客户五个口径，本报告不取其中一个当结论</strong>（避坑 116 / 165）。<strong>⚠️ 与 030 期登记时的差别</strong>：<strong>030 期是「单一信源（The New Stack 转述）、官方模型卡未核到」；本期官方页已在手，且公测期新增的四项能力（<code>GPT‑Live</code> 集成 / 提示缓存 / 美欧推理驻留 / 单请求 400 题）均为官方逐字</strong>。</p></blockquote>
+<h3 id="h3-52">🟢 智谱 <code>GLM-Legal</code>（法律智能体 · API 申请制 · 本期补一条更硬的「不是开源」证据）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（10/12 发布）。⚠️ （040 期）本期实访智谱官方博客 <code>z.ai/blog/glm-legal</code>（2026-10-12）全文：无「开放权重 / open-weight」表述、无权重下载入口、无许可证；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（<strong>10/12 发布</strong>）。<strong>基于轻量级 <code>GLM-5.3-Flash</code> 构建</strong>；<strong>官方口径 <code>Harvey LAB</code> 全通过率 <code>19.2%</code>（较基座提升 <code>12.5</code> 个百分点）、<code>LegalBench</code> 与顶级闭源前沿模型持平、<code>PLawBench</code> 中文本地化持平；两项由 <code>Vals</code> 独立评测</strong>。<strong>⚠️ （040 期）本期实访智谱官方博客 <code>z.ai/blog/glm-legal</code>（2026-10-12）全文</strong>：<strong>无「开放权重 / open-weight」表述、无权重下载入口、无许可证；唯一进入路径是「Apply for API access: <code>z.ai/consultation/legal</code>」与 <code>AutoClaw</code> 链接</strong> —— <strong>而中文媒体（量子位 10/17）标题写「开源模型」、同一篇正文又写「申请 <code>GLM-Legal</code> Beta」，标题与正文给出两种口径</strong>。⚠️ <strong>维持 035 / 037 期「不是开放权重模型」的口径，并补上这条更硬的证据</strong>；<strong>媒体的「开源」表述原样记录，两说并列、不替厂商裁决</strong>。<strong>⚠️ <code>Harvey LAB</code> 的难度口径（040 期首次登记）</strong>：<strong>首版设置</strong>超过 1,200 项<strong>模拟律所工作任务、覆盖并购与知识产权与银行金融等 </strong>24 个<strong>法律业务领域；采用</strong>「全条件通过」机制<strong> —— </strong>满足一项任务的全部评分条件才算通过，少一条都不行<strong> —— </strong>这解释了 19.2% 为何看起来低：它是「全条件通过率」不是「正确率」<strong>（避坑 144 同族）。</strong>⚠️ 第三方口径（媒体转述、不可与官方表相加）<strong>：</strong><code>Vals AI</code> 最新测评中以 <code>19.2%</code> 全通过率与 <code>86.23%</code> 准确率摘得 <code>Harvey LAB</code> 与 <code>LegalBench</code> 双榜开放权重模型榜首；成绩相近时 <code>GLM-Legal</code> 比 <code>Gemini 4 Argon</code> 慢近 30 分钟、但 <code>Gemini</code> 每项测试成本约为其 <code>70</code> 倍<strong> —— </strong>「慢 30 分钟但便宜 70 倍」是本条最有选型价值的一句，但它出自媒体转述的厂商对比、非受控测试<strong>（避坑 116）。</strong>⚠️ 免费档一问仍未结（036 期挂账延续）<strong>：核到 <code>AutoClaw</code> 侧注册赠 <code>$24</code> 额度；第三方另转述「2 亿 tokens」，</strong>两个数都带来源记账、不折算、不取中间值<strong>（避坑 54/161）；</strong>035 期已更正：<code>Artificial Lawyer</code> 10/13 报道称该法律版本「不打算作为开放权重模型发布」—— 开放的是基座 <code>GLM-5.3-Flash</code>，不是这个领域模型**（避坑 155）</p></blockquote>
+<h3 id="h3-53">🟢 Meta <code>Muse Spark Open</code> 开放权重（816B / 42B 激活 / 1M 上下文 · HF gated 需填出生日期）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（当地时间 10/15 发布，北京时间 10/15 傍晚至 10/16）。⚠️ （040 期）本期补入一个独立第二名次：<code>Arena</code> 官方 X（10/17） —— <code>Muse Spark Open (Max)</code> 在 <code>Code Arena: WebDev</code> 以 <code>1511</code> 分位列开放模型总榜第 <code>13</code>、美国开放模型第 <code>1</code>；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（<strong>当地时间 10/15 发布，北京时间 10/15 傍晚至 10/16</strong>）。<strong>官方称「迄今能力最强的美国开放权重模型」</strong>。<strong>规格</strong>：<strong>原生多模态稀疏 MoE、总参 816B / 每 token 激活约 42B、上下文 1M token（1,048,576）、100 多种语言</strong>。<strong>⚠️ （040 期）本期补入一个独立第二名次：<code>Arena</code> 官方 X（10/17）</strong> —— <strong><code>Muse Spark Open (Max)</code> 在 <code>Code Arena: WebDev</code> 以 <code>1511</code> 分位列开放模型总榜第 <code>13</code>、美国开放模型第 <code>1</code>；比 <code>Muse Glimmer</code> 高 <code>156</code> 分（后者 <code>1355</code> 分、开放模型第 <code>41</code>）；定价 <code>$1.25</code> / <code>$4.25</code> 每百万输入/输出 token，比 <code>Muse Wonder (Max)</code> 便宜 <code>79%</code>、与 <code>Muse Spark 1.3 (Max)</code> 持平</strong>；<strong>分领域：品牌与营销、数据与分析 第 <code>13</code>、基于参考的设计 第 <code>14</code>、游戏与消费产品 第 <code>15</code>、模拟 第 <code>20</code></strong>。<strong>⚠️ 把这个名次与 037 期登记的官方表并排看，得到的正是避坑 165 说的形状</strong>：<strong>官方表里 <code>MCP-Atlas</code> 领先但 <code>Terminal-Bench 2.1</code> 落后、<code>AA</code> 智能指数 <code>39</code> 落后 <code>GLM-5.3</code> 与 <code>Kimi K3</code>；而 <code>Arena</code> 给出「WebDev 榜美国开放模型第一」、<code>AA</code> 给出「开放权重总榜第 <code>10</code>」—— </strong>同一个模型在编码前端榜第一、在综合智能榜第十，两个结论都对，问题是量的不是同一件事<strong>（避坑 144/165）。</strong>⚠️ 下载闸门（037 期登记，本期维持）<strong>：</strong>HF 上两个 Meta 仓库均为 gated 且人工审核 —— 访问表单要求「法定全名 + 出生日期 + 组织全称」、提交后不可编辑，并警告影响 HF 上其他模型；同一份权重的 <code>Unsloth</code> GGUF（21 档）、<code>ggml-org</code> GGUF、AMD Quark 检查点均 ungated<strong>（避坑 162）。</strong>⚠️ 许可证 <code>Muse Model License</code>，不是 Apache-2.0<strong>：</strong>① 显著展示「Built with Muse Spark Open」；② 「衍生作品」定义极宽，含任何用该模型或其输出训练 / 微调 / 蒸馏得到的模型；③ 作为 MaaS 对外服务且连续 12 个月总收入超 2,000 万美元须先通知 Meta 并另签书面协议；④ 使用政策是许可证的一部分<strong>（避坑 158）。</strong>⚠️ 跑起来要什么<strong>：</strong>NVFP4 约需 700 GB GPU 显存、BF16 约需 2 TB；Apple 路线为主推（两台 M5 Ultra 各 512 GB 统一内存经 MLX 跑全量）**</p></blockquote>
+<h3 id="h3-54">🟢 蚂蚁百灵 <code>Ling-3.1-flash</code> 开放权重（560B / 25B 激活 / 1M 上下文 · MIT · 量化后 4 卡部署）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（HF 仓库 10/13 创建、10/15 正式宣布开源；⚠️ 许可证 MIT（040 期与 <code>Muse Spark Open</code> 的 <code>Muse Model License</code> 构成同期对照：MIT 可自由商用、无署名义务、无收入闸门，而后者三条全有 —— 同一个「开源」在中文报道里被写成同一件事，读者要做的合规动作完全相反，避坑 158）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中（<strong>HF 仓库 10/13 创建、10/15 正式宣布开源</strong>；<code>gated: false</code> ungated，含 54 个分片 safetensors，FP8 量化）。<strong>规格</strong>：<strong>总参约 560B / 每 token 激活约 25B / 最高 1M 上下文</strong>；<strong>混合线性 MoE：63 层 KDA（Kimi Delta Attention，线性注意力）+ 9 层门控 MLA，比例 7:1，另加 4 层稠密层；512 个路由专家 + 1 个共享专家、每 token 选 8 个</strong>；<strong>注意力 64 头、hidden size 4096、专家中间层 1280、稠密中间层 10240、词表 157,184</strong>。⚠️ <strong>许可证 MIT</strong>（<strong>040 期与 <code>Muse Spark Open</code> 的 <code>Muse Model License</code> 构成同期对照：MIT 可自由商用、无署名义务、无收入闸门，而后者三条全有 —— 同一个「开源」在中文报道里被写成同一件事，读者要做的合规动作完全相反</strong>，避坑 158）。<strong>部署</strong>：<strong>Day-0 支持 SGLang（带投机解码专用镜像）与 vLLM，另附参考部署配置</strong>；⚠️ <strong>一组独立来源给出的推荐配置为 8 张 H200 或 4 张 GB300</strong>。⚠️ <strong>量化门槛（040 期最有实用价值的一组）</strong>：<strong>路由专家 MXFP4 量化、稠密层保留 block-FP8，权重体积从约 534 GB 压缩至约 292 GB；Hopper 环境下部署显卡由 8 卡降至 4 卡</strong> —— <strong>⚠️ 「8 卡降至 4 卡」说的是量化后的 Hopper 下限，与上面的 BF16 推荐配置不矛盾，两个都要写</strong>；<strong>另提供长上下文并行推理方案 PCP / DCP，并增强 JSON Schema 支持</strong>。⚠️ <strong>基准均为厂商自报</strong>：<code>GDPVal-AA V2.1</code> 办公任务 <strong>ELO 1673</strong>；<code>HealthBench Professional</code> <strong>65.35</strong>；<strong>内部 Lua 原生编译器开发任务约 17 小时、独立测试通过率 97.8%</strong>；<strong>Artificial Analysis 智能指数 41、输出速度约 210 tok/s、混合调用价约 $0.19 / 百万 token</strong>（避坑 116）。⚠️ <strong>官方称在 <code>Claude Code</code> / <code>Kilo Code</code> / <code>Qwen Code</code> / <code>Hermes Agent</code> / <code>OpenClaw</code> 等 harness 中表现良好，无独立复现</strong>。⚠️ <strong>官方自陈局限</strong>：<strong>大量长文本一次性输入时可能失焦、一次性生成有适配边界；当前版本不具备原生视觉理解，需另配视觉模型</strong>。⚠️ <strong>沿革（本条是「预告 → 兑现」的正样本）</strong>：<strong>9/30 作为 API 模型首次出现在 Vercel AI Gateway，开放两周免费体验（两个 ID <code>inclusionai/ling-3.1-flash</code> 与 <code>inclusionai/ling-3.1-flash-free</code>，试用窗口上下文为 262K）</strong>；<strong>当时官方表示「免费体验结束转付费后，将开放 1M 上下文并同步开源」—— 10/13 免费网关窗口关闭与权重落地几乎同日、1M 上下文随权重一同开放，承诺已兑现</strong>（避坑 158：写「未公布」必须同时写「承诺日尚未到」）。⚠️ <strong>API「限时 2.5 折」是价格不是免费</strong>（避坑 154）：<strong>OpenRouter 输入 $0.075 / 输出 $0.225 / 缓存读取 $0.015；Ling Studio 输入 ¥0.5 / 输出 ¥1.5 / 缓存读取 ¥0.1</strong>；<strong>⚠️ 2.5 折的结束日本期未核到 → 只标注「结束日未公布」，不预估</strong>。⚠️ <strong>按量化后 292 GB 的体量，这是服务器模型、个人开发者不具备本地部署条件</strong>（避坑 41 第三层）</p></blockquote>
+<h3 id="h3-55">🟢 <code>OpenCode</code> 限免 <code>Reflection Beam</code>（1M 上下文）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中。⚠️ （040 期）本期最重要的一条叠加事实 —— 同一平台昨夜发生安全漏洞：<code>OpenCode</code> 官方 X 逐字原文「We had a security breach last night related to a large scale distillation attack that impacted 1.4% of OpenCode Console users」「We have notified them all this morning via email. If you did not get an email you were not impacted, it was a subset of users who had external providers linked」「The incident is ongoing so we cannot share more details at this point but we are working with Anthropic, OpenAI, and Google to remediate」；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中。<strong>10/16–10/17 <code>OpenCode</code> 官方 X 宣布把 <code>Beam</code> 与 <code>GLM-5.3-Flash</code> 一并免费</strong>（501B/23B MoE、1M 上下文）。<strong>039 期已从官方两页核齐的四组字段本期维持</strong>：<strong>① 留存 30 天</strong>（官方原文「not used for training. Data is retained for 30 days for safety reasons」）；<strong>② <code>limited regions</code>、不可用清单 18 国 + 乌克兰 3 州、含「China (including Hong Kong and Macau)」</strong>；<strong>③ 不占套餐额度（<code>Go</code> 与 <code>Go Plus</code> 两档月度用量均 <code>Unlimited</code>）</strong>；<strong>④ Input / Output / Cached Read 三列均 <code>Free</code>、Cached Write 为 <code>-</code>（占位符非数值）</strong>。<strong>⚠️ （040 期）本期最重要的一条叠加事实 —— 同一平台昨夜发生安全漏洞</strong>：<strong><code>OpenCode</code> 官方 X 逐字原文「We had a security breach last night related to a large scale distillation attack that impacted 1.4% of OpenCode Console users」「We have notified them all this morning via email. If you did not get an email you were not impacted, it was a subset of users who had external providers linked」「The incident is ongoing so we cannot share more details at this point but we are working with Anthropic, OpenAI, and Google to remediate」</strong>；<strong><code>Anthropic</code> 已撤销疑似受影响的 <code>Claude API</code> 密钥并建议用户重新创建</strong>。<strong>⚠️ 这与本行「留存 30 天」是两个独立闸门 —— 零留存承诺不回答 key 是否安全</strong>（避坑 175）。<strong>⚠️ 定性受到公开质疑</strong>：<code>Nathan Lambert</code> 称把窃取密钥归入「蒸馏」很反常、<strong>且流量规模与模型训练的关联目前不清楚</strong> —— <strong>本报告两说并列，判断风险时用「凭证可能已泄露、需轮换」这个可判定事实</strong>（避坑 116 同族）。<strong>⚠️ 三条现在就能判定的边界</strong>：<strong>① 受影响范围是「链接了外部提供商」的子集、不是全部 Console 用户；② 判据是「有没有收到那封邮件」，官方未给字段级说明；③ 官方明确「cannot share more details」—— 本报告不推测泄露了什么数据</strong>。⚠️ <strong>「1.4%」按原样引用，不换算成「影响很小」</strong> —— <strong>它是厂商自报、未经第三方复核、且官方明确仍在处置中的比例</strong></p></blockquote>
+<h3 id="h3-56">🟡 中国电信 <code>Xing4.0-29B-A4B</code> 上架 OpenRouter 免费档</h3>
+<p><strong>表体精简后</strong>：🟡 生效中。⚠️ （038 期）本轮重取同一页面，<code>:free</code> 清单逐条比对结果与 038 期一致（19 个在线、本模型仍在列、上下文仍为 262K）—— 按 029 期定「重取三结果记账」，本期为同值，且不得据此写趋势。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟡 生效中。<strong><code>xingchen-agi/xing4.0-29b-a4b:free</code>，262K 上下文</strong>（<code>freellm.net</code> OpenRouter 专页 <code>Last Updated 2026-10-17</code> 实跑，逐条标注厂商为 XingChen / China Telecom）。<strong>⚠️ （038 期）本轮重取同一页面，<code>:free</code> 清单逐条比对结果与 038 期一致（19 个在线、本模型仍在列、上下文仍为 262K）—— 按 029 期定「重取三结果记账」，本期为同值，且不得据此写趋势</strong>。⚠️ <strong>与 008 期那条「<code>Xing4.0</code> 开放权重」是两件事</strong>：权重自 2026-09-16 起就在 HF <code>XingChen-AGI</code> 组织页可下载（Apache-2.0），<strong>040 期变化的是「出现了免费可调入口」—— 「权重公开」与「免费可调用」之间隔了整整一个月</strong>（避坑 142）。⚠️ <strong>免费档额度按 <code>OpenRouter</code> 官方口径</strong>：<strong>50 次/日（累计充值满 $10 后 1,000 次/日）、20 次/分</strong> —— ⚠️ <strong><code>freellm.net</code> 该页写「200 req/day」，与官方冲突，两个口径都写、不取其一</strong>（避坑 161）。<strong>架构字段</strong>：<strong>29B 总参 / 每 token 约 4B 激活、40 层、64 路由专家选 4 + 1 常开共享专家、<code>MLA</code> 压缩 KV、<code>MTP</code> 内训、原生 256K 可扩 512K</strong>；⚠️ <strong><code>mHC</code> 四路 hyper-connection 结构需框架自定义内核（SGLang 为其专门发 split-K 内核）</strong>；⚠️ <strong>基准全为厂商模型卡自报、无独立复现</strong>（避坑 116）</p></blockquote>
+<h3 id="h3-57">🟡 <code>Ollama Cloud</code> 限免 <code>Reflection Beam</code>（1M 上下文 · 全量零留存）</h3>
+<p><strong>表体精简后</strong>：🟡 生效中。⚠️ 本条最干净的一个字段是留存：「In collaboration with Reflection, Ollama's Beam endpoint runs with full zero data retention (ZDR)」—— 全量零数据保留，与 <code>OpenCode</code> 那条 30 天留存形成同周内两种口径（避坑 171 同族）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟡 生效中。<strong><code>Ollama</code> 官方博客（10/16，署名 Ollama）原文</strong>：「Reflection's first open-weight model Beam is generally available as of this morning, and we're day-zero partners rolling it out on Ollama for free (for a limited time only!)」<strong>—— 即「首发合作方（day-zero partner）」身份与限免是同一句话给出的</strong>。<strong>⚠️ 本条最干净的一个字段是留存</strong>：<strong>「In collaboration with Reflection, Ollama's Beam endpoint runs with full zero data retention (ZDR)」—— 全量零数据保留，与 <code>OpenCode</code> 那条 30 天留存形成同周内两种口径</strong>（避坑 171 同族）。<strong>接入方式（官方给的四条命令，逐条抄）</strong>：<code>ollama run beam:cloud</code>；<code>ollama launch claude --model beam:cloud</code>；<code>ollama launch codex --model beam:cloud</code>；<code>ollama launch opencode --model beam:cloud</code><strong>—— 即它同时给出了三家编码 agent 的接入口</strong>。<strong>规格（官方博客复述）</strong>：<strong>稀疏 MoE、约 501B 总参 / 每 token 激活约 23B、1M 上下文、文本进文本出、Apache 2.0</strong>。<strong>⚠️ 三处必须分开读的限制</strong>：<strong>① 限免没有结束日期（原文只写 <code>for a limited time only</code>）</strong>；<strong>② 模型托管在美国</strong>（另一来源明确写 <code>hosted in the US</code>）—— <strong>「零留存」回答的是「留不留」，不回答「存哪里」</strong>；<strong>③ <code>Ollama</code> 这条限免在 038 期已被核到但未被登记</strong>（038 期正文只把它列为 <code>Beam</code> 的 40+ 生态伙伴之一、并写「本期只核到 Vercel 一家给出了免费口径」）<strong>—— 本期更正为「Vercel 与 Ollama 两家」</strong>（避坑 173）。⚠️ <strong>与权重自部署是两笔账</strong>：<code>ollama run</code> 走的是 Ollama Cloud 端点、不下载权重（避坑 148）</p></blockquote>
+<h3 id="h3-58">🟡 <code>OpenCode</code> 的地区限制清单（<code>Beam Free</code> 等 · 本期起读法改变）</h3>
+<p><strong>表体精简后</strong>：🟡 生效中（仍在限制中，官方未给解除时点）。⚠️ 地区限制挂在免费端点的提供方、不挂在权重上 —— <code>Beam</code> 权重 Apache 2.0、HF 无 gated，受限地区仍可下载自部署（避坑 171）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟡 <strong>生效中（仍在限制中，官方未给解除时点）</strong>。<strong>本轮实访 <code>opencode.ai/docs/go</code> 与 <code>opencode.ai/docs/zen</code> 两页逐条维持 042 期结论</strong>：<strong><code>Beam Free</code> 仍标 <code>limited regions</code>、不可用清单为 18 国 + 乌克兰 3 个州，逐字含「<code>China (including Hong Kong and Macau)</code><code>」</strong>；<strong>同页另两个模型同标 </code>limited regions<code>：</code>Muse Spark 1.3 Contributor<code>、</code>Muse Spark 1.2 Contributor<code></strong>。<strong>⚠️ 地区限制挂在免费端点的提供方、不挂在权重上 —— </code>Beam<code> 权重 Apache 2.0、HF 无 gated，受限地区仍可下载自部署</strong>（避坑 171）。<strong>⚠️ （043 期）本轮核到「同页不同条目的限制不可互推」这一层</strong>：<strong></code>MiniMax M3.1 Flash Free<code> 在两页均</strong>未<strong>标 </code>limited regions<code> —— 而同页的 </code>Beam Free` 标了。</strong>即「别的条目有」≠「这条也有」<strong>（避坑 181 的反向）。⚠️ </strong>但「页面没写」仍然不等于「没有限制」<strong> —— </strong>本报告只写「官方页未标注」，不写「该模型在中国大陆可用」**</p></blockquote>
+<h3 id="h3-59">🟢 <code>DeepSeek-V4.1-Flash-1017</code>（10/17 发布 · 价格不变 · 本期头条）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中。⚠️ 绝对价格（040 期首次从官方 <code>Models &amp; Pricing</code> 页核到，单位每百万 token）：缓存命中输入 <code>$0.003</code>（Off-Peak）/ <code>$0.006</code>（Peak）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 生效中。<strong>官方更新日志逐字</strong>：<code>DeepSeek V4.1 Flash</code> 已升级为 <code>DeepSeek-V4.1-Flash-1017</code>；<strong>网页端与 APP 同步更新；调用方式与价格不变、仍用 <code>deepseek-flash</code> 访问</strong>。<strong>⚠️ 绝对价格（040 期首次从官方 <code>Models &amp; Pricing</code> 页核到，单位每百万 token）</strong>：<strong>缓存命中输入 <code>$0.003</code>（Off-Peak）/ <code>$0.006</code>（Peak）；缓存未命中输入 <code>$0.15</code> / <code>$0.30</code>；输出 <code>$0.6</code> / <code>$1.2</code></strong> —— <strong>官方规则「Off-peak rates are half of the peak rates」，Peak 时段为 UTC 01:00–04:00 与 06:00–10:00、周一至周五（不含中国法定假日），其余全部为 Off-Peak（含周末与全部中国法定假日）</strong>。<strong>⚠️ 两个此前未记字段</strong>：<strong>上下文 1M、最大输出 <code>MAXIMUM: 384K</code>、并发限制 250</strong>；<strong>旧名 <code>deepseek-v4-flash</code> 与 <code>deepseek-v4-flash-vision-exp</code> 仍被接受，但对应模型已退役、其请求由 <code>DeepSeek-V4.1-Flash-1017</code> 服务并按 Flash 价计费</strong>（避坑 142：<strong>同一个模型名下面换了实现，是一条独立事实</strong>）。<strong>⚠️ 官方基准必须连口径一起引</strong>：<strong><code>HLE</code>(w/o tools) <code>42.6</code>（纯文本子集 <code>44.0</code>）／<code>Terminal-Bench 4.0</code> <code>42.3</code>（</strong>用 Claude Code 框架测<strong>）／<code>DeepSWE v1.1</code> <code>77.0</code>（</strong>用 Mini-SWE-V2 框架测<strong>）／<code>ProgramBench</code> <code>29.1</code>／<code>NL2Repo-Bench</code> <code>68.2</code>／<code>Automation-Bench v1.0.6</code> <code>60.5</code>／<code>Agents' Last Exam</code> <code>35.4</code>／<code>Apex Bench v1.1</code> <code>72.1</code>／<code>Chartography</code>(w/tools) <code>83.0</code>／<code>BabyVision</code>(w/tools) <code>92.5</code>／<code>ZeroBench-main</code>(w/tools) <code>51.0</code>（</strong><code>Pass@5</code><strong>）</strong> —— <strong>同一条表里两个基准各自标了不同框架，故分数不可跨模型直接比，而表内没有任何一句写「均在同一 harness 下测得」</strong>（避坑 165）。<strong>⚠️ 版本门槛</strong>：<code>DeepSeek Harness 0.2.1-rc.1</code> 或更高（<strong>「or later」而非「必须」，不升级也能用、只是拿不到专项优化</strong>）。<strong>⚠️ 一条发布前泄露的可判定细节（第三方口径）</strong>：<strong>官方发布前数小时有用户在模型列表中短暂看到 <code>1017</code> 这一项，且 <code>deepseek-flash</code> 的系统指纹从 <code>aeb56401...</code> 变为 <code>e72d3c7f...</code></strong> —— <strong><code>1017</code> 对应 10 月 17 日、符合用日期标记快照的一贯方式；而系统指纹变化说明「可访问时刻」早于「公告时刻」</strong>（避坑 142）</p></blockquote>
+<h3 id="h3-60">🟢 <code>OpenAI</code> <code>Rosalind Academic Plan</code>（040 期全漏登，本期补登 · 无申请截止日，故本行不进截止倒计时）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（公告日 10/15；⚠️ 四条读法（041 期新增避坑 182）：① 「免费最长 12 个月」是额度期限、不是申请期限 —— 官方页既没写申请截止日，也没写名额上限或「先到先得」，所以不能据此判断「现在申请还赶得上」；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>生效中（公告日 10/15；审批制、无名额上限说明）</strong>。<strong>官方公告逐字字段</strong>：<strong>① 面向谁</strong>：「academic labs at <strong>U.S. universities</strong>」（<strong>不是面向学生个人</strong>）；<strong>② 给什么</strong>：「<strong>Up to 30 Business Standard seats at <code>$0 per user per month</code> for up to <code>12 months</code></strong>」；<strong>③ 怎么拿</strong>：「PIs and lab leads at universities <strong>without an OpenAI Enterprise agreement</strong> can apply on behalf of their labs through our trusted access process」；<strong>已有 Enterprise 协议的学校必须走学校自己的 Enterprise 渠道</strong>；<strong>④ 审批查什么</strong>：机构合法性、PI 身份与专业背景、机构任命与授权、实验室的机构隶属与预期用途、<strong>并要求指定机构安全联系人</strong>；<strong>⑤ 数据</strong>：「Research data shared through the Rosalind Academic Plan is <strong>not used to train our models by default</strong>」；<strong>⑥ API</strong>：「<strong>API access is not included at this time.</strong>」；<strong>⑦ 其他模型</strong>：「Access to all commercially available frontier OpenAI models, <strong>subject to plan usage limits</strong>」。<strong>⚠️ 四条读法（041 期新增避坑 182）</strong>：<strong>① 「免费最长 12 个月」是额度期限、不是申请期限</strong> —— <strong>官方页既没写申请截止日，也没写名额上限或「先到先得」，所以不能据此判断「现在申请还赶得上」</strong>；<strong>「没有申请截止日」≠「可以慢慢来」</strong>（避坑 142 第二层：<strong>每个日期都要问它是哪一种</strong>）。<strong>② 「席位可用」不等于「能调 API」</strong> —— 官方逐字排除 API，<strong>对做研究流水线的人是硬闸门：拿不到 API 就只能人工用界面</strong>。<strong>③ 申请主体是实验室负责人、不是学生</strong> —— 学生能否用<strong>取决于其所在实验室是否获批、以及获批负责人是否把席位给到该学生</strong>（30 个 named members 的分配权在实验室负责人手里）。<strong>④ 审批含「指定机构安全联系人」这一条</strong> —— <strong>这是前置条件而不是事后追责</strong>，<strong>即实验室要先在机构内安排一个人承担该角色，才可能提交</strong>（避坑 41 第二层：能否跑起来）。<strong>⚠️ 不可与 <code>Anthropic</code> 10/18 公告里的那句混为一谈</strong>：<strong>后者写「discounts on Claude for nonprofits and scientific institutions」但未给折扣幅度、是否完全免费、适用地区、申请条件与有效期 —— 字段全空，不可用</strong>（避坑 161）</p></blockquote>
+<h3 id="h3-61">🟡 <code>OpenCode</code> 安全事件处置状态（10/17 起 · 040 期头条，本期状态推进）</h3>
+<p><strong>表体精简后</strong>：🟡 生效中（仍在处置中，官方不给完成时点）。⚠️ （044 期）本轮补一条与本期头条的交叉观察：<code>OpenAI</code> 同日（10/21）发布的 <code>Patch the Planet</code> 公告里，逐字提到 <code>We’re also calibrating additional blocking classifiers for Daybreak to help reduce the potential for misuse. This involves difficult tradeoffs: safeguards intended to prevent abuse can also block legitimate security work.</code> —— 即防守方被护栏挡住这件事，官方本人在同一周自己写成了「困难的权衡」（避坑 185：安全护栏会按场景拒绝防守方，这类通道必须提前申请）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟡 <strong>生效中（仍在处置中，官方不给完成时点）</strong>。<strong>041–044 期已登记的口径全部维持</strong>：<strong>攻击面 = 一套「正在停用的旧系统」遭未授权访问</strong>，<strong>存放在用户工作区的第三方 AI 服务 API 密钥可能泄露（含 <code>OpenAI</code>、<code>Anthropic</code>）</strong>；<strong>官方明确「目前尚无法确认相关密钥是否遭到恶意使用，初步调查也未发现其他数据泄露的证据」</strong>（阴性结果，非清白证明，避坑 138 同族）；<strong>退款口径按主体分四家（避坑 184）</strong>：<code>OpenAI</code> <strong>承诺</strong>退款、<code>OpenCode</code> 退款<strong>正在进行 / 已启动补偿流程</strong>、<code>Anthropic</code> 与 <code>Google</code> <strong>封禁</strong>密钥且<strong>本轮未核到其退款承诺</strong>；<strong>「1.4%」的分母口径官方仍未给出</strong>。<strong>⚠️ （044 期）本轮补一条与本期头条的交叉观察</strong>：<code>OpenAI</code> 同日（10/21）发布的 <code>Patch the Planet</code> 公告里，<strong>逐字提到 <code>We’re also calibrating additional blocking classifiers for Daybreak to help reduce the potential for misuse. This involves difficult tradeoffs: safeguards intended to prevent abuse can also block legitimate security work.</code></strong> —— <strong>即防守方被护栏挡住这件事，官方本人在同一周自己写成了「困难的权衡」</strong>（避坑 185：<strong>安全护栏会按场景拒绝防守方，这类通道必须提前申请</strong>）。<strong>⚠️ 但本行不写「防护失效」也不写「防护有效」</strong>（避坑 190）—— <strong>官方这段是在讲「校准分类器的取舍」，不是在讲本次事件的成因</strong>。<strong>⚠️ 「1.4%」这一条至今没有任何官方给出分母</strong> —— <strong>本报告不代官方补分母、不做推算</strong>（避坑 165）</p></blockquote>
+<h3 id="h3-62">🟢 <code>MiniMax</code> <code>M3.1 Flash</code> 开放权重（权重 10/17 就已在 <code>HF</code> · 043/044 两期判定「未见」是错的）</h3>
+<p><strong>表体精简后</strong>：🟢 已开放权重（第 ④ 级已到）。⚠️ （049 期）<code>HF</code> 字段重取（<code>hf-mirror.com</code>，读于 2026-10-27 19:4x，详情端点连读两次 + 列表端点各一次）：详情 <code>downloads</code> <code>8,782</code> / <code>likes</code> <code>371</code>（两次读数完全一致）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>已开放权重（第 ④ 级已到）</strong>。<strong>⚠️ （049 期）<code>HF</code> 字段重取（<code>hf-mirror.com</code>，读于 2026-10-27 19:4x，</strong>详情端点连读两次<strong> + 列表端点各一次）</strong>：<strong>详情 <code>downloads</code> <code>8,782</code> / <code>likes</code> <code>371</code>（两次读数完全一致）；列表端点仍为 <code>22</code> 个仓库</strong>；<code>createdAt</code> <code>2026-10-17T06:37:50Z</code>（不变）、<code>lastModified</code> <strong><code>2026-10-26T07:08:15Z</code></strong>（046 期 <code>2026-10-23T03:37:20Z</code>，<strong>又改了一次</strong>）、<code>gated false</code>。<strong>⚠️ 本期最值得记的一条：两个端点的大小关系反了</strong> —— <strong>046 期是「列表 <code>7,355</code> &gt; 详情 <code>5,789</code>（差 1,566）」，本期是「详情 <code>8,782</code> &gt; 列表 <code>7,355</code>（差 1,427）」</strong> ✘✔ <strong>同一个字段、同一对端点，隔两天方向相反</strong> —— <strong>本报告因此把 046 期「列表 &gt; 详情」的观察降级为「当期读数」，不再当作稳定关系</strong>（避坑 203 同族：<strong>端点关系本身也不稳定</strong>）。<strong>⚠️ 流通量记账（升降都写）</strong>：<strong>详情 <code>downloads</code> <code>8,782 → 8,782</code>（同值）、<code>likes</code> <code>371 → 371</code>（同值）、<code>lastModified 2026-10-26T07:08:15Z</code> 不变</strong>；<strong>列表端点 <code>22</code> 个仓库（与 048 期同值）</strong>。<strong>⚠️ 对照组 <code>MiniMax-H3</code></strong>：<strong>本期取到的是「按 <code>downloads</code> 排序的列表端点」读数 <code>5,285,319</code> / <code>likes</code> <code>6,379</code>；047 期记的是「详情端点」<code>5,173,270</code> —— ⚠️ </strong>两个数来自不同端点、不可相减<strong>（避坑 210 同源），本期只报列表端点读数、不写涨跌</strong>。<strong>⚠️ 许可与四层结论不变（045 期已固化）</strong>：<strong><code>minimax-community</code> = 非商用免费 + 商用须标注 + 年收入超 2,000 万美元须书面授权；判许可必须读 <code>LICENSE</code> 正文，不读 API 字段（为空）也不读 tag（<code>license:other</code>）</strong>（避坑 197）。<strong>⚠️ 「能跑」侧的第三方证据（本期补上一手仓库，048 期挂账项⑨销项）</strong>：<strong><code>hf-mirror.com/api/models?author=unsloth&amp;search=MiniMax-M3.1-Flash</code> 本轮返回 <code>2</code> 个仓库</strong> —— <code>unsloth/MiniMax-M3.1-Flash-GGUF</code>（<code>downloads 7,179</code>、<code>createdAt 2026-10-23</code>）与 <code>unsloth/MiniMax-M3.1-Flash</code>（<code>downloads 399</code>、<code>createdAt 2026-10-23</code>）。<strong>⚠️ 但 048 期转述的那组数（2-bit 体积 −45%、保留 91.5% top-1、1-bit 约 89.9%、4-bit <code>UD-Q4_K_XL</code> 达 98.0%、可在 150GB 内存上本地运行）本轮只核到「仓库存在」这一层 —— 模型卡正文未读，那组数仍是转述</strong>（避坑 200）。<strong>⚠️ 另注意一个日期差</strong>：048 期写「<code>Unsloth</code> 10/26 发布」，而一手 <code>createdAt</code> 是 <strong><code>2026-10-23</code></strong> —— <strong>仓库创建在 10/23，「发布」与「创建」不是同一个时刻</strong>（避坑 211 同源）。<strong>这仍是「开放权重」从「能下载」走到「能在本地跑」的一手旁证，但它是第三方量化、不是官方权重本身</strong>（避坑 197 四层结构）。 <strong>⚠️ 本期不再复述 047 期「详情 &gt; 列表」的方向</strong>：047 期已把它降级为「当期读数」（避坑 207），<strong>本期遵守 —— 只写「本期读到 A=<code>8,782</code>、B=<code>8,782</code>」，不写方向</strong>。<strong>⚠️ 另立一条取数纪律（本期新记）</strong>：<code>hf-mirror.com/api/models?sort=trending</code> 本轮返回 <code>{"error":"✖ Invalid sort parameter: trending"}</code> —— <strong>该排序参数已失效</strong>，<strong>本报告因此不写「本期 trending 榜前 N 名」</strong>（与 045 期 <code>M3.1 Flash</code> 权重「取数方法错了」是同一族坑）。 <strong>⚠️ （049 期）另记一条取数纪律的延续</strong>：<code>hf-mirror.com/api/models?sort=trending</code> 本轮<strong>仍</strong>返回 <code>{"error":"✖ Invalid sort parameter: trending"}</code> —— <strong>连续第 2 期失效</strong>，<strong>本报告因此继续不写「trending 榜前 N 名」</strong>（避坑 44 同族）。<strong>⚠️ 但本期新开了 <code>search=</code> 形态的搜索端点并取到了新数据</strong> —— <code>hf-mirror.com/api/models?search=Unlimited-OCR</code> 返回 <code>30</code> 条结果，<strong>用途是「查某模型有没有官方仓库、有哪些第三方量化版」，比逐个猜 <code>author</code> 快得多</strong>。</p></blockquote>
+<h3 id="h3-63">🟢 <code>OpenRouter</code> 新增免费档 <code>recursive/flint-v1.0:free</code>（10/21 22:46 UTC 上线 · 官方无截止日）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（自 2026-10-21 22:46 UTC 起在官方 API 目录内）。⚠️ 三个必须写清的量：① <code>downloads: 0</code> 不是「没有人在用」，而是「仓库创建不足一天，下载计数还没起来」 —— 读一个刚发布的仓库的下载数当成熟度指标是错的（避坑 165）；</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>生效中（自 2026-10-21 22:46 UTC 起在官方 API 目录内）</strong>。<strong>官方一手（<code>openrouter.ai/api/v1/models</code>，本轮实跑全量 468 个模型）</strong>：<strong><code>recursive/flint-v1.0:free</code> 的 <code>created</code> = <code>1792622765</code>（= 2026-10-21 22:46 UTC）、<code>context_length</code> = <code>262144</code>、<code>pricing.prompt</code> = <code>0</code>、<code>pricing.completion</code> = <code>0</code></strong>。<strong>权重一手（<code>huggingface.co/RecursiveSI/flint</code>，本轮经 API 实访）</strong>：<strong><code>license: apache-2.0</code>、<code>gated: false</code>、<code>createdAt</code> <code>2026-10-21T14:20:58Z</code>、<code>lastModified</code> <code>2026-10-21T14:24:03Z</code>、<code>downloads</code> <code>0</code>、tags 含 <code>license:apache-2.0</code></strong>。<strong>⚠️ 三个必须写清的量</strong>：<strong>① <code>downloads: 0</code> 不是「没有人在用」，而是「仓库创建不足一天，下载计数还没起来」</strong> —— <strong>读一个刚发布的仓库的下载数当成熟度指标是错的</strong>（避坑 165）；<strong>② 同一批还有 <code>int4</code> / <code>int4-gguf</code> / <code>nvfp4-gguf</code> 三个衍生仓库</strong>（043 期已核），<strong>即量化版本与主仓库同时在架</strong>；<strong>③ 这是本报告第一次把「<code>OpenRouter</code> 官方 API 目录」当作一手目录来用</strong> —— <strong>此前 040–043 期引用的 <code>freellm.net</code> 转录数字与官方目录并不一致，本期把两套口径并列、不取其一</strong>（避坑 161）。<strong>⚠️ 本行的「截止」列写「未公布」</strong>：<strong>官方 API 目录对免费档不带任何时间字段</strong>（避坑 191：<strong>不替厂商写截止日</strong>）</p></blockquote>
+<h3 id="h3-64">🟢 <code>Anthropic</code> 发布 <code>Claude Duet Safety, Privacy, and Security</code>（10/23 · 研究预览的安全设计全文）</h3>
+<p><strong>表体精简后</strong>：🟢 生效中（<code>claude.com/resources/articles/claude-duet-safety-privacy-and-security</code>，页面标注 <code>Published Oct 23, 2026</code>）。⚠️ 本条的免费性判据（与 044 期登记的 <code>Claude Duet</code> 行一致，本期不改变）：官方一字未提免费 —— 研究预览含在 <code>Pro</code>/<code>Max</code> 套餐内、候补名单制、起始于美国 <code>Pro</code>/<code>Max</code> 用户（官方逐字 <code>A research preview is available by waitlist today, starting with US Pro and Max subscribers.</code>）。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟢 <strong>生效中（<code>claude.com/resources/articles/claude-duet-safety-privacy-and-security</code>，页面标注 <code>Published Oct 23, 2026</code>）</strong>。<strong>官方一手逐字（节选与本报告相关的）</strong>：「<strong>Claude Duet never sees your passwords, browser cookies, sign-in tokens, or other credentials.</strong>」「<strong>A separate, automated check runs alongside each action, built on the auto mode classifier from Claude Code and extended for Claude Duet. … The check runs outside the model doing the work so instructions hidden in a page cannot affect the outcome.</strong>」「<strong>For purchases, Claude Duet pays with a one-time card from a wallet like Link from Stripe, limited to that merchant and amount. … Your real card number isn’t shared with Claude Duet or the merchant.</strong>」<strong>敏感信息两级（官方逐字分类名）</strong>：<strong><code>Never share</code></strong>（登录凭证、完整卡号与银行账号、政府 ID 号码）与 <strong><code>Needs consent to share</code></strong>（健康、财务等 —— <strong>「You own request counts as consent」</strong>）。<strong>审批与边界（官方逐字）</strong>：付款、发消息、删除前出审批卡，<strong>「shows you the action, the destination, and the content, including every recipient」</strong>；<strong>有些动作即使批准也禁止</strong>（交易证券、账户间转账、访问他人账号）；<strong>付款/转账/删单/建账号不适用「别再问我」</strong>。<strong>浏览器隔离（官方逐字）</strong>：「<strong>runs in its own dedicated virtual machine in the cloud, separate from the model</strong>」；智能体只能通过<strong>固定命令集</strong>驱动浏览器；<strong>「requests that its web browser sends include a distinct User-Agent header, and we publish the public IP addresses it browses from」</strong>；<strong>上线前联系了若干大型网站并给予阻止 <code>Claude Duet</code> 访问的选项，「some chose to」</strong>。<strong>测试与赏金（官方逐字）</strong>： Safeguards 团队三变体评测（无害版 / 注入指令版 / 诱导越权版）+ 影子流量；外部渗透测试公司测过一轮、云浏览器与登录表单的跟进测试「is running now」；<strong>「in scope of Anthropic’s public bug bounty program」</strong>（<code>HackerOne</code>）。<strong>⚠️ 本条的免费性判据（与 044 期登记的 <code>Claude Duet</code> 行一致，本期不改变）</strong>：<strong>官方一字未提免费</strong> —— <strong>研究预览含在 <code>Pro</code>/<code>Max</code> 套餐内、候补名单制、起始于美国 <code>Pro</code>/<code>Max</code> 用户</strong>（官方逐字 <code>A research preview is available by waitlist today, starting with US Pro and Max subscribers.</code>）。<strong>⚠️ 本篇是「安全设计说明」，不是「额度说明」</strong> —— <strong>全文没有任何免费额度、试用期或钟点</strong>（避坑 154）。</p></blockquote>
+<h3 id="h3-65">🟡 <code>OpenCode</code> 免费模型清单 10 → 11 项（<code>LongCat 2.5 Preview Free</code> 上架 · 窗口外复读已下架）</h3>
+<p><strong>表体精简后</strong>：🟡 生效中（清单动态变动，逐条以两页实读为准）。⚠️ 与 045 期（10/23 实读 10 项）的逐条 diff：新增 3 条（<code>Flint 40B Free</code>、<code>LongCat 2.5 Preview Free</code>、<code>Jev 1.13 Free</code>）、减少 2 条（<code>Exo Free</code>、<code>MiMo-V2.5 Free</code>）—— 净 +1，两轮之间又是 10 → 11 → 10。</p>
+<p><strong>完整原文</strong>：</p>
+<blockquote class="bq"><p>🟡 <strong>生效中（清单动态变动，逐条以两页实读为准）</strong>。<strong>（046 期）两轮实读 <code>opencode.ai/docs/zen</code> 的 <code>Free models</code> 段</strong>：<strong>① 10/24 09:05（窗口内）实读 11 项</strong>：<code>GLM-5.3-Flash Free</code>、<code>DeepSeek V4.1 Flash Free</code>、<code>MiMo-V2.6-Flash Free</code>、<code>Nemotron 3 Ultra Free</code>、<code>Nemotron 3.5 Lightning Free</code>、<code>Nemotron 3.5 Super VL Free</code>、<code>Big Pickle</code>、<code>Beam Free</code>、<code>Flint 40B Free</code>、<strong><code>LongCat 2.5 Preview Free</code>（新）</strong>、<strong><code>Jev 1.13 Free</code>（新）</strong>；<strong>② 10/25 20:17（窗口外复读，属 047 期窗口）实读 10 项</strong>：<strong><code>LongCat 2.5 Preview Free</code> 已不在清单中</strong>，其余同上。<strong>⚠️ 与 045 期（10/23 实读 10 项）的逐条 diff</strong>：<strong>新增 3 条</strong>（<code>Flint 40B Free</code>、<code>LongCat 2.5 Preview Free</code>、<code>Jev 1.13 Free</code>）、<strong>减少 2 条</strong>（<code>Exo Free</code>、<code>MiMo-V2.5 Free</code>）—— <strong>净 +1，两轮之间又是 10 → 11 → 10</strong>。<strong>⚠️ <code>LongCat 2.5 Preview Free</code> 的留存口径（官方逐字）</strong>：「<strong>Its provider follows a zero-retention policy and does not use your data for model training.</strong>」；<strong><code>Flint 40B Free</code> 的口径相反</strong>：「<strong>During its free period, collected data may be used to improve the model. Data is retained for 30 days.</strong>」<strong>⚠️ <code>Go</code> 订阅页同步变动</strong>：10/24 实读有 <code>LongCat 2.5 Preview Free (limited time)</code> 与 <code>Beam Free (limited time, limited regions)</code> 两行；10/25 20:17 复读<strong>只剩 <code>Beam Free</code> 一行</strong> —— <strong>与 <code>zen</code> 页同向，两页合起来才构成「已下架」的结论</strong>（避坑 199：单读一页会漏）。<strong>⚠️ 下架本身没有任何官方说明</strong>：<strong><code>OpenCode</code> 两侧均未发布关于 <code>LongCat</code> 上/下架的公告，本报告因此不写「官方宣布上架/下架」，只写「两页出现/不再出现」</strong>（避坑 154）。<strong>⚠️ <code>Beam Free</code> 地区清单本轮仍在</strong>（<code>Angola, Belarus, Cambodia, China (including Hong Kong and Macau), Cuba, …</code> 等 20 个条目，含中国港澳台地区按官方原文照录）—— <strong>与 045 期一致，本期不变</strong>。<strong>⚠️ <code>Gemini 4 Argon</code> 五折（官方逐字 <code>The 50% discount applies through November 30, 2026.</code>）本轮仍在 <code>Go</code> 页</strong>。</p></blockquote>
+</section>
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="fr"><span>AI 免费内容与权益速递 · 第 001 期</span><span>__DATELINE__</span></div>
+  <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
+  <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
+</footer>
+
+<div class="fab" data-no-print>
+  <button class="iconbtn" id="topBtn" type="button" aria-label="回到顶部">↑</button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var root=document.documentElement, main=document.getElementById("main");
+
+  /* ---------- 主题 ---------- */
+  var themeBtn=document.getElementById("themeBtn");
+  themeBtn.addEventListener("click",function(){
+    var t=root.getAttribute("data-theme")==="dark"?"light":"dark";
+    root.setAttribute("data-theme",t);
+    try{localStorage.setItem("aihs-theme",t);}catch(e){}
+  });
+
+  /* ---------- 章节高亮 ---------- */
+  var secs=[].slice.call(document.querySelectorAll("main .sec")),
+      navA=[].slice.call(document.querySelectorAll("#topnav a")),
+      tocA=[].slice.call(document.querySelectorAll(".toc-a"));
+  function sync(id){
+    navA.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+id);});
+    tocA.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+id);});
+  }
+
+  /* ---------- 阅读进度 + 章节高亮（确定性：取最后一个越过阈值的章节） ---------- */
+  var bar=document.getElementById("progress"), ticking=false;
+  function syncNow(){
+    var cur=secs.length?secs[0].id:null;
+    for(var i=0;i<secs.length;i++){
+      if(secs[i].getBoundingClientRect().top<=150) cur=secs[i].id; else break;
+    }
+    if(cur) sync(cur);
+  }
+  function onScroll(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      var h=document.documentElement.scrollHeight-window.innerHeight;
+      bar.style.width=(h>0?Math.min(100,(window.scrollY/h)*100):0)+"%";
+      syncNow();
+      ticking=false;
+    });
+  }
+  window.addEventListener("scroll",onScroll,{passive:true});
+  window.addEventListener("resize",onScroll);
+  onScroll();
+
+  /* ---------- 入场 ---------- */
+  var rise=[].slice.call(document.querySelectorAll("main .tblwrap, main .ol, h3, .summary .ul"));
+  rise.forEach(function(el,i){ el.classList.add("rise"); el.style.transitionDelay=(Math.min(i,14)*55)+"ms"; });
+  if(window.IntersectionObserver && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    var io2=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io2.unobserve(e.target); } });
+    },{rootMargin:"0px 0px -8% 0px", threshold:.05});
+    rise.forEach(function(el){io2.observe(el);});
+    requestAnimationFrame(function(){
+      rise.forEach(function(el){
+        var r=el.getBoundingClientRect();
+        if(r.top<window.innerHeight*.95) el.classList.add("in");
+      });
+    });
+  } else { rise.forEach(function(el){el.classList.add("in");}); }
+
+  /* ---------- 截止时间表：按状态筛选 ---------- */
+  var ledger=document.querySelector(".tbl.ledger");
+  if(ledger){
+    var rows=[].slice.call(ledger.querySelectorAll("tbody tr[data-st]")),
+        chips=[].slice.call(document.querySelectorAll(".chip")),
+        cnt=document.getElementById("ledgerCount"),
+        counts={all:rows.length}, filter="all";
+    rows.forEach(function(r){var s=r.getAttribute("data-st"); counts[s]=(counts[s]||0)+1;});
+    document.querySelectorAll("[data-c]").forEach(function(b){
+      var k=b.getAttribute("data-c"); b.textContent=(counts[k]||0);
+    });
+    function apply(){
+      var shown=0;
+      rows.forEach(function(r){
+        var ok=(filter==="all"||r.getAttribute("data-st")===filter);
+        r.hidden=!ok; if(ok) shown++;
+      });
+      cnt.textContent="显示 "+shown+" / "+rows.length+" 条";
+    }
+    chips.forEach(function(c){
+      c.addEventListener("click",function(){
+        filter=c.getAttribute("data-f");
+        chips.forEach(function(x){
+          var on=(x===c); x.classList.toggle("on",on); x.setAttribute("aria-pressed",on?"true":"false");
+        });
+        apply();
+      });
+    });
+    apply();
+  }
+
+  /* ---------- 长状态格：点击展开全文 ---------- */
+  [].slice.call(document.querySelectorAll(".st-txt.cbody.clamp")).forEach(function(el){
+    el.setAttribute("tabindex","0");
+    el.setAttribute("role","button");
+    el.setAttribute("aria-expanded","false");
+    function open(){
+      el.classList.remove("clamp");
+      el.setAttribute("aria-expanded","true");
+      el.removeAttribute("title");
+    }
+    el.addEventListener("click", open);
+    el.addEventListener("keydown", function(ev){
+      if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); }
+    });
+  });
+
+  /* ---------- 全文检索 ---------- */
+  var q=document.getElementById("q"), qn=document.getElementById("qn"),
+      marks=[], cur=-1, lastQ="";
+  function clearMarks(){
+    marks.forEach(function(m){
+      var p=m.parentNode; if(!p) return;
+      p.replaceChild(document.createTextNode(m.textContent),m); p.normalize();
+    });
+    marks=[]; cur=-1;
+  }
+  function paint(){
+    clearMarks();
+    var v=q.value.trim();
+    qn.textContent="0";
+    if(v.length<1){ lastQ=""; return; }
+    var walk=document.createTreeWalker(main,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+      if(!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      var p=n.parentNode; if(!p) return NodeFilter.FILTER_REJECT;
+      if(/^(SCRIPT|STYLE|MARK|INPUT|BUTTON|CODE|svg|path)$/.test(p.nodeName)) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }});
+    var nodes=[],n;
+    while((n=walk.nextNode())) nodes.push(n);
+    var lv=v.toLowerCase();
+    nodes.forEach(function(node){
+      var val=node.nodeValue, low=val.toLowerCase(), i=low.indexOf(lv);
+      if(i<0) return;
+      var frag=document.createDocumentFragment(), last=0;
+      while(i>=0){
+        if(i>last) frag.appendChild(document.createTextNode(val.slice(last,i)));
+        var m=document.createElement("mark");
+        m.className="hl"; m.textContent=val.slice(i,i+v.length);
+        marks.push(m); frag.appendChild(m);
+        last=i+v.length; i=low.indexOf(lv,last);
+      }
+      if(last<val.length) frag.appendChild(document.createTextNode(val.slice(last)));
+      node.parentNode.replaceChild(frag,node);
+    });
+    qn.textContent=marks.length;
+    if(marks.length){ cur=-1; jump(1); }
+    lastQ=v;
+  }
+  function jump(d){
+    if(!marks.length) return;
+    if(cur>=0 && marks[cur]) marks[cur].classList.remove("cur");
+    cur=(cur+d+marks.length)%marks.length;
+    var el=marks[cur]; el.classList.add("cur");
+    el.scrollIntoView({block:"center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+  }
+  var timer=null;
+  q.addEventListener("input",function(){ clearTimeout(timer); timer=setTimeout(paint,140); });
+  q.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){ e.preventDefault(); jump(e.shiftKey?-1:1); }
+    if(e.key==="Escape"){ q.value=""; paint(); }
+  });
+  document.getElementById("qnext").addEventListener("click",function(){jump(1);});
+  document.getElementById("qprev").addEventListener("click",function(){jump(-1);});
+
+  /* ---------- 手机端搜索条：<=600px 时搜索收成一个图标，点开成全宽搜索栏 ---------- */
+  var sBtn=document.getElementById("searchBtn");
+  function closeSearch(){
+    document.body.classList.remove("search-open");
+    sBtn.textContent="⌕";
+    sBtn.setAttribute("aria-expanded","false");
+  }
+  sBtn.addEventListener("click",function(){
+    var open=document.body.classList.toggle("search-open");
+    sBtn.textContent=open?"✕":"⌕";
+    sBtn.setAttribute("aria-expanded",open?"true":"false");
+    if(open) q.focus();
+  });
+  document.addEventListener("keydown",function(e){
+    /* 输入框内的 Esc 交给上面那段处理（只清空，不关面板） */
+    if(e.key==="Escape" && document.body.classList.contains("search-open") && document.activeElement!==q) closeSearch();
+  });
+
+  /* ---------- 量顶栏与筛选条的实际高度写回 CSS 变量 ----------
+     --tb-h 决定抽屉从哪开始、锚点跳转留多少空；--chips-h 决定截止表表头吸在哪。
+     两者都随字号与是否换行变化，写死数值迟早对不上。 */
+  function syncMetrics(){
+    var tb=document.querySelector(".topbar"), ch=document.querySelector(".chips");
+    if(tb) root.style.setProperty("--tb-h", tb.offsetHeight+"px");
+    if(ch) root.style.setProperty("--chips-h", ch.offsetHeight+"px");
+  }
+  syncMetrics();
+  window.addEventListener("resize",syncMetrics);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(syncMetrics);
+
+  /* ---------- 移动端目录 ---------- */
+  var menuBtn=document.getElementById("menuBtn");
+  menuBtn.addEventListener("click",function(){
+    var open=document.body.classList.toggle("nav-open");
+    menuBtn.setAttribute("aria-expanded",open?"true":"false");
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      document.body.classList.remove("nav-open");
+      menuBtn.setAttribute("aria-expanded","false");
+    });
+  });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape" && document.body.classList.contains("nav-open")){
+      document.body.classList.remove("nav-open");
+      menuBtn.setAttribute("aria-expanded","false");
+    }
+  });
+  /* 点击正文区收起抽屉 */
+  main.addEventListener("click",function(){
+    if(document.body.classList.contains("nav-open")){
+      document.body.classList.remove("nav-open");
+      menuBtn.setAttribute("aria-expanded","false");
+    }
+  });
+
+  /* ---------- 回到顶部 ---------- */
+  document.getElementById("topBtn").addEventListener("click",function(){
+    window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+  });
+})();
+</script>
+</body>
+</html>
