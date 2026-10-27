@@ -21,6 +21,9 @@ import re
 import urllib.parse
 
 WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import sys as _sys
+_sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import viewswitch
 OUT = os.path.join(WS, "index.html")
 DEF = "AI免费内容与权益速递-"
 
@@ -130,6 +133,17 @@ def main():
     def esc(t):
         return H.escape(t, quote=True)
 
+    def mdstrip(t):
+        """剥掉 Markdown 标记，只留文字。
+
+        首页是把 md 的**标题行**直接搬过来用的，而标题里带 `**粗体**` 与 `反引号`，
+        不做处理就会在门面上原样露出星号（实测 048 期头条有 10 个 `**`、18 个反引号）。
+        只去标记、不改字，所以不会影响信息。
+        """
+        t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)   # [文字](链接) -> 文字
+        t = re.sub(r"\*\*|__|~~|`", "", t)
+        return t
+
     # ---------------------------------------------------------------- 大卡片
     def big_card(it):
         btns = []
@@ -148,7 +162,7 @@ def main():
   <div class="acts">%s</div>
 </article>""" % (
             esc(it["no"]), esc(it["date"]), format(it["size"], ","), it["tables"],
-            esc(url_of(it["html"] or it["md"])), esc(it["theme"]), ab, "".join(btns))
+            esc(url_of(it["html"] or it["md"])), esc(mdstrip(it["theme"])), ab, "".join(btns))
 
     # ---------------------------------------------------------------- 小行
     def row(it):
@@ -162,7 +176,7 @@ def main():
     <span class="pit">避坑 %s</span>
     <span class="kind">%s</span>
   </a>
-</li>""" % (esc(url_of(link)), esc(it["no"]), esc(it["date"][5:]), esc(it["theme"]),
+</li>""" % (esc(url_of(link)), esc(it["no"]), esc(it["date"][5:]), esc(mdstrip(it["theme"])),
             esc(it["pit"]), kind)
 
     from datetime import date
@@ -363,6 +377,9 @@ footer .fr{
   .card,ul.list li.row a{box-shadow:none}
   .btn{display:none}
 }
+__VS_CSS__
+.vsnote{margin:12px 0 0; font-size:13px; color:var(--faint); line-height:1.8; max-width:70ch}
+.vsnote b{color:var(--ink-2); font-weight:600}
 </style>
 </head>
 <body>
@@ -394,21 +411,12 @@ footer .fr{
 </section>
 
 <section>
-  <div class="slabel">免费速查 · 一条一行</div>
-  <p class="lede" style="font-size:15px; max-width:62ch">
-    只想看「<strong>现在有什么免费</strong>、<strong>到什么时候结束</strong>」的，从这里进：
-    <strong>__QUICK_N__ 条</strong>，每条只写四个字段 —— 给什么 / 能拿多少 / 到期日 / 什么门槛。
-    不写沿革、不写论证、不写期号。
-    <a href="quick.html">打开《免费速查》&#8594;</a>
-  </p>
-</section>
-
-<section>
-  <div class="slabel">常驻权益总账</div>
-  <p class="lede" style="font-size:15px; max-width:62ch">
-    <strong>没有确切截止日</strong>的长期有效权益（<strong>__LEDGER_N__</strong> 条）单独成册，原文照搬、不逐期重印。
-    要查「某家现在还给不给免费额度 / 什么价 / 什么许可」，查这一册；日报只在变了的时候报一行。
-    <a href="standing.html">打开《常驻权益总账》&#8594;</a>
+  <div class="slabel">另外两个视图 · 同一批数据</div>
+  __VIEWSWITCH__
+  <p class="vsnote">
+    <b>极速视图</b>只答四个问题 —— 给什么 / 能拿多少 / 到什么时候 / 什么门槛，不写沿革、不写期号；
+    <b>常驻总账</b>收没有确切截止日的长期权益，逐期复核但不逐期重印原文。
+    三个页面顶部的这排切换器位置一致，随时可以换。
   </p>
 </section>
 
@@ -453,6 +461,9 @@ __ROWS__
         ledger_n = str(max(_n - 1, 0))
 
     doc = (DOC
+           .replace("__VS_CSS__", viewswitch.CSS)
+           .replace("__VIEWSWITCH__", viewswitch.render(
+               None, n_quick=quick_n, n_ledger=ledger_n, ws=WS))
            .replace("__QUICK_N__", quick_n)
            .replace("__LEDGER_N__", ledger_n)
            .replace("__ACCENT__", ACCENT)

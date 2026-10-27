@@ -24,6 +24,8 @@ import sys
 from string import Template
 
 WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import viewswitch
 SRC = os.path.join(WS, ".workbuddy", "data", "quick_items.csv")
 DEADLINES = os.path.join(WS, ".workbuddy", "data", "deadlines.csv")
 OUT = os.path.join(WS, "quick.html")
@@ -164,6 +166,18 @@ def build(rows):
     over = sorted([r for r in rows if bucket(r) == "over"],
                   key=lambda r: (r["days"] if r["days"] is not None else 9999))
 
+    # 三档视图切换器：放在刊头之后、统计之前，与日报页 / 总账页同一位置同一外观
+    n_ledge = None
+    _lp = os.path.join(WS, "常驻权益总账.md")
+    if os.path.exists(_lp):
+        _lt = io.open(_lp, encoding="utf-8").read()
+        n_ledge = max(sum(1 for _l in _lt.split("\n")
+                          if _l.strip().startswith("|")
+                          and not re.match(r"^\|\s*-", _l.strip())) - 1, 0)
+    full_href = viewswitch.latest_issue_html(WS) or "index.html"
+    vs_html = viewswitch.render("quick", n_quick=len(rows), n_ledger=n_ledge,
+                                full_href=full_href, ws=WS)
+
     n_live = len([r for r in rows if bucket(r) != "over"])
     n_week = len([r for r in ticking if r["days"] is not None and 0 <= r["days"] <= 7])
     n_over = len(over)
@@ -197,6 +211,9 @@ def build(rows):
         "standing": "\n".join(blocks) if blocks else '<p class="empty">当前没有长期条目。</p>',
         "over": over_block,
         "n_all": len(rows),
+        "viewswitch": vs_html,
+        "full_href": full_href,
+        "vs_css": viewswitch.CSS,
     })
 
 
@@ -453,6 +470,7 @@ footer b{color:var(--muted); font-weight:600}
   table.qt tr{break-inside:avoid}
   a{color:#000; text-decoration:none}
 }
+${vs_css}
 </style>
 </head>
 <body>
@@ -463,6 +481,7 @@ footer b{color:var(--muted); font-weight:600}
   <h1>AI 免费额度，一条一行</h1>
   <p class="lede">只回答四个问题：<b>给什么</b>、<b>能拿多少</b>、<b>到什么时候结束</b>、<b>要什么门槛</b>。不写沿革、不写期号、不写论证过程。</p>
   <hr class="rule">
+  ${viewswitch}
 </header>
 
 <div class="stats">
@@ -473,7 +492,7 @@ footer b{color:var(--muted); font-weight:600}
 
 <div class="boundary">
   <b>本页不收什么：</b>模型发布、开源公告、申报通知、停服迁移这类「新闻」不在本页 —— 它们不是「我现在能领什么」。
-  需要看这些，或者要查某条的依据、口径、历史变更，去<a href="index.html">完整版日报</a>。
+  需要看这些，或者要查某条的依据、口径、历史变更，去<a href="${full_href}">完整版日报</a>。
   每一条的原文与核对时点都留在那里，本页只做「能不能白拿」的判断。
 </div>
 
@@ -500,7 +519,7 @@ ${over}
   <p><b>数字会变。</b>本页基准日 <b>${date}</b>，共 ${n_all} 条。厂商随时可能降档、提前收口或不公布结束日；
      看到「未公布」的，按「随时会关」处理，别拿它排长期计划。</p>
   <p><b>要追证：</b>每一条的原始出处、核对时点、口径变更与避坑记录，都在完整版日报里。
-     <a href="index.html">完整版与历史各期 &#8594;</a></p>
+     <a href="${full_href}">读本期完整日报 &#8594;</a>　<a href="index.html">历史各期索引 &#8594;</a></p>
   <p class="back">AI 免费内容与权益速递 · 免费速查</p>
 </footer>
 

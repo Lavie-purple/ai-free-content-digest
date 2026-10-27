@@ -8,6 +8,10 @@
 - **`AI信息源分级清单-T0-T4.md` 不对外展示**（内部台账，只用于路由与去重），照旧就地维护。
 - 每次出刊**只 `present_files` 那一份日报**；**只有用户明确要求才展示台账**。
 - **用户问「最简版 / 只看免费」时给 `quick.html`**（不是日报）：那条线只答四个字段，别拿日报顶。
+- **三页是「一份刊物的三个视图」，不是三个独立网页**：日报 / `quick.html` / `standing.html` 顶部
+  **同一位置都有三格切换器**（极速 / 完整 / 总账，当前格实心 + `aria-current`），首页三格都不高亮。
+  组件在 `viewswitch.py` —— **改一处、三页同时变**；别在任一页单独加链接（047 期前就是这么散的，
+  而且 `quick.html` 里「完整版日报」还错指到 `index.html` 首页）。**条数一律实算**，不许手写。
 
 ## 出刊约定（全文见附卷 §十·22）
 - **增量 + 纠错**，不重复往期已固化内容（先跑 `check_frozen.py`，🔴 高危 exit 1）。
@@ -85,6 +89,8 @@
 5b. **`build_quick.py --check`** → 补齐 `.workbuddy/data/quick_items.csv` → **`build_quick.py`**
    （《免费速查》页。`--check` 用 2-gram 相似度比对 `deadlines.csv`，报出「额度类但没进速查表」的条目；
    **新增的免费额度条目必须逐条补进去，量要写到具体数字，不许写「见官方页」蒙过去**）
+5c. 三页切换器由 `viewswitch.py` 统一渲染：`build_web.py`（日报 + 总账）、`build_quick.py`、
+   `build_index_web.py` 都 `import viewswitch`。**改样式只改它**，三页自动一致。
 6. `build_source_hits.py` → `build_index.py` → `build_index_web.py` → `check_site_freshness.py`（后两个每期必跑）
 7. git commit + push → **核实 sha** → 带 `?t=<ts>` 抓线上页**逐字节比对**
    （Pages 延迟 1–2 分钟；构建 API 无 token 返 404，逐字节比对可替代且更强）

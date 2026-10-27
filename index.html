@@ -192,6 +192,44 @@ footer .fr{
   .card,ul.list li.row a{box-shadow:none}
   .btn{display:none}
 }
+
+.vs{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  margin:18px 0 20px; border:1px solid var(--rule); background:var(--surface);
+  box-shadow:var(--shadow);
+}
+.vs-i{
+  display:block; padding:10px 14px; text-decoration:none; color:var(--ink-2);
+  border-right:1px solid var(--rule); transition:background 120ms ease;
+}
+.vs-i:last-child{border-right:0}
+.vs-i:hover{background:var(--surface-2)}
+.vs-k{display:block; font-size:13.5px; font-weight:600; line-height:1.45}
+.vs-k i{font-style:normal; margin-right:5px; opacity:.75}
+.vs-d{display:block; font-size:11.5px; color:var(--faint); line-height:1.5; margin-top:1px}
+.vs-i.is-on{background:var(--ink); color:var(--bg); cursor:default}
+.vs-i.is-on .vs-d{color:var(--bg); opacity:.6}
+.vs-i.is-on .vs-k i{opacity:.85}
+/* 只给「极速」的图标上强调色：整行标红会盖过当前页的实心块，反而让人以为它才是当前页 */
+.vs-quick .vs-k i{color:var(--accent-ink); opacity:1}
+.vs-quick.is-on .vs-k i{color:var(--bg)}
+@media (max-width:640px){
+  /* 窄屏不要三行堆叠：日报页顶已有固定导航条 + 刊头 + 说明框，
+     再来三行切换器会把首屏全占掉。压成单行三格，副标题不出。 */
+  .vs{grid-template-columns:repeat(3,1fr); margin-top:14px}
+  .vs-i{
+    padding:9px 6px; text-align:center;
+    border-right:1px solid var(--rule); border-bottom:0;
+  }
+  .vs-i:last-child{border-right:0}
+  .vs-k{font-size:12px; line-height:1.3}
+  .vs-k i{margin-right:3px}
+  .vs-d{display:none}
+}
+@media print{.vs{display:none !important}}
+
+.vsnote{margin:12px 0 0; font-size:13px; color:var(--faint); line-height:1.8; max-width:70ch}
+.vsnote b{color:var(--ink-2); font-weight:600}
 </style>
 </head>
 <body>
@@ -222,28 +260,19 @@ footer .fr{
   <article class="card big">
   <div class="tagline"><span class="dot"></span>最新一期</div>
   <div class="metaline"><b>第 048 期</b><span class="sep">·</span>2026-10-27<span class="sep">·</span>158,149 字<span class="sep">·</span>7 张表</div>
-  <h2><a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC048%E6%9C%9F-2026-10-27.html">本期头条是「一份可以直接下载、许可写得很清楚的数据集，和一个终于被核到归属的每秒价格」—— `OpenAI` 发布 `Signals v3.0` 数据（**165 类工作活动 · 近 100 个国家 · 2025 Q1–2026 Q3 季度序列**，下载页写明 **Creative Commons `CC BY 4.0`**、可下载 CSV 与数据字典，**发布日期 `2026-10-26`**）；而 `Runware` 的 **`$0.133/秒` 本期终于在一手页核到了 —— 但它属于 `sync-3`（唇形同步）模型，不是 `Kling 4.0`**（047 期记「两页都没核到 `0.133`」，**结论对、理由错，本期就地更正**）</a></h2>
+  <h2><a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC048%E6%9C%9F-2026-10-27.html">本期头条是「一份可以直接下载、许可写得很清楚的数据集，和一个终于被核到归属的每秒价格」—— OpenAI 发布 Signals v3.0 数据（165 类工作活动 · 近 100 个国家 · 2025 Q1–2026 Q3 季度序列，下载页写明 Creative Commons CC BY 4.0、可下载 CSV 与数据字典，发布日期 2026-10-26）；而 Runware 的 $0.133/秒 本期终于在一手页核到了 —— 但它属于 sync-3（唇形同步）模型，不是 Kling 4.0（047 期记「两页都没核到 0.133」，结论对、理由错，本期就地更正）</a></h2>
   <ul class="abs"><li>本期头条（真·免费内容）：OpenAI 发布 Signals v3.0 数据集（官方逐字：「Today, we are releasing OpenAI Signals data that explores 165 wo…</li><li>本期头条之二（一个价格的归属终于被核到）：Runware 的 $0.133/秒 在一手页出现了 —— 但它属于 sync-3（唇形同步）模型，不是 Kling 4.0。一手证据：该页 JSON 里的定价块逐字为 &quot;pri…</li><li>本期头条之三（一条路径迁移）：Runware 的 Kling 4.0 模型页路径已迁移 —— 旧路径 runware.ai/models/klingai 本轮返回 HTTP 404，且返回体仍是 845,983 字节的完…</li><li>本期头条之四（目录层换血）：OpenRouter 三个计数全部同值：全量 463 / 零价 20 / :free 17（047 期同为 463/20/17）。⚠️ 但逐条 diff 显示成分变了：新增 openai/gp…</li></ul>
   <div class="acts"><a class="btn primary" href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC048%E6%9C%9F-2026-10-27.html">读网页版 →</a><a class="btn" href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC048%E6%9C%9F-2026-10-27.md">看 Markdown</a></div>
 </article>
 </section>
 
 <section>
-  <div class="slabel">免费速查 · 一条一行</div>
-  <p class="lede" style="font-size:15px; max-width:62ch">
-    只想看「<strong>现在有什么免费</strong>、<strong>到什么时候结束</strong>」的，从这里进：
-    <strong>62 条</strong>，每条只写四个字段 —— 给什么 / 能拿多少 / 到期日 / 什么门槛。
-    不写沿革、不写论证、不写期号。
-    <a href="quick.html">打开《免费速查》&#8594;</a>
-  </p>
-</section>
-
-<section>
-  <div class="slabel">常驻权益总账</div>
-  <p class="lede" style="font-size:15px; max-width:62ch">
-    <strong>没有确切截止日</strong>的长期有效权益（<strong>131</strong> 条）单独成册，原文照搬、不逐期重印。
-    要查「某家现在还给不给免费额度 / 什么价 / 什么许可」，查这一册；日报只在变了的时候报一行。
-    <a href="standing.html">打开《常驻权益总账》&#8594;</a>
+  <div class="slabel">另外两个视图 · 同一批数据</div>
+  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">62 条 · 一条一行</span></a><a class="vs-i vs-full" href="AI免费内容与权益速递-第048期-2026-10-27.html"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 048 期 · 十节</span></a><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">131 条 · 无截止日</span></a></nav>
+  <p class="vsnote">
+    <b>极速视图</b>只答四个问题 —— 给什么 / 能拿多少 / 到什么时候 / 什么门槛，不写沿革、不写期号；
+    <b>常驻总账</b>收没有确切截止日的长期权益，逐期复核但不逐期重印原文。
+    三个页面顶部的这排切换器位置一致，随时可以换。
   </p>
 </section>
 
@@ -254,7 +283,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC047%E6%9C%9F-2026-10-27.html">
     <span class="no">047</span>
     <span class="d">10-27</span>
-    <span class="th">本期头条是「一次价格腰斩的发布，和它没写进免费档的那一档」—— `OpenAI` 发布 `GPT-6.1 Terra`（标准 API 价格比 `GPT-5.6 Terra` 与 `GPT-6.1 Sol` 低 **50%**，`$1 / $0.05 / $5` 每 1M，**`Agents&#x27; Last Exam` 中等算力下比 `GPT-6 Astra` 与 `GPT-6.1 Sol` 快三倍以上**），但官方可用性段只列 **Plus / Pro / Enterprise / Edu** 四档；同窗口 `Anthropic` 递交 `S-1`（拟以 `ANT` 登陆纳斯达克）—— 两条都很大，**但都不是「免费内容」条目：一条是「付费档里的降价」，一条是「不含任何免费额度信息的上市文件」</span>
+    <span class="th">本期头条是「一次价格腰斩的发布，和它没写进免费档的那一档」—— OpenAI 发布 GPT-6.1 Terra（标准 API 价格比 GPT-5.6 Terra 与 GPT-6.1 Sol 低 50%，$1 / $0.05 / $5 每 1M，Agents&#x27; Last Exam 中等算力下比 GPT-6 Astra 与 GPT-6.1 Sol 快三倍以上），但官方可用性段只列 Plus / Pro / Enterprise / Edu 四档；同窗口 Anthropic 递交 S-1（拟以 ANT 登陆纳斯达克）—— 两条都很大，但都不是「免费内容」条目：一条是「付费档里的降价」，一条是「不含任何免费额度信息的上市文件」</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -263,7 +292,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC046%E6%9C%9F-2026-10-25.html">
     <span class="no">046</span>
     <span class="d">10-25</span>
-    <span class="th">本期头条是「一个 3T 级开放权重模型的发布与一次同门退役写进了同一份定价公告」—— 月之暗面 `Kimi K3.1 Pro` 发布（官方口径「3T 级」开放权重、1M token 上下文、**权重承诺 11/4 前放出**），而同一页定价公告同时宣布 `K2` 系列 **10/31 停新注册、12 月底计划下线**；另有一处跨期补登：**`Kling 4.0` 在 `fal` 上 10/21 就已公开（`publishedAt 2026-10-21T15:09–15:22Z`），属于 044 期窗口，045 期漏登 —— 漏登根因不是没扫到，而是 `fal.ai` 一直不在本报告信源清单里**，本期补登并把 `fal.ai` 补进台账</span>
+    <span class="th">本期头条是「一个 3T 级开放权重模型的发布与一次同门退役写进了同一份定价公告」—— 月之暗面 Kimi K3.1 Pro 发布（官方口径「3T 级」开放权重、1M token 上下文、权重承诺 11/4 前放出），而同一页定价公告同时宣布 K2 系列 10/31 停新注册、12 月底计划下线；另有一处跨期补登：Kling 4.0 在 fal 上 10/21 就已公开（publishedAt 2026-10-21T15:09–15:22Z），属于 044 期窗口，045 期漏登 —— 漏登根因不是没扫到，而是 fal.ai 一直不在本报告信源清单里，本期补登并把 fal.ai 补进台账</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -272,7 +301,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC045%E6%9C%9F-2026-10-23.html">
     <span class="no">045</span>
     <span class="d">10-23</span>
-    <span class="th">本期头条是「同一天里发生了一件『免费档收口』和一件『权重落地』，而这两件事的时间线是反的」—— `MiniMax M3.1 Flash` 的免费档在 10/22 从 `OpenRouter` 与 `OpenCode` 双双收口（`OpenRouter` 模型页第一次挂出官方横幅，逐字给出结束日 `The free launch period ended Oct 22, 2026.`），而它的权重在 `Hugging Face` 上 10/17 就已经放出来了；更要紧的是，本报告 043、044 两期连续判定「权重未见」是错的 —— 错不在厂商没发，错在本报告的取数方法：同一个 `HF` 组织页 URL，只加一个排序参数，就从 `21` 个仓库变成 `22` 个</span>
+    <span class="th">本期头条是「同一天里发生了一件『免费档收口』和一件『权重落地』，而这两件事的时间线是反的」—— MiniMax M3.1 Flash 的免费档在 10/22 从 OpenRouter 与 OpenCode 双双收口（OpenRouter 模型页第一次挂出官方横幅，逐字给出结束日 The free launch period ended Oct 22, 2026.），而它的权重在 Hugging Face 上 10/17 就已经放出来了；更要紧的是，本报告 043、044 两期连续判定「权重未见」是错的 —— 错不在厂商没发，错在本报告的取数方法：同一个 HF 组织页 URL，只加一个排序参数，就从 21 个仓库变成 22 个</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -281,7 +310,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC044%E6%9C%9F-2026-10-22.html">
     <span class="no">044</span>
     <span class="d">10-22</span>
-    <span class="th">本期头条是「同一天里，`OpenAI` 一口气发了 7 条公告，而其中真正带免费/补贴语义的只有一条」—— `Patch the Planet` 里那个 `github.com/openai/php2shell-checker` 官方逐字写的是 `We’re sharing`（分享）而不是 `free`，同一篇里那笔 `$1 billion` 补贴的对象是「资源有限的机构」而不是个人开发者；另一条 `OpenAI models are coming to Google Cloud` 则明确「无免费层」，只是把采购路径换到 `Google Cloud Marketplace`；同时本期把 `OpenRouter` 的免费清单第一次改成读官方 API 目录（`468` 模型 / `21` 零价 / `18` 带 `:free`），发现与 `freellm.net` 转录的 `20` 条三个数都不同</span>
+    <span class="th">本期头条是「同一天里，OpenAI 一口气发了 7 条公告，而其中真正带免费/补贴语义的只有一条」—— Patch the Planet 里那个 github.com/openai/php2shell-checker 官方逐字写的是 We’re sharing（分享）而不是 free，同一篇里那笔 $1 billion 补贴的对象是「资源有限的机构」而不是个人开发者；另一条 OpenAI models are coming to Google Cloud 则明确「无免费层」，只是把采购路径换到 Google Cloud Marketplace；同时本期把 OpenRouter 的免费清单第一次改成读官方 API 目录（468 模型 / 21 零价 / 18 带 :free），发现与 freellm.net 转录的 20 条三个数都不同</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -290,7 +319,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC043%E6%9C%9F-2026-10-21.html">
     <span class="no">043</span>
     <span class="d">10-21</span>
-    <span class="th">本期头条是「一条公告里同时藏着三个不同日期」—— `MiniMax M3.1 Flash` 的开放权重，官方博客只写「later」、官方文档站把它标成 open-weight、而 10/23 这个具体日期只出自官方 X 与媒体，本报告第一次把「开放权重」这件事拆成四种状态并给出可执行的核验顺序；同时本期把 `MiniMax-H3` 的真实许可读出来了：它不是 MIT、不是 Apache-2.0，而是一份把美/欧/英/韩四地排除在外的自定义社区许可</span>
+    <span class="th">本期头条是「一条公告里同时藏着三个不同日期」—— MiniMax M3.1 Flash 的开放权重，官方博客只写「later」、官方文档站把它标成 open-weight、而 10/23 这个具体日期只出自官方 X 与媒体，本报告第一次把「开放权重」这件事拆成四种状态并给出可执行的核验顺序；同时本期把 MiniMax-H3 的真实许可读出来了：它不是 MIT、不是 Apache-2.0，而是一份把美/欧/英/韩四地排除在外的自定义社区许可</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -308,7 +337,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC041%E6%9C%9F-2026-10-19.html">
     <span class="no">041</span>
     <span class="d">10-19</span>
-    <span class="th">本期头条是一个此前 40 期全部漏掉的形态：「厂商把同一个 URL 上的活动内容就地改写，读者按昨天的截图今天就领错了档」—— 智谱 `AutoClaw` 官方活动页在窗口内把标题从 60M 改成 85M、把单日 3000 万改成两天各 3000 万，而中文媒体今天仍在按 10/18 的旧版快照写「只算 10/19 当天」</span>
+    <span class="th">本期头条是一个此前 40 期全部漏掉的形态：「厂商把同一个 URL 上的活动内容就地改写，读者按昨天的截图今天就领错了档」—— 智谱 AutoClaw 官方活动页在窗口内把标题从 60M 改成 85M、把单日 3000 万改成两天各 3000 万，而中文媒体今天仍在按 10/18 的旧版快照写「只算 10/19 当天」</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -317,7 +346,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC040%E6%9C%9F-2026-10-18.html">
     <span class="no">040</span>
     <span class="d">10-18</span>
-    <span class="th">本期头条是本报告第一次登记的「平台侧安全事件」—— `OpenCode` 昨夜遭大规模攻击、1.4% Console 用户的外部提供商凭证受影响、`Anthropic` 已撤销相关 `Claude API` 密钥；这条与 039 期头条（同一平台的留存分档）叠在一起看，会得出一个此前没写过的结论</span>
+    <span class="th">本期头条是本报告第一次登记的「平台侧安全事件」—— OpenCode 昨夜遭大规模攻击、1.4% Console 用户的外部提供商凭证受影响、Anthropic 已撤销相关 Claude API 密钥；这条与 039 期头条（同一平台的留存分档）叠在一起看，会得出一个此前没写过的结论</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -326,7 +355,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC039%E6%9C%9F-2026-10-17.html">
     <span class="no">039</span>
     <span class="d">10-17</span>
-    <span class="th">同日第二轮（增补轮）· 本期把 038 期自己挂着的两个「未核到」当场核完：`OpenCode` 的 `Beam` 免费档**中国大陆不可用**、数据留存 30 天、且不占套餐额度；同一模型在 `Ollama Cloud` 也限免且是全量零留存 —— 上一期写「只核到 Vercel 一家」，实为两家</span>
+    <span class="th">同日第二轮（增补轮）· 本期把 038 期自己挂着的两个「未核到」当场核完：OpenCode 的 Beam 免费档中国大陆不可用、数据留存 30 天、且不占套餐额度；同一模型在 Ollama Cloud 也限免且是全量零留存 —— 上一期写「只核到 Vercel 一家」，实为两家</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -335,7 +364,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC038%E6%9C%9F-2026-10-17.html">
     <span class="no">038</span>
     <span class="d">10-17</span>
-    <span class="th">Reflection 把 501B 的 `Beam` 权重按 Apache 2.0 放出来，Vercel 同一天给了两个收尾方式完全相反的免费 slug 且不公布结束日期；OpenCode 把它也免了；另有一条更硬的线：商务部拟把 23 项 AI 技术增列进出口管制目录并同步启动出口前登记</span>
+    <span class="th">Reflection 把 501B 的 Beam 权重按 Apache 2.0 放出来，Vercel 同一天给了两个收尾方式完全相反的免费 slug 且不公布结束日期；OpenCode 把它也免了；另有一条更硬的线：商务部拟把 23 项 AI 技术增列进出口管制目录并同步启动出口前登记</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -344,7 +373,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC037%E6%9C%9F-2026-10-16.html">
     <span class="no">037</span>
     <span class="d">10-16</span>
-    <span class="th">Meta 开放 816B 的 `Muse Spark Open` 权重，但许可证不是 Apache、HF 还要填出生日期才能下；同一天蚂蚁百灵把 `Ling-3.1-flash` 以 MIT 放出、OpenCode 把 `GLM-5.3-Flash` 全免只给 200K 上下文；另有一条运营硬节点：腾讯元器 11/9 停服，Google AI Plus 11/13 起失去 Pro 模型</span>
+    <span class="th">Meta 开放 816B 的 Muse Spark Open 权重，但许可证不是 Apache、HF 还要填出生日期才能下；同一天蚂蚁百灵把 Ling-3.1-flash 以 MIT 放出、OpenCode 把 GLM-5.3-Flash 全免只给 200K 上下文；另有一条运营硬节点：腾讯元器 11/9 停服，Google AI Plus 11/13 起失去 Pro 模型</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -353,7 +382,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC036%E6%9C%9F-2026-10-15.html">
     <span class="no">036</span>
     <span class="d">10-15</span>
-    <span class="th">阶跃 `Step 5 Preview` 权重按原定日期真的放出了（HF + ModelScope 三档检查点），`StepFun Model License 1.0` 同日公布——035 期「许可证未在任何官方渠道发布」的挂账当天兑现；同日 OpenCode 把 `DeepSeek V4.1 Flash` 全免但只给 200K 上下文，DeepSeek 自己则经历了 4 小时 52 分的全线故障并按 7 日消耗全额返赠金；昆仑万维把 480p/60FPS 的世界模型 `Matrix-Game 4.0` 装进一张 RTX 5090 并同步开源</span>
+    <span class="th">阶跃 Step 5 Preview 权重按原定日期真的放出了（HF + ModelScope 三档检查点），StepFun Model License 1.0 同日公布——035 期「许可证未在任何官方渠道发布」的挂账当天兑现；同日 OpenCode 把 DeepSeek V4.1 Flash 全免但只给 200K 上下文，DeepSeek 自己则经历了 4 小时 52 分的全线故障并按 7 日消耗全额返赠金；昆仑万维把 480p/60FPS 的世界模型 Matrix-Game 4.0 装进一张 RTX 5090 并同步开源</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -362,7 +391,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC035%E6%9C%9F-2026-10-14.html">
     <span class="no">035</span>
     <span class="d">10-14</span>
-    <span class="th">谷歌把 `Gemini 4 Argon` 的「分级访问」收口到「付费 API + AI Ultra」，首发价只有竞品五分之一但 11 月底就恢复；同日 OpenAI 让 GPT-6 下沉到免费档、GPT-5.5 从 ChatGPT / Codex 退场；阶跃 `STEPX Neo` 以 3999 元「软硬模」全栈定价开卖，腾讯把 `A.I.G` 开源进 ClawHub 安全审核</span>
+    <span class="th">谷歌把 Gemini 4 Argon 的「分级访问」收口到「付费 API + AI Ultra」，首发价只有竞品五分之一但 11 月底就恢复；同日 OpenAI 让 GPT-6 下沉到免费档、GPT-5.5 从 ChatGPT / Codex 退场；阶跃 STEPX Neo 以 3999 元「软硬模」全栈定价开卖，腾讯把 A.I.G 开源进 ClawHub 安全审核</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -371,7 +400,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC034%E6%9C%9F-2026-10-13.html">
     <span class="no">034</span>
     <span class="d">10-13</span>
-    <span class="th">阶跃星辰「三日三动作」的第一天：今晚发布智能体手机 `STEPX Neo`、明天 00:30 `Step 5 Preview` 缓存命中价翻倍（**带祖父条款**）、10/15 权重开源而**许可证至今未在任何官方渠道发布**；同日 Meta 把 `Muse Wonder` 放上 API、OpenAI 把 `Auto-review` 开成免费</span>
+    <span class="th">阶跃星辰「三日三动作」的第一天：今晚发布智能体手机 STEPX Neo、明天 00:30 Step 5 Preview 缓存命中价翻倍（带祖父条款）、10/15 权重开源而许可证至今未在任何官方渠道发布；同日 Meta 把 Muse Wonder 放上 API、OpenAI 把 Auto-review 开成免费</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -380,7 +409,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC033%E6%9C%9F-2026-10-12.html">
     <span class="no">033</span>
     <span class="d">10-12</span>
-    <span class="th">同日第二轮（增补轮）· 阶跃 Step 5 Preview 接入腾讯 WorkBuddy 并开启「10/12–10/25 独家限免」；腾讯把「开源版 WorkBuddy」`Octop` 放了出来；同一天里 Mistral 的免费档一边砍额度、一边把 Vibe CLI 与 Vibe for IDE 开给免费用户 —— 这是本期最该记的一条「既降又升」</span>
+    <span class="th">同日第二轮（增补轮）· 阶跃 Step 5 Preview 接入腾讯 WorkBuddy 并开启「10/12–10/25 独家限免」；腾讯把「开源版 WorkBuddy」Octop 放了出来；同一天里 Mistral 的免费档一边砍额度、一边把 Vibe CLI 与 Vibe for IDE 开给免费用户 —— 这是本期最该记的一条「既降又升」</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -389,7 +418,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC032%E6%9C%9F-2026-10-12.html">
     <span class="no">032</span>
     <span class="d">10-12</span>
-    <span class="th">决策模型线的第六种出现方式：权重先落地、公告只发在 X（vLLM-SR `Decision 3.0` 六档 Apache-2.0，10/10 传完、10/11 才有一条转推）；世界模型一天两件（`Odyssey-3` 免费公开研究预览 / LeCun 的 AMI 开源 `H-JEPA` 代码与权重）；而本期最该补的一条是 —— **`Gemini 4 Argon` 已经发布了，而 028 / 029 / 030 三期全篇未出现 `Argon`**</span>
+    <span class="th">决策模型线的第六种出现方式：权重先落地、公告只发在 X（vLLM-SR Decision 3.0 六档 Apache-2.0，10/10 传完、10/11 才有一条转推）；世界模型一天两件（Odyssey-3 免费公开研究预览 / LeCun 的 AMI 开源 H-JEPA 代码与权重）；而本期最该补的一条是 —— Gemini 4 Argon 已经发布了，而 028 / 029 / 030 三期全篇未出现 Argon</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -398,7 +427,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC031%E6%9C%9F-2026-10-11.html">
     <span class="no">031</span>
     <span class="d">10-11</span>
-    <span class="th">决策模型线再落一子但「开放」两个字要打问号（Nace AI `Drex 1.5` 许可证在 10/9 从 MIT 改成 Open RAIL-M 变体、公开集与全榜差 7.24 分）；Google 把水印检测器开给所有人（`SynthID Detector` 公众开放）；开源权重与工具线一天多件（星动纪元 VPP2 / JetBrains Mellum2.1 / Speridlabs Iris-3B / Talorys / Cloudflare 收购 Deno）；额度线最重要的一条是「AutoClaw 不是收口，是无缝续期」</span>
+    <span class="th">决策模型线再落一子但「开放」两个字要打问号（Nace AI Drex 1.5 许可证在 10/9 从 MIT 改成 Open RAIL-M 变体、公开集与全榜差 7.24 分）；Google 把水印检测器开给所有人（SynthID Detector 公众开放）；开源权重与工具线一天多件（星动纪元 VPP2 / JetBrains Mellum2.1 / Speridlabs Iris-3B / Talorys / Cloudflare 收购 Deno）；额度线最重要的一条是「AutoClaw 不是收口，是无缝续期」</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -461,7 +490,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC024%E6%9C%9F-2026-10-05.html">
     <span class="no">024</span>
     <span class="d">10-05</span>
-    <span class="th">决策模型从「新品类」直接进入价格战（Perplexity `pplx-decider-v1-27b` 上 Hugging Face、Apache 2.0、$0.04/百万输入且输出免费；上海 StartLux 三天做出五档开源决策模型，27B 在 Decision Index 0.2.1 的 38 项里 31 项高于 Jev）+ 阿里在假期最后一天放出端侧多模态开源（Qwen3-VL-30B-A3B-Instruct / -Thinking 双档 + 235B-A22B FP8）+ Kimi K3 成为首个进入 OpenAI 企业付费结算通道的中国开源模型 + 美国本月「开源月」：Reflection AI 首款开放权重模型将发 + 一项新研究把「AI 汇报会系统性报喜不报忧」量化了（GPT-5.5 在 200 份摘要里只提了 2 次「新方法输给基线」）+ 掘金第二期已按期收口 + 10/7 同日收口 7 项、剩 2 天</span>
+    <span class="th">决策模型从「新品类」直接进入价格战（Perplexity pplx-decider-v1-27b 上 Hugging Face、Apache 2.0、$0.04/百万输入且输出免费；上海 StartLux 三天做出五档开源决策模型，27B 在 Decision Index 0.2.1 的 38 项里 31 项高于 Jev）+ 阿里在假期最后一天放出端侧多模态开源（Qwen3-VL-30B-A3B-Instruct / -Thinking 双档 + 235B-A22B FP8）+ Kimi K3 成为首个进入 OpenAI 企业付费结算通道的中国开源模型 + 美国本月「开源月」：Reflection AI 首款开放权重模型将发 + 一项新研究把「AI 汇报会系统性报喜不报忧」量化了（GPT-5.5 在 200 份摘要里只提了 2 次「新方法输给基线」）+ 掘金第二期已按期收口 + 10/7 同日收口 7 项、剩 2 天</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>
@@ -470,7 +499,7 @@ footer .fr{
   <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC023%E6%9C%9F-2026-10-04.html">
     <span class="no">023</span>
     <span class="d">10-04</span>
-    <span class="th">Google 开始收免费桌（Gemini 免费档 10/9 起只剩 Flash-Lite、AI Plus 连 Pro 也丢）+ 两条新开源权重（Aleph Alpha Kolibri 78B MoE / Cloudflare Clef 决策模型双档）+ 一条补全（Lightricks LTX-2.5 多模态音视频）+ 决策模型从「一个新词」变成「一个品类」（Jev → OpenAI Decisions API → Cloudflare → llama.cpp `/v1/systemone`）+ 微软 ThinkingBox 507 题把「跑通过一次」与「每次都能跑通」拆成两个指标 + 掘金第二期今晚 24:00 截止（最后一天）+ 10/7 六线收口剩 3 天</span>
+    <span class="th">Google 开始收免费桌（Gemini 免费档 10/9 起只剩 Flash-Lite、AI Plus 连 Pro 也丢）+ 两条新开源权重（Aleph Alpha Kolibri 78B MoE / Cloudflare Clef 决策模型双档）+ 一条补全（Lightricks LTX-2.5 多模态音视频）+ 决策模型从「一个新词」变成「一个品类」（Jev → OpenAI Decisions API → Cloudflare → llama.cpp /v1/systemone）+ 微软 ThinkingBox 507 题把「跑通过一次」与「每次都能跑通」拆成两个指标 + 掘金第二期今晚 24:00 截止（最后一天）+ 10/7 六线收口剩 3 天</span>
     <span class="pit">避坑 —</span>
     <span class="kind">网页版</span>
   </a>

@@ -191,6 +191,42 @@ footer b{color:var(--muted); font-weight:600}
   table.qt tr{break-inside:avoid}
   a{color:#000; text-decoration:none}
 }
+
+.vs{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  margin:18px 0 20px; border:1px solid var(--rule); background:var(--surface);
+  box-shadow:var(--shadow);
+}
+.vs-i{
+  display:block; padding:10px 14px; text-decoration:none; color:var(--ink-2);
+  border-right:1px solid var(--rule); transition:background 120ms ease;
+}
+.vs-i:last-child{border-right:0}
+.vs-i:hover{background:var(--surface-2)}
+.vs-k{display:block; font-size:13.5px; font-weight:600; line-height:1.45}
+.vs-k i{font-style:normal; margin-right:5px; opacity:.75}
+.vs-d{display:block; font-size:11.5px; color:var(--faint); line-height:1.5; margin-top:1px}
+.vs-i.is-on{background:var(--ink); color:var(--bg); cursor:default}
+.vs-i.is-on .vs-d{color:var(--bg); opacity:.6}
+.vs-i.is-on .vs-k i{opacity:.85}
+/* 只给「极速」的图标上强调色：整行标红会盖过当前页的实心块，反而让人以为它才是当前页 */
+.vs-quick .vs-k i{color:var(--accent-ink); opacity:1}
+.vs-quick.is-on .vs-k i{color:var(--bg)}
+@media (max-width:640px){
+  /* 窄屏不要三行堆叠：日报页顶已有固定导航条 + 刊头 + 说明框，
+     再来三行切换器会把首屏全占掉。压成单行三格，副标题不出。 */
+  .vs{grid-template-columns:repeat(3,1fr); margin-top:14px}
+  .vs-i{
+    padding:9px 6px; text-align:center;
+    border-right:1px solid var(--rule); border-bottom:0;
+  }
+  .vs-i:last-child{border-right:0}
+  .vs-k{font-size:12px; line-height:1.3}
+  .vs-k i{margin-right:3px}
+  .vs-d{display:none}
+}
+@media print{.vs{display:none !important}}
+
 </style>
 </head>
 <body>
@@ -201,6 +237,7 @@ footer b{color:var(--muted); font-weight:600}
   <h1>AI 免费额度，一条一行</h1>
   <p class="lede">只回答四个问题：<b>给什么</b>、<b>能拿多少</b>、<b>到什么时候结束</b>、<b>要什么门槛</b>。不写沿革、不写期号、不写论证过程。</p>
   <hr class="rule">
+  <nav class="vs" aria-label="视图切换"><span class="vs-i vs-quick is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">62 条 · 一条一行</span></span><a class="vs-i vs-full" href="AI免费内容与权益速递-第048期-2026-10-27.html"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 048 期 · 十节</span></a><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">131 条 · 无截止日</span></a></nav>
 </header>
 
 <div class="stats">
@@ -211,7 +248,7 @@ footer b{color:var(--muted); font-weight:600}
 
 <div class="boundary">
   <b>本页不收什么：</b>模型发布、开源公告、申报通知、停服迁移这类「新闻」不在本页 —— 它们不是「我现在能领什么」。
-  需要看这些，或者要查某条的依据、口径、历史变更，去<a href="index.html">完整版日报</a>。
+  需要看这些，或者要查某条的依据、口径、历史变更，去<a href="AI免费内容与权益速递-第048期-2026-10-27.html">完整版日报</a>。
   每一条的原文与核对时点都留在那里，本页只做「能不能白拿」的判断。
 </div>
 
@@ -321,7 +358,7 @@ footer b{color:var(--muted); font-weight:600}
   <p><b>数字会变。</b>本页基准日 <b>2026-10-27</b>，共 62 条。厂商随时可能降档、提前收口或不公布结束日；
      看到「未公布」的，按「随时会关」处理，别拿它排长期计划。</p>
   <p><b>要追证：</b>每一条的原始出处、核对时点、口径变更与避坑记录，都在完整版日报里。
-     <a href="index.html">完整版与历史各期 &#8594;</a></p>
+     <a href="AI免费内容与权益速递-第048期-2026-10-27.html">读本期完整日报 &#8594;</a>　<a href="index.html">历史各期索引 &#8594;</a></p>
   <p class="back">AI 免费内容与权益速递 · 免费速查</p>
 </footer>
 

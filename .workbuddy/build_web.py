@@ -13,6 +13,8 @@
 import io, os, re, sys, html
 
 WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import viewswitch
 
 
 def pick_default():
@@ -373,8 +375,23 @@ def build():
     # 刊头解析
     m = re.search(r"第\s*(\d+)\s*期", title)
     issue = m.group(1) if m else "001"
+    # 总账不是「一期」，它没有期号。此前 fallback 成 001，页头就写出了
+    # 「AI 免费内容与权益速递 · 第 001 期」和「#001」—— 读者会以为这是创刊号。
+    is_ledger = os.path.basename(SRC).startswith("常驻权益总账")
+    if is_ledger:
+        issue_line, issue_badge, mh_num = "常驻权益总账", "总账", ""
+    else:
+        issue_line, issue_badge, mh_num = "第 %s 期" % issue, issue, issue
     mast = title.split("·")[0].strip() if "·" in title else title
     date_line = re.sub(r"\*\*", "", metas[0]) if metas else ""
+    # 分隔符跟着内容走：总账没有日期行，若还照打一个「·」，
+    # 右上角就会孤零零挂一个点（实测就是这么挂上去的）。
+    if is_ledger:
+        date_block = "<em>逐期复核 · 原文照搬</em>"
+    elif date_line:
+        date_block = esc(date_line) + " \u00b7 <em>增量与纠错口径</em>"
+    else:
+        date_block = "<em>增量与纠错口径</em>"
     theme_line = re.sub(r"\*\*", "", metas[1]) if len(metas) > 1 else ""
 
     # 目录
@@ -401,10 +418,36 @@ def build():
     note_html = "".join("<p>%s</p>" % inline(x) for x in note)
 
     doc = PAGE.replace("__TITLE__", esc(mast)).replace("__ISSUE__", esc(issue))
-    doc = doc.replace("__DATELINE__", esc(date_line)).replace("__THEME__", esc(theme_line))
+    doc = doc.replace("__DATEBLOCK__", date_block).replace("__THEME__", esc(theme_line))
     doc = doc.replace("__NOTE__", note_html).replace("__TOC__", toc_html)
     doc = doc.replace("__NAV__", nav_html).replace("__BODY__", html_body)
     doc = doc.replace("__METAS__", esc(" \u00b7 ".join(re.sub(r"\*\*", "", x) for x in metas)))
+
+    # 三档视图切换器（极速 / 完整 / 总账）：三页同一位置、同一外观，当前页高亮。
+    # 条数都从文件实算，不手写 —— 手写的数字过一期就是错的。
+    n_quick = n_ledger = None
+    _q = os.path.join(WS, ".workbuddy", "data", "quick_items.csv")
+    if os.path.exists(_q):
+        n_quick = max(sum(1 for _ in io.open(_q, encoding="utf-8-sig")) - 1, 0)
+    if is_ledger:
+        n_ledger = sum(1 for _l in src.split("\n")
+                       if _l.strip().startswith("|") and not re.match(r"^\|\s*-", _l.strip()))
+        n_ledger = max(n_ledger - 1, 0)
+    else:
+        _lp = os.path.join(WS, "常驻权益总账.md")
+        if os.path.exists(_lp):
+            _lt = io.open(_lp, encoding="utf-8").read()
+            n_ledger = max(sum(1 for _l in _lt.split("\n")
+                               if _l.strip().startswith("|")
+                               and not re.match(r"^\|\s*-", _l.strip())) - 1, 0)
+    doc = doc.replace("__VS_CSS__", viewswitch.CSS)
+    doc = doc.replace("__VIEWSWITCH__", viewswitch.render(
+        "standing" if is_ledger else "full",
+        issue_no=None if is_ledger else issue,
+        n_quick=n_quick, n_ledger=n_ledger, ws=WS))
+    doc = doc.replace("__ISSUE_LINE__", esc(issue_line))
+    doc = doc.replace("__ISSUE_BADGE__", esc(issue_badge))
+    doc = doc.replace("__MH_NUM__", esc(mh_num))
 
     io.open(OUT, "w", encoding="utf-8", newline="\n").write(doc)
     print("written %s  %d bytes" % (OUT, os.path.getsize(OUT)))
@@ -419,7 +462,7 @@ PAGE = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>__TITLE__ · 第 __ISSUE__ 期</title>
+<title>__TITLE__ · __ISSUE_LINE__</title>
 <meta name="description" content="__METAS__">
 <meta name="color-scheme" content="light dark">
 <script>
@@ -594,25 +637,7 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
 }
 .pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
 .pubnote p:last-child{margin-bottom:0}
-.quickbar{
-  display:flex; align-items:center; gap:var(--s4); justify-content:space-between;
-  margin:var(--s4) 0 0; padding:14px 18px; text-decoration:none;
-  background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--accent);
-  box-shadow:var(--shadow); transition:transform var(--fast),border-color var(--fast);
-}
-.quickbar:hover{transform:translateY(-1px); border-left-color:var(--accent-ink)}
-.quickbar:hover .qb-r{text-decoration:underline; text-underline-offset:3px}
-.qb-l b{display:block; color:var(--ink); font-size:15px; font-weight:700; margin-bottom:3px; line-height:1.4}
-.qb-l span{display:block; font-size:12.5px; color:var(--muted); line-height:1.65; font-family:var(--fu)}
-.qb-r{
-  flex:0 0 auto; font-family:var(--fm); font-size:12.5px; color:var(--accent-ink);
-  font-weight:600; white-space:nowrap;
-}
-@media (max-width:640px){
-  .quickbar{flex-direction:column; align-items:flex-start; gap:8px; padding:12px 14px}
-  .qb-l b{font-size:14px}
-  .qb-l span{font-size:12px}
-}
+__VS_CSS__
 .summary-note{}
 
 /* ============================================================ 主栅格 */
@@ -1082,7 +1107,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 
 <header class="topbar" data-no-print>
   <div class="tb-in">
-    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#__ISSUE__</b></span>
+    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#__ISSUE_BADGE__</b></span>
     <nav class="tb-nav" id="topnav" aria-label="章节导航">__NAV__</nav>
     <div class="tb-tools">
       <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">\u2315</button>
@@ -1098,22 +1123,16 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </header>
 
 <header class="masthead">
-  <span class="mh-num" aria-hidden="true">__ISSUE__</span>
+  <span class="mh-num" aria-hidden="true">__MH_NUM__</span>
   <div class="mh-top">
-    <span>AI 免费内容与权益速递 · 第 __ISSUE__ 期</span>
-    <span>__DATELINE__ · <em>增量与纠错口径</em></span>
+    <span>AI 免费内容与权益速递 · __ISSUE_LINE__</span>
+    <span>__DATEBLOCK__</span>
   </div>
   <div class="mh-rule" aria-hidden="true"></div>
   <h1 class="mh-t">__TITLE__</h1>
   <p class="mh-sub">__THEME__</p>
   <div class="pubnote">__NOTE__</div>
-  <a class="quickbar" href="quick.html">
-    <span class="qb-l">
-      <b>只想看「现在有什么免费、到什么时候结束」</b>
-      <span>打开《免费速查》：61 条，一条一行 —— 给什么 / 能拿多少 / 到期日 / 什么门槛。不写沿革、不写论证、不写期号。</span>
-    </span>
-    <span class="qb-r">免费速查 &#8594;</span>
-  </a>
+  __VIEWSWITCH__
 </header>
 
 <div class="shell">

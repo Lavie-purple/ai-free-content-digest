@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>常驻权益总账 · 第 001 期</title>
+<title>常驻权益总账 · 常驻权益总账</title>
 <meta name="description" content="">
 <meta name="color-scheme" content="light dark">
 <script>
@@ -178,25 +178,42 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
 }
 .pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
 .pubnote p:last-child{margin-bottom:0}
-.quickbar{
-  display:flex; align-items:center; gap:var(--s4); justify-content:space-between;
-  margin:var(--s4) 0 0; padding:14px 18px; text-decoration:none;
-  background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--accent);
-  box-shadow:var(--shadow); transition:transform var(--fast),border-color var(--fast);
+
+.vs{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  margin:18px 0 20px; border:1px solid var(--rule); background:var(--surface);
+  box-shadow:var(--shadow);
 }
-.quickbar:hover{transform:translateY(-1px); border-left-color:var(--accent-ink)}
-.quickbar:hover .qb-r{text-decoration:underline; text-underline-offset:3px}
-.qb-l b{display:block; color:var(--ink); font-size:15px; font-weight:700; margin-bottom:3px; line-height:1.4}
-.qb-l span{display:block; font-size:12.5px; color:var(--muted); line-height:1.65; font-family:var(--fu)}
-.qb-r{
-  flex:0 0 auto; font-family:var(--fm); font-size:12.5px; color:var(--accent-ink);
-  font-weight:600; white-space:nowrap;
+.vs-i{
+  display:block; padding:10px 14px; text-decoration:none; color:var(--ink-2);
+  border-right:1px solid var(--rule); transition:background 120ms ease;
 }
+.vs-i:last-child{border-right:0}
+.vs-i:hover{background:var(--surface-2)}
+.vs-k{display:block; font-size:13.5px; font-weight:600; line-height:1.45}
+.vs-k i{font-style:normal; margin-right:5px; opacity:.75}
+.vs-d{display:block; font-size:11.5px; color:var(--faint); line-height:1.5; margin-top:1px}
+.vs-i.is-on{background:var(--ink); color:var(--bg); cursor:default}
+.vs-i.is-on .vs-d{color:var(--bg); opacity:.6}
+.vs-i.is-on .vs-k i{opacity:.85}
+/* 只给「极速」的图标上强调色：整行标红会盖过当前页的实心块，反而让人以为它才是当前页 */
+.vs-quick .vs-k i{color:var(--accent-ink); opacity:1}
+.vs-quick.is-on .vs-k i{color:var(--bg)}
 @media (max-width:640px){
-  .quickbar{flex-direction:column; align-items:flex-start; gap:8px; padding:12px 14px}
-  .qb-l b{font-size:14px}
-  .qb-l span{font-size:12px}
+  /* 窄屏不要三行堆叠：日报页顶已有固定导航条 + 刊头 + 说明框，
+     再来三行切换器会把首屏全占掉。压成单行三格，副标题不出。 */
+  .vs{grid-template-columns:repeat(3,1fr); margin-top:14px}
+  .vs-i{
+    padding:9px 6px; text-align:center;
+    border-right:1px solid var(--rule); border-bottom:0;
+  }
+  .vs-i:last-child{border-right:0}
+  .vs-k{font-size:12px; line-height:1.3}
+  .vs-k i{margin-right:3px}
+  .vs-d{display:none}
 }
+@media print{.vs{display:none !important}}
+
 .summary-note{}
 
 /* ============================================================ 主栅格 */
@@ -669,7 +686,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 
 <header class="topbar" data-no-print>
   <div class="tb-in">
-    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#001</b></span>
+    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#总账</b></span>
     <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s01"><b>01</b>全量表</a></nav>
     <div class="tb-tools">
       <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">⌕</button>
@@ -685,22 +702,16 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </header>
 
 <header class="masthead">
-  <span class="mh-num" aria-hidden="true">001</span>
+  <span class="mh-num" aria-hidden="true"></span>
   <div class="mh-top">
-    <span>AI 免费内容与权益速递 · 第 001 期</span>
-    <span> · <em>增量与纠错口径</em></span>
+    <span>AI 免费内容与权益速递 · 常驻权益总账</span>
+    <span><em>逐期复核 · 原文照搬</em></span>
   </div>
   <div class="mh-rule" aria-hidden="true"></div>
   <h1 class="mh-t">常驻权益总账</h1>
   <p class="mh-sub"></p>
   <div class="pubnote"><p><strong>这是什么</strong>：日报第四章里「没有确切截止日」的长期有效权益。<strong>原文照搬、不改写、不删条</strong> —— 日报每期只报「有变化的」，本册保存全量。</p><p></p><p><strong>怎么用</strong>：查某家现在还给不给免费额度、什么价格、什么许可，在这里搜平台名或模型名即可；带 <code>⚠️</code> 的是口径存疑（后面跟的是避坑编号）。日报里 4.2 列出的变化条目，完整原文也在这里。</p><p></p><p><strong>为什么不在日报里逐期重印</strong>：这 131 条里本期真正发生变化的只有 18 条，其余 113 条逐字重印一遍会让日报正文多出 6 万字，把时效内容淹掉。<strong>未重印 ≠ 未复核</strong>，每期仍逐条过一遍状态与口径。</p><p></p><p><strong>条目会变少吗</strong>：会，但只按同一条规则 —— 某条一旦有了确切截止日，它就从本册移入日报 4.1；已过期 &gt;7 天且已收口的，按归档规则移到 <code>.workbuddy/data/deadline_archive.md</code>（原文照存，可搜）。</p></div>
-  <a class="quickbar" href="quick.html">
-    <span class="qb-l">
-      <b>只想看「现在有什么免费、到什么时候结束」</b>
-      <span>打开《免费速查》：61 条，一条一行 —— 给什么 / 能拿多少 / 到期日 / 什么门槛。不写沿革、不写论证、不写期号。</span>
-    </span>
-    <span class="qb-r">免费速查 &#8594;</span>
-  </a>
+  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">62 条 · 一条一行</span></a><a class="vs-i vs-full" href="AI免费内容与权益速递-第048期-2026-10-27.html"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 048 期 · 十节</span></a><span class="vs-i vs-standing is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">131 条 · 无截止日</span></span></nav>
 </header>
 
 <div class="shell">
@@ -855,7 +866,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </div>
 
 <footer class="foot">
-  <div class="fr"><span>AI 免费内容与权益速递 · 第 001 期</span><span></span></div>
+  <div class="fr"><span>AI 免费内容与权益速递 · 第 001 期</span><span>__DATELINE__</span></div>
   <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
   <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
 </footer>

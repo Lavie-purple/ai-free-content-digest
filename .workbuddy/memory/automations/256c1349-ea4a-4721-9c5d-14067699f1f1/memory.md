@@ -1743,3 +1743,13 @@ README `minimax-community`）—— **043/044 两期「权重未见」判定错�
 - **发布**：commit `928add6c` → push 成功（`840ba8a..928add6`）；远端 sha API 核对一致；**线上 048 期页逐字节一致**（263,377 B、md5 `5a834f56…`）；线上 index 已更新至第 048 期、quick 33,945 B、standing 249,449 B。
 - **未核到 / 受阻**：15 个源 `000`（google blog/research、meta、x.ai、perplexity、midjourney、minicpm、singularis、lmarena、superclue、nda、hnrss、reddit 等）、`msblog_ai` 403、`ant_group` 404、`tisi` 503、`baoyu.io/feed` 404、`anthropic.com/news/rss.xml` 404（该站无此 RSS）、`platform.reflection.ai` 403（连续第 10 期）、`mistral.ai/news` 连续第 8 次失败、`platform.openai.com/docs/models` 403、`hf-mirror` 的 `sort=trending` 参数失效、`MiniMax` 新闻列表 JS 渲染未抓到、`freellm` `Models Tracked −9` 仍未定位、`granite-4.0-h-micro` 下架原因未核到。
 - **下一轮强制动作**：① `豆包工作 30 天订阅`（A 档、已过 10 天）必须实访 ② `AutoClaw` 国际站「40M vs 100 million」矛盾（048 未实访，追踪项不销项）③ `GPT-6.1 Terra` Free 档细表 ④ `Kimi K3.1 Pro` 权重是否 11/4 前放出 ⑤ `K2` 系列 10/31 停新 ⑥ `OpenRouter` 全量 463 逐条 diff ⑦ `OpenCode` 10 项稳定 ⑧ `Runware` 侧「15% × 7 天」是否上页 ⑨ `Unsloth` GGUF 的 `HF` 模型卡原文 ⑩ `mistral.ai/news`（第 8 次）⑪ `platform.reflection.ai`（第 10 期）⑫ 老混元 Q04 第 37 期 ⑬ `Anthropic` S-1/A 修订件 ⑭ `freellm` 六项 diff（重点 `Models Tracked` 是否从 300 回升）⑮ `Runware` 的 `Kling 4.0` 是否补价格字段 ⑯ **第四章表体瘦身 MVP（047 期已答应用户）**。
+
+## 三页视图切换器（2026-10-27 晚 · 用户「三个网页零散独立」）
+
+- 用户建议：把 quick 作为「极速视角」挂在日报上，standing 按需打开。方向对，但实测问题更大 ——
+  quick / standing **没有任何回链**，quick 里「完整版日报」还错指到 index.html（首页）。
+- 落地 `viewswitch.py`：三格（极速 / 完整 / 总账），三页同位置同外观，当前格实心 + aria-current，
+  首页三格不高亮。三个 build 脚本统一 import，**改一处三页同变**。
+- 总账页的假期号一并修掉：此前显示 `#001` / 「第 001 期」/ 背景 `001` 水印。
+- 首页顺手修：标题与历史列表的裸 Markdown（`**`、反引号）剥掉；两段文字说明收成一排入口。
+- 校验：三页 ALL GREEN、五页零死链。
