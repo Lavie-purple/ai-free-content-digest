@@ -120,6 +120,7 @@ Markdown 之外，每期可选生成一份**单文件自包含**的网页版：
     ├── split_ledger.py       # 第四章拆 4.1/4.2，常驻权益移入《常驻权益总账》
     ├── build_quick.py        # 生成《免费速查》quick.html；--check 找出漏登的额度类条目
     ├── viewswitch.py         # 三页共用的三格切换器（同一位置、同一外观、当前页高亮）
+    ├── check_views.py        # 三视图守卫：三页是否同构、链接是否到最新一期、条数是否与源文件一致
     ├── lint_table.py         # 行内体检：单行超长 / 沿革与避坑编号堆在表里
     ├── check_frozen.py       # 防重复往期
     ├── check_tables.py       # 逐表核对 md 列数 + 避坑编号连续性
@@ -147,6 +148,7 @@ python .workbuddy/build_quick.py        # 生成《免费速查》；--check 体
 python .workbuddy/build_web.py          # 编译最新一期 → 单文件网页版
 python .workbuddy/build_web.py 常驻权益总账.md standing.html   # 总账页
 python .workbuddy/verify_web.py         # 必跑：判定 ALL GREEN 才继续
+python .workbuddy/check_views.py        # 必跑：极速/完整/总账三页是否同构（推送前须 ALL GREEN）
 python .workbuddy/check_tables.py       # 出稿后：逐表核对列数 + 避坑编号跨期连续
 python .workbuddy/check_frozen.py       # 出刊前：比对已固化条目，有重复直接 exit 1
 python .workbuddy/check_deadlines.py    # 出刊前：巡检过期未更新 / N 天内到期
@@ -158,6 +160,7 @@ python .workbuddy/snap_mobile.py        # 改版式后：出 11 张手机端截�
 | 脚本 | 它防的是什么 |
 | --- | --- |
 | `verify_web.py` | md 与 html 的**表格列数/行数逐表比对**、文本片段保真、未闭合标签、外部引用、状态格色标数 |
+| `check_views.py` | **三个视图脱钩** —— 某页漏了切换器、高亮错格、「完整日报」还指着上一期或首页、条数与 CSV/总账实算不符 |
 | `check_tables.py` | **表格错行与编号断裂** —— md 里每行 `\|` 个数必须与分隔行一致；避坑编号必须跨期连续 |
 | `check_frozen.py` | **重复往期** —— 每期只做增量，靠它拦住"这条上期写过了" |
 | `check_deadlines.py` | **截止日期写错** —— 过期却没标"已结束"、或即将到期却没提醒 |

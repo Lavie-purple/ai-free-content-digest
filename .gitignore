@@ -9,6 +9,7 @@ tmp_live*/
 
 # 线上页抓取快照（比对用，内容不删、只是不入库）
 .workbuddy/_live_*.html
+.workbuddy/_v_*.html
 .workbuddy/_build*/
 .workbuddy/_live*/
 _live_*.html

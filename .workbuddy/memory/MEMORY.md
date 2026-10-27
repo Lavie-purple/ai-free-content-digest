@@ -12,6 +12,9 @@
   **同一位置都有三格切换器**（极速 / 完整 / 总账，当前格实心 + `aria-current`），首页三格都不高亮。
   组件在 `viewswitch.py` —— **改一处、三页同时变**；别在任一页单独加链接（047 期前就是这么散的，
   而且 `quick.html` 里「完整版日报」还错指到 `index.html` 首页）。**条数一律实算**，不许手写。
+- **「三页同构」由 `check_views.py` 守，不靠记忆**（048 期立）：每期出刊后跑一次，
+  它检查三格齐全、当前格唯一、「完整日报」指向最新一期、格内条数与源文件实算一致、样式在位；
+  **任何一处不符 exit 1**。此前的失效形态是「页面照常打开、只是点进去是过期的」，肉眼看不出来。
 
 ## 出刊约定（全文见附卷 §十·22）
 - **增量 + 纠错**，不重复往期已固化内容（先跑 `check_frozen.py`，🔴 高危 exit 1）。
@@ -91,7 +94,9 @@
    **新增的免费额度条目必须逐条补进去，量要写到具体数字，不许写「见官方页」蒙过去**）
 5c. 三页切换器由 `viewswitch.py` 统一渲染：`build_web.py`（日报 + 总账）、`build_quick.py`、
    `build_index_web.py` 都 `import viewswitch`。**改样式只改它**，三页自动一致。
-6. `build_source_hits.py` → `build_index.py` → `build_index_web.py` → `check_site_freshness.py`（后两个每期必跑）
+6. `build_source_hits.py` → `build_index.py` → `build_index_web.py` → `check_site_freshness.py` → **`check_views.py`**
+   （**后三个每期必跑**；`check_views.py` 是**三视图卡口** —— 三页都挂切换器、当前格唯一且身份对、
+   「完整日报」指向最新一期、格里的条数与 `quick_items.csv` / `常驻权益总账.md` 实算一致，**必须 ALL GREEN**）
 7. git commit + push → **核实 sha** → 带 `?t=<ts>` 抓线上页**逐字节比对**
    （Pages 延迟 1–2 分钟；构建 API 无 token 返 404，逐字节比对可替代且更强）
    - ⚠️ push 报 `could not read Username`：`credential.helper=helper-selector` 坏 → `git-credential-manager get`
