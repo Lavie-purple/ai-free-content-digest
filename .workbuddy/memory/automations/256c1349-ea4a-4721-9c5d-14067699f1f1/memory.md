@@ -1727,3 +1727,19 @@ README `minimax-community`）—— **043/044 两期「权重未见」判定错�
   规则收紧排 049 期，048 期先 `--strict` 之外的模式留观。
 - **口径提醒**：总账计入后 047 期信源命中数高于往期（`OpenRouter` 1059→1070），
   **口径变过，不可与往期直接相减**。
+
+## 048 期（2026-10-27 出刊 · 扫描截止 10/27 10:40 · 同日第二轮增补轮）
+
+- **窗口**：10/27 06:30 → 10/27 10:40（≈4.2 h；**047 期是当天正式刊，本期是同日增补轮，两期不合并**；美西 10/26 15:30 → 19:40 PT）。
+- **头条**：**`OpenAI` 发布 `Signals v3.0` 数据集**（165 类工作活动 / 近 100 国 / 2025 Q1–2026 Q3 季度序列；下载页 `CC BY 4.0`、免登录可下载 CSV + 数据字典；**发布日 10/26 落在 047 期窗口，047 期漏登 → 本期补登**）。
+- **头条之二**：`Runware` 的 **`$0.133/秒` 归属被核到 —— 属于 `sync-3`（唇形同步），不是 `Kling 4.0`**（047 期「两页都没核到」的**结论对、理由错**）；**且 `Kling 4.0` 模型页路径已迁移**：旧路径 `/models/klingai` 返回 **404 + 845,983 字节完整 SPA（软 404）**，真实路径 **`/kling-4`**（200、529,847 B、两次读数一致）。
+- **头条之三**：`OpenRouter` **463/20/17 三数全同值，但成分换血** —— `+openai/gpt-6.1-terra-pro / −ibm-granite/granite-4.0-h-micro`（`+1 −1`）；⚠️ **`created` =「加入目录时间」≠「厂商发布时间」**（`terra-pro` 的 `created` 落在 047 期窗口内）。
+- **三个渲染陷阱（本轮实访，全部差点造成误判）**：`Anthropic` news 区块标题栏「October 27, 2026」≠ 条目日期（列表最新仍是 10/26 S-1）／`MiniMax` 与 `llm-stats` 的 `2026-10-27` 均为 JSON-LD `dateModified`。
+- **窗口内一手硬条目稀**：OpenAI RSS 1,325 条、最新 `pubDate 2026-10-26 22:00 UTC`（窗口外 30 分钟）→ 窗口内 **0 条**；**写「本轮未核到」，不写「今天没有发布」**。
+- **规模**：表体 **186 行**（185 + 1 新增 − 0 移出）、色标 **⚪11/🟢128/🟡16/🟠5/🔴4/⚠3/空19**、classify `crit4/live144/over11/pending18/switch4/unclear5`、**A2+B22+C9+D141+E12=186** 对账一致；总账 **131 条**（+1）；固化库 **449 条**（+4 首登）；台账 **282 条**（不变，就地更新 `Runware`/`OpenRouter`/`OpenAI News RSS` 三行）；速查页 **62 条**。
+- **纠错 4 条 / 避坑 208–211**（① `0.133` 归属 ② `native audio` 计数取自已失效 URL ③ `created` 语义 ④ 「总量同值」必须逐条 diff）。
+- **工程三修**：① `prune_table.py` 边界改为「`## 四、` → 下一个 `## ` 或文末」（第四章 047 期起移到文末，原「四→五」假设失效）② `split_ledger.py` 加「正文之后」改幂等（重复跑不再叠加成「正文之后 · 正文之后」）③ **脚本抓出 047 期两行继承天数未重算**（`Anthropic` 新版使用政策 27→16 天、`WorkBuddy Intl` `DeepSeek-V4.1-Flash-1017` 限免 9→4 天）。
+- **排版坑**：官方 BibTeX 引用格式的**双层大括号**与模板占位符同形 → `verify_web.py` 判「未替换的模板残留」→ **按单层书写 + 正文注明**（改措辞不改守卫）。
+- **发布**：commit `928add6c` → push 成功（`840ba8a..928add6`）；远端 sha API 核对一致；**线上 048 期页逐字节一致**（263,377 B、md5 `5a834f56…`）；线上 index 已更新至第 048 期、quick 33,945 B、standing 249,449 B。
+- **未核到 / 受阻**：15 个源 `000`（google blog/research、meta、x.ai、perplexity、midjourney、minicpm、singularis、lmarena、superclue、nda、hnrss、reddit 等）、`msblog_ai` 403、`ant_group` 404、`tisi` 503、`baoyu.io/feed` 404、`anthropic.com/news/rss.xml` 404（该站无此 RSS）、`platform.reflection.ai` 403（连续第 10 期）、`mistral.ai/news` 连续第 8 次失败、`platform.openai.com/docs/models` 403、`hf-mirror` 的 `sort=trending` 参数失效、`MiniMax` 新闻列表 JS 渲染未抓到、`freellm` `Models Tracked −9` 仍未定位、`granite-4.0-h-micro` 下架原因未核到。
+- **下一轮强制动作**：① `豆包工作 30 天订阅`（A 档、已过 10 天）必须实访 ② `AutoClaw` 国际站「40M vs 100 million」矛盾（048 未实访，追踪项不销项）③ `GPT-6.1 Terra` Free 档细表 ④ `Kimi K3.1 Pro` 权重是否 11/4 前放出 ⑤ `K2` 系列 10/31 停新 ⑥ `OpenRouter` 全量 463 逐条 diff ⑦ `OpenCode` 10 项稳定 ⑧ `Runware` 侧「15% × 7 天」是否上页 ⑨ `Unsloth` GGUF 的 `HF` 模型卡原文 ⑩ `mistral.ai/news`（第 8 次）⑪ `platform.reflection.ai`（第 10 期）⑫ 老混元 Q04 第 37 期 ⑬ `Anthropic` S-1/A 修订件 ⑭ `freellm` 六项 diff（重点 `Models Tracked` 是否从 300 回升）⑮ `Runware` 的 `Kling 4.0` 是否补价格字段 ⑯ **第四章表体瘦身 MVP（047 期已答应用户）**。
