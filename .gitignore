@@ -36,3 +36,6 @@ __pycache__/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# 误建的嵌套目录（prune_table 路径拼接产物，内容保留、不删）
+.workbuddy/.workbuddy/
