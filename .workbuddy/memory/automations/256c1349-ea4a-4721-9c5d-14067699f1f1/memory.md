@@ -1815,3 +1815,38 @@ README `minimax-community`）—— **043/044 两期「权重未见」判定错�
 - **发布**：commit **`da096e3`** → push 成功；**远端 sha 一致**（GitHub API 核对）；**线上五页逐字节一致**（049 期日报 `194,692` B、md5 `87289019…`；`index.html` `240f9354…`；`quick.html` `8734dc48…`；`standing.html` `e260786b…`；**`details.html` `e01cb46e…` 首次上线**）。
 - **未核到 / 受阻**：`platform.reflection.ai` `403`（连续第 11 期）、`mistral.ai/news` `000`（连续第 9 次）、`platform.openai.com/docs/models` `403`（连续第 2 期）、`volcengine.com/activity/doubao` `200` 但**页面是 React 空壳**（`豆包工作 30 天订阅` 连续第 3 期只推天数）、`lingguang.ai` / `lingguang.aliyun.com` **DNS 无法解析**（`蚂蚁灵光 2.0` 免费额度未核到）、`api.replicate.com` `401`、`runware.ai/sync-3` `404`（该路径不存在）、`huggingface.co` 主站 `000`（改用 `hf-mirror.com`）、`semantic_scholar` `429`、`lmarena` 全站 `000`、`arxiv.org` / `hf.co/papers` / `openreview` / `neurips.cc` / `jmlr.org` / `aminer.cn` `000`（**论文线本轮无一手新增**）、`tbench` `404`、`scale` `403`、`zhihu` `403`、`geekpark` `403`、`stratechery` `403`、`neuron` `403`、`producthunt` `403`、`sec_edgar` `403`、`itjuzi` `412`、`gsxt` `521`、`eulex` `202`。
 - **下一轮强制动作（本期 18 条）**：**① `豆包工作 30 天订阅`（A 档，已过 10 天）必须实访官方页（连续第 3 期只推天数）② `AutoClaw` 国际站「40M vs 100 million」矛盾（已实访、第 3 次未改，追踪项不销项）③ `GPT-6.1 Terra` Free 档细表 ④ `Kimi K3.1 Pro` 权重是否 11/4 前放出 ⑤ `K2` 系列 10/31 停新 ⑥ `OpenRouter` 全量逐条 diff（本期已存 `463`/`16`，下期继续报增减名）⑦ `OpenCode` 10 项是否稳定、`LongCat` 是否回归（连续第 3 期未回归）⑧ `Runware` `15%` 官方截止日是否改为 10/29 ⑨ `Unsloth` GGUF 模型卡原文 ⑩ `mistral.ai/news`（第 9 次）⑪ `platform.reflection.ai`（第 11 期）⑫ 老混元 Q04 第 38 期 ⑬ `Anthropic` `S-1` 附信原文 ⑭ `freellm` 那 9 条逐条归因 ⑮ `NVIDIA` 侧 `nemotron-3-super-120b-a12b` 状态 ⑯ `文心 Unlimited OCR 2` 官方基准分的图片内容 ⑰ `B` 类 14 天内到期 23 条逐条复核（10/29 三条最紧）⑱ **`gen_table` 下期输入要加 `data/table_full.md` 的 4.1 完整行**（否则 4.1 的论证会逐期流失）**。
+
+## 2026-10-28 第 050 期（隔日出刊 + 三个往期挂账项销项 + 两条新一手信源入库）
+
+- **状态**：成功。**窗口 = 049 期截止 10/27 20:10 → 本期截止 10/28 09:05（≈12.9 小时）**；美西/北京双向换算：起 10/27 05:10 PT、止 10/27 18:05 PT（**整个窗口在美西同一天内**）。**本期是隔日出刊**（049 期为 10/27 同日第三轮）。
+- **规模**：主抓取 168 个抓取件（另补抓 30 余个专项一手页）、解析出 1,744 条带时间戳条目、**窗口内 63 条**、其中**免费内容类硬条目 6 条**。
+
+### 头条
+- **`Opera` 发布 `WebAI`**（官方博客 10/27）：**拟议中的 Web 标准**（官方逐字 `backed by companies including Google and Microsoft`），**early preview 已上 `Opera One`/`GX`/`Neon`**；**本地推理内置浏览器、无需 `API key`、「no per-request cloud costs, and no AI infrastructure to run」**；三个 API：`Prompt`/`Decision`/`Semantic Embeddings`。⚠️ **免费性来自「本地算力」而非厂商送额度 —— 本报告至今「免费来源」维度最不一样的一条**。
+- **`OpenRouter` 公告页在 041–049 连续九期停在 `October 14, 2026` 之后首次出现新公告（10/27）** —— `CSAM Screening Across OpenRouter`，**「零数据留存（ZDR）」承诺首次写明例外**（疑似 CSAM 内容会被留存供人工审查；官方逐字 `does not authorize general retention`）。⚠️ **不是限免公告**。
+
+### 三个往期挂账项销项
+- **⑮** `NVIDIA` 官方 `build.nvidia.com` 的 `nemotron-3-super-120b-a12b`「Model Availability」四格：**`Free Endpoint` = `Deprecated`**、`Partner Endpoint`/`Download Available` = `Available` —— **与 049 期「`:free` 档从目录消失」时间上对得上**（写「对得上」不写「因为」）。
+- **⑯** `文心 Unlimited OCR 2` 官方基准分实读：**`MPDocBench 84.6` / `MarathonDocBench 77.1`**，官方标注「+6.1 on MPDocBench, +8.5% on MarathonDocBench」；10 个对照模型逐条；上一代 `MarathonDocBench` 是 `0.0`。
+- **⑨** `Unsloth` GGUF 模型卡原文：**`license_name` 是 `minimax-community`（不是 `MIT`）**；048 期转述的 `91.5`/`89.9`/`45%`/`98.0`/`150GB` 那组数**在原文里全部零命中** → 从「未核到」推进到「官方模型卡原文里没有这组数」。
+- 另有 **`Runware` 促销表 12 → 13 条**（新增 `pruna-p-video-upscale` `50%` 至 `11/8`；`Kling 4.0` 的 `15%` 截止日仍是 `10/29`）；**`OpenRouter` 目录 `464/19/16`**（全量 +1、`:free` 与零价同值）。
+
+### 工程坑（本期实测，均已修）
+- **① `prune_table.py --archive` 默认路径是相对路径** —— 在 `.workbuddy/` 下调用会写到 `.workbuddy/.workbuddy/data/`（**归档条目没进真档但表体已移出 = 事实丢失**）。必须显式给路径。
+- **② `split_ledger.py` 判常驻档靠截止列的开头关键词**（`未公布`/`无结束日`/…），**不是语义判断** —— 三条新行写成「官方未给结束日（…）」被误判进 `4.1`（4.1 变 60 行而非 57），改成「未公布」开头后正确落进 `4.2`。**写作格式是流水线的一部分**。
+- **③ `gen_table` 的 REWRITE 键必须与源行逐字符一致** —— 049 期已瘦身的行状态列只剩短句，旧替换片段匹配不到；写 REWRITE 前先 print 源行。
+- **④ `NEW` 行末尾必须带 ` |`**（否则字段数 2 而非 3）。
+- **⑤ 官方仓库里的图片可能是 git-LFS 指针** —— `raw.githubusercontent.com` 给 132 字节指针，真图走 `media.githubusercontent.com/media/…`（避坑 218）。
+
+### 规模与对账
+- 表体 **192** 行 ＝ 049 期 189 ＋ 新增 4 − 移出 1（`佛山微短剧申报`，归档区保留原文）；`4.1` = 57 / `4.2` = 24；**总账 135** 条；**速查页 64** 条（与 049 同值）。
+- 色标 ⚪10/🟢133/🟡17/🟠5/🔴4/⚠4/空19 = 192；classify crit4/live149/over10/pending19/switch4/unclear6 = 192；**A2+B24+C8+D146+E12 = 192** ✔。
+- **⚪ 与 over 本期不仅个数相同（10=10）、成员也逐条一致** —— 但仍写「本期恰好对上」，不写「规则保证永远对上」。
+- 15 行「距今」因基准日推进各减 1；断言仍是「天数 == 截止日 − 基准日」。
+- `lint_table.py --strict` **ALL CLEAN**；`verify_web` 四页 **ALL GREEN**；`check_views` **ALL GREEN**（极速 64 / 总账 135）；`check_site_freshness` **ALL GREEN**。
+- **台账新增 2 条 T0 官方一手·国外**（`Opera` 官方博客 + `NVIDIA Build` 模型页）→ **282 → 284**，手写计数三处同步（版本行 / `## T0 · 根节点（169→171）` / `### 官方一手 · 国外（55→57）`）。
+
+### 发布
+- commit **`9aaf628`** → push 成功 → **远端 sha 一致**（GitHub API 核对）→ **五页线上逐字节一致**（050 期日报 `221,358` B / md5 `650a9554…`；`index.html` `bafbee5d…`；`quick.html` `8734dc48…`；`standing.html` `45dc862b…`；`details.html` `d68f5741…`）。
+- **未核到 / 受阻**：`platform.reflection.ai` `403`（连续第 12 期）、`mistral.ai/news` `000`（连续第 10 次）、`platform.openai.com/docs/models` `403`（连续第 3 期）、`opera.com` 主站全站 `451`（**但 `blogs.opera.com` 可读，官方公告没丢**）、`next.opera.com/web-ai/` `451`、`mozilla.org` 两条路径 `404`、`volcengine.com/activity/doubao` `200` 但 React 空壳（连续第 4 期）、`lingguang.ai` DNS 解析失败（连续第 2 期）、`api.replicate.com` `401`、`runware.ai/sync-3` `000`、`huggingface.co` 主站 `000`（改用 `hf-mirror.com`）、`semantic_scholar` `429`、`lmarena` 全站 `000`、`arxiv.org`/`hf.co/papers`/`openreview`/`neurips.cc`/`jmlr.org`/`aminer.cn` `000`（论文线无一手新增）、`tbench` `404`、`scale` `403`、`zhihu`/`geekpark`/`stratechery`/`neuron`/`producthunt`/`sec_edgar` `403`、`itjuzi` `412`、`gsxt` `521`、`eulex` `202`。
+- **下一轮强制动作（20 条，见 050 期第四章脚注 ③）**：最紧的七条 —— ① `豆包工作 30 天订阅`（A 档已过 11 天，连续第 4 期空壳）② `AutoClaw` 国际站 40M vs 100M 矛盾（第 4 次实读未改）③ `GPT-6.1 Terra` Free 档细表（连续第 3 期 403）④ `Kimi K3.1 Pro` 权重是否在 11/4 前放出 ⑤ `WebAI` 完整 API 文档 ⑥ `Unsloth` 官网量化基准页（`91.5` 那组数仍只有转述）⑦ `B` 类 14 天内到期 24 条逐条复核（**10/29 三条最紧**）。
