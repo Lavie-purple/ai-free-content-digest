@@ -226,6 +226,10 @@ FREE_RE = re.compile(r"免费|试用|额度|积分|Tokens|token|赠送|白嫖|�
 SKIP_RE = re.compile(
     r"无免费层|无免费额度|促销价|免费档改版|留存口径|地区限制|广告测试"
     r"|停服|下线|停止服务|申报指南|清单$|政策实施细则"
+    # 050 期新增：免费端点已标 Deprecated / 弃用的 —— 不是「现在能白拿」的额度
+    # （`NVIDIA` 官方 `nemotron-3-super-120b-a12b` 的 `Free Endpoint` 标 `Deprecated`，
+    #   但 `Partner Endpoint` 与权重仍 `Available` —— 入口在、不免费）
+    r"|Deprecated|弃用"
 )
 
 

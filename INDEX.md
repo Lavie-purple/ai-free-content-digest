@@ -3,11 +3,11 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **49 期**（2026-09-14 ~ 2026-10-27），Markdown 合计 **6202545 B ≈ 6057 KB**。
+共 **50 期**（2026-09-14 ~ 2026-10-28），Markdown 合计 **6319524 B ≈ 6171 KB**。
 
 只想看「现在有什么免费、到什么时候结束」的：**[《免费速查》](quick.html)** —— **64 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
 
-另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**132 条**没有确切截止日的长期权益，全量原文、不逐期重印。
+另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**135 条**没有确切截止日的长期权益，全量原文、不逐期重印。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -60,11 +60,12 @@
 | **047** | 2026-10-27 | 本期头条是「一次价格腰斩的发布，和它没写进免费档的那一档」—— `OpenAI` 发布 `GPT-6.1 Terra`（标准 API 价格比 `GPT-5.6 Terra` 与 `GPT-6.1 Sol` 低 **50%**，`$1 / $0.05 / $5` 每 1M，**`Agents' Last Exam` 中等算力下比 `GPT-6 Astra` 与 `GPT-6.1 Sol` 快三倍以上**），但官方可用性段只列 **Plus / Pro / Enterprise / Edu** 四档；同窗口 `Anthropic` 递交 `S-1`（拟以 `ANT` 登陆纳斯达克）—— 两条都很大，**但都不是「免费内容」条目：一条是「付费档里的降价」，一条是「不含任何免费额度信息的上市文件」 | 149,255 B | 6 | 253621 B | 204–207 |
 | **048** | 2026-10-27 | 本期头条是「一份可以直接下载、许可写得很清楚的数据集，和一个终于被核到归属的每秒价格」—— `OpenAI` 发布 `Signals v3.0` 数据（**165 类工作活动 · 近 100 个国家 · 2025 Q1–2026 Q3 季度序列**，下载页写明 **Creative Commons `CC BY 4.0`**、可下载 CSV 与数据字典，**发布日期 `2026-10-26`**）；而 `Runware` 的 **`$0.133/秒` 本期终于在一手页核到了 —— 但它属于 `sync-3`（唇形同步）模型，不是 `Kling 4.0`**（047 期记「两页都没核到 `0.133`」，**结论对、理由错，本期就地更正**） | 158,149 B | 7 | 264026 B | 208–211 |
 | **049** | 2026-10-27 | 本期头条是「一个 MIT 许可、权重当天上架、当天就有免部署 API 且明确给出免费页数额度的开源文档解析模型」—— `百度` 发布并开源 `文心 Unlimited OCR 2`（官方逐字「**基于最新 文心Unlimited-OCR 2 ，提供开箱即用、免部署的API调用服务**」，**接口限时免费**，**个人实名可获取免费测试资源 200 页、企业实名可获取免费测试资源 1000 页**；权重 `baidu/Unlimited-OCR-2` 已在 `HF` 上架、`license: mit`、`gated: false`、两个 `safetensors` 分片）；同时 `OpenRouter` 目录层发生本期唯一一次**免费档净减少**（`:free` 17 → 16，`nvidia/nemotron-3-super-120b-a12b:free` 下架而其付费档仍在），而 `Runware` 那个被连续两期记成「一手未核到」的 `15%` 折扣，本期在 `pricing` 页的促销数组里**当场抓到 —— 但官方写的截止日是 `10 月 29 日`，不是社媒口径的「7 天」 | 98,539 B | 9 | 194692 B | 212–217 |
+| **050** | 2026-10-28 | 本期头条是「一个把免费从『云端额度』搬进『浏览器本地』的 Web 标准」—— `Opera` 发布 `WebAI`（官方公告 10/27，官方逐字「**WebAI is a proposed web standard, backed by companies including Google and Microsoft**」，**early preview 已上 `Opera One` / `Opera GX` / `Opera Neon`**，**本地推理内置在浏览器里、无需另装 App、无需配置本地服务、无需 API key**，**「no per-request cloud costs, and no AI infrastructure to run」**）；同时 `OpenRouter` 公告页在连续九期停在 `October 14, 2026` 之后**首次出现新公告（10/27）**，而该条公告的内容恰恰是**收紧数据留存**——**「零数据留存（ZDR）」承诺首次写明了一个例外：CSAM 审查**；此外本期拿到了三个往期挂账项的一手答案：**`NVIDIA` 官方侧 `nemotron-3-super-120b-a12b` 的免费端点已标 `Deprecated`（049 期那 049 期记「厂商侧未核到」的挂账项，本期有答案了）**、**`文心 Unlimited OCR 2` 的官方基准分图片终于读出真实数字（`MPDocBench 84.6` / `MarathonDocBench 77.1`，官方标注「+6.1 on MPDocBench, +8.5% on MarathonDocBench」）**、**`Unsloth` GGUF 模型卡原文（049 期挂账项⑨） | 116,979 B | 10 | 221358 B | 218–222 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
 - **信源分级台账** `AI信息源分级清单-T0-T4.md`：282 条（T0 169 / T1 19 / T2 18 / T3 41 / T4 35）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：189 条（由 `extract_deadlines.py` 从最新一期重建）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：192 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
