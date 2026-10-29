@@ -3,11 +3,11 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **50 期**（2026-09-14 ~ 2026-10-28），Markdown 合计 **6319524 B ≈ 6171 KB**。
+共 **51 期**（2026-09-14 ~ 2026-10-29），Markdown 合计 **6437439 B ≈ 6287 KB**。
 
-只想看「现在有什么免费、到什么时候结束」的：**[《免费速查》](quick.html)** —— **64 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
+只想看「现在有什么免费、到什么时候结束」的：**[《免费速查》](quick.html)** —— **67 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
 
-另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**135 条**没有确切截止日的长期权益，全量原文、不逐期重印。
+另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**138 条**没有确切截止日的长期权益，全量原文、不逐期重印。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -61,11 +61,12 @@
 | **048** | 2026-10-27 | 本期头条是「一份可以直接下载、许可写得很清楚的数据集，和一个终于被核到归属的每秒价格」—— `OpenAI` 发布 `Signals v3.0` 数据（**165 类工作活动 · 近 100 个国家 · 2025 Q1–2026 Q3 季度序列**，下载页写明 **Creative Commons `CC BY 4.0`**、可下载 CSV 与数据字典，**发布日期 `2026-10-26`**）；而 `Runware` 的 **`$0.133/秒` 本期终于在一手页核到了 —— 但它属于 `sync-3`（唇形同步）模型，不是 `Kling 4.0`**（047 期记「两页都没核到 `0.133`」，**结论对、理由错，本期就地更正**） | 158,149 B | 7 | 264026 B | 208–211 |
 | **049** | 2026-10-27 | 本期头条是「一个 MIT 许可、权重当天上架、当天就有免部署 API 且明确给出免费页数额度的开源文档解析模型」—— `百度` 发布并开源 `文心 Unlimited OCR 2`（官方逐字「**基于最新 文心Unlimited-OCR 2 ，提供开箱即用、免部署的API调用服务**」，**接口限时免费**，**个人实名可获取免费测试资源 200 页、企业实名可获取免费测试资源 1000 页**；权重 `baidu/Unlimited-OCR-2` 已在 `HF` 上架、`license: mit`、`gated: false`、两个 `safetensors` 分片）；同时 `OpenRouter` 目录层发生本期唯一一次**免费档净减少**（`:free` 17 → 16，`nvidia/nemotron-3-super-120b-a12b:free` 下架而其付费档仍在），而 `Runware` 那个被连续两期记成「一手未核到」的 `15%` 折扣，本期在 `pricing` 页的促销数组里**当场抓到 —— 但官方写的截止日是 `10 月 29 日`，不是社媒口径的「7 天」 | 98,539 B | 9 | 194692 B | 212–217 |
 | **050** | 2026-10-28 | 本期头条是「一个把免费从『云端额度』搬进『浏览器本地』的 Web 标准」—— `Opera` 发布 `WebAI`（官方公告 10/27，官方逐字「**WebAI is a proposed web standard, backed by companies including Google and Microsoft**」，**early preview 已上 `Opera One` / `Opera GX` / `Opera Neon`**，**本地推理内置在浏览器里、无需另装 App、无需配置本地服务、无需 API key**，**「no per-request cloud costs, and no AI infrastructure to run」**）；同时 `OpenRouter` 公告页在连续九期停在 `October 14, 2026` 之后**首次出现新公告（10/27）**，而该条公告的内容恰恰是**收紧数据留存**——**「零数据留存（ZDR）」承诺首次写明了一个例外：CSAM 审查**；此外本期拿到了三个往期挂账项的一手答案：**`NVIDIA` 官方侧 `nemotron-3-super-120b-a12b` 的免费端点已标 `Deprecated`（049 期那 049 期记「厂商侧未核到」的挂账项，本期有答案了）**、**`文心 Unlimited OCR 2` 的官方基准分图片终于读出真实数字（`MPDocBench 84.6` / `MarathonDocBench 77.1`，官方标注「+6.1 on MPDocBench, +8.5% on MarathonDocBench」）**、**`Unsloth` GGUF 模型卡原文（049 期挂账项⑨） | 116,979 B | 10 | 221358 B | 218–222 |
+| **051** | 2026-10-29 | 本期头条是「一份写了明码标价、也写明了免费上限档的官方定价页」—— `Google Antigravity` 定价页公开三档个人方案，其中**个人档 `$0/month`**，官方逐字包含「**Access to a variety of agent models**」「**Unlimited Tab completions**」「**Unlimited Command requests**」「**Basic weekly rate limits**」；同时 `Google DeepMind` 官方模型页新增了 `Gemini 4 Carbon`（`2026 年 10 月`），并**首次出现一条针对科研与安全项目的免费额度**——官方逐字「**Academic and independent scientists can apply to get the highest usage tier in Google Antigravity free of charge for 6 months (subject to eligibility, capacity, and selection)**」，网络安全防守方另可申请 `Fairwind Program`；此外本期拿到了**四个往期挂账项的一手答案**：`Kimi K3.1 Pro` **已正式发布**（官方文档逐字「**完整模型权重将于 11 月 4 日前发布**」，3 万亿级参数 / 1M 上下文 / `Terminal-Bench 4.0` 得分 `65.7%`）、`K2` 系列 `10/31` 停新**官方确认**、`Runware` 促销表 `13 → 14` 条、以及 `OpenRouter` 目录 `464 → 457` 的**逐条归因**；还有一条**方法论级的发现**：`OpenRouter` 公告页把一条 **`Aug 19, 2026`** 的老公告置顶在「`October 29, 2026`」分组栏下 —— **列表页的日期分组栏不是条目日期 | 117,915 B | 11 | 226863 B | 223–227 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：282 条（T0 169 / T1 19 / T2 18 / T3 41 / T4 35）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：192 条（由 `extract_deadlines.py` 从最新一期重建）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：286 条（T0 173 / T1 19 / T2 18 / T3 41 / T4 35）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：196 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）

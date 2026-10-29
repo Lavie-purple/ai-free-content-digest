@@ -28,9 +28,23 @@ def tables_in(text):
 
 
 def pit_range(text):
-    m = re.search(r"(?ms)^##+[^\n]*避坑[^\n]*\n(.*?)(?=^## |\Z)", text)
+    """取本期避坑编号区间。
+
+    ⚠️ 051 期修的坑：原正则 `^##+[^\n]*避坑[^\n]*` 会**抢先命中正文里的小节标题**
+    （051 期的 `### 3. Anthropic news：…避坑 208 连续第 3 期命中`），
+    导致抓到错误段落、编号全空、INDEX 显示「—」。
+    **修法：只认二级标题 `## `（`^## ` 恰好两个井号，后面不能是井号）** ——
+    即避坑章是「章级」标题（`## 六、避坑提示…`），正文里的 `###` 小节不算。
+    **判据口径写在函数注释里（与 lint_table 同规矩）。**
+    """
+    m = re.search(r"(?ms)^## [^#\n]*避坑[^\n]*\n(.*?)(?=^## |\Z)", text)
     if not m:
-        return "—"
+        # 兜底：二级标题没命中时，退回「任意层级但必须是最后一个匹配」——
+        # 取所有候选中**位置最靠后**的那个（避坑章在正文之后）。
+        cands = list(re.finditer(r"(?ms)^#{2,}[^\n]*避坑[^\n]*\n(.*?)(?=^## |\Z)", text))
+        if not cands:
+            return "—"
+        m = cands[-1]
     nums = [int(x) for x in re.findall(r"(?m)^\s*(?:\*\*)?(\d{1,3})[\.、)]", m.group(1))]
     return "%d–%d" % (min(nums), max(nums)) if nums else "—"
 

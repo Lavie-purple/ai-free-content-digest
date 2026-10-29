@@ -63,3 +63,6 @@ over,ZCode / BigModel 新用户试用,—,,域名已易主，登记项失效,ove
 oss,OpenAI Signals v3.0 数据集,165 类工作活动 · 近 100 国 · 2025 Q1–2026 Q3 季度序列,,无结束日,live,免登录直接下载；CC BY 4.0 须署名或引用
 api,百度智能云 文档解析（Unlimited-OCR）API,限时免费：个人实名 200 页 / 企业实名 1000 页,,官方未给结束日,live,实名认证；免部署，QPS 2/5
 oss,百度 文心 Unlimited OCR 2 开放权重,MIT 许可 · 权重 + 技术报告 + SGLang wheel 全开放,,无结束日（永久开放）,live,本地跑需 A800-80GB 级显存
+cloud,Google Antigravity 个人免费档,$0/month · Unlimited Tab completions · Unlimited Command requests,,长期（免费档 · 官方未给截止日）,live,零门槛；⚠️ agent models 本身是 Basic weekly rate limits
+cloud,Google Antigravity 科研/安全 6 个月免费档,最高使用档位免费 6 个月（官方逐字 for 6 months）,,6 个月（起点是获批日）,live,"需申请；subject to eligibility, capacity, and selection"
+api,Kimi 文件相关接口限时免费,文件内容抽取 / 文件存储 两个接口本身不产生费用,,官方未给结束日,live,⚠️ 模型调用仍按量计费；文档内容作 Input 传输也计费
