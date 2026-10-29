@@ -1484,3 +1484,110 @@ gen_table → inject → prune → split_ledger → 脚注 → slim（跑两轮�
 - `classify()` 误捕否定式规避措辞；
 - `build_source_hits.py` 根别名须过 `norm()`、表格内 `>` 行重置 `in_tbl`；
 - `verify_web.py` 的 `None` 守卫会捕真实字段值 → **改措辞不改守卫**。
+
+### ⑳ 052 期：051 期表格改写漏进交付物 —— 两层根因与七条工程纪律（全文 · 实测样本）
+
+**背景**：052 期开工时逐条核对 051 期产物，发现 **051 期的正文写了 `457/19/16`、`8,357`、`截止日＝本期基准日当天`，
+但第四章表体与《常驻权益总账》仍是 050 期的 `464/19/16`、`513`、"距结束 2 天"** —— 即
+**051 期 `gen_table051.py` 声明的「改写 10 行」一行都没进交付物**。051 期的脚注④写的是「本期改写 10 行
+（每键在源表恰好命中 1 行、每个值在输出恰好出现 1 行，两项均已断言）」—— **断言确实全过，而产物是错的**。
+
+#### 第一层根因：注入源文件与最终产物不同步
+
+- `gen_table051.py` 读 **050 期 md** → 生成 `tmp_table051.md`（改写都在这里）；
+- 但 **051 期的最终 md 由 `inject051.py` 从 `tmp_051_body_a.md` 注入** ——
+  **而 `tmp_051_body_a.md` 里存的是未改写的旧表格**；
+- `inject051.py` 一跑，**就把 `gen_table051.py` 的改写覆盖回去了**。
+- **这是 051 期记忆里已经写过的「改了正文必须改这两个源文件」的表格版本** ——
+  **同一���纪律，脚本层与正文层各漏一次**。
+- **052 期的做法**：`gen_table052.py` 的输入**直接取 051 期 md 的现行文本**（不是取上一期的 `tmp_table`），
+  **并在注入后逐条核对表体关键口径**。
+
+#### 第二层根因：写出循环的判断写错一层
+
+```python
+# ✘ 051 期的写法：k 是整行，永远不是 REWRITE 的键 —— 改写一行都没进输出
+for k in body:
+    if k in REWRITE:
+        out.append(REWRITE[k])
+    else:
+        out.append(k)
+```
+
+**而脚本内的断言只校验 `REWRITE` 字典本身**：
+
+```python
+for k, v in REWRITE.items():
+    assert res.count(v) == 1   # ← 这里的「输出」是字典值，不是落盘文件
+```
+
+**修法（052 期落地，三条断言全加）**：
+
+```python
+rewritten = set()
+for k in body:
+    hit = None
+    for key, val in REWRITE.items():
+        if key in k:
+            assert hit is None, ("一行命中多个 REWRITE 键", k[:60])
+            hit = key
+    if hit is not None:
+        rewritten.add(k)
+        out.append(REWRITE[hit])
+    else:
+        out.append(k)
+assert len(rewritten) == len(REWRITE)          # ① 改写行数守恒
+assert res.count(v) == 1 for each REWRITE value # ② 每个改写值在落盘文本中恰好一次
+assert res.count(r) == 1 for each untouched row # ③ 未改写行唯一（数量 + 唯一性）
+# ④ 另加：「表体关键口径 == 正文关键口径」——六个必查数逐条查得到
+```
+
+#### 051 期的第二条漏改：REWRITE 键不够长
+
+**`Runware` 分发层 `Kling 4.0` 促销行**与**快手可灵 `Kling 4.0` 模型行**的活动名都含 `Kling 4.0` ——
+**051 期的键只匹配到了后者**（前者没被改写）。**修法：键要写到能唯一命中整行**（含 `Runware` / `促销` 等限定词）。
+
+#### 052 期顺带修掉的六个脚本坑（全部实测）
+
+1. **`slim_table.py` 从不清理历史指针** —— 049–051 期是「在状态列后**追加** `〔附录 NNN〕`」，
+   **但不清上一期遗留的 `[附录 NNN](details.html)`**。052 期表体出现
+   `[附录 049] [附录 050] [附录 051] 〔附录 052〕 〔附录 052〕` 这种五连指针，
+   **把行撑到 212–229 字、直接触发 lint R1 超限（12 处）**。
+   **修法**：`slim_status()` 开头先 `strip_pointers()` —— **两种形态都要剥**（md 形态与纯文本形态），
+   剥完再追加本期指针。
+2. **`slim` 的字数口径必须与 `lint` 的 R1 判据逐字一致** —— `lint_table.py` 的 R1 是
+   「状态列**剔除 markdown 链接**后的字数」（**不剔 `**`**）；`slim` 的 `visible_len` 原本只去空白、不去链接
+   → **slim 以为裁到位、lint 判超限**。**修法**：`visible_len` 也剔 markdown 链接。
+   **⚠️ 不可多剔 `**`** —— lint 不剔，多剔会过度裁剪。
+3. **硬裁的预算要给「加粗标记 + 指针」留余量** —— 硬裁发生在**加粗之前**（量的是 `visible_len(out)`），
+   而落盘时会发生两件事：**① 整句被包进 `**…**`（多 4 字符）② 追加 `〔附录 NNN〕`（多 8 字符）**。
+   **实测样本**：剥指针后 190 字（< 200，看似达标）、落盘后 202 字 → **R1 命中**。
+   **修法**：**硬裁预算 = maxc − 16**；**且「未丢句子就早退」的判断（`if not dropped and new_status == status`）
+   也要复量落盘后长度**（`visible_len(probe) + PTR_LEN <= maxc`）。
+4. **`gen_table` 的 `build()` 必须幂等** —— 反复跑流水线时 `split_ledger.py` 已把改写写回《常驻权益总账》，
+   下一轮 `gen_table` 再拿它当输入就会**对已改写的文本再改写一次**。
+   **修法**：若该行已含本期标记（`（0NN 期）`）且待替换片段均不在，则**原样返回**。
+5. **`inject` 必须注入「4.1 + 4.2 合并表」** —— `split_ledger.py` 取「第四章里**最长的一块表格**」当表体，
+   再按截止列拆成 4.1 / 4.2。**若在 inject 阶段就分成两张表，它会挑错块 → 4.2 变 0 行**（052 期实测踩到）。
+   **修法**：inject 注入**一个合并表**（4.1 行 + 4.2 行顺序混排均可），让 `split_ledger` 自行分流。
+6. **`403` 的归因要先排除请求头** —— **本报告连续多期把 `SEC EDGAR` 的 `403` 记成「站点拒绝访问」**，
+   实际是 `User-Agent` 不合规；**换成带联系方式的合规 UA（`AI-Free-Content-Report research@example.com`）
+   后同一 URL 返回 `200`**（此前响应页标题逐字 `SEC.gov | Your Request Originates from an Undeclared Automated Tool`）。
+   **归因错了，后续每一期都会重复记「未核到」**（新立避坑 232）。
+
+#### 052 期的短窗口出刊判据（新增）
+
+- **窗口 = 051 期截止 10/29 14:30 → 本期截止 10/29 15:30，约 1.0 小时**；
+- **窗口内只有 2 条**（**均为媒体转述**），**但实访另拿到 1 条官方一手新条目 + 3 个挂账销项**；
+- **纪律**：短窗口先核「窗口内确有硬条目」再决定出刊/挂账；**销项本身是增量**，
+  **但不得把窗口外的销项包装成「窗口内新增」** —— 本期正文如实写明「窗口内仅 2 条且均为媒体转述」。
+
+#### 052 期新增的一手入口（两个）
+
+- **`SEC EDGAR` 三层**：`www.sec.gov/cgi-bin/browse-edgar`（检索页）+ `data.sec.gov/submissions/CIK…json`
+  （申报索引）+ `www.sec.gov/Archives/edgar/data/…`（原文）—— **全部需带联系方式的合规 `User-Agent`**。
+  **本期据此拿到 `Anthropic` `S-1` 原文（`14,169,255` 字节）**，**并首次在法律文件里读到厂商对免费档的自我定性**。
+- **`aihot.news` 公开 API**：`https://aihot.news/api/v1/items?limit=30`（`200` / `31,839` 字节）——
+  **返回 13 个字段的 JSON，含 `publishedAt` 与 `discoveredAt` 两个时间戳**。
+  **⚠️ 窗口归属必须看 `publishedAt`** —— 本期抓到一条 `publishedAt 10/28 16:00` / `discoveredAt 10/29 02:05`
+  的条目（`MOSS-Image`），**按收录时间归期会把上期窗口的发布算进本期**（新立避坑 229）。
