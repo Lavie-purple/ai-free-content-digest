@@ -1850,3 +1850,44 @@ README `minimax-community`）—— **043/044 两期「权重未见」判定错�
 - commit **`9aaf628`** → push 成功 → **远端 sha 一致**（GitHub API 核对）→ **五页线上逐字节一致**（050 期日报 `221,358` B / md5 `650a9554…`；`index.html` `bafbee5d…`；`quick.html` `8734dc48…`；`standing.html` `45dc862b…`；`details.html` `d68f5741…`）。
 - **未核到 / 受阻**：`platform.reflection.ai` `403`（连续第 12 期）、`mistral.ai/news` `000`（连续第 10 次）、`platform.openai.com/docs/models` `403`（连续第 3 期）、`opera.com` 主站全站 `451`（**但 `blogs.opera.com` 可读，官方公告没丢**）、`next.opera.com/web-ai/` `451`、`mozilla.org` 两条路径 `404`、`volcengine.com/activity/doubao` `200` 但 React 空壳（连续第 4 期）、`lingguang.ai` DNS 解析失败（连续第 2 期）、`api.replicate.com` `401`、`runware.ai/sync-3` `000`、`huggingface.co` 主站 `000`（改用 `hf-mirror.com`）、`semantic_scholar` `429`、`lmarena` 全站 `000`、`arxiv.org`/`hf.co/papers`/`openreview`/`neurips.cc`/`jmlr.org`/`aminer.cn` `000`（论文线无一手新增）、`tbench` `404`、`scale` `403`、`zhihu`/`geekpark`/`stratechery`/`neuron`/`producthunt`/`sec_edgar` `403`、`itjuzi` `412`、`gsxt` `521`、`eulex` `202`。
 - **下一轮强制动作（20 条，见 050 期第四章脚注 ③）**：最紧的七条 —— ① `豆包工作 30 天订阅`（A 档已过 11 天，连续第 4 期空壳）② `AutoClaw` 国际站 40M vs 100M 矛盾（第 4 次实读未改）③ `GPT-6.1 Terra` Free 档细表（连续第 3 期 403）④ `Kimi K3.1 Pro` 权重是否在 11/4 前放出 ⑤ `WebAI` 完整 API 文档 ⑥ `Unsloth` 官网量化基准页（`91.5` 那组数仍只有转述）⑦ `B` 类 14 天内到期 24 条逐条复核（**10/29 三条最紧**）。
+
+## 2026-10-29 第 051 期（隔日出刊 + Google Antigravity 免费档（含明确上限）+ 四个往期挂账项销项）
+
+- **状态**：成功。**窗口 = 050 期截止 10/28 09:05 → 本期截止 10/29 14:30（北京），约 29.4 小时**；美西/北京双向换算：起 北京 10/28 09:05 ＝ 美西 10/27 18:05 PT、止 北京 10/29 14:30 ＝ 美西 10/28 22:30 PT（**窗口跨越了一个美西日**）。**本期是隔日出刊**（050 期是 10/28 第一轮，本期是 10/29 第一轮 —— **两期不合并**）。
+- **规模**：全量扫 273 个抓取件（另补抓 40 余个专项一手页）、解析出 **3,066** 条带时间戳条目、**窗口内 120 条**、其中免费内容类硬条目 **8** 条；其余窗口内条目为媒体转述、融资、人事与社区讨论，逐条归因后不产生免费条目（见第一章第 4 节）。
+
+### 头条
+- **`Google Antigravity` 定价页公开三档个人方案** —— **个人档逐字 `$0/month`**，含 `Access to a variety of agent models` / `Unlimited Tab completions` / `Unlimited Command requests` / `Basic weekly rate limits`；付费三档 `Pro` / `Ultra` / 组织档（`$30 USD per seat per month` ＋ `$0 seat fee` 按消耗计费）。⚠️ **本报告至今免费额度口径最完整的一条** —— **只有两项写 `Unlimited`，`agent models` 本身是 `Basic weekly rate limits`**；**旗舰 `Gemini 4 Argon` 挂在付费档**，故不写「免费提供 `Gemini 4`」。
+- **`Google DeepMind` 官方模型页首现定向免费额度** —— 逐字 `Academic and independent scientists can apply to get the highest usage tier in Google Antigravity free of charge for 6 months (subject to eligibility, capacity, and selection) and cybersecurity defenders can apply to join the Fairwind Program.` ⚠️ **本报告至今唯一一条「官方明写期限 + 明写条件」**。
+- **`Gemini 4 Carbon` 官方五模型对照表拿到** —— `AA Index v5.0` = `59`；⚠️ **官方表里它并非每一项都第一**（`OSWorld-2.1` 与 `FrontierSWE 2` 两项 `Claude Opus 5.5` 更高）。
+- **四个往期挂账项销项**：`Kimi K3.1 Pro` 已正式发布（官方逐字「完整模型权重将于 11 月 4 日前发布」· `Terminal-Bench 4.0` 得分 `65.7%`）／`K2` 系列 `10/31` 停新官方确认／`Runware` 促销表 `13 → 14`（新增 `pruna-p-video-edit` `25%` 至 `11/3`）／`OpenRouter` 目录 `464 → 457` 逐条归因。
+- ⚠️ **`OpenRouter` 公告页把一条 `Aug 19, 2026` 的老公告置顶在 `October 29, 2026` 分组栏下** —— **列表页的日期分组栏不是条目日期**（新立避坑 227）。
+
+### 规模与对账
+- 表体 **196** 行 ＝ 050 期 192 ＋ 新增 5 − 移出 1（`⚪ AutoClaw` 桌面端 v2.1.0 一次性 2 亿 Tokens，已收口，原文归档 `data/deadline_archive.md`）；`4.1` = 58 / `4.2` = 25；**总账 138** 条；**速查页 67** 条。
+- 色标 ⚪9/🟢136/🟡18/🟠6/🔴4/⚠4/空19 = 196；classify crit4/live152/over9/pending20/switch5/unclear6 = 196；**A2 + B26 + C7 + D150 + E11 = 196** ✔。
+- **⚪ 与 over 本期个数相同（9=9）且成员逐条一致** —— 仍写「本期恰好对上」，不写「规则保证永远对上」。
+- **「距今 N 天」由新写的 `recalc_days051.py` 逐行独立重算**（15 行因基准日推进各减 1）；**断言是「天数 == 截止日 − 基准日」，不是「推进一天就 −1」**。
+- `lint_table.py --strict` **ALL CLEAN**；`verify_web` 四页 **ALL GREEN**；`check_views` **ALL GREEN**（极速 67 / 总账 138）；`check_site_freshness` **ALL GREEN**。
+- 台账：**无新增 T0–T4 条目**（`aihot.news` 与台账 `aihot.virxact.com` 同一家的两个入口，034–051 连续十八期同结论）。
+
+### 发布
+- commit **`3e29fe6`**（提交时间 2026-10-29 15:08:56 +0800）→ push 成功。
+
+### ⚠️ 本期的一处硬要求缺口（由 052 期补齐）
+- **051 期主流程在 15:08 提交后，自动化 memory.md 与当日日志 `memory/2026-10-29.md` 都漏写了** —— **由 052 期这一轮补写完毕**（已建 `memory/2026-10-29.md`、并把本条追加进自动化 memory.md）。**新纪律：commit 之后先确认记忆文件里有本期期号，再收尾。**
+
+### 本期实测的工程坑（全部已修）
+- **① 「距今 N 天」的重算必须是独立重算器，不能靠批量替换** —— `gen_table051.py` 只做行级改写、**不负责按基准日重算天数**，15 行的「距今 N 天」全部仍是 050 期的值。本期新写 `recalc_days051.py`：从每行截止列独立解析日期 → 算 `截止日 − 基准日` → 回填；**遇到「截止日不可解析却带距今」或「真值为负」直接 exit 1**。**这是 048/049/050 期反复出现「继承误差」的根因** —— `gen_table` 的 diff 输出只能发现差异，不能自动修正。
+- **② 「截止日当天」是第三个状态** —— `Runware` 的 `klingai-video-4-0-launch-promo` 的 `endsAt` 是 `2026-10-29`、基准日也是 `2026-10-29`，**官方促销数组在这一刻仍把它列为在售**。写「官方数组仍列为在售、截止日＝基准日当天」，既不写「已结束」也不写「已过期」（新立避坑 223）。同理 `Google Nano Banana 2` 停用的「距今」真值是 `0` 天而不是 `1` 天。
+- **③ 「列表页的日期分组栏」与「条目的日期」是两回事** —— `OpenRouter` 公告页把 `Aug 19, 2026` 的老公告放在 `October 29, 2026` 分组栏下（源码有 `sticky` 标记）。**必须点进公告页看它自己的日期行**（新立避坑 227，是避坑 208 的新变种）。
+
+### 新增避坑（223–227）
+- **223** 截止日当天 ≠ 已过期 —— 是第三个状态
+- **224** 目录总数变化可能整批来自同一家厂商的旧模型下架
+- **225** 模型消失先问「同系列替身还在不在」
+- **226** 目录层 `created` ≠ 模型发布日
+- **227** 列表页的日期分组栏 ≠ 条目的日期
+
+### 下一轮强制动作（20 条，见 051 期第四章脚注 ③）
+最紧的七条 —— ① `豆包工作 30 天订阅`（A 档已过 12 天，连续第 5 期 React 空壳 / 文档站零命中）② `AutoClaw` 国际站「40M vs 100 million」矛盾 ③ `GPT-6.1 Terra` Free 档细表（连续第 4 期 403）④ `Kimi K3.1 Pro` 权重是否在 `11/4` 前放出 ⑤ `K2` 系列 `10/31` 停新是否如期执行 ⑥ `OpenRouter` 全量 `457` 逐条 diff ⑦ `B` 类 14 天内到期 26 条逐条复核（`10/29` 三条 `T+0` 最紧）。

@@ -57,12 +57,45 @@ def split_sentences(text):
 
 
 def visible_len(s):
-    return len("".join(s.split()))
+    """字数口径（**必须与 lint_table.py 的 R1 判据逐字一致**）。
+
+    ⚠️ 052 期新立（实测 3 条 R1 超限）：**两个脚本的字数口径不一致** ——
+    `lint_table.py` 的 R1 是「状态列**剔除 markdown 链接**（`[附录 NNN](details.html)`）后的字数」，
+    **它不剔除 `**` 加粗标记**；
+    而本函数只去空白、不去链接，**且 slim 在剥指针之前就量长度** ——
+    结果：**slim 认为已经裁到位、lint 却判超限**。
+    修法：**这里也剔除 markdown 链接**，与 lint 逐字对齐（**多剔除 `**` 会导致过度裁剪，不可取**）。
+    """
+    t = re.sub(r"\[[^\]]*\]\([^)]*\)", "", s)
+    return len("".join(t.split()))
 
 
 def strip_bold(s):
     """剥掉 markdown 强调标记（**），避免裁剪在标记中间切断、留下破碎的加粗。"""
     return s.replace("**", "")
+
+
+# ⚠️ 052 期新立：历史指针必须先剥掉。
+#   049–051 期的瘦身实现是「在状态列后面**追加**〔附录 NNN〕」，
+#   但**没有清除上一期遗留的 `[附录 NNN](details.html)` 指针** ——
+#   实测 052 期表体出现「[附录 049] [附录 050] [附录 051] 〔附录 052〕 〔附录 052〕」
+#   这种五连指针，把行撑到 212–229 字、直接触发 lint R1 超限。
+#   修法：**瘦身前先把状态列里所有历史指针（两种形态）剥掉，再追加本期指针。**
+PTR_MD_RE = re.compile(r"\s*\[附录\s*\d{3}\]\(details\.html\)")
+# 指针「 〔附录 NNN〕」的长度（含前导空格）—— 落盘后状态列会比裁剪结果长这么多
+PTR_LEN = 10
+PTR_PLAIN_RE = re.compile(r"\s*〔附录\s*\d{3}〕")
+
+
+def strip_pointers(s):
+    """剥掉状态列里的全部历史指针（md 形态与纯文本形态），返回剥后的文本。"""
+    prev = None
+    t = s
+    while prev != t:
+        prev = t
+        t = PTR_MD_RE.sub("", t)
+        t = PTR_PLAIN_RE.sub("", t)
+    return t.rstrip()
 
 
 def split_by_punct(text, limit):
@@ -106,6 +139,8 @@ def slim_status(status, maxc, issue):
       ③ **边界句只在装得下时才加** —— 装不下就进附录，不做「先加后砍」的往返。
     """
     plain = strip_bold(status)
+    # ⚠️ 052 期新立：**先剥历史指针**，否则多期累积的指针会把行撑爆（lint R1 超限）。
+    plain = strip_pointers(plain)
     sents = split_sentences(plain)
     if not sents:
         return status, []
@@ -214,10 +249,16 @@ def slim_status(status, maxc, issue):
     # ⚠️ 049 期实测：`split_by_punct` 遇到「整段没有标点可切」的长句时会原样保留，
     #   于是状态列仍可 >200 字（R1 命中 5 条）。
     #   修法：**在标点全用尽时按字符硬切到预算内**，切掉的部分进附录（内容不丢）。
-    if visible_len(out) > maxc:
+    # ⚠️ 052 期新立：**硬裁的预算必须给「后续加粗标记 + 指针」留出余量** ——
+    #   硬裁发生在加粗之前（量的是 `visible_len(out)`），而落盘时会发生两件事：
+    #   **① 整句被包进 `**…**`（多 4 个字符）；② 追加 `〔附录 NNN〕` 指针（多 8 个字符）**。
+    #   实测 052 期有 3 行因此仍 >200 字（典型样本：剥指针后 190 字、落盘后 202 字）。
+    #   修法：**硬裁预算 = maxc − 16**（4 加粗 + 8 指针 + 4 余量）。
+    BUDGET = max(60, maxc - PTR_LEN - 6)
+    if visible_len(out) > BUDGET:
         acc = ""
         for ch in out:
-            if visible_len(acc + ch) > maxc:
+            if visible_len(acc + ch) > BUDGET:
                 break
             acc += ch
         # 尽量退到最近的标点，读起来不突兀
@@ -226,6 +267,28 @@ def slim_status(status, maxc, issue):
             acc = acc[:cut + 1]
         dropped.append(out[len(acc):] + "（超预算硬切，完整原文见附录）")
         out = acc
+    # ⚠️ 052 期补：加粗之后**再量一次**，仍然超预算就再切一刀（保证落盘即达标）。
+    if out:
+        m = re.match(r"^((?:[^\w\s\u3000-\u9FFF\uFF00-\uFFEF]){1,3})\s*(.*)$", out, re.S)
+        if m:
+            probe = "%s **%s**" % (m.group(1), m.group(2).strip())
+        else:
+            probe = "**%s**" % out
+        if visible_len(probe) > maxc:
+            core = m.group(2).strip() if m else out
+            acc = ""
+            for ch in core:
+                if visible_len(acc + ch) > BUDGET:
+                    break
+                acc += ch
+            cut = max(acc.rfind(ch) for ch in "，、；：。 ")
+            if cut > len(acc) * 0.5:
+                acc = acc[:cut + 1]
+            dropped.append(core[len(acc):] + "（加粗后仍超预算，二次硬切，完整原文见附录）")
+            if m:
+                out = "%s **%s**" % (m.group(1), acc.strip())
+            else:
+                out = "**%s**" % acc.strip()
     if out:
         m = re.match(r"^((?:[^\w\s\u3000-\u9FFF\uFF00-\uFFEF]){1,3})\s*(.*)$", out, re.S)
         if m:
@@ -347,7 +410,13 @@ def main():
         #      **活动名一改，去重就失效**，CSV 从 189 条涨到 204 条（多出 15 条重复）；
         #   ② 主名被破坏（实测把「`百度智能云`「文档解析（Unlimited-OCR）」API」切坏了）。
         #   修法：**活动名是跨期引用的主键，一个字不动**；R1/R3 已改为只看状态列，不需要动它。
-        if not dropped and new_status == status:
+        # ⚠️ 052 期新立：**早退前必须再量一次落盘后的长度** ——
+        #   落盘时状态列 = `**结论** 〔附录 NNN〕`，比 `new_status` 多出加粗标记与指针。
+        #   实测 052 期有一条行因「未丢句子、new_status == status」而早退，
+        #   **结果剥指针后 190 字（<200）但落盘后 202 字 → lint R1 命中**。
+        #   修法：**早退条件加上「落盘后长度 ≤ maxc」**；不满足就继续走裁剪流程。
+        probe = new_status.rstrip()
+        if not dropped and new_status == status and visible_len(probe) + PTR_LEN <= maxc:
             out_lines.append(ln)
             continue
         changed += 1
