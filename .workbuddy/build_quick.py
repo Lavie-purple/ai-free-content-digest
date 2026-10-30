@@ -230,6 +230,11 @@ SKIP_RE = re.compile(
     # （`NVIDIA` 官方 `nemotron-3-super-120b-a12b` 的 `Free Endpoint` 标 `Deprecated`，
     #   但 `Partner Endpoint` 与权重仍 `Available` —— 入口在、不免费）
     r"|Deprecated|弃用"
+    # 053 期新增：**付费档**的额度变动 —— 读者拿不到任何免费东西。
+    # （`OpenAI` 本期把 `Pro 100` / `Pro 500` / `Pro 200` 三档付费档的用量上限翻倍，
+    #   但 `Plus` 档不变 —— 那一行是本期唯一与免费读者有关的事实，仍然不是「一条免费额度」，
+    #   不该进速查页的「我现在能领什么」清单。）
+    r"|付费档"
 )
 
 

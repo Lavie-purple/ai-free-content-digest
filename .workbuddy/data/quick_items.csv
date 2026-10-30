@@ -12,11 +12,11 @@ token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
 token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
 token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
 token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
-api,OpenRouter 免费档,全量 463 个模型中 19 个零价 / 16 个 :free（本期 :free 净减 1）,,长期（动态目录）,live,注册，看 :free 后缀；nemotron-3-super-120b-a12b:free 已从目录消失
+api,OpenRouter 免费档,全量 456 个模型中 19 个零价 / 16 个 :free（本期全量 −1、零价与 :free 均同值）,,长期（动态目录）,live,注册，看 :free 后缀；本期 upstage/solar-pro-3 已从目录消失，同系列 solar-pro4 仍在
 api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
 api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
 api,OpenCode DeepSeek V4.1 Flash Free,免费，200K 上下文,,未公布,live,仅限平台内
-api,OpenCode 免费模型清单,11 项（2026-10-24 实读）,,未公布（清单动态变动）,live,仅限平台内
+api,OpenCode 免费模型清单,9 项（2026-10-30 实读，ID 逐条同值）,,未公布（清单动态变动）,live,仅限平台内
 api,MiniMax 开放平台 M3 / M2,免费试用,2026-11-07,11/7,live,注册
 api,DeepSeek Search / Fetch API,免费调用,2026-11-01,11/1 00:00 起按请求计费,pending,直接调用
 api,GMI Cloud 免费档,Qwen3.8-Max / Flash、Wan3.0 全免费,,本次再延 7 天（滚动续期）,live,GMI API Key
@@ -67,3 +67,6 @@ cloud,Google Antigravity 个人免费档,$0/month · Unlimited Tab completions �
 cloud,Google Antigravity 科研/安全 6 个月免费档,最高使用档位免费 6 个月（官方逐字 for 6 months）,,6 个月（起点是获批日）,live,"需申请；subject to eligibility, capacity, and selection"
 api,Kimi 文件相关接口限时免费,文件内容抽取 / 文件存储 两个接口本身不产生费用,,官方未给结束日,live,⚠️ 模型调用仍按量计费；文档内容作 Input 传输也计费
 api,Anthropic Claude for Teachers,免费使用高级 Claude 能力 + 教学技能库 + 循证课程对接,,官方未给结束日与额度数字,live,仅限美国 verified K-12 教师；S-1 招股书原文口径
+api,Mistral Large 4（Le Chonk）官方 demo 首周共享免费预算,每位访客一份共享免费预算（官方逐字 a small shared free budget）,,发布后第一周（官方逐字 for the first week of the release；无日历日）,live,走官方 demo Spaces；官方未给额度数字
+api,国家超算互联网 夜间限时免费调用 Auto 模型,每晚 21:00–次日 09:00 免费调用 Auto 模型,2026-10-30,10/21–10/30 每晚 21:00–次日 09:00（官方逐字）,live,须订阅 TokenPlan；官方页未核到，媒体转述
+oss,MOSS-Image 开放权重（5B 单流 DiT · Apache-2.0）,Base 与 SFT 权重 Apache-2.0 商用,,无结束日（权重永久开放）,live,Diffusers / Gradio / ComfyUI 三条路径；支持 LoRA 与全量微调

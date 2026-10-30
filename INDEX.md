@@ -3,11 +3,11 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **52 期**（2026-09-14 ~ 2026-10-29），Markdown 合计 **6534542 B ≈ 6381 KB**。
+共 **53 期**（2026-09-14 ~ 2026-10-30），Markdown 合计 **6656780 B ≈ 6501 KB**。
 
-只想看「现在有什么免费、到什么时候结束」的：**[《免费速查》](quick.html)** —— **68 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
+只想看「现在有什么免费、到什么时候结束」的：**[《免费速查》](quick.html)** —— **71 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
 
-另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**140 条**没有确切截止日的长期权益，全量原文、不逐期重印。
+另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**144 条**没有确切截止日的长期权益，全量原文、不逐期重印。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -63,11 +63,12 @@
 | **050** | 2026-10-28 | 本期头条是「一个把免费从『云端额度』搬进『浏览器本地』的 Web 标准」—— `Opera` 发布 `WebAI`（官方公告 10/27，官方逐字「**WebAI is a proposed web standard, backed by companies including Google and Microsoft**」，**early preview 已上 `Opera One` / `Opera GX` / `Opera Neon`**，**本地推理内置在浏览器里、无需另装 App、无需配置本地服务、无需 API key**，**「no per-request cloud costs, and no AI infrastructure to run」**）；同时 `OpenRouter` 公告页在连续九期停在 `October 14, 2026` 之后**首次出现新公告（10/27）**，而该条公告的内容恰恰是**收紧数据留存**——**「零数据留存（ZDR）」承诺首次写明了一个例外：CSAM 审查**；此外本期拿到了三个往期挂账项的一手答案：**`NVIDIA` 官方侧 `nemotron-3-super-120b-a12b` 的免费端点已标 `Deprecated`（049 期那 049 期记「厂商侧未核到」的挂账项，本期有答案了）**、**`文心 Unlimited OCR 2` 的官方基准分图片终于读出真实数字（`MPDocBench 84.6` / `MarathonDocBench 77.1`，官方标注「+6.1 on MPDocBench, +8.5% on MarathonDocBench」）**、**`Unsloth` GGUF 模型卡原文（049 期挂账项⑨） | 116,979 B | 10 | 221358 B | 218–222 |
 | **051** | 2026-10-29 | 本期头条是「一份写了明码标价、也写明了免费上限档的官方定价页」—— `Google Antigravity` 定价页公开三档个人方案，其中**个人档 `$0/month`**，官方逐字包含「**Access to a variety of agent models**」「**Unlimited Tab completions**」「**Unlimited Command requests**」「**Basic weekly rate limits**」；同时 `Google DeepMind` 官方模型页新增了 `Gemini 4 Carbon`（`2026 年 10 月`），并**首次出现一条针对科研与安全项目的免费额度**——官方逐字「**Academic and independent scientists can apply to get the highest usage tier in Google Antigravity free of charge for 6 months (subject to eligibility, capacity, and selection)**」，网络安全防守方另可申请 `Fairwind Program`；此外本期拿到了**四个往期挂账项的一手答案**：`Kimi K3.1 Pro` **已正式发布**（官方文档逐字「**完整模型权重将于 11 月 4 日前发布**」，3 万亿级参数 / 1M 上下文 / `Terminal-Bench 4.0` 得分 `65.7%`）、`K2` 系列 `10/31` 停新**官方确认**、`Runware` 促销表 `13 → 14` 条、以及 `OpenRouter` 目录 `464 → 457` 的**逐条归因**；还有一条**方法论级的发现**：`OpenRouter` 公告页把一条 **`Aug 19, 2026`** 的老公告置顶在「`October 29, 2026`」分组栏下 —— **列表页的日期分组栏不是条目日期 | 117,915 B | 11 | 226863 B | 223–227 |
 | **052** | 2026-10-29 | 本期头条是「一个被追问了三期的矛盾，今天有了确切答案」—— `智谱 AutoClaw` 国际站同一个页面上同时出现 `40M`、`85M`、`100 million`、`132M` 四个 Token 数，本期逐一实访四个活动页后确认：这是「四个不同活动被同一页的相关卡片混在一起看」，没有哪一个数是错的；错的是读法。同期还拿到了 `Anthropic` 向 `SEC` 提交的 `S-1` 招股书原文（`14,169,255` 字节），**官方第一次在法律文件里把「免费档」写成风险因素**（`our free trials and free tiers` 失败会影响增长、`The availability of free tiers may cannibalize potential paid subscriptions`），并逐字写出一个此前无人登记的免费项目 —— `Claude for Teachers`；`GLM-5.3-flashX-Legal` 于今天（10/29）在 `AutoClaw` 上线（官方逐字 `Harvey LAB` 全通过率 `19.2%`）；此外本期拿到了一个被记了多期的工程级发现 —— **`SEC EDGAR` 的 `403` 不是站点封锁，是 `User-Agent` 不合规，换成带联系方式的合规 UA 后立刻可读 | 97,103 B | 9 | 194363 B | 228–232 |
+| **053** | 2026-10-30 | 本期头条是「一个被记了 28 期的官方口径，今天有了确切答案」—— `Mistral` 的万亿参数模型 `Mistral Large 4`（昵称 `Le Chonk`）的**权重已正式公开**，官方 `Hugging Face` 模型卡里第一次写明了一个**带期限的免费额度**：官方逐字 `Official demos run on the Mistral API with a small shared free budget per visitor for the first week of the release, so you can try the model without paying.` —— **即「发布后第一周」内，每个访客有一份共享的免费预算**。这是本报告至今第一次从**权重发布公告本身**读到「明写期限 + 明写免费」的组合（此前只有 `Google Antigravity` 的科研 6 个月档与个人 `$0/month` 档两条）；同期还拿到了该模型的**完整许可证原文**（`Mistral Ecosystem Open-Weight License`，逐字允许商用、但 `Model as a Service` 需另签商业许可），以及发布后 `7` 小时内社区已铺开的量化生态（`Unsloth` 的 `1-bit 233 GB` 版、`mlx-community` 的 `2-bit/3-bit/4-bit` 版、`akhaliq` 的 `LeTrim-NVFP4` 版）。另外本期实访拿到了一条**国家级算力平台的夜间限时免费**（`国家超算互联网`：`10` 月 `21` 日至 `30` 日、每晚 `21:00` 至次日 `09:00` 的 `Auto` 模型免费调用 —— **截止日正好是本期基准日当天**），以及一条**本报告至今唯一一条「免费额度被官方自己写进法律文件」的后续进展**（`Anthropic` 的 `S-1` 修订件追踪到最新 `10/26` 申报、此后无新修订） | 122,238 B | 13 | 228800 B | 233–236 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：286 条（T0 173 / T1 19 / T2 18 / T3 41 / T4 35）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：198 条（由 `extract_deadlines.py` 从最新一期重建）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：287 条（T0 174 / T1 19 / T2 18 / T3 41 / T4 35）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：199 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
