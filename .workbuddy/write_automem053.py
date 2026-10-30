@@ -1,0 +1,56 @@
+import io, os
+
+WS = "C:/Users/lavie/WorkBuddy/automation-2026-09-14-00-49-15/"
+P = WS + ".workbuddy/memory/automations/256c1349-ea4a-4721-9c5d-14067699f1f1/memory.md"
+
+TEXT = """
+
+## 2026-10-30 第 053 期（隔日出刊 + Mistral Le Chonk 权重公开 + 官方模型卡首现「明写期限的免费预算」）
+
+- **状态**：成功。**窗口 = 052 期截止 10/29 15:30 → 本期截止 10/30 09:30（北京），约 18.0 小时**；美西/北京双向换算：起 北京 10/29 15:30 ＝ 美西 10/29 00:30 PT、止 北京 10/30 09:30 ＝ 美西 10/29 18:30 PT（**窗口完全落在美西同一天内**）。**本期是隔日出刊**（052 是 10/29 同日增补轮、窗口约 1.0 小时；**两期不合并**）。
+- **规模**：全量扫 **301** 个抓取件（另补抓 70 余个专项一手页）、解析出 **3,077** 条带时间戳条目、**窗口内 105 条** —— **逐条归因后只有 4 条产生免费内容条目**。
+
+### 头条
+- **⚠️ `Mistral Large 4`（`Le Chonk`）权重正式公开 —— 官方模型卡第一次写明带期限的免费额度**：一手 `huggingface.co/mistralai/Mistral-Large-4-1T-A52B`（模型页 `200`/`291,884` 字节、`README.md` `200`/`19,063`、`LICENSE` `200`/`2,632`、`commits/main` `200`/`1,452`、`tree/main` `200`/`19,439` · `67` 个文件 · `54` 个 safetensors 分片 · 单片约 `19.97 GB`）。**官方逐字（`README.md` 的 `Demo Gallery` 段）**：`Official demos run on the Mistral API with a small shared free budget per visitor for the first week of the release, so you can try the model without paying.` ⚠️ **本报告至今第一次从「权重发布公告本身」读到「明写期限 + 明写免费」的免费额度**（此前只有 `Antigravity` 科研 6 个月档与个人 `$0/month` 档两条，且都出自定价页）。**提交历史 `Initial release` 逐字 `2026-10-29T14:11:16Z` ＝ 北京 10/29 22:11，落在本期窗口内**。
+- **⚠️ 首次拿到「允许商用但把 `MaaS` 单列」的开放权重许可证全文**：`Mistral Ecosystem Open-Weight License`（`MIT` 修改版）逐字 `for both commercial and non-commercial use — operating a Model-as-a-Service business requires a separate commercial license with Mistral`；**官方对 `MaaS` 的定义逐字排除两种情形**（嵌进自己产品、转手转发别人托管的模型）。
+- **`国家超算互联网` 夜间限时免费** —— 逐字 `10月21日至30日，每晚21:00至次日09:00，Auto模型可免费调用`；**截止日 `10/30` ＝ 本期基准日当天**。⚠️ **官方页未核到**（`www.scnet.cn` `200`/`132,762` 字节但五个关键词各 `0` 命中）—— **本期首次登记该信源（T0 官方一手 · 国内，条目数 256 → 257）**。
+- **`OpenAI` 付费档用量上限翻倍 —— 但 `Plus` 档不变**（逐字 `The Plus plan stays the same.`）。
+- **三个往期挂账项销项**：`MOSS-Image` 官方一手页全文（`5B` 单流 `DiT` · **`Apache-2.0`** · `Diffusers`/`Gradio`/`ComfyUI` 三条路径）／`OpenRouter` 目录全量逐条 diff／`Anthropic` `S-1` 修订件（止于 `10/26`，**无新修订**）。
+
+### 本期纠错 4 条
+1. **052 期的表格层仍比正文层慢一拍** —— `OpenRouter` 目录三个数、`百度` `Unlimited OCR 2` 下载量在表体与总账里没跟上（本期补上并推进到 `456` / `18,141`）。
+2. **052 期把「零价 `19`」与「`:free` `16`」并列写** —— `19` 条里有 `3` 条**不带 `:free` 后缀**（`google/lyria-3-pro-preview`、`google/lyria-3-clip-preview`、`openrouter/free`）；本期用 `freellm.net/providers/openrouter` 专页交叉验证：它逐字写 `19 free models online`，其 `19` 条与官方**零价**集合逐条一致、与官方 `:free` 集合不一致。
+3. **052 期挂账项⑨「`Runware` 那 `7` 条已过期仍在数组里的条目会不会被清理」—— 本期销项，答案是「一条都没清理」**；**且「已过期条目数」从 `7` 变成 `9`** —— **多出的两条是 `endsAt` 恰为 `10/29` 的促销，基准日推进一天它们就从「截止日当天」变成「已过期」**（新立避坑 238）。
+4. **051 期记「`freellm` 五项上升是阶段性的」** —— 本期**连续第二期被推翻**（六项全部同值）。
+
+### 本期新增避坑（233–236）
+233. **权重发布类事件的官方一手源是「模型卡全文」，不是定价页、不是聚合器、不是新闻稿** —— 这条带期限的免费额度公告在官方定价页（`mistral.ai` 不可达）、在聚合器（`aihot.news` 只归成「开源模型发布」）、在 `TechCrunch` 报道里**全部没有出现**。
+234. **一个官方域名可以整体不可达，而它的分发层完全可达** —— `mistral.ai` 连续第 `13` 次不可达，但 `Hugging Face` 上的官方权重仓库与 `GitHub` 上的官方 `Mistral Vibe` 仓库均 `200`。
+235. **「有商用限制」必须拿到许可证原文才算核到** —— 此前 `Meta` `Muse Spark Open` 的 gated、`MiniMax` `M3.1 Flash` 的「三条限制」都只有转述。
+236. **同一厂商两个官方渠道的表述可能不一致，要如实并列而不是替官方选边**（模型卡说 `Mistral Vibe` powered by `ML4`，`Vibe` 自己的 README 里 `ML4` 零命中）。
+
+### 规模与对账
+- 表体 **199** 行 ＝ 052 期 198 行 ＋ 新增 **4** 行 − 移出 **3** 行（均为「过期 >7 天且已收口（⚪）」，原文逐行归档 `data/deadline_archive.md` 的「053 期」节）；`4.1` = **55** / `4.2` = **29**；**总账 144** 条；**速查页 71** 条。
+- 色标 ⚪6/🟢138/🟡21/🟠7/🔴4/⚠4/空19 = 199；classify crit4/live154/over6/pending22/switch6/unclear7 = 199；**A5 + B25 + C4 + D156 + E9 = 199** ✔。
+- ⚪ 与 over 本期个数相同（6=6）且成员逐条一致 —— 仍写「本期恰好对上」。
+- **「距今 N 天」由 `recalc_days053.py` 逐行独立重算**（14 行因基准日推进各减 1）；断言是「天数 == 截止日 − 基准日」。
+- `lint_table.py --strict` **CLEAN**；`verify_web` 三页 **ALL GREEN**；`check_views` **ALL GREEN**（极速 71 / 总账 144）；`check_site_freshness` **ALL GREEN**；`check_frozen` **🔴 0**；`build_quick --check` 全覆盖。
+
+### 本期实测的工程坑（全部已修）
+- **① 「脚本改写」必须断言它真的进了落盘文件 —— 且断言全过仍不等于事实全对（新立避坑 239）**：本期加严两条 —— **① 写出后重新读回落盘文件再逐条断言**（052 期的断言只校验内存里的结果、不校验磁盘）；**② 「表体关键口径 == 正文关键口径」9 项断言**（`456`/`18,141`/`upstage/solar-pro-3`/`Initial release`/`a small shared free budget`/`Mistral Ecosystem Open-Weight License`/`10月21日至30日`/`Apache-2.0`/`The Plus plan stays the same`）。
+- **② `recalc_days` 必须跑在 `split_ledger` 之前** —— 否则总账（由 `split_ledger` 从日报重建）里留的是旧值，出现「日报是新的、总账是旧的」两层不同步。**053 期的 `run053.sh` 已把这个顺序固化。**
+- **③ 三类会被守卫字面误读的写法（本期各踩一次，共四处）**：**① 状态列出现「未开始」/「已结束」字样**（哪怕写的是「上期它属未开始」）→ `classify()` 按字面判定 → 整行被误判；**② 截止列出现「月底」字样**（哪怕写在引述里）→ `norm_date()` 命中「月底」分支 → 解析成月底那一天；**③ 相对期限（「发布后第一周」）没有日历日 → 不该硬塞进 `4.1`**。
+- **④ `check_frozen` 的 🔴 高危本期触发 2 条，全部是措辞触发**（`腾讯云 TokenHub` 首见 003 期、`Mistral Large 4` 首见 025 期）—— 处置一律「改措辞、不放宽守卫」：**「本期新增」→「本期补入」**（`NEW_PAT` 不含「补入」）。
+
+### 发布
+- commit **`c9604bc`** → push 成功 → **远端 sha 一致**（`c9604bcad3c516aa3b9c532f06e1fafc204779b1`）→ Pages `built` → **线上五页逐字节一致**（053 期日报 `228,800` B / `index.html` `53,827` B / `quick.html` `40,422` B / `standing.html` `314,946` B / `details.html` `820,168` B）；**线上首页逐字 `更新至 第 053 期`**。
+- **未核到 / 受阻**：`mistral.ai` 全站连续第 `13` 次 `000`（含 `/news/mistral-large-4-oss/`、`console.mistral.ai`、`docs.mistral.ai`）；`platform.openai.com/docs/models` 连续第 `6` 期 `403`；`ai.google.dev`/`aistudio.google.com`/`blog.google`/`deepmind.google` 连续第 `3` 期 `000`；`platform.reflection.ai` 连续第 `15` 期 `403`；`www.scnet.cn` 官方页六个关键词零命中；`volcengine.com` 四路径 `200` 但七词零命中（连续第 `7` 期）；`next.opera.com/web-ai/` 与 `blogs.opera.com/webai/` 均 `451`（连续第 `3` 期）；`antigravity.google/models` `404`（连续第 `2` 期）；`huggingface.co` 主站 `000`（改用 `hf-mirror.com`）；`lmarena` 全站 `000`；`arxiv.org`/`hf.co/papers`/`openreview`/`neurips.cc`/`jmlr.org`/`aminer.cn` `000`；`semantic_scholar` `429`；`tbench` `404`；`scale` `403`；`zhihu`/`geekpark`/`stratechery`/`neuron`/`producthunt`/`sec_edgar`（默认 UA）`403`；`itjuzi` `412`；`gsxt` `521`；`eulex` `202`；`techdirt.com` `403`；`character.ai` 不可达。
+- **下一轮强制动作（21 条，见 053 期第四章脚注③）**：最紧的八条 —— ① `豆包工作 30 天订阅`（A 档已过 `13` 天、连续第 `7` 期零命中）② `国家超算互联网` 官方页的「夜间免费」栏 ③ `Mistral` 官方公告页原文（连续第 `13` 次 `000`）④ `Mistral` demo 免费预算的额度数字与日历日 ⑤ `AutoClaw` 国际站 `M10W4` 残留文案官方是否会改 ⑥ `AutoClaw` 国内站 `M10W5` 是否发布 ⑦ `Kimi K3.1 Pro` 权重是否在 `11/4` 前放出 ⑧ `K2` 系列 `10/31` 停新是否如期执行
+"""
+
+old = io.open(P, encoding="utf-8").read()
+assert "第 053 期（隔日出刊" not in old, "053 期记忆已存在，不重复追加"
+io.open(P, "w", encoding="utf-8", newline="\n").write(old.rstrip("\n") + "\n" + TEXT)
+new = io.open(P, encoding="utf-8").read()
+print("追加完成，原 %d 字节 → 现 %d 字节" % (len(old), len(new)))
+print("053 段落已写入:", "第 053 期（隔日出刊" in new)
