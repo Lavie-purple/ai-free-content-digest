@@ -1967,3 +1967,46 @@ README `minimax-community`）—— **043/044 两期「权重未见」判定错�
 - commit **`c9604bc`** → push 成功 → **远端 sha 一致**（`c9604bcad3c516aa3b9c532f06e1fafc204779b1`）→ Pages `built` → **线上五页逐字节一致**（053 期日报 `228,800` B / `index.html` `53,827` B / `quick.html` `40,422` B / `standing.html` `314,946` B / `details.html` `820,168` B）；**线上首页逐字 `更新至 第 053 期`**。
 - **未核到 / 受阻**：`mistral.ai` 全站连续第 `13` 次 `000`（含 `/news/mistral-large-4-oss/`、`console.mistral.ai`、`docs.mistral.ai`）；`platform.openai.com/docs/models` 连续第 `6` 期 `403`；`ai.google.dev`/`aistudio.google.com`/`blog.google`/`deepmind.google` 连续第 `3` 期 `000`；`platform.reflection.ai` 连续第 `15` 期 `403`；`www.scnet.cn` 官方页六个关键词零命中；`volcengine.com` 四路径 `200` 但七词零命中（连续第 `7` 期）；`next.opera.com/web-ai/` 与 `blogs.opera.com/webai/` 均 `451`（连续第 `3` 期）；`antigravity.google/models` `404`（连续第 `2` 期）；`huggingface.co` 主站 `000`（改用 `hf-mirror.com`）；`lmarena` 全站 `000`；`arxiv.org`/`hf.co/papers`/`openreview`/`neurips.cc`/`jmlr.org`/`aminer.cn` `000`；`semantic_scholar` `429`；`tbench` `404`；`scale` `403`；`zhihu`/`geekpark`/`stratechery`/`neuron`/`producthunt`/`sec_edgar`（默认 UA）`403`；`itjuzi` `412`；`gsxt` `521`；`eulex` `202`；`techdirt.com` `403`；`character.ai` 不可达。
 - **下一轮强制动作（21 条，见 053 期第四章脚注③）**：最紧的八条 —— ① `豆包工作 30 天订阅`（A 档已过 `13` 天、连续第 `7` 期零命中）② `国家超算互联网` 官方页的「夜间免费」栏 ③ `Mistral` 官方公告页原文（连续第 `13` 次 `000`）④ `Mistral` demo 免费预算的额度数字与日历日 ⑤ `AutoClaw` 国际站 `M10W4` 残留文案官方是否会改 ⑥ `AutoClaw` 国内站 `M10W5` 是否发布 ⑦ `Kimi K3.1 Pro` 权重是否在 `11/4` 前放出 ⑧ `K2` 系列 `10/31` 停新是否如期执行
+
+
+## 2026-10-31 第 054 期（隔日出刊 + OXR 官方免费 API 首现「免注册免 key ＋ 明写数字」）
+
+- **状态**：成功。**窗口 = 053 期截止 10/30 09:30 → 本期截止 10/31 19:00（北京），约 33.5 小时**；美西/北京双向换算：起 北京 10/30 09:30 ＝ 美西 10/29 18:30 PT、止 北京 10/31 19:00 ＝ 美西 10/31 04:00 PT（**窗口跨越两个美西日**：美西 10/29 18:30 → 10/30 24:00 ＋ 10/31 00:00 → 04:00）。**本期是隔日出刊**（**两期不合并**）。
+- **规模**：全量扫 **417** 个抓取件（另补抓 100 余个专项一手页）、解析出 **4,436** 条带时间戳条目、**窗口内 109 条** —— **逐条归因后只有 5 条产生免费内容条目**。
+
+### 头条
+- **⚠️ `OXR`（`SoMark` 团队）`1.3B` 开放权重文档解析模型 + 官方「免费 API」—— 本报告至今第一次读到「免注册、免 `API key`、且官方把免费额度写成具体数字」的免费 API**：一手 `github.com/SoMarkAI/OXR`（`README.md` `200`/`19,333` 字节、`LICENSE` `200`/`2,394`）、`huggingface.co/SoMarkAI/OXR-1.0`（`downloads 3,180`/`likes 132`/`gated false`）、**`docs.somark.ai` 的 `free-tier-rules.md`（`200`/`1,290` 字节 —— 本期最硬的一条一手证据）**、`docs.somark.ai` 的 `oxr/index.md`（`200`/`4,580`）、`docs.somark.ai/llms.txt`（`200`/`6,561`）。**官方逐字（规则表）**：`Up to 500 pages of free quota per day` ／ `Up to 2000 pages of free quota per month` ／ `Daily free quota resets at 00:00 each day` ／ `Monthly free quota resets at 00:00 on the 1st of each month`。**官方逐字（`Free API` 段）**：`OXR provides a free API so you can test parsing on your own documents without registering or requesting an API key.`、`The Free OXR API requires no authentication. Set api_key to any value, such as dummy.`。⚠️ **官方同时写了两条限制，逐字照录**：`We do not recommend using the Free OXR API in production.`、单文件 `10MB`/单请求 `20` 页。⚠️ **归期如实写**：`README.md` 的 `Free API` 段**最早见于提交 `0245ee0e`（`2026-10-19T10:11:58Z`）**（本报告实读逐 commit 的 README 内容确认）→ **落在 051 期窗口之前，本期按「首次登记的往期事件」写入**（避坑 229）。
+- **⚠️ `AutoClaw` 万圣节双周档 `M11W1` —— 国际站 `80M`、国内站 `50M`，两个官方站点给了两个数、两个起始日**：一手 `autoclaw.z.ai/blog/news/M11W1/`（`200`/`42,467`，`datePublished 2026-10-30T08:17:44Z` ＝ 北京 10/30 16:17，**窗口内**）、`autoclaw.zhipuai.cn/blog/news/M11W1/`（`200`/`47,058`，`datePublished 2026-10-30T10:07:34Z` ＝ 北京 10/30 18:07，**窗口内**）。⚠️ **三个数都不一样**：上限 `80M` vs `50M`、起始日 `10/31` vs `11/2`、积分当量 `8,000` vs `5,000`；**到期日相同（`11/8`）**。
+- **⚠️ `Moonshot` `K2` 系列 `10/31` 停新 —— 官方定价页逐字原文终于核到（被追 7 期的挂账项，本期销项）**：一手 `platform.moonshot.cn/docs/pricing/chat` 与 `platform.kimi.com/docs/pricing/chat`（各 `200`/`1,701`）。**官方逐字**：`K2 系列模型将于 2026 年 10 月 31 日起停止向新注册用户开放，已注册用户不受影响；我们计划在 12 月底下线所有 K2 系列模型。` ⚠️ **053 期记的是「四个候选文档页各命中 `0` 次」—— 本期在同一份 `kimi_pricing2.html` 上实读 `停止`/`下线`/`2026 年 10 月 31 日` 各命中 `1` 次**：即 053 期是「当期没读到那一段」、不是「官方没写」（新立避坑 243）。
+- **⚠️ `Anthropic` 订阅档改版**：`Max 5x`→`Max`、`Max 20x`→`Ultra`，一手 `claude.com/pricing`（`200`/`1,323,504`）+ `support.claude.com/en/articles/11175166-...`（`200`/`254,392`）。**官方逐字**：`No 5-hour limit ‡ 10x Pro usage every week* $200 a month in API credits, up from $100 on Max † New`、脚注 `‡ No 5-hour limit for verified accounts.`；**与免费读者相关的只有 `Free` 档 —— 官方对照表两格都写 `Limited`**。
+- **⚠️ `MiniMax` `H3` 的开源替代 `Open-H3-Regenerate-2K`**（`NVIDIA`+`MIT` 团队）—— 一手 `github.com/NVlabs/Sana` 的 **`sol-engine` 分支**（**不在 `main` 分支上 —— `commits?path=` 在默认分支返回 `0` 条、必须显式 `?sha=sol-engine`**），分支头提交 `781e8341`（`2026-10-30T07:01:24Z` ＝ 北京 10/30 15:01，**窗口内**）。官方逐字：`An open replacement for the closed H3-Regenerate-2K API`。⚠️ `HF` 实读 `downloads 0`；**权重许可是 `minimax-h3-community`、不是仓库的 `apache-2.0`**。
+
+### 本期纠错 4 条
+1. **⚠️ 053 期的「逐条零变化」口径本期被打破 —— `Runware` 促销数组里有一条的截止日被官方改了**：`heygen-video-1-0-launch-promo` 的 `endsAt` 从 `2026-10-31` 变成 `2026-11-30`、描述逐字从「`until October 31, 2026`」变成「`until November 30, 2026`」—— **官方把促销延长了 `30` 天**。**即「条数不变、过期数不变、单条内容可变」是第三种变化形态**（避坑 238 的新变体）。
+2. **⚠️ 053 期的正文结论成立、但第四章表体与《常驻权益总账》没跟上（两条）**：`OpenRouter` 目录三个数（表体仍是 `464/19/16`）、`百度` `Unlimited OCR 2` 下载量（表体被 `slim` 裁掉了 `downloads`/`likes`）。**⚠️ 这是「表体层比正文层慢一拍」的第三种形态：不是数字写错、是数字被裁掉。**
+3. **⚠️ 053 期记的「`K2` 系列 `10/31` 停新未核到」—— 本期在同一份文件上实读命中**（新立避坑 243）。
+4. **⚠️ 053 期记的「`百度` `Unlimited OCR 2` 单期涨 `9,784`」被本期的实测改写了增速口径**：本期 `18,141` → `69,231`，**单期涨 `51,090`（涨 `281%）**，比 053 期那一跳还大 `5.2` 倍。
+
+### 本期新增避坑（240–243）
+240. **同一个活动在两个官方站点上可以给两个不同的数、两个不同的起始日、两个不同的积分当量** —— `AutoClaw` `M11W1`（国际 `80M`/`10/31`/`8,000 credits` vs 国内 `50M`/`11/2`/`5,000 积分`，到期日相同）。与避坑 41 同族但更强：**041 说的是「同一家厂商的多条产品线别混」，240 说的是「同一个活动在两个官方站点上就是两个活动，连起始日都不同」**。
+241. **官方文档站如果有 `llms.txt` 索引，那份索引里的 `.md` 原文往往比网页正文更硬 —— 而且它常常是唯一给出「免费额度具体是多少」的地方** —— `docs.somark.ai/llms.txt` → `free-tier-rules.md` → 官方逐字 `500` 页/日 + `2,000` 页/月（**这些数字在 `oxr/index.md` 里一个字都没有**）。
+242. **「开放权重 + `Apache-2.0` 底子」不等于「无附加条款」** —— `OXR` 的 `LICENSE` 三条附加条款：商用免单独许可有 `$2,000,000` 双阈值、对外在线服务须显著署名、禁止做竞品托管 API。
+243. **「grep 零命中」只能证明「这次没搜到」，不能证明「官方没写」** —— 053 期搜「停新」而官方写「停止向新注册用户开放」，差一个词全盘落空。**判据：要下「官方没写」的结论，必须在同一份文件上用至少三组同义表述各搜一次。**
+
+### 规模与对账
+- 表体 **203** 行 ＝ 053 期 199 行 ＋ 本期新增 **6** 行 − 移出 **2** 行（`上海青浦算力券补贴`、`OpenAI` `o4-mini` API 停用，均为「过期 >7 天且已收口（⚪）」，原文逐行归档 `data/deadline_archive.md` 的「054 期」节）；`4.1` = **56** / `4.2` = **31**；**总账 147** 条；**速查页 71** 条。
+- 色标 ⚪4/🔴4/🟢142/🟡22/🟠7/⚠5/空19 = 203；classify crit4/live158/over4/pending23/unclear8/switch6 = 203；**A7 + B26 + C2 + D159 + E9 = 203** ✔。
+- ⚪ 与 over 本期**个数相同（4=4）且成员逐条一致** —— 写「本期恰好对上」。
+- **「距今 N 天」由 `recalc_days054.py` 逐行独立重算**（14 行全部需改写、**无一行继承值与真值相同** —— 这本身就是「基准日真的推进了」的证据）；断言是「天数 == 截止日 − 基准日」。
+- `lint_table.py --strict` **CLEAN**；`verify_web` **ALL GREEN**；`check_views` **ALL GREEN**（极速 71 / 总账 147）；`check_site_freshness` **ALL GREEN**；`check_frozen` **🔴 0**；`build_quick --check` 全覆盖。
+
+### 本期实测的工程坑（全部已修）
+- **① 「状态列里不能出现会被 `classify()` 字面误读的词」—— 本期又踩了一次，处置仍是「改措辞、不放宽守卫」**：初稿在 `国家超算互联网` 那行的尾注里写了「**不写「已结束」**」这句说明性的话，`classify()` 按字面文本判定 → **整行被误判成 `over` 桶**。**处置：把说明改成不带判定词的表述（「不写收口字样」）**。**053 期踩 `4` 次、本期踩 `1` 次**。
+- **② 「markdown 表格单元格里不能出现竖线」**：本期新增的两行分别引用了 `claude.com/pricing` 的官方对照表与 `docs.somark.ai` 的官方规则表 —— **原文都含竖线，直接逐字贴进单元格会让该行字段数从 `3` 变成 `7` 与 `11`、整张表渲染错位**。**处置：把 `|` 转写成 `／` 分隔并保留「一行四格」「一行：」的原文结构说明**（`gen_table054.py` 的字段数分布断言 `Counter({3: 205})` 就是这条纪律的守门断言）。
+- **③ 「表体层比正文层慢一拍」有第三种形态：不是数字写错，是数字被裁掉** —— `slim_table.py` 把 053 期那条 `百度` 行的 `downloads`/`likes` 裁掉了。**处置：把本期实读的流通量直接追加到该行的 tail 里**（流通量是避坑 029 的必记账项）。
+- **④ `check_frozen` 的 🔴 高危本期触发 1 条，是措辞触发**：台账里 `REA`（`Reverse Engineer Anything`）这个关键词会**在 `README.md` 里被字面命中** —— 我那行的尾注以「不写成「本期新增」」结尾，落在 `NEW_PAT` 里 → 被判「声称新增」。**处置：改成「不写成「本期首条」」**。**这是 053 期立的那条纪律的第四种触发形态：关键词子串误命中**。
+- **⑤ 台账计数改动必须按「行首标题」定位**：文件开头那段「历史沿革」长段落里**也含同名的分类名** —— 全局 `replace` 会改到历史叙述里的数字、而不是标题里的数字。**054 期第一次跑更新脚本就踩了，已改回并用行首定位重跑**。
+
+### 发布
+- **未核到 / 受阻**：`mistral.ai` 全站连续第 `14` 次 `000`；`platform.openai.com/docs/models` 连续第 `7` 期 `403`；`platform.reflection.ai` 连续第 `16` 期 `403`；`antigravity.google/models` 连续第 `3` 期 `404`；`next.opera.com/web-ai/` 连续第 `4` 期 `451`；`docs.unsloth.ai` 404（连续第 `3` 期）；`www.scnet.cn` 官方页六个关键词零命中（连续第 `2` 期）；`volcengine.com/product/doubao` 与 `/product/doubao-work` 均 `200` 但正文只有 `178` 字节 JS 壳（连续第 `8` 期）；`openrouter.ai/announcements/csam-screening` 与 `/blog/csam-screening` 均 `200` 但正文只有重定向壳；`deepmind.google/discover/blog/gemini-4-carbon/` 两种 slug 都 `404`（**但博客首页核到了条目**）。
+- **下一轮强制动作（31 条，见 054 期第四章脚注③）**：最紧的八条 —— ① `豆包工作 30 天订阅`（A 档已过 `14` 天、连续第 `8` 期零命中）② `国家超算互联网` 官方页的「夜间免费」栏（连续第 `2` 期）③ `Mistral` 官方公告页原文（连续第 `14` 次 `000`）④ `Mistral` demo 免费预算的额度数字与日历日 ⑤ `AutoClaw` 国际站 `M10W4` 残留文案官方是否会改（**本期实访仍在、连续第 `2` 期**）⑥ `K2` 系列 `10/31` 停新**当日新用户能否注册**（**官方公告原文已核到，但「如期执行」需登录态实测 —— 两件事不合并**）⑦ `Kimi K3.1 Pro` 权重是否在 `11/4` 前放出 ⑧ `OXR` 免费 API 的**超额扣费**与**单请求上限**实测
