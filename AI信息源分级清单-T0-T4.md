@@ -101,8 +101,8 @@ T0 内部分类复核（025 期）：论文与预印本 12、**模型与开源 1
 | OpenAI News | https://openai.com/news | ✅ | 定价与免费档变动 | 054 | 1494 |
 | **🆕 Vercel（AI Gateway changelog + 定价页）** | https://vercel.com/changelog · https://vercel.com/ai-gateway | — | **「渠道级限免」的一手现场**。**038 期首次命中（10/16）**——**`Reflection Beam` 在 AI Gateway 上同时给了两个 slug**：**`reflection/beam`**（免费期内 $0，**免费期结束后自动切到定价、slug 不变、无停服**）与 **`reflection/beam-free`**（现在 $0，**免费期结束即停止服务**）。⚠️ **同一模型、同一个渠道、同一天，两个 slug 的收尾方式完全相反** —— **且官方 changelog 与 Reflection 官方博客都没有给出限免的确切结束日期**（这是本期「限免无截止日」的第一个样本）；另该页明确写出 **AI Gateway 不加价、不收平台费（含 BYOK 请求）** | 054 | 205 |
 | OpenAI Research | https://openai.com/research | — | 能力边界 | 054 | 1486 |
-| Anthropic News | https://www.anthropic.com/news | ✅ | Claude 免费档、速率 | 054 | 954 |
-| Anthropic Engineering | https://www.anthropic.com/engineering | — | Agent 工程实践 | 054 | 951 |
+| Anthropic News | https://www.anthropic.com/news | ✅ | Claude 免费档、速率 | 054 | 955 |
+| Anthropic Engineering | https://www.anthropic.com/engineering | — | Agent 工程实践 | 054 | 952 |
 | Google DeepMind Blog | https://deepmind.google/discover/blog | ✅ | Gemini 系列 | 054 | 77 |
 | Google AI Blog | https://blog.google/technology/ai/ | ✅ | 产品侧免费入口（AI Studio、NotebookLM） | 054 | 1177 |
 | Google Research Blog | https://research.google/blog/ | ✅ | 论文一手 | 054 | 244 |

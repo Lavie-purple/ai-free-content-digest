@@ -16,7 +16,12 @@ MD="../AI免费内容与权益速递-第054期-2026-10-31.md"
 cd .workbuddy
 
 echo "=== 0) 恢复 053 期总账（gen_table 的输入之一）==="
-cd "$WS" && git checkout 常驻权益总账.md && cd .workbuddy
+# ⚠️ **不能用 \`git checkout 常驻权益总账.md\`** —— 054 期一旦 commit 过，HEAD 上的总账
+#    就是**054 期那一版（147 条）**、不是 053 期那一版（144 条），gen_table 的
+#    \`assert len(rows_led) == 144\` 会直接失败（054 期第一次重跑就踩了）。
+#    **必须从 053 期那一次 commit 里显式取。**
+cd "$WS" && git show c9604bc:常驻权益总账.md > 常驻权益总账.md && cd .workbuddy
+echo "  总账基线（053 期）已恢复：$(grep -c '^| ' "$WS/常驻权益总账.md") 行（含表头 2 行）"
 
 echo "=== 1) gen_table054 ==="
 python gen_table054.py | tail -3

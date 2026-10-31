@@ -380,7 +380,7 @@ NEW.append(
     "| 🟡 **`Anthropic` 订阅档改版：`Max 5x`→`Max`、`Max 20x`→**`Ultra`**"
     "（**`$200`/月 · 取消 5 小时限制 · 周额度 `10x` Pro · 月度 API credits `$100`→`$200`**）** | "
     "**未公布（官方未给任何活动期或截止日）** | "
-    "🟡 **生效中（**付费订阅附带的权益，不是免费额度**）。 "
+    "🟡 **生效中（**付费订阅附带的权益，不是免费额度** · **本期改版**）。 "
     "⚠️ 一手（`claude.com/pricing`，`200` / `1,323,504` 字节；`support.claude.com/en/articles/"
     "11175166-about-claude-pro-max-and-ultra-plans`，`200` / `254,392` 字节）官方逐字："
     "`Ultra For your longest tasks $200 Per month Try Claude Everything in Max, plus: No 5-hour limit "
@@ -483,6 +483,15 @@ CHECKS = [
 ]
 for needle, label in CHECKS:
     assert needle in disk, ("表体缺关键口径", label, needle)
+
+# ---- 断言 4b（054 期新立）：**每条 NEW 行都必须带「本期」或「054 期」标记** ----
+# ⚠️ `split_ledger.py` 靠 `CHANGE_RE = (本期|<期号> 期)` 判断「这一行本期有变化」→ 留在 4.2；
+#    **不带标记的新增行会被当成「无变化的常驻权益」移进《常驻权益总账》—— 读者在 4.2 看不到它。**
+#    本期就踩了：`Anthropic` `Ultra` 档那行没写标记 → 被移进总账 → 4.2 少一行。
+_change_re = re.compile(r"(本期|054\s*期)")
+for _n in NEW:
+    assert _change_re.search(_n), ("NEW 行缺「本期」标记，会被 split_ledger 移进总账", _n[:70])
+print("断言 4b 通过：%d 条 NEW 行均带本期标记" % len(NEW))
 
 # ---- 断言 4：本期新增的每个截止日都必须能在表体里查到（防「正文写了、表体没有」）----
 for needle in ["11/8", "11/6", "未公布", "无结束日"]:
