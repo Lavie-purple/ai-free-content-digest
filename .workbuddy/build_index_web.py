@@ -7,9 +7,10 @@
     就会返回 404 —— 页面提示原话是「For root URLs you must provide an
     index.html file」。
 
-这个脚本产出的是**索引页而非跳转页**：只把最新一期做成一张大卡片，
-其余各期排成列表。理由是读者到站点首页通常想看「最新那期」，
-但也可能想翻旧期，跳转页会把后一种需求直接丢掉。
+这个脚本产出的是**索引页而非跳转页**。2026-11-01 起首页的**默认视图是极速视图**：
+第一张精选卡是「极速视图」（一条一行、只答四个问题），完整日报（最新一期）的大卡片
+紧随其后，其余各期排成列表。理由：读者打开站点最常问的是「现在能白拿什么」，
+这是极速视图的问题；但翻旧期、读全文的需求也都在同一页上，跳转页会丢掉它们。
 
 用法：
     python .workbuddy/build_index_web.py
@@ -245,6 +246,12 @@ h1{
   margin:0 0 18px; max-width:60ch;
 }
 .lede strong{color:var(--ink); font-weight:700}
+/* 极速视图精选卡里的一句定位语（2026-11-01 起：首页默认视图 = 极速） */
+.qlede{
+  font-family:var(--fd); font-size:15.5px; line-height:1.85; color:var(--ink-2);
+  margin:0 0 18px; max-width:64ch;
+}
+.qlede strong{color:var(--ink); font-weight:700}
 .stats{
   display:flex; gap:22px; flex-wrap:wrap; font-family:var(--fm); font-size:12.5px;
   color:var(--muted); padding-top:4px;
@@ -406,12 +413,28 @@ __VS_CSS__
 </header>
 
 <section>
-  <div class="slabel">最新一期</div>
+  <div class="slabel">默认视图 · 极速</div>
+  <article class="card big">
+    <div class="tagline"><span class="dot"></span>默认视图 · 2026-11-01 起</div>
+    <div class="metaline"><b>极速视图</b><span class="sep">·</span>__QUICK_N__ 条<span class="sep">·</span>一条一行</div>
+    <h2><a href="quick.html">现在有什么免费、能拿多少、到什么时候、要什么门槛</a></h2>
+    <p class="qlede">
+      只答这四个问题，<strong>不写沿革、不写期号</strong> —— 想知道「今天能白拿什么」，从这里进。
+    </p>
+    <div class="acts">
+      <a class="btn primary" href="quick.html">打开极速视图 →</a>
+      <a class="btn" href="__LATEST_HTML__">看完整日报（第 __LATEST__ 期）→</a>
+    </div>
+  </article>
+</section>
+
+<section>
+  <div class="slabel">最新一期 · 完整日报</div>
   __BIG__
 </section>
 
 <section>
-  <div class="slabel">另外两个视图 · 同一批数据</div>
+  <div class="slabel">三个视图 · 同一批数据</div>
   __VIEWSWITCH__
   <p class="vsnote">
     <b>极速视图</b>只答四个问题 —— 给什么 / 能拿多少 / 到什么时候 / 什么门槛，不写沿革、不写期号；
@@ -473,6 +496,7 @@ __ROWS__
            .replace("__TABLES__", str(sum(i["tables"] for i in issues)))
            .replace("__SRC__", str(src_total) if src_total else "—")
            .replace("__RANGE__", issue_range)
+           .replace("__LATEST_HTML__", esc(url_of(latest["html"] or latest["md"])))
            .replace("__BIG__", big_card(latest))
            .replace("__ROWS__", "\n".join(row(i) for i in rest))
            .replace("__TODAY__", today))

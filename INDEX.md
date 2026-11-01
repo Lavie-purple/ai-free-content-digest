@@ -69,7 +69,7 @@
 
 ## 台账与结构化数据（内部，不对外展示）
 
-- **信源分级台账** `AI信息源分级清单-T0-T4.md`：293 条（T0 176 / T1 19 / T2 18 / T3 44 / T4 36）
+- **信源分级台账** `AI信息源分级清单-T0-T4.md`：296 条（T0 179 / T1 19 / T2 18 / T3 44 / T4 36）
 - **截止时间表** `.workbuddy/data/deadlines.csv`：208 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
@@ -91,7 +91,7 @@
 | `check_tables.py` | 出稿后核对：逐表列数一致性 + 避坑编号跨期连续性 |
 | `build_source_hits.py` | 信源命中统计 → 回写台账 + 导出 CSV |
 | `build_index.py` | 重建本索引（INDEX.md） |
-| `build_index_web.py` | 生成站点首页 index.html（GitHub Pages 根路径入口） |
+| `build_index_web.py` | 生成站点首页 index.html（根路径入口；2026-11-01 起默认视图=极速视图，完整日报大卡居次） |
 | `run_all.py` | 工具链统一入口：一把跑完并保证日志是 UTF-8（PowerShell 捕获会乱码） |
 
 ## 版本控制与线上地址

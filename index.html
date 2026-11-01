@@ -60,6 +60,12 @@ h1{
   margin:0 0 18px; max-width:60ch;
 }
 .lede strong{color:var(--ink); font-weight:700}
+/* 极速视图精选卡里的一句定位语（2026-11-01 起：首页默认视图 = 极速） */
+.qlede{
+  font-family:var(--fd); font-size:15.5px; line-height:1.85; color:var(--ink-2);
+  margin:0 0 18px; max-width:64ch;
+}
+.qlede strong{color:var(--ink); font-weight:700}
 .stats{
   display:flex; gap:22px; flex-wrap:wrap; font-family:var(--fm); font-size:12.5px;
   color:var(--muted); padding-top:4px;
@@ -256,7 +262,23 @@ footer .fr{
 </header>
 
 <section>
-  <div class="slabel">最新一期</div>
+  <div class="slabel">默认视图 · 极速</div>
+  <article class="card big">
+    <div class="tagline"><span class="dot"></span>默认视图 · 2026-11-01 起</div>
+    <div class="metaline"><b>极速视图</b><span class="sep">·</span>71 条<span class="sep">·</span>一条一行</div>
+    <h2><a href="quick.html">现在有什么免费、能拿多少、到什么时候、要什么门槛</a></h2>
+    <p class="qlede">
+      只答这四个问题，<strong>不写沿革、不写期号</strong> —— 想知道「今天能白拿什么」，从这里进。
+    </p>
+    <div class="acts">
+      <a class="btn primary" href="quick.html">打开极速视图 →</a>
+      <a class="btn" href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC055%E6%9C%9F-2026-11-01.html">看完整日报（第 055 期）→</a>
+    </div>
+  </article>
+</section>
+
+<section>
+  <div class="slabel">最新一期 · 完整日报</div>
   <article class="card big">
   <div class="tagline"><span class="dot"></span>最新一期</div>
   <div class="metaline"><b>第 055 期</b><span class="sep">·</span>2026-11-01<span class="sep">·</span>120,953 字<span class="sep">·</span>7 张表</div>
@@ -267,7 +289,7 @@ footer .fr{
 </section>
 
 <section>
-  <div class="slabel">另外两个视图 · 同一批数据</div>
+  <div class="slabel">三个视图 · 同一批数据</div>
   <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">71 条 · 一条一行</span></a><a class="vs-i vs-full" href="AI免费内容与权益速递-第055期-2026-11-01.html"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 055 期 · 十节</span></a><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">151 条 · 无截止日</span></a></nav>
   <p class="vsnote">
     <b>极速视图</b>只答四个问题 —— 给什么 / 能拿多少 / 到什么时候 / 什么门槛，不写沿革、不写期号；

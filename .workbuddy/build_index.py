@@ -151,7 +151,7 @@ def main():
                  ("check_tables.py", "出稿后核对：逐表列数一致性 + 避坑编号跨期连续性"),
                  ("build_source_hits.py", "信源命中统计 → 回写台账 + 导出 CSV"),
                  ("build_index.py", "重建本索引（INDEX.md）"),
-                 ("build_index_web.py", "生成站点首页 index.html（GitHub Pages 根路径入口）"),
+                 ("build_index_web.py", "生成站点首页 index.html（根路径入口；2026-11-01 起默认视图=极速视图，完整日报大卡居次）"),
                  ("run_all.py", "工具链统一入口：一把跑完并保证日志是 UTF-8（PowerShell 捕获会乱码）")]:
         L.append("| `%s` | %s |" % (s, d))
     L.append("")
