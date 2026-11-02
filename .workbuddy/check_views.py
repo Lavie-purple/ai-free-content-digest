@@ -19,6 +19,8 @@ quick 的横幅，quick 与 standing **没有任何回链**，进去就出不来
   · 「完整日报」一律指向最新一期，不许指首页、不许指上期
   · 页面上显示的条数与源文件实算一致（手写的数字过一期就是错的）
   · 三页内嵌同一段 viewswitch CSS（否则同一个组件在三个页面长相不同）
+  · **站点首页 index.html 与 quick.html 逐字节相同**（2026-11-02 起「极速视图即首页」）
+  · archive.html（往期总目录）三格都不高亮 —— 它是目录，不是三个视图之一
 
 用法：
     python .workbuddy/check_views.py
@@ -85,6 +87,33 @@ def count_ledger():
                    and not re.match(r"^\|\s*-", l.strip())) - 1, 0)
 
 
+def check_home_is_quick(ws):
+    """首页必须**就是**极速视图 —— 不是「首页第一张卡是极速视图」，是同一份字节。
+
+    2026-11-02 用户要求「以后每天运行都把极速视图作为首页」。
+    这条要求如果用「首页加一张极速卡片」来实现，等于每天都要有人记得把卡片
+    放第一位；只要哪天漏了，首页就又变回目录页，而**没有任何东西会报错**。
+    这里把它变成可计算判定：index.html 与 quick.html **逐字节相同**。
+    分叉只有两种可能 —— 有人手改了首页，或者重建时只跑了其中一个脚本。
+    """
+    ok, err = [], []
+    home = os.path.join(ws, "index.html")
+    quick = os.path.join(ws, "quick.html")
+    if not os.path.exists(home):
+        return ok, ["index.html：文件不存在 -> 跑 build_quick.py"]
+    if not os.path.exists(quick):
+        return ok, ["quick.html：文件不存在 -> 跑 build_quick.py"]
+    a = io.open(home, "rb").read()
+    b = io.open(quick, "rb").read()
+    if a != b:
+        err.append("index.html 与 quick.html 不同字节（%d B vs %d B）"
+                   "—— 首页必须就是极速视图，跑 build_quick.py 重建"
+                   % (len(a), len(b)))
+    else:
+        ok.append("index.html == quick.html（%d B，首页即极速视图）" % len(a))
+    return ok, err
+
+
 def check_page(path, expect, n_quick, n_ledger, latest):
     """返回 (ok 列表, err 列表)。expect=None 表示首页（三格都不该高亮）。"""
     ok, err = [], []
@@ -112,10 +141,10 @@ def check_page(path, expect, n_quick, n_ledger, latest):
     n_cur = len(CUR_RE.findall(nav))
     if expect is None:
         if ons or n_cur:
-            err.append("%s：首页三格都不该高亮，实际高亮了 %s"
+            err.append("%s：目录页三格都不该高亮，实际高亮了 %s"
                        % (name, ons or "aria-current"))
         else:
-            ok.append("三格均不高亮（首页正确）")
+            ok.append("三格均不高亮（目录页正确）")
     elif len(ons) != 1 or n_cur != 1:
         err.append("%s：当前格必须唯一 —— is-on %d 个、aria-current %d 个"
                    % (name, len(ons), n_cur))
@@ -187,7 +216,8 @@ def main():
     print("=" * 64)
 
     pages = [
-        ("index.html", None, "首页"),
+        ("index.html", "quick", "站点首页（= 极速视图）"),
+        ("archive.html", None, "往期总目录"),
         ("quick.html", "quick", "极速视图"),
         (latest, "full", "完整日报"),
         ("standing.html", "standing", "常驻总账"),
@@ -196,6 +226,14 @@ def main():
     errs = []
     if not latest:
         errs.append("找不到任何一期日报 html（`AI免费内容与权益速递-第NNN期-*.html`）")
+
+    ok, err = check_home_is_quick(WS)
+    print("\n[首页 = 极速视图] index.html vs quick.html")
+    for x in ok:
+        print("  OK   " + x)
+    for x in err:
+        print("  FAIL " + x)
+    errs.extend(err)
 
     for fn, expect, label in pages:
         if not fn:
@@ -215,7 +253,7 @@ def main():
         for x in errs:
             print("  · " + x)
         return 1
-    print("VERDICT: ALL GREEN（四页同构，条数与源文件一致）")
+    print("VERDICT: ALL GREEN（五页同构 · 首页 = 极速视图 · 条数与源文件一致）")
     return 0
 
 

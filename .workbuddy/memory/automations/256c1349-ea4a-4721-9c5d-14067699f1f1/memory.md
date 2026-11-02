@@ -2053,3 +2053,52 @@ README `minimax-community`）—— **043/044 两期「权重未见」判定错�
 ### 发布
 - **未核到 / 受阻**：`mistral.ai` 全站连续第 `15` 次 `000`；`platform.openai.com/docs/models` 连续第 `8` 期 `403`；`platform.reflection.ai` 连续第 `17` 期 `403`；`next.opera.com/web-ai/` 与 `blogs.opera.com/webai/` 均 `451`（连续第 `5` 期）；`antigravity.google/models` 与 `/pricing` 均 `000`；`docs.unsloth.ai/baselines/unsloth-benchmarks` `404`；`openrouter.ai/blog/how-much-does-claude-code-cost` `404`（另一篇仍是 `1,496` 字节重定向壳）；`www.scnet.cn` 官方页关键词零命中（连续第 `3` 期）；`volcengine.com/product/doubao-work` 正文 `178` 字节 `JS` 壳（连续第 `9` 期）；`techdirt.com` `403`；`ollie.ai/letter-from-the-ceo` `404`（**真身是 `/farewell`**）；`cloudy.chat`（`hnrss` 窗口内唯一「Free AI」条目）超时不可达 → **不登记**。
 - **下一轮强制动作（33 条，见 055 期第四章脚注③）**：最紧的八条 —— ① `豆包工作 30 天订阅`（A 档已过 `15` 天、连续第 `9` 期零命中）② `国家超算互联网` 官方页的「夜间免费」栏（连续第 `3` 期）③ `Mistral` 官方公告页原文（连续第 `15` 次 `000`）④ `Mistral` demo 免费预算的额度数字与日历日 ⑤ `AutoClaw` 国际站 `M10W4` 残留文案（连续第 `3` 期未改）⑥ `K2` 系列 `10/31` 停新当日新用户能否注册（需登录态实测）⑦ `Kimi K3.1 Pro` 权重是否在 `11/4` 前放出 ⑧ `Ollie` `Free` 档与关停日 `11/6` 的关系（**免费档会一并消失**）
+
+
+## 2026-11-02 第 056 期（隔日出刊 + OpenAI 一周两份官方帮助中心文档 + HF downloads 口径纠错 + 修掉冻结 7 天的天数字段）
+
+### 窗口与规模
+- 窗口 **11/1 13:30 → 11/2 16:00 北京（26.5h）**；窗口内硬条目 53 条，逐条归因后**只有 4 条产生免费内容条目**。
+- 表体 **212** 行 ＝ 055 期 208 ＋ 新增 **6** − 移出 **2**；`4.1` = **55** / `4.2` = **40**；**总账 157** 条；**速查页 72** 条（本期刷新，见下）。
+
+### 头条三条（全部一手）
+- **`OpenAI` 官方 `help.openai.com/en/articles/20001625`** 逐字 `Starting in December, Plus, Pro, and Business plans' usage allowance will be shared across ChatGPT and Codex…` —— **额度合池逐字排除 `Free`**；同周另一份 `11369540` 逐字 `Codex is included across ChatGPT plans, including Free and Go.` → **「能力」覆盖免费档、「限额」不覆盖**（新立避坑 251，判据是「这次变更动的是能力还是限额」）。
+- **`OpenAI` 官方 `20001559`** 逐字 `Device limits apply to ChatGPT Go, ChatGPT Plus, ChatGPT Pro 100/200/500… ChatGPT Free and ChatGPT Business, Enterprise, and Edu workspace plans do not count toward the limit.` —— **`Free` 豁免**；**`Go` 落在「计入」那句里、却不在豁免名单里**，两侧写法不一致 → 挂账。
+- **小米孵化 `HachimoDock`（哈基米机）** 一手仓库 `YizhengWw/HachimoDock`（`642` stars / `60` forks / `created_at 2026-06-10`），**客户端 + ESP32-P4 固件 + 硬件图纸全可下载，许可证是自有「非商业」文本** → 四层开放里「能下载」「能跑」成立、「能商用」不成立。
+
+### 三条纠错（对往期）
+- **① `Hugging Face` 的 `downloads` 是「近 30 天滚动窗口」，不是累计量**（新立避坑 249）—— 官方模型页标签逐字 `Downloads last month`，同页数据块另有独立字段 `downloadsAllTime`。**判据：跨期出现「下降」就一定是窗口值**（本期 `347` 个可比模型里 `169` 降 / `178` 升 / `0` 同值）。**往期多期当累计量写并据此写「涨 Y%」，本期全部作废**。
+- **② 055 期关于 `Runware` `heygen` 促销 `endsAt` 的结论与 055 期自己的归档矛盾**（新立避坑 250）—— 055 期写「回到 `2026-10-31`」，而 055 期归档的 `tmp_055/runware_pricing6.html` 逐字是 `endsAt: "2026-11-30"`。**七期逐期实读：`050`–`053` 全 `10-31`、`054` 起 `11-30`** → **054 期的「延长 30 天」是对的**。**处置用的是往期归档、不是重抓一遍** —— 「上期当时看到什么」只能从上期自己的归档里回答。
+- **③ 「截止列里的天数」从来没有被任何脚本重算过**（新立避坑 252，本期最重要的工程发现）—— `recalc_daysNNN.py` 自 049 期起只扫**状态列**的「距今 N 天」，而**截止列**里的「距结束 N 天」/「距开卖 N 天」自写入起**冻结 7 期**（`pruna-p-video-upscale` 仍写「距结束 11 天」真值 7；`天猫 AI 空间站` 仍写「距开卖 0 天」真值 26）。**处置：`recalc_days056.py` 扫描面扩到「截止列 + 状态列」、token 扩到 4 类，实跑核对 38 处全过**。**通用形态：守卫只覆盖它被写出来那一刻想到的写法 —— 语义换一种写法时，守卫不会失败，它只是沉默。**
+
+### 本期新增的一条对账纪律（`⚪` vs 巡检 `C` 桶）
+- **必须分开报三个数**：① `⚪` 2 vs `classify()` `over` 2 → 成员一致；② `⚪` 2 vs 巡检 `C` 0 → **差额 2**，逐条归因到「截止日不可解析」（`ZCode/BigModel` 是相对期限 `第 5 天到期`；`AutoClaw 每日登录第二期` 的日期藏在叙述句里）→ **两条都落 `D` 桶**；③ 总数 212 = 212。
+- **055 期脚注只报了 ①，本期补上 ② 才算把对账做完整** —— **把 ① 的「成员一致」当成 ② 的「差额为 0」是两套口径混用最典型的错法。**
+
+### 顺带修：极速视图数据源自 053 期起未刷新
+- `data/quick_items.csv` 最后一次更新是 053 期 commit（054/055 都没动），导致 `quick.html` 把 `11/1` 已过期的 `AutoClaw M10W4` 等仍挂在「在用」区。
+- 本期刷新四类：① `OpenRouter` `456/19/16` → `452/17/14`；② `AutoClaw` 两站 `M10W4`（11/1 过期）换 `M11W1`（11/8，`50M` / `40M`）；③ 五条过期行**移入「已结束」分组、不删行**；④ 补入 `HachimoDock`。**71 → 72 行**。
+- **⚠️ 刷新后必须重建四页**（日报 / `standing` / `details` / `index_web`）—— `viewswitch` 的「极速 N 条」是**构建时**写进 HTML 的，只重建 `quick.html` 会让 `check_views` 报 3 处不一致（本期实际踩到）。
+
+### 守卫
+`check_deadlines` A18+B17+C0+D169+E8=212 对账一致 · `verify_web` ALL GREEN（9 表 / 95 状态格）· `lint --strict` CLEAN（R1–R4 全 0）· `check_views` ALL GREEN（72/157）· `check_frozen` 🔴 0 · `check_site_freshness` ALL GREEN · 远端 `main` = `65de16b` 与本地一致。
+
+### 挂账债务
+- **`data/frozen_items.md` 最后更新停在 048 期**（`addfrozen048.py`；053–056 均未登记）—— 本期新条目未入库。**做「重复检测」前需先补 053–056 的登记脚本**。
+- `docs.somark.ai/free-tier-rules.md` 本期 `404`（055 期 `200` / `576` 字节）→ **`OXR` 免费额度口径本期未复核**，故未把 `OXR` 加进极速表（宁可少一条，不写未复核的数）。
+- **下一轮强制动作 34 条**（见 056 期第四章脚注③）；最紧五条：① `豆包工作 30 天订阅`（已过 `16` 天、连续第 `10` 期零命中）② `国家超算互联网` 官方页「夜间免费」栏（连续第 `4` 期）③ `OpenAI` 额度合并文档里「`12` 月」的具体日（官方只写 `Starting in December`）④ `OpenAI` 设备上限里 `Go` 档算哪一侧 ⑤ `Kimi K3.1 Pro` 权重是否 `11/4` 前放出。
+
+## 2026-11-02 站点改版 · 极速视图 = 首页（用户长期要求，**此后每期都要遵守**）
+
+### 结论
+- **根路径 `index.html` 就是极速视图本体**，与 `quick.html` **逐字节相同**（`build_quick.py` 一份字符串写两次）。
+- 往期总目录 = **`archive.html`**（`build_index_web.py`）；极速页页头右上「往期总目录 →」、页脚「历史各期索引」都指向它。
+- **每期出刊后跑 `bash .workbuddy/build_site.sh`** 一次重建五页 + 两个守卫（顺序：日报 → 总账 → 附录 → 极速+首页 → 目录 → 守卫）。
+
+### 守卫（已硬化，不靠记性）
+- `check_views.py`：五页同构 + **`index.html` 与 `quick.html` 字节相等** + 首页当前格必须是 `quick`；`archive.html` 三格都不高亮。
+- `check_site_freshness.py`：`archive.html` 期号/最新卡片/链到最新网页版 + **极速「本页基准日」= 最新一期日期**。
+- `build_quick.py` 出口自指检测：页面里出现 `href="index.html"` 直接 `exit 1`（首页与极速同体，点了会原地打转）。
+
+### 本期实测
+`check_views` ALL GREEN（五页）· `check_site_freshness` ALL GREEN · `verify_web` ALL GREEN（9 表 / 95 状态格）· `lint --strict` CLEAN · `probe_mobile` 320/360/375/414 四档均无横向溢出。

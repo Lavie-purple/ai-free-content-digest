@@ -39,6 +39,13 @@ header{padding:36px 0 0}
   font-family:var(--fm); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
   color:var(--accent-ink); font-weight:600;
 }
+/* 首页（= 本页）不再是总目录，往期入口缩到页头右上角一行小字：
+   不占首屏、但也不必翻到页脚才找得到。 */
+.kicker .arc{
+  float:right; letter-spacing:0; text-transform:none; font-weight:500;
+  color:var(--muted); text-decoration:none; border-bottom:1px solid var(--rule);
+}
+.kicker .arc:hover{color:var(--accent-ink); border-bottom-color:var(--accent)}
 h1{
   font-size:30px; line-height:1.2; margin:8px 0 0; letter-spacing:-.02em; font-weight:800;
 }
@@ -233,7 +240,7 @@ footer b{color:var(--muted); font-weight:600}
 <div class="wrap">
 
 <header>
-  <div class="kicker">免费速查 · Free Tier Index</div>
+  <div class="kicker">免费速查 · Free Tier Index<a class="arc" href="archive.html">往期总目录 &#8594;</a></div>
   <h1>AI 免费额度，一条一行</h1>
   <p class="lede">只回答四个问题：<b>给什么</b>、<b>能拿多少</b>、<b>到什么时候结束</b>、<b>要什么门槛</b>。不写沿革、不写期号、不写论证过程。</p>
   <hr class="rule">
@@ -368,7 +375,7 @@ footer b{color:var(--muted); font-weight:600}
   <p><b>数字会变。</b>本页基准日 <b>2026-11-02</b>，共 72 条。厂商随时可能降档、提前收口或不公布结束日；
      看到「未公布」的，按「随时会关」处理，别拿它排长期计划。</p>
   <p><b>要追证：</b>每一条的原始出处、核对时点、口径变更与避坑记录，都在完整版日报里。
-     <a href="AI免费内容与权益速递-第056期-2026-11-02.html">读本期完整日报 &#8594;</a>　<a href="index.html">历史各期索引 &#8594;</a></p>
+     <a href="AI免费内容与权益速递-第056期-2026-11-02.html">读本期完整日报 &#8594;</a>　<a href="archive.html">历史各期索引 &#8594;</a></p>
   <p class="back">AI 免费内容与权益速递 · 免费速查</p>
 </footer>
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""生成 GitHub Pages 站点首页 index.html（根路径 / 的入口页）。
+"""生成「往期总目录」页 archive.html（站点根路径的 index.html 已让给极速视图）。
 
 为什么需要它：
     GitHub Pages 访问根路径时只认 index.html / index.md。日报文件名带中文
@@ -7,10 +7,13 @@
     就会返回 404 —— 页面提示原话是「For root URLs you must provide an
     index.html file」。
 
-这个脚本产出的是**索引页而非跳转页**。2026-11-01 起首页的**默认视图是极速视图**：
-第一张精选卡是「极速视图」（一条一行、只答四个问题），完整日报（最新一期）的大卡片
-紧随其后，其余各期排成列表。理由：读者打开站点最常问的是「现在能白拿什么」，
-这是极速视图的问题；但翻旧期、读全文的需求也都在同一页上，跳转页会丢掉它们。
+**2026-11-02 起（用户要求「以后每天运行都把极速视图作为首页」）：**
+    · `index.html` = 极速视图本体，由 `build_quick.py` 与 `quick.html` 同字节写出；
+    · 本脚本产出的「总目录」改名为 `archive.html`，从极速视图页脚
+      「历史各期索引」进入。**根路径不再经过中转页** —— 打开站点第一眼
+      就是「现在有什么免费、能拿多少、到什么时候、什么门槛」。
+    · 这页仍保留三视图切换器（三格都不高亮：它不是三个视图之一，是它们的目录），
+      方便从目录直接跳极速 / 完整 / 总账。
 
 用法：
     python .workbuddy/build_index_web.py
@@ -25,7 +28,7 @@ WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import sys as _sys
 _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import viewswitch
-OUT = os.path.join(WS, "index.html")
+OUT = os.path.join(WS, "archive.html")
 DEF = "AI免费内容与权益速递-"
 
 ACCENT = "#bf3327"
@@ -146,6 +149,23 @@ def main():
         return t
 
     # ---------------------------------------------------------------- 大卡片
+    def title_of(t, maxlen=60):
+        """卡片标题取「本期定位」的**第一句**。
+
+        056 期起，日报日期行后面的定位语有时是一整段（056 期那条 190 多字：
+        「本期头条是『OpenAI 官方第一次把…』」），直接当 h2 会把整屏占满、
+        目录页的往期列表要滚很久才看得到。只截第一句，余下的读者点进正文看。
+        """
+        t = mdstrip(t)
+        if len(t) <= maxlen:
+            return t
+        cut = t[:maxlen]
+        for p in ("。", "；", "——", "，"):
+            i = cut.rfind(p)
+            if i >= 20:
+                return cut[:i] + "…"
+        return cut.rstrip("，、；：,;: ") + "…"
+
     def big_card(it):
         btns = []
         if it["html"]:
@@ -163,7 +183,7 @@ def main():
   <div class="acts">%s</div>
 </article>""" % (
             esc(it["no"]), esc(it["date"]), format(it["size"], ","), it["tables"],
-            esc(url_of(it["html"] or it["md"])), esc(mdstrip(it["theme"])), ab, "".join(btns))
+            esc(url_of(it["html"] or it["md"])), esc(title_of(it["theme"])), ab, "".join(btns))
 
     # ---------------------------------------------------------------- 小行
     def row(it):
@@ -177,7 +197,7 @@ def main():
     <span class="pit">避坑 %s</span>
     <span class="kind">%s</span>
   </a>
-</li>""" % (esc(url_of(link)), esc(it["no"]), esc(it["date"][5:]), esc(mdstrip(it["theme"])),
+</li>""" % (esc(url_of(link)), esc(it["no"]), esc(it["date"][5:]), esc(title_of(it["theme"], 46)),
             esc(it["pit"]), kind)
 
     from datetime import date
@@ -189,7 +209,7 @@ def main():
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>AI 免费内容与权益速递 · 总目录</title>
+<title>AI 免费内容与权益速递 · 往期总目录</title>
 <meta name="description" content="每天筛出 AI 免费额度、免费内容与分发入口的新变化，只做增量与纠错。已出 __CNT__ 期。">
 <meta property="og:title" content="AI 免费内容与权益速递">
 <meta property="og:description" content="每天筛出 AI 免费额度、免费内容与分发入口的新变化，只做增量与纠错。">
@@ -246,6 +266,9 @@ h1{
   margin:0 0 18px; max-width:60ch;
 }
 .lede strong{color:var(--ink); font-weight:700}
+/* 目录页里的「回首页」与「极速视图」链接：不写上划线会跟正文糊成一片 */
+.kicker a,.lede a{color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--rule-2)}
+.kicker a:hover,.lede a:hover{border-bottom-color:var(--accent)}
 /* 极速视图精选卡里的一句定位语（2026-11-01 起：首页默认视图 = 极速） */
 .qlede{
   font-family:var(--fd); font-size:15.5px; line-height:1.85; color:var(--ink-2);
@@ -395,6 +418,7 @@ __VS_CSS__
 <header class="top">
   <div class="kicker">
     <span>AI 免费内容与权益速递</span>
+    <span><a href="quick.html">&#8592; 回首页（极速视图）</a></span>
     <span>更新至 <em>第 __LATEST__ 期</em></span>
   </div>
   <!-- 「能&#8288;力」之间插的是 WORD JOINER（U+2060）：手机上标题正好在这里折行，
@@ -403,6 +427,7 @@ __VS_CSS__
   <p class="lede">
     把散落在官方公告、模型卡、平台招募页和社区帖里的<strong>免费额度、免费内容与分发入口</strong>
     逐条核实，写清口径、标好截止日期。<strong>只做增量与纠错</strong>，不重复往期已固化的内容。
+    <br><strong>本页是往期总目录</strong>；站点首页已改为 <a href="quick.html">极速视图</a>。
   </p>
   <div class="stats">
     <span><b>__CNT__</b>期</span>
@@ -413,9 +438,9 @@ __VS_CSS__
 </header>
 
 <section>
-  <div class="slabel">默认视图 · 极速</div>
+  <div class="slabel">站点首页 · 极速视图</div>
   <article class="card big">
-    <div class="tagline"><span class="dot"></span>默认视图 · 2026-11-01 起</div>
+    <div class="tagline"><span class="dot"></span>首页 · 2026-11-02 起</div>
     <div class="metaline"><b>极速视图</b><span class="sep">·</span>__QUICK_N__ 条<span class="sep">·</span>一条一行</div>
     <h2><a href="quick.html">现在有什么免费、能拿多少、到什么时候、要什么门槛</a></h2>
     <p class="qlede">
@@ -502,7 +527,7 @@ __ROWS__
            .replace("__TODAY__", today))
 
     io.open(OUT, "w", encoding="utf-8", newline="\n").write(doc)
-    print("站点首页 -> index.html  %d bytes" % os.path.getsize(OUT))
+    print("往期总目录 -> archive.html  %d bytes" % os.path.getsize(OUT))
     print("  共 %d 期（%s）· 合计 %d 字 · %d 张表 · 信源 %d 条"
           % (len(issues), issue_range, total_words,
              sum(i["tables"] for i in issues), src_total))

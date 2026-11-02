@@ -13,6 +13,12 @@
   python build_quick.py                    # 基准日取最新一期 md 的日期
   python build_quick.py --today 2026-10-27
   python build_quick.py --check            # 只体检：找出截止表里有、速查表里漏的额度类条目
+
+产物（2026-11-02 起）：
+  · quick.html —— 极速视图本体
+  · index.html —— **与 quick.html 逐字节相同**。站点根路径直接落到极速视图，
+                  不再经过「总目录」中转页；往期总目录移到 archive.html
+                  （由 build_index_web.py 生成），页脚「历史各期索引」指向它。
 """
 
 import csv
@@ -29,6 +35,12 @@ import viewswitch
 SRC = os.path.join(WS, ".workbuddy", "data", "quick_items.csv")
 DEADLINES = os.path.join(WS, ".workbuddy", "data", "deadlines.csv")
 OUT = os.path.join(WS, "quick.html")
+# 2026-11-02 起（用户要求「以后每天运行都把极速视图作为首页」）：
+# 站点根路径 `index.html` **就是极速视图本身**，与 quick.html **逐字节相同**。
+# 同一份字符串写两次，不做任何替换 —— 两份文件一旦分叉，就等于「首页」和
+# 「极速视图」两个名字指向两种内容，读者点进来看到的东西随时可能不一样。
+# 分叉由 check_views.py 用 `bytes 相等` 断言守住（不是靠记忆）。
+OUT_HOME = os.path.join(WS, "index.html")
 
 GROUPS = [
     ("token", "Token 与积分", "登录或注册就能领的额度"),
@@ -327,6 +339,13 @@ header{padding:36px 0 0}
   font-family:var(--fm); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
   color:var(--accent-ink); font-weight:600;
 }
+/* 首页（= 本页）不再是总目录，往期入口缩到页头右上角一行小字：
+   不占首屏、但也不必翻到页脚才找得到。 */
+.kicker .arc{
+  float:right; letter-spacing:0; text-transform:none; font-weight:500;
+  color:var(--muted); text-decoration:none; border-bottom:1px solid var(--rule);
+}
+.kicker .arc:hover{color:var(--accent-ink); border-bottom-color:var(--accent)}
 h1{
   font-size:30px; line-height:1.2; margin:8px 0 0; letter-spacing:-.02em; font-weight:800;
 }
@@ -486,7 +505,7 @@ ${vs_css}
 <div class="wrap">
 
 <header>
-  <div class="kicker">免费速查 · Free Tier Index</div>
+  <div class="kicker">免费速查 · Free Tier Index<a class="arc" href="archive.html">往期总目录 &#8594;</a></div>
   <h1>AI 免费额度，一条一行</h1>
   <p class="lede">只回答四个问题：<b>给什么</b>、<b>能拿多少</b>、<b>到什么时候结束</b>、<b>要什么门槛</b>。不写沿革、不写期号、不写论证过程。</p>
   <hr class="rule">
@@ -528,7 +547,7 @@ ${over}
   <p><b>数字会变。</b>本页基准日 <b>${date}</b>，共 ${n_all} 条。厂商随时可能降档、提前收口或不公布结束日；
      看到「未公布」的，按「随时会关」处理，别拿它排长期计划。</p>
   <p><b>要追证：</b>每一条的原始出处、核对时点、口径变更与避坑记录，都在完整版日报里。
-     <a href="${full_href}">读本期完整日报 &#8594;</a>　<a href="index.html">历史各期索引 &#8594;</a></p>
+     <a href="${full_href}">读本期完整日报 &#8594;</a>　<a href="archive.html">历史各期索引 &#8594;</a></p>
   <p class="back">AI 免费内容与权益速递 · 免费速查</p>
 </footer>
 
@@ -561,9 +580,17 @@ def main():
     if left:
         raise SystemExit("还有占位符没填：%s" % set(left))
 
+    # 首页自指检测：index.html 与 quick.html 是同一份内容，页面里若还有
+    # `href="index.html"`，读者点「历史各期索引」会原地打转（看起来像没反应）。
+    if 'href="index.html"' in html:
+        raise SystemExit("页面里出现自指链接 href=\"index.html\"（往期索引应为 archive.html）")
+
     io.open(OUT, "w", encoding="utf-8", newline="\n").write(html)
+    io.open(OUT_HOME, "w", encoding="utf-8", newline="\n").write(html)
     print("quick.html 已生成：%d 条 / %d B / 基准日 %s"
           % (len(rows), len(html.encode("utf-8")), BASE))
+    print("index.html 已生成（与 quick.html 同字节 = 站点首页就是极速视图）：%d B"
+          % os.path.getsize(OUT_HOME))
 
 
 if __name__ == "__main__":

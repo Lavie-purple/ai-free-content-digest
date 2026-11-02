@@ -5,7 +5,7 @@
 
 共 **56 期**（2026-09-14 ~ 2026-11-02），Markdown 合计 **7033734 B ≈ 6869 KB**。
 
-只想看「现在有什么免费、到什么时候结束」的：**[《免费速查》](quick.html)** —— **71 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
+**站点首页**就是这份速查：**[《免费速查》](index.html)**（`index.html` 与 [`quick.html`](quick.html) 同字节）—— **72 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
 
 另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**157 条**没有确切截止日的长期权益，全量原文、不逐期重印。
 
@@ -92,7 +92,8 @@
 | `check_tables.py` | 出稿后核对：逐表列数一致性 + 避坑编号跨期连续性 |
 | `build_source_hits.py` | 信源命中统计 → 回写台账 + 导出 CSV |
 | `build_index.py` | 重建本索引（INDEX.md） |
-| `build_index_web.py` | 生成站点首页 index.html（根路径入口；2026-11-01 起默认视图=极速视图，完整日报大卡居次） |
+| `build_quick.py` | 极速视图 → `quick.html` **与站点首页 `index.html`（同字节）**；一条一行只答四问 |
+| `build_index_web.py` | 往期总目录 → `archive.html`（2026-11-02 起；根路径已让给极速视图） |
 | `run_all.py` | 工具链统一入口：一把跑完并保证日志是 UTF-8（PowerShell 捕获会乱码） |
 
 ## 版本控制与线上地址
@@ -101,4 +102,4 @@
 
 站点首页（GitHub Pages）：https://lavie-purple.github.io/ai-free-content-digest/
 
-> 根路径由 `index.html` 提供入口（`build_index_web.py` 生成）。GitHub Pages 的根路径只认 `index.html` / `index.md`，而日报文件名带中文，故必须显式生成此文件，否则根路径会 404。
+> 根路径 `index.html` **就是极速视图本体**（`build_quick.py` 生成，与 `quick.html` **逐字节相同**，2026-11-02 起用户要求「以后每天运行都把极速视图作为首页」）。往期总目录在 `archive.html`（`build_index_web.py` 生成），从极速视图页脚「历史各期索引」进入。GitHub Pages 的根路径只认 `index.html` / `index.md`，而日报文件名带中文，故必须显式生成此文件，否则根路径会 404。

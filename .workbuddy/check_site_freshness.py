@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
-"""站点新鲜度守卫：确认 index.html 与 INDEX.md 都跟上了目录里最新一期日报。
+"""站点新鲜度守卫：确认 archive.html / index.html / INDEX.md 都跟上了最新一期日报。
+
+2026-11-02 起站点结构变了：**根路径 index.html 就是极速视图本体**（与 quick.html
+同字节，由 build_quick.py 生成），往期总目录搬到 archive.html（build_index_web.py）。
+所以「首页有没有跟上最新一期」现在要查三件事：
+  · archive.html 的期号、最新卡片、是否链到最新一期网页版
+  · index.html 与 quick.html 是否同字节（首页必须就是极速视图）
+  · 极速视图的「本页基准日」是否等于最新一期日期
 
 为什么需要它（2026-09-19 事故，第 008 期）
 --------------------------------------------
@@ -81,50 +88,74 @@ def main():
             ERR.append("INDEX.md 最大期号 = %s，落后于最新一期 %03d → 跑 build_index.py"
                        % ("%03d" % top if top else "无", latest))
 
-    # ---- index.html ----
-    web = os.path.join(WS, "index.html")
+    # ---- archive.html（往期总目录，2026-11-02 起原 index.html 的位置）----
+    web = os.path.join(WS, "archive.html")
     if not os.path.exists(web):
-        ERR.append("index.html 不存在 → 跑 build_index_web.py")
+        ERR.append("archive.html 不存在 → 跑 build_index_web.py")
     else:
         h = read(web)
         m = re.search(r"更新至\s*<em>第\s*(\d+)\s*期</em>", h)
         if not m:
-            ERR.append("index.html 里找不到「更新至 第 N 期」锚点（页面结构可能变了）")
+            ERR.append("archive.html 里找不到「更新至 第 N 期」锚点（页面结构可能变了）")
         elif int(m.group(1)) == latest:
-            OK.append("index.html 更新至 = %03d" % int(m.group(1)))
+            OK.append("archive.html 更新至 = %03d" % int(m.group(1)))
         else:
-            ERR.append("index.html 更新至 = %03d，落后于最新一期 %03d → 跑 build_index_web.py"
+            ERR.append("archive.html 更新至 = %03d，落后于最新一期 %03d → 跑 build_index_web.py"
                        % (int(m.group(1)), latest))
 
         m2 = re.search(r'class="metaline"><b>第\s*(\d+)\s*期</b>.*?(\d{4}-\d{2}-\d{2})', h, re.S)
         if m2:
             if int(m2.group(1)) == latest and m2.group(2) == latest_date:
-                OK.append("index.html 最新卡片 = %03d · %s" % (int(m2.group(1)), m2.group(2)))
+                OK.append("archive.html 最新卡片 = %03d · %s" % (int(m2.group(1)), m2.group(2)))
             else:
-                ERR.append("index.html 最新卡片 = %03d · %s，与最新一期不符（%03d · %s）"
+                ERR.append("archive.html 最新卡片 = %03d · %s，与最新一期不符（%03d · %s）"
                            % (int(m2.group(1)), m2.group(2), latest, latest_date))
         else:
-            ERR.append("index.html 里找不到最新一期卡片（metaline）")
+            ERR.append("archive.html 里找不到最新一期卡片（metaline）")
 
-        # 最新一期的网页版若已生成，首页必须链到它
+        # 最新一期的网页版若已生成，目录页必须链到它
         fh = os.path.join(WS, "AI免费内容与权益速递-第%03d期-%s.html" % (latest, latest_date))
         if os.path.exists(fh):
             from urllib.parse import quote
             enc = quote(os.path.basename(fh))
             if enc in h or os.path.basename(fh) in h:
-                OK.append("index.html 已链到最新一期网页版")
+                OK.append("archive.html 已链到最新一期网页版")
             else:
-                ERR.append("最新一期网页版已存在，但 index.html 没有链到它 → 跑 build_index_web.py")
+                ERR.append("最新一期网页版已存在，但 archive.html 没有链到它 → 跑 build_index_web.py")
         else:
-            WARN.append("最新一期没有网页版（%s 不存在），首页只能给 Markdown"
+            WARN.append("最新一期没有网页版（%s 不存在），目录页只能给 Markdown"
                         % os.path.basename(fh))
 
         # mtime 提示（非致命）
         try:
             if os.path.getmtime(web) < os.path.getmtime(latest_path):
-                WARN.append("index.html 的修改时间早于最新一期 md，建议确认内容确实一致")
+                WARN.append("archive.html 的修改时间早于最新一期 md，建议确认内容确实一致")
         except OSError:
             pass
+
+    # ---- index.html（2026-11-02 起 = 极速视图本体，与 quick.html 同字节）----
+    home = os.path.join(WS, "index.html")
+    quick = os.path.join(WS, "quick.html")
+    if not os.path.exists(home):
+        ERR.append("index.html 不存在 → 跑 build_quick.py")
+    elif not os.path.exists(quick):
+        ERR.append("quick.html 不存在 → 跑 build_quick.py")
+    else:
+        a = io.open(home, "rb").read()
+        b = io.open(quick, "rb").read()
+        if a != b:
+            ERR.append("index.html 与 quick.html 不同字节（%d B vs %d B）"
+                       "—— 首页必须就是极速视图 → 跑 build_quick.py" % (len(a), len(b)))
+        else:
+            OK.append("index.html == quick.html（%d B，首页即极速视图）" % len(a))
+        mq = re.search(r"本页基准日\s*<b>(\d{4}-\d{2}-\d{2})</b>", b.decode("utf-8", "replace"))
+        if not mq:
+            ERR.append("quick.html 里找不到「本页基准日」锚点（页面结构可能变了）")
+        elif mq.group(1) == latest_date:
+            OK.append("极速视图基准日 = %s" % mq.group(1))
+        else:
+            ERR.append("极速视图基准日 = %s，落后于最新一期 %s → 跑 build_quick.py"
+                       % (mq.group(1), latest_date))
 
     # ---- 输出 ----
     for s in OK:

@@ -32,16 +32,20 @@ JOBS = {
     "verify": [os.path.join(HERE, "verify_web.py")],
     "layout": [os.path.join(HERE, "probe_layout.py"), "--widths", "1440,1024"],
     "color": [os.path.join(HERE, "audit_color.py")],
+    # 2026-11-02 起：quick 必须在 index 之前 —— quick.html 变了首页 index.html 才跟着变
+    "quick": [os.path.join(HERE, "build_quick.py")],
     "index": [os.path.join(HERE, "build_index_web.py")],
     "indexmd": [os.path.join(HERE, "build_index.py")],
     "fresh": [os.path.join(HERE, "check_site_freshness.py")],
+    "views": [os.path.join(HERE, "check_views.py")],
     "indexprobe": [os.path.join(HERE, "probe_mobile.py"),
                    os.path.join(WS, "index.html"), "--out",
                    os.path.join(SHOT, "mobile_probe_index.txt")],
     "snap": [os.path.join(HERE, "snap_mobile.py")],
 }
 
-names = sys.argv[1:] or ["build", "probe", "verify", "index", "indexmd", "fresh"]
+names = sys.argv[1:] or ["quick", "build", "probe", "verify", "index", "indexmd",
+                         "fresh", "views"]
 for name in names:
     if name not in JOBS:
         print("跳过未知任务 %s" % name)
