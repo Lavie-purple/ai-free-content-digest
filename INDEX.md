@@ -3,11 +3,11 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **57 期**（2026-09-14 ~ 2026-11-03），Markdown 合计 **7139707 B ≈ 6972 KB**。
+共 **58 期**（2026-09-14 ~ 2026-11-04），Markdown 合计 **7245227 B ≈ 7075 KB**。
 
-**站点首页**就是这份速查：**[《免费速查》](index.html)**（`index.html` 与 [`quick.html`](quick.html) 同字节）—— **74 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
+**站点首页**就是这份速查：**[《免费速查》](index.html)**（`index.html` 与 [`quick.html`](quick.html) 同字节）—— **75 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
 
-另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**160 条**没有确切截止日的长期权益，全量原文、不逐期重印。
+另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**162 条**没有确切截止日的长期权益，全量原文、不逐期重印。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -68,11 +68,12 @@
 | **055** | 2026-11-01 | 本期头条是「本报告至今第一次拿到一份官方自己写明「哪些模型的水印覆盖到哪一列」的完整对照表」—— `Anthropic` 的文本水印与 `C2PA` 内容凭证**。`Anthropic` 官方支持页逐字写明：文本水印加在**模型层**，「**`Watermarking will be applied at the model level, which means it will be present no matter which Claude product or surface the text comes from.`**」——**这意味着 `Free` 档读者用 `Claude` 生成的内容同样带水印**。官方同时给出一张**逐行逐列**的对照表（`16` 个模型 × `3` 列），逐字写明每个模型「第一方产品文本水印 / 云厂商输出文本水印 / 文件 `C2PA`」三列各自是 `✅` 还是空 —— **这是本报告至今第一次拿到「免费读者能用到的模型，其生成内容带不带标记」的官方逐条口径**。**同期还拿到一条本报告至今第一次的一手证据**：官方给了一个**完全免费的 `Content Checker` 工具**（`claude.com/check-content`，`200` / `394,825` 字节），逐字 `This tool runs in your browser. Your file never leaves your device.`、单文件上限 `100 MB`、支持 `JPG, PNG, GIF, WEBP, TIFF, HEIC, AVIF, SVG, DNG, JXL, MP4, MOV, AVI, WAV, MP3, M4A, FLAC`。**另外三条硬条目**：**① `Moonshot` `Kimi K3.1 Pro` 的「访问条件」官方逐字核到了 —— 「充值最低 `10` 元才解锁，新用户送的 `15` 元代金券不可用于 K3.1 Pro」（被追了 8 期的挂账项，本期销项）② `OpenRouter` 官方目录 `Poolside` 的 `4` 个模型全部消失（其中 `2` 个是 `:free`）—— 零价档 `19 → 17`、`:free` 档 `16 → 14`，本报告至今第一次出现「免费档减少」③ `Ollie` 官方 CEO 告别信原文核到（`ollie.ai/farewell`，`200` / `39,747` 字节），逐字 `Ollie is sunsetting on Nov 6, 2026`，且**官方定价页同时给出 `Free` 档 `50` 条/月 ＋ 每天 `6` 条免费追加消息** —— 054 期记的「付费订阅制、非免费额度」这句话本期被官方原文推翻 | 120,953 B | 7 | 227578 B | 244–248 |
 | **056** | 2026-11-02 | 本期头条是「`OpenAI` 官方第一次把「`ChatGPT` 与 `Codex` 的额度将从 12 月起合并成一个 `token` 池」写成了一份独立的官方帮助中心文档 —— 并且在同一份文档里逐字写明「`Free` 档不在这次合并的范围内」」**。一手 `help.openai.com/en/articles/20001625-understanding-chatgpt-and-codex-usage-limits`（`200` / `49,809` 字节，官方 `Updated: 11 hours ago`）：`Starting in December, Plus, Pro, and Business plans' usage allowance will be shared across ChatGPT and Codex as we bring the agentic capabilities of Work into the main ChatGPT experience.`、`Your usage for ChatGPT and Codex will be measured in tokens, the units of information a model processes and generates.`、`Instant chat will not draw from your usage.`。**对免费读者最要紧的一句在同一份官方文档的另一处**：`Codex is included across ChatGPT plans, including Free and Go.`（一手 `help.openai.com/en/articles/11369540-codex-in-chatgpt`，`200` / `128,587` 字节，官方 `Updated: 8 days ago`）—— **即「`Codex` 能用」与「额度合池」是两件事，前者覆盖 `Free`、后者不覆盖**。**同期还拿到第二份官方一手文档**：`help.openai.com/en/articles/20001559-understanding-card-and-device-limits-in-chatgpt`（`200` / `71,201` 字节，官方 `Updated: 2 days ago`）逐字写明付费账号的「设备 / 支付卡上限」，**并同样逐字把 `Free` 排除在外**：`Device limits apply to ChatGPT Go, ChatGPT Plus, ChatGPT Pro 100, ChatGPT Pro 200, and ChatGPT Pro 500 plans. ChatGPT Free and ChatGPT Business, Enterprise, and Edu workspace plans do not count toward the limit.`。**另外三条硬条目**：**① 本期推翻了往期多期对 `Hugging Face` `downloads` 字段的口径 —— 它是「近 `30` 天滚动窗口」而不是累计量**（官方模型页逐字 `Downloads last month`，且另有独立字段 `downloadsAllTime`）**② `Runware` 那条 `heygen` 促销的 `endsAt` —— 055 期记的「回到 `10/31`」被本期用 055 期自己的归档文件推翻**（055 期的归档文件里写的就是 `2026-11-30`，055 期的结论与自己的证据不一致）**③ 小米孵化、已开源的 `HachimoDock`（哈基米机）—— 一手 `GitHub` 仓库 `YizhengWw/HachimoDock`，`642` stars、`60` forks、许可证为「非商业」自有许可 | 136,494 B | 9 | 248803 B | 249–251 |
 | **057** | 2026-11-03 | 本期头条是「商汤 `SenseNova 6.8 Flash` 上线，而『免费』在这件事上有三个互不相同的入口 —— 媒体写『限时免费』，官方 API 页写『限时放量』但只点名 `Lite` 版，产品站则一个字都没提这个型号」**。一手实读三处：**① API 侧** `www.sensenova.cn/token-plan`（`200` / `20,820` 字节）逐字 `公测期完全免费开放，付费档位即将上线`、`Free · 公测`、`限时放量`、`¥ 0 /月`，**免费档点名的两个模型是 `SenseNova 6.8 Flash Lite` 与 `SenseNova U1 Fast`**，逐字 `最多 20 个 API Key`；**② 产品侧** `xiaohuanxiong.com/pricing`（`200` / `147,400` 字节）逐字 `免费版`、`¥ 0`、`/永久`、`300`、`积分/日`、`每日 0 点重置 · 不累计 · 仅限标准模型`；**③ 开源侧** `github.com/OpenSenseNova/SenseNova-Skills`（`MIT`、`6009` stars、`432` forks、`pushed_at 2026-11-02T10:54:08Z`）。⚠️ **而真正点名「`6.8 Flash` 限时免费」的只有量子位 `11/2 21:36` 那一篇媒体稿**（逐字 `它现在可以是限时免费的哦`）—— **`xiaohuanxiong.com` 的定价页与 `/work` 页对 `6.8` / `Flash` / `Lite` / `限时` / `12 月` 各命中 `0` 次，`sensetime.com/cn/news` 列表里也没有 6.8 Flash 的发布条目**。**本期因此把它写成三笔账，而不是一句「限时免费」**（新立避坑 253、254）。**另外三条硬条目**：**① `OpenRouter` 官方目录全量 `452 → 451`（新增 `z-ai/glm-5.3-flashx-legal` 一条付费档、消失 `Nous` 的 `Hermes 3` 405B / 70B 两条），零价 `17` 与 `:free` `14` 逐条 ID 完全不变**；**② `freellm.net` 四个结构化计数器从 `541/306/31/459` 降到 `535/296/31/454` —— 这是本报告第一次在同一口径下读到「免费模型在线数」的净下降**；**③ `Moonshot` `Kimi K3.1 Pro` 承诺的 `11/4` 前放出权重，距截止只剩 `1` 天，`HF` 官方名下含 `K3.1` 的条目仍是 `0` 条 | 105,973 B | 10 | 211526 B | 253–255 |
+| **058** | 2026-11-04 | AI 免费内容发布 · 免费内容（生成/分发）· 免费额度 | 105,520 B | 9 | 209827 B | 256–259 |
 
 ## 台账与结构化数据（内部，不对外展示）
 
 - **信源分级台账** `AI信息源分级清单-T0-T4.md`：296 条（T0 179 / T1 19 / T2 18 / T3 44 / T4 36）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：215 条（由 `extract_deadlines.py` 从最新一期重建）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：217 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）

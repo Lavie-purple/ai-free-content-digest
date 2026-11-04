@@ -12,7 +12,8 @@ token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
 token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
 token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
 token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
-api,OpenRouter 免费档,全量 451 个模型中 17 个零价 / 14 个带 :free 后缀（2026-11-03 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期零价与 :free 逐条 diff 新增 0 消失 0
+api,OpenRouter 免费档,全量 455 个模型中 18 个零价 / 14 个带 :free 后缀（2026-11-04 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期零价 +1（stealth/crouton-alpha）、:free 14 条逐条不变
+api,OpenRouter stealth/crouton-alpha,免费隐身模型 · 100 万上下文 · $0,,未公布（官方无截止日）,live,注册即用；官方逐字 This model is free to use.；无公告
 api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
 api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
 api,OpenCode DeepSeek V4.1 Flash Free,免费，200K 上下文,,未公布,live,仅限平台内
