@@ -12,12 +12,12 @@ token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
 token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
 token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
 token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
-api,OpenRouter 免费档,全量 455 个模型中 18 个零价 / 14 个带 :free 后缀（2026-11-04 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期零价 +1（stealth/crouton-alpha）、:free 14 条逐条不变
-api,OpenRouter stealth/crouton-alpha,免费隐身模型 · 100 万上下文 · $0,,未公布（官方无截止日）,live,注册即用；官方逐字 This model is free to use.；无公告
+api,OpenRouter 免费档,全量 454 个模型中 16 个零价 / 12 个带 :free 后缀（2026-11-05 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期零价 −2（两个 inkling:free 整批下架、付费版原价不动）
+api,OpenRouter stealth/crouton-alpha,免费隐身模型 · 100 万上下文 · $0,,未公布（官方无截止日）,live,注册即用；官方逐字 This model is free to use.；无公告；OpenCode 侧另有 crouton-alpha-free（10→11）
 api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
 api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
 api,OpenCode DeepSeek V4.1 Flash Free,免费，200K 上下文,,未公布,live,仅限平台内
-api,OpenCode 免费模型清单,10 项（2026-11-03 实读，新增 pulse-alpha-free）,,未公布（清单动态变动）,live,仅限平台内
+api,OpenCode 免费模型清单,11 项（2026-11-05 实读，新增 crouton-alpha-free）,,未公布（清单动态变动）,live,仅限平台内
 api,MiniMax 开放平台 M3 / M2,免费试用,2026-11-07,11/7,live,注册
 over,DeepSeek Search / Fetch API,免费调用,2026-11-01,11/1 00:00 起按请求计费,over,直接调用
 api,GMI Cloud 免费档,Qwen3.8-Max / Flash、Wan3.0 全免费,,本次再延 7 天（滚动续期）,live,GMI API Key
@@ -44,7 +44,7 @@ api,Nous Research MISSINGNO,$0.00 / 百万 token，限时免费,,未公布,live,
 cloud,腾讯轻量云 专家限量,免费领 1 个月轻量应用服务器,2026-11-13,11/13,live,专家认证
 cloud,Talorys 自托管 agent,MIT，整套跑在 Cloudflare 免费层,,长期,live,自部署到自己的账号
 cloud,Odyssey Odyssey-3,免费公开研究预览（14B 世界模型）,,研究预览期免费；API 需申请,live,网页 demo
-cloud,Figma Code Layers,付费计划内创建与编辑代码层免费,2026-11-04,11/4,live,需付费计划账号
+cloud,Figma Code Layers,付费计划内创建与编辑代码层免费,2026-11-04,11/4 已到期（本期起转为已收口）,over,需付费计划账号
 subsidy,江苏省 词元券 / 语料券 / 模型券,词元券上限 500 万元、语料券 100 万元,2027-06-30,政策有效期至 2027-06-30,live,企业 / 高校院所 / OPC
 subsidy,四川省 算力券 / 词元券,最高补 20%、上限 100 万元（OPC 可到 40%）,,未公布,live,企业
 subsidy,辽宁省 算力券,最高补 30%、年度上限 200 万元,,未公布,live,年算力采购需达 25 万元以上
@@ -74,3 +74,4 @@ oss,MOSS-Image 开放权重（5B 单流 DiT · Apache-2.0）,Base 与 SFT 权重
 oss,小米 HachimoDock（哈基米机）,客户端 + ESP32-P4 固件 + 硬件图纸全部可下载,,未公布（开源仓库，长期）,live,能免费用、不能商用（自有「非商业」许可证，逐字 Non-Commercial）
 token,商汤 小浣熊 免费版（产品侧）,¥0 / 永久 ＋ 300 积分/日,,官方写「永久」，无活动截止日,live,注册即用；每日 0 点重置 · 不累计 · 仅限标准模型
 oss,商汤 SenseNova-Skills 开源技能库,"MIT 许可 · 6,009 stars",,开源仓库，无活动期,live,git clone 即用；办公技能集合
+oss,Moonshot Kimi K3.1 Pro 开放权重,2.8T 总参 / 104B 激活 / 1M 上下文（96 个 safetensors 分片）,,权重 2026-11-05 已公开（仓库 createdAt 11/2）,live,⚠️ 许可为自定义 kimi-k3.1-pro（license: other），商用需自读条款
