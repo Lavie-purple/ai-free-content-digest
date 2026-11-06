@@ -217,6 +217,12 @@ def render_table(rows, section_no, chips=True):
     ledger = (ncol == 3 and head[0].strip() == "活动"
               and "截止" in head[1] and "状态" in head[2])
     cls = "tbl" + (" ledger" if ledger else "") + (" c%d" % ncol)
+    # 《常驻权益总账》的「全量表」三列都是长文本（活动名 / 未公布+长说明 / 状态小作文），
+    # 日报 4.1 的 date=76px 定宽是从「2026-11-08」这种短日历日来的，套到总账会把
+    # 中文压成一字一行。给这张表单独一个类名，CSS 里按内容配比分三列宽。
+    # 判源文件名而不是表头：日报 4.1 / 4.2 / 附录同样是「活动|截止|状态」，不能一起改。
+    if ledger and os.path.basename(SRC).startswith("常驻权益总账"):
+        cls += " ledger-full"
     out = ['<div class="tblwrap%s">' % (" scrolly" if ledger else "")]
     # chips 只给本章的**第一张**截止表：同一节里第二张（4.2 本期变更）只有十几行、
     # 状态又单一，再挂一条筛选条是纯噪音，而且 id="ledgerCount" 会重复。
@@ -497,6 +503,22 @@ def build():
             )
     toc_html = "\n".join(items)
 
+    # 目录呈现：日报 / 附录照旧挂 196px 左侧栏；《常驻权益总账》只有「全量表」一节，
+    # 侧栏纯占宽度 —— 收成主区顶部一行可展开控件，表格铺满，目录条目一条不删。
+    if is_ledger:
+        rail_block = (
+            '  <details class="toc-fold" id="tocFold">'
+            '<summary>本期目录<span class="fold-hint">　点开查看</span></summary>'
+            '<nav class="toc-fold-nav">%s</nav></details>' % toc_html)
+        shell_cls, body_cls = " shell-wide", ' class="ledger-page"'
+    else:
+        rail_block = (
+            '  <div class="drawerwrap" id="drawerwrap"><aside class="rail" id="rail" aria-label="目录">\n'
+            '    <p class="rail-t">本期目录</p>\n'
+            '    <nav>%s</nav>\n'
+            '  </aside></div>' % toc_html)
+        shell_cls, body_cls = "", ""
+
     # 导航条：标题截短（去掉尾部括号里的复核口径），并把「四」标成尾段
     # —— 047 期修订后第四章物理位置在文末，编号仍是 04，不加分隔读者会以为是排序错了
     def _nav_t(t):
@@ -512,7 +534,10 @@ def build():
 
     doc = PAGE.replace("__TITLE__", esc(mast)).replace("__ISSUE__", esc(issue))
     doc = doc.replace("__DATEBLOCK__", date_block).replace("__THEME__", esc(theme_line))
-    doc = doc.replace("__NOTE__", note_html).replace("__TOC__", toc_html)
+    doc = doc.replace("__NOTE__", note_html)
+    doc = (doc.replace("__RAILBLOCK__", rail_block)
+              .replace("__SHELLCLASS__", shell_cls)
+              .replace("__BODYCLASS__", body_cls))
     if is_digest:
         html_body = _brief(issue, date_line, _headline(issue, src), html_body) + html_body
     doc = doc.replace("__NAV__", nav_html).replace("__BODY__", html_body)
@@ -756,6 +781,26 @@ __VS_CSS__
 .toc-a.active{color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft)}
 .toc-a.active .toc-n{color:var(--accent-ink)}
 
+/* 《常驻权益总账》只有一个章节（全量表），左侧 196px 目录栏纯占宽度：
+   收成主区顶部一行可展开控件，表格铺满整栏。目录条目一个不删，点开即见。 */
+.shell.shell-wide{grid-template-columns:minmax(0,1fr); gap:0}
+.toc-fold{
+  margin:0 0 var(--s4); padding:8px var(--s3);
+  border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface);
+}
+.toc-fold>summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px;
+  font-family:var(--fm); font-size:11px; letter-spacing:.12em; color:var(--muted);
+}
+.toc-fold>summary::-webkit-details-marker{display:none}
+.toc-fold>summary::before{content:"+"; font-size:15px; line-height:1; color:var(--accent-ink)}
+.toc-fold[open]>summary::before{content:"−"}
+.toc-fold-nav{display:grid; gap:2px; margin-top:8px; padding-top:8px; border-top:1px solid var(--rule)}
+.toc-fold-nav .toc-a{padding-top:6px; padding-bottom:6px}
+/* 总账页没有侧栏抽屉，窄屏的汉堡按钮点了会开一个空抽屉 */
+body.ledger-page #menuBtn{display:none !important}
+@media print{ .toc-fold{display:none !important} }
+
 main{min-width:0}
 .sec{scroll-margin-top:76px; padding-top:var(--s5)}
 .sec h2{
@@ -867,6 +912,13 @@ blockquote{margin:0}
 .ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over)}
 .ledger tbody tr[data-st="over"] td{color:var(--muted)}
 .ledger td[data-col="st"]{white-space:normal; overflow-wrap:anywhere}
+/* 《常驻权益总账》全量表专用列宽（2026-11-06 用户截图：活动列一大片空白、
+   截止列被挤成一字一行）。日报 4.1 的 date=76px 是给短日历日用的，不能套过来。
+   三列按内容量配比分宽，仍是 fixed 布局 —— 长状态句不会把整表撑爆。 */
+.tbl.ledger.ledger-full th[data-col="body"]{width:28%}
+.tbl.ledger.ledger-full th[data-col="date"]{width:32%}
+.tbl.ledger.ledger-full th[data-col="st"]{width:40%}
+.tbl.ledger.ledger-full tbody td{overflow-wrap:anywhere}
 .st{
   display:inline-block; width:9px; height:9px; border-radius:99px; margin-right:8px; vertical-align:1px;
   background:var(--rule-2);
@@ -1240,7 +1292,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 }
 </style>
 </head>
-<body>
+<body__BODYCLASS__>
 <a class="skip" href="#main">跳到正文</a>
 <div class="grain" aria-hidden="true"></div>
 <div class="progress" id="progress" aria-hidden="true"></div>
@@ -1275,11 +1327,8 @@ mark.hl.cur{background:var(--accent); color:#fff}
   __VIEWSWITCH__
 </header>
 
-<div class="shell">
-  <div class="drawerwrap" id="drawerwrap"><aside class="rail" id="rail" aria-label="目录">
-    <p class="rail-t">本期目录</p>
-    <nav>__TOC__</nav>
-  </aside></div>
+<div class="shell__SHELLCLASS__">
+__RAILBLOCK__
   <main id="main">
 __BODY__
   </main>
