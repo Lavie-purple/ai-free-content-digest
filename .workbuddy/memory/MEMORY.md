@@ -43,7 +43,11 @@
   `_toc_label()` 剥掉 `（…）`、只留 `正文之后` 小标记，正文 `h2` 与附录目录（括号里是期次日期）不动；
   ③ 模板 `__DATELINE__` **必须被替换**（日报取「扫描截止」、总账取「最后全量复核」、没有就整段删），
   页脚左边用 `__ISSUE_LINE__` 而不是写死「第 N 期」，`<title>` 刊名页名相同则去重。
-- **五页重建一条命令**：`bash .workbuddy/build_site.sh`（日报 / 总账 / 附录 / 极速+首页 / 目录 + 两个守卫）。
+- **五页重建一条命令**：`bash .workbuddy/build_site.sh`（日报 / 总账 / 附录 / 极速+首页 / 目录 + 三个守卫）。
+- **出刊收尾三件套（每期必做，`build_site.sh` 不代劳）**：① 往 `data/headlines.json` 加本期一行纯事件标题（缺行守卫直接 `exit 1`）；
+  ② `git add` 产物 → `commit` → `push`（仓库无 `.github/workflows`，**push 是触发 Pages 的唯一动作**，只构建不推 = 线上永远旧）；
+  ③ 线上核对**先看 `Age`/`X-Cache`**：`max-age=600` 窗口内命中就是纯缓存、等窗口过、**不要重推**；
+  超 15 分钟仍旧页再查 `/deployments` + `/statuses`（`failure` 且耗时≈10 分钟 = Deploy 超时，空提交重试一次）。
 
 ## 出刊约定（全文见附卷 §十·22）
 - **增量 + 纠错**，不重复往期已固化内容（先跑 `check_frozen.py`，🔴 高危 exit 1）。
