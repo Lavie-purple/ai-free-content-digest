@@ -2311,3 +2311,13 @@ README `minimax-community`）—— **043/044 两期「权重未见」判定错�
 - **未核到 / 受阻**：`Mistral` 连续第 `21` 次 `000`；`platform.reflection.ai` 连续第 `23` 期 `403`；`platform.openai.com/docs/models` 连续第 `14` 期 `403`；`next.opera.com/web-ai/` 连续第 `11` 期 `451`；`antigravity.google/models` 连续第 `9` 期 `404`；`docs.somark.ai/free-tier-rules.md` 连续第 `6` 期 `404`；`x.ai/news` 本期 `000`。
 - **`AI信息源分级清单-T0-T4.md` 本期未改动** —— 逐条核对用户随任务提供的 `T0–T4` 补充清单（T0 `97`／T1 `19`／T2 `18`／T3 `36`／T4 `12` = `182` 条原始基线）无新增项、无缺项；**版本行只记有条目增删的期次**，且 `182` 条基线与台账当前条目数不是同一口径、不可相减。**台账是内部件，不对外展示。**
 - **下一轮强制动作（`061` 期出刊前必须逐条过，共 16 条，见 060 期脚注③）**；**最紧的五条**：① `Vercel Labs fx` 归类修正（3 处 059 期「本期」重贴为期号，预期 4.2 出 `1` 条毕业）—— **本期新立、优先级最高** ② `Ollie` 关停后续：核三页是否已下线、`Free` 档是否一并停服（连续第 `3` 期无逐字答案） ③ 两个 `inkling:free` 是否回归（**别把「端点数组为空」写成「模型已下架」**） ④ `crouton-alpha` 第 `5` 天 ＋ `OpenCode` 那份是否先消失 ⑤ `ERNIE` 首次复核（`Exhibit A` 修订日／`Territory` 排除清单／两仓库 `lastModified`）。
+
+## 2026-11-06 15:5x 补推（用户发现线上仍停在 057 期后执行）
+
+- **现象**：`https://lavie-purple.github.io/ai-free-content-digest/` 首页仍是第 `057` 期 / 基准日 `2026-11-03`；线上 `058`/`059`/`060` 单页均 `404`。`Last-Modified: Tue, 03 Nov 2026 01:38:10 GMT`，与最后一次 push（`11/3 09:36:37`）吻合 —— **不是 CDN 缓存**（`max-age=600` 仅 10 分钟），是根本没推。
+- **根因**：`build_site.sh` 只重建本地五页 + 两个本地守卫，**不含 `git commit` / `git push`**；`check_site_freshness.py` 判据只比对本地 `index.html` / `INDEX.md`，**管不到远端**。仓库无 `.github/workflows`，Pages 从 `main` 根目录发布，**push 是唯一触发更新的动作**。`11/3 09:36` 之后这一步断了：`058`/`059` 有 commit 未推，`060` 连 commit 都缺（`24` 个文件处于已修改/未跟踪）。工程附卷 §九 第 51 行记过同类坑（全绿但线上旧），本次是「根本没推」变体；`020`/`021` 期亦发生过「已生成但从未推送」。
+- **动作**：`git add -A`（`24` 文件）→ commit **`58c9dd6`** → `git push origin main`：**`411be50..58c9dd6` 一次成功**。`GIT_TERMINAL_PROMPT=0 /usr/bin/timeout 90 git push` 直接可用，本机 `credential.helper=manager`（**不再是旧的 `helper-selector`**），**没走到 GCM 取令牌 + 内联助手那套**。
+- **核对**：`git ls-remote` 与 GitHub API `commits/main` 的 sha 均 = `58c9dd67f6e319de7f79d058471a19b328b58219`；`pages/builds/latest` 返回 **404**（附卷记过的间歇性 404）→ 按纪律改走「抓线上页与本地逐字节比对」；轮询第 `3` 次（约 `16s`）首页与本地 `index.html` 一致，新 `Last-Modified: Fri, 06 Nov 2026 07:54:49 GMT`，首页显示「第 060 期 / 本页基准日 2026-11-06」。
+- **全页逐字节 ALL GREEN**：`index.html` = `quick.html` `43,013` · `archive.html` `42,051` · `standing.html` `341,795` · `details.html` `2,226,039` · `058` `209,827` / `059` `220,520` / `060` `226,095` B。
+- **⚠️ 传输截断复发一次**：`details.html` 首轮 `40s` 超时只落 `1,015,808` B，一度被读成「线上页面变小」；改 `120s` + `Accept-Encoding: identity` 重抓得完整 `2,226,039` B，`</html>` 收尾、共同前缀 = 全长、逐字节相等。**大页核对必须先校验落盘完整性**（避坑 059 期「传输截断会伪造页面变小」）。
+- **⚠️ `061` 期出刊后必须手动补 `commit + push + 线上核对`** —— 本次用户**未授权改脚本**，`build_site.sh` 与两个守卫**保持原样**、没有加远端新鲜度检查，这一步仍靠人记。
