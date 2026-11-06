@@ -50,7 +50,9 @@ h1{
   font-size:30px; line-height:1.2; margin:8px 0 0; letter-spacing:-.02em; font-weight:800;
 }
 .lede{
-  margin:10px 0 0; color:var(--ink-2); font-size:15px; max-width:56ch;
+  /* 2026-11-06：原来 max-width:56ch 把导语挤成左侧一窄条，
+     右边空一大块，与下面的表格不同宽 —— 去掉限制，与正文同宽。 */
+  margin:10px 0 0; color:var(--ink-2); font-size:15px;
 }
 .lede b{color:var(--ink); font-weight:700}
 hr.rule{border:0; border-top:2px solid var(--ink); margin:22px 0 0}
@@ -81,14 +83,11 @@ hr.rule{border:0; border-top:2px solid var(--ink); margin:22px 0 0}
 .pulse-rest b.hot{color:var(--soon)}
 .pulse-rest b.done{color:var(--over)}
 
-/* ---------- 边界说明 ---------- */
-.boundary{
-  margin:18px 0 0; padding:11px 14px; background:var(--surface-2);
-  border-left:2px solid var(--rule-2); font-size:13px; color:var(--muted); line-height:1.7;
-}
-.boundary b{color:var(--ink-2); font-weight:600}
+/* 2026-11-06：首屏原有一块「本页不收什么」的口径说明（带背景与左边框），
+   用户明确说「这段其实不用显示给用户看」—— 从首屏移除，内容不删，
+   整合进页脚「要追证」一段；这里不再保留 .boundary 样式。 */
 .legend{
-  margin:10px 0 0; font-size:12.5px; color:var(--faint); line-height:1.75;
+  margin:20px 0 0; font-size:12.5px; color:var(--faint); line-height:1.75;
 }
 .legend b{color:var(--muted); font-weight:600}
 
@@ -267,12 +266,6 @@ footer b{color:var(--muted); font-weight:600}
   <span class="pulse-rest">其中 <b class="hot">5</b> 条 7 天内截止，<b class="done">12</b> 条已结束</span>
 </p>
 
-<div class="boundary">
-  <b>本页不收什么：</b>模型发布、开源公告、申报通知、停服迁移这类「新闻」不在本页 —— 它们不是「我现在能领什么」。
-  需要看这些，或者要查某条的依据、口径、历史变更，去<a href="AI免费内容与权益速递-第060期-2026-11-06.html">完整版日报</a>。
-  每一条的原文与核对时点都留在那里，本页只做「能不能白拿」的判断。
-</div>
-
 <p class="legend">
   <b>右列怎么读：</b>写<b>具体日期</b>的是限时活动，过期就没了；写<b>「长期 / 每日重置 / 按月」</b>的是常驻，
   额度可能调整、但不会到期；写<b>「领后 N 天」</b>的是领到手才开始算 —— 早领早用，放着不算数。
@@ -392,7 +385,8 @@ footer b{color:var(--muted); font-weight:600}
      同一家的两笔额度分开列（例如 AutoClaw 的周福利与升级礼），不能相加 —— 计量单位或领取条件不同的额度互换没有意义。</p>
   <p><b>数字会变。</b>本页基准日 <b>2026-11-06</b>，共 76 条。厂商随时可能降档、提前收口或不公布结束日；
      看到「未公布」的，按「随时会关」处理，别拿它排长期计划。</p>
-  <p><b>要追证：</b>每一条的原始出处、核对时点、口径变更与避坑记录，都在完整版日报里。
+  <p><b>要追证：</b>本页只收「我现在能领什么」—— 模型发布、开源公告、申报通知、停服迁移这类新闻不在此列。
+     每一条的原文、原始出处、核对时点、口径与历史变更、避坑记录都在完整版日报里，本页只做「能不能白拿」的判断。
      <a href="AI免费内容与权益速递-第060期-2026-11-06.html">读本期完整日报 &#8594;</a>　<a href="archive.html">历史各期索引 &#8594;</a></p>
   <p class="back">AI 免费内容与权益速递 · 免费速查</p>
 </footer>
