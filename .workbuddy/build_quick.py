@@ -355,17 +355,31 @@ h1{
 .lede b{color:var(--ink); font-weight:700}
 hr.rule{border:0; border-top:2px solid var(--ink); margin:22px 0 0}
 
-/* ---------- 数字条 ---------- */
-.stats{
-  display:flex; gap:0; margin:0 0 4px; border-bottom:1px solid var(--rule);
+/* ---------- 概览句 ----------
+   2026-11-06 改版：旧版是三等分数字格，每个数字独占一格、上下有横线、
+   格间有竖线，看起来像被框住的 KPI 面板（用户：「不要这样框法」）。
+   改成一行摘要句：主读数在前、两条附注随后，数字跟着文字走；
+   不画任何框线、不加底色，与 archive.html 的统计行同族（内联数字），
+   但用字号分出主次，三个数字仍各自保留状态色。 */
+.pulse{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 0;
+  margin:20px 0 0; padding:0; line-height:1.6;
 }
-.stat{flex:1; padding:16px 0 14px; border-right:1px solid var(--rule)}
-.stat:last-child{border-right:0}
-.stat b{
-  display:block; font-family:var(--fm); font-size:28px; line-height:1; font-weight:700;
+.pulse-lead{
+  font-size:14px; font-weight:600; color:var(--ink-2); white-space:nowrap;
 }
-.stat.live b{color:var(--live)} .stat.soon b{color:var(--soon)} .stat.over b{color:var(--over)}
-.stat span{display:block; margin-top:5px; font-size:12.5px; color:var(--muted)}
+.pulse-lead b{
+  font-family:var(--fm); font-size:29px; line-height:1; font-weight:700;
+  color:var(--live); margin-right:5px; vertical-align:-2px;
+  font-variant-numeric:tabular-nums;
+}
+.pulse-rest{font-size:13px; color:var(--muted)}
+.pulse-rest b{
+  font-family:var(--fm); font-size:15px; font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.pulse-rest b.hot{color:var(--soon)}
+.pulse-rest b.done{color:var(--over)}
 
 /* ---------- 边界说明 ---------- */
 .boundary{
@@ -465,7 +479,8 @@ footer b{color:var(--muted); font-weight:600}
   body{font-size:14px}
   h1{font-size:24px}
   .wrap{padding:0 15px 56px}
-  .stat b{font-size:23px}
+  .pulse-lead b{font-size:25px}
+  .pulse-rest{font-size:12.5px}
   /* 窄屏不再挤三列：一行一条，名称与短日期同行、额度单独一行 */
   table.qt{display:block}
   table.qt thead{display:none}
@@ -512,11 +527,10 @@ ${vs_css}
   ${viewswitch}
 </header>
 
-<div class="stats">
-  <div class="stat live"><b>${n_live}</b><span>现在能拿</span></div>
-  <div class="stat soon"><b>${n_week}</b><span>其中 7 天内截止</span></div>
-  <div class="stat over"><b>${n_over}</b><span>已结束</span></div>
-</div>
+<p class="pulse">
+  <span class="pulse-lead"><b>${n_live}</b> 条现在能拿，</span>
+  <span class="pulse-rest">其中 <b class="hot">${n_week}</b> 条 7 天内截止，<b class="done">${n_over}</b> 条已结束</span>
+</p>
 
 <div class="boundary">
   <b>本页不收什么：</b>模型发布、开源公告、申报通知、停服迁移这类「新闻」不在本页 —— 它们不是「我现在能领什么」。
