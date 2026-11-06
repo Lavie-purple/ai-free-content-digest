@@ -479,6 +479,9 @@ def build():
     is_ledger = os.path.basename(SRC).startswith("常驻权益总账")
     if is_ledger:
         issue_line, issue_badge, mh_num = "常驻权益总账", "总账", ""
+    elif os.path.basename(SRC).startswith("第四章表体明细附录"):
+        # 附录逐期累积，不属于任何一期；写「第 001 期」会让读者以为翻到了创刊号
+        issue_line, issue_badge, mh_num = "第四章表体明细附录", "附录", ""
     else:
         issue_line, issue_badge, mh_num = "第 %s 期" % issue, issue, issue
     mast = title.split("·")[0].strip() if "·" in title else title
@@ -492,6 +495,16 @@ def build():
     else:
         date_block = "<em>增量与纠错口径</em>"
     theme_line = re.sub(r"\*\*", "", metas[1]) if len(metas) > 1 else ""
+
+    # 页脚右上的日期戳：模板里的 __DATELINE__ 一直没有被替换，读者看到的是字面量
+    # （用户 2026-11-07 截图里它就挂在页脚右下）。取值只从源 md 抄已核实的时点，
+    # 不在构建时打「当前时间」—— 那样每重建一次字节都会变，破坏幂等。
+    m_dl = re.search(r"扫描截止\s*\**\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})", src)
+    if m_dl:
+        dateline = "扫描截止 %s %s（GMT+8）" % (m_dl.group(1), m_dl.group(2))
+    else:
+        m_dl = re.search(r"最后全量复核\**：\s*(\d{4}-\d{2}-\d{2})", src)
+        dateline = ("最后全量复核 " + m_dl.group(1)) if m_dl else ""
 
     # 目录显示顺序（2026-11-07 用户选定方案 A）：
     # 正文物理顺序、章节编号、折叠分组一律不动，只重排「目录 / 顶栏」的呈现次序 ——
@@ -513,13 +526,26 @@ def build():
         toc_view = sorted(toc_view, key=_toc_rank)
     groups = TOC_GROUPS if is_digest else {}
 
+    # 目录行只留章节名：标题尾部那串括号是写给人看的口径注解（复核时点、补入条数、
+    # 「正文之后」等），正文 h2 里原样保留。用户 2026-11-07 反馈「括号内的内容太长了」
+    # —— 04 那条在 196px 侧栏里被折成三行。唯一影响点击预期的是「正文之后」（点它
+    # 会跳到文末），留成一个弱化小标记，不占括号。
+    # 只对日报生效：附录的小节标题是「第 049 期（2026-10-27）」，括号里是日期，
+    # 剥掉等于把期次弄丢。
+    def _toc_label(t):
+        hint = "正文之后" if re.search(r"（[^）]*正文之后[^）]*）\s*$", t) else ""
+        return esc(re.sub(r"（[^）]*）\s*$", "", t)), hint
+
     items = []
     for aid, no, t, is_h3, sub in toc_view:
         if aid in groups:
             items.append('<p class="toc-g">%s</p>' % groups[aid])
+        label, hint = _toc_label(t) if is_digest else (esc(t), "")
         items.append(
-            '<a class="toc-a" href="#%s"><span class="toc-n">%s</span>%s</a>'
-            % (aid, no if no != "00" else "\u00b7\u00b7", esc(t))
+            '<a class="toc-a" href="#%s"><span class="toc-n">%s</span>'
+            '<span class="toc-t">%s%s</span></a>'
+            % (aid, no if no != "00" else "\u00b7\u00b7", label,
+               ('<span class="toc-hint">%s</span>' % hint) if hint else "")
         )
     toc_html = "\n".join(items)
 
@@ -564,6 +590,9 @@ def build():
         html_body = _brief(issue, date_line, _headline(issue, src), html_body) + html_body
     doc = doc.replace("__NAV__", nav_html).replace("__BODY__", html_body)
     doc = doc.replace("__METAS__", esc(" \u00b7 ".join(re.sub(r"\*\*", "", x) for x in metas)))
+    # 没抓到复核时点就整段去掉，不把占位符留在页面上
+    doc = doc.replace("<span>__DATELINE__</span>",
+                      ("<span>%s</span>" % esc(dateline)) if dateline else "")
 
     # 三档视图切换器（极速 / 完整 / 总账）：三页同一位置、同一外观，当前页高亮。
     # 条数都从文件实算，不手写 —— 手写的数字过一期就是错的。
@@ -588,6 +617,11 @@ def build():
         issue_no=None if is_ledger else issue,
         n_quick=n_quick, n_ledger=n_ledger, ws=WS))
     doc = doc.replace("__ISSUE_LINE__", esc(issue_line))
+    # 总账 / 附录的刊名就是页名，模板拼「刊名 · 页名」会写出
+    # 「常驻权益总账 · 常驻权益总账」这种重复标题
+    if issue_line == mast:
+        doc = doc.replace("<title>%s · %s</title>" % (esc(mast), esc(issue_line)),
+                          "<title>%s</title>" % esc(mast))
     doc = doc.replace("__ISSUE_BADGE__", esc(issue_badge))
     doc = doc.replace("__MH_NUM__", esc(mh_num))
 
@@ -799,6 +833,12 @@ __VS_CSS__
   background-image:none; line-height:1.45;
 }
 .toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+/* 「正文之后」标记：只说明点它跳到文末，不用括号、不加底色（2026-11-07）。
+   单独占一行 —— 196px 侧栏里跟在章节名后面会把标题挤到折行。 */
+.toc-hint{
+  display:block; margin-top:1px; font-family:var(--fm); font-size:9.5px;
+  letter-spacing:.06em; color:var(--faint); opacity:.8;
+}
 /* 目录分组标签：一条细线 + 小字，不加框（2026-11-07 方案 A） */
 .toc-g{
   font-family:var(--fm); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
@@ -812,6 +852,10 @@ __VS_CSS__
 /* 《常驻权益总账》只有一个章节（全量表），左侧 196px 目录栏纯占宽度：
    收成主区顶部一行可展开控件，表格铺满整栏。目录条目一个不删，点开即见。 */
 .shell.shell-wide{grid-template-columns:minmax(0,1fr); gap:0}
+/* 总账页最后就是这张表，表格外框底 = 内容结束。再照别的页留 96px 页脚上边距，
+   深色底上会读成「表格下面塌了一块空白」（用户 2026-11-07 截图框出的那块）。
+   只收这一页，其它页仍是 var(--s7)。 */
+body.ledger-page .shell{padding-bottom:var(--s5)}
 .toc-fold{
   margin:0 0 var(--s4); padding:8px var(--s3);
   border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface);
@@ -1368,7 +1412,7 @@ __BODY__
 </div>
 
 <footer class="foot">
-  <div class="fr"><span>AI 免费内容与权益速递 · 第 __ISSUE__ 期</span><span>__DATELINE__</span></div>
+  <div class="fr"><span>AI 免费内容与权益速递 · __ISSUE_LINE__</span><span>__DATELINE__</span></div>
   <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
   <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
 </footer>

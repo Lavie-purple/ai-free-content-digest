@@ -38,6 +38,11 @@
 - **完整日报的目录与顶栏顺序 = 方案 A**（2026-11-07 用户选定）：显示序 `摘要 → 01 → 02 → 03 → 04 → 07 → 05 → 06 → 08 → 09`，四组标签「本期内容 / 马上要办 / 怎么用 / 审计层 · 默认折叠」（`TOC_ORDER` / `TOC_GROUPS`）；**正文物理顺序与章节编号一律不动**，点 04 会跳到文末（`openFold` 自动展开）。排序与分组**只许对 `is_digest` 生效** —— 附录 12 个小节的 aid 全是 `s-abs`，套上去会插 12 个「本期内容」标签。
 - **可滚动表格里的 sticky 表头不许有 `overflow:hidden`**（2026-11-07 修）：`.tbl` 上的 `overflow:hidden` 会新建滚动容器、废掉 `th{position:sticky}`，表头滚上去被筛选条压掉半行；解药是 `.tblwrap.scrolly .tbl{overflow:visible}`（**只加 `border-collapse:separate` 无效**，实测过）。改任何表格容器样式后量 `chips.bottom − th.top`，必须 = 0。
 - **Pages 部署失败先查 `deployments` API，别猜缓存**（2026-11-07）：`pages/builds` 常 404，但 `/repos/<o>/<r>/deployments` + `/deployments/<id>/statuses` 能读到 sha 与 state；`state=failure` 且耗时≈10 分钟 = **Deploy 步骤超时**（服务端偶发），处置是 `git commit --allow-empty` 空提交重试一次，**不要改内容、不要 force push**。只有 `Age` 接近 600 且 `Last-Modified` 已刷新才是纯 CDN 缓存。
+- **版面三件套（2026-11-07 用户两张截图）**：① 总账页底部不许留 `96px` 页脚上边距 ——
+  `body.ledger-page .shell{padding-bottom:var(--s5)}`（40px），其它页照旧；② 日报目录行**不显示标题尾括号**，
+  `_toc_label()` 剥掉 `（…）`、只留 `正文之后` 小标记，正文 `h2` 与附录目录（括号里是期次日期）不动；
+  ③ 模板 `__DATELINE__` **必须被替换**（日报取「扫描截止」、总账取「最后全量复核」、没有就整段删），
+  页脚左边用 `__ISSUE_LINE__` 而不是写死「第 N 期」，`<title>` 刊名页名相同则去重。
 - **五页重建一条命令**：`bash .workbuddy/build_site.sh`（日报 / 总账 / 附录 / 极速+首页 / 目录 + 两个守卫）。
 
 ## 出刊约定（全文见附卷 §十·22）

@@ -233,6 +233,12 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
   background-image:none; line-height:1.45;
 }
 .toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+/* 「正文之后」标记：只说明点它跳到文末，不用括号、不加底色（2026-11-07）。
+   单独占一行 —— 196px 侧栏里跟在章节名后面会把标题挤到折行。 */
+.toc-hint{
+  display:block; margin-top:1px; font-family:var(--fm); font-size:9.5px;
+  letter-spacing:.06em; color:var(--faint); opacity:.8;
+}
 /* 目录分组标签：一条细线 + 小字，不加框（2026-11-07 方案 A） */
 .toc-g{
   font-family:var(--fm); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
@@ -246,6 +252,10 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
 /* 《常驻权益总账》只有一个章节（全量表），左侧 196px 目录栏纯占宽度：
    收成主区顶部一行可展开控件，表格铺满整栏。目录条目一个不删，点开即见。 */
 .shell.shell-wide{grid-template-columns:minmax(0,1fr); gap:0}
+/* 总账页最后就是这张表，表格外框底 = 内容结束。再照别的页留 96px 页脚上边距，
+   深色底上会读成「表格下面塌了一块空白」（用户 2026-11-07 截图框出的那块）。
+   只收这一页，其它页仍是 var(--s7)。 */
+body.ledger-page .shell{padding-bottom:var(--s5)}
 .toc-fold{
   margin:0 0 var(--s4); padding:8px var(--s3);
   border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface);
@@ -801,19 +811,19 @@ mark.hl.cur{background:var(--accent); color:#fff}
   <div class="drawerwrap" id="drawerwrap"><aside class="rail" id="rail" aria-label="目录">
     <p class="rail-t">本期目录</p>
     <nav><p class="toc-g">本期内容</p>
-<a class="toc-a" href="#s-abs"><span class="toc-n">··</span>摘要</a>
-<a class="toc-a" href="#s01"><span class="toc-n">01</span>AI 免费内容发布</a>
-<a class="toc-a" href="#s02"><span class="toc-n">02</span>免费内容生成工具</a>
-<a class="toc-a" href="#s03"><span class="toc-n">03</span>常驻免费额度与 API</a>
+<a class="toc-a" href="#s-abs"><span class="toc-n">··</span><span class="toc-t">摘要</span></a>
+<a class="toc-a" href="#s01"><span class="toc-n">01</span><span class="toc-t">AI 免费内容发布</span></a>
+<a class="toc-a" href="#s02"><span class="toc-n">02</span><span class="toc-t">免费内容生成工具</span></a>
+<a class="toc-a" href="#s03"><span class="toc-n">03</span><span class="toc-t">常驻免费额度与 API</span></a>
 <p class="toc-g">马上要办</p>
-<a class="toc-a" href="#s04"><span class="toc-n">04</span>限时活动与截止时间表（正文之后 · 11/6 13:46 复核 · 过期 &gt;7 天已归档）</a>
+<a class="toc-a" href="#s04"><span class="toc-n">04</span><span class="toc-t">限时活动与截止时间表<span class="toc-hint">正文之后</span></span></a>
 <p class="toc-g">怎么用</p>
-<a class="toc-a" href="#s07"><span class="toc-n">07</span>按任务选型速查</a>
+<a class="toc-a" href="#s07"><span class="toc-n">07</span><span class="toc-t">按任务选型速查</span></a>
 <p class="toc-g">审计层 · 默认折叠</p>
-<a class="toc-a" href="#s05"><span class="toc-n">05</span>本期纠错清单</a>
-<a class="toc-a" href="#s06"><span class="toc-n">06</span>避坑提示</a>
-<a class="toc-a" href="#s08"><span class="toc-n">08</span>本期信源体系更新</a>
-<a class="toc-a" href="#s09"><span class="toc-n">09</span>来源与核查说明</a></nav>
+<a class="toc-a" href="#s05"><span class="toc-n">05</span><span class="toc-t">本期纠错清单</span></a>
+<a class="toc-a" href="#s06"><span class="toc-n">06</span><span class="toc-t">避坑提示</span></a>
+<a class="toc-a" href="#s08"><span class="toc-n">08</span><span class="toc-t">本期信源体系更新</span></a>
+<a class="toc-a" href="#s09"><span class="toc-n">09</span><span class="toc-t">来源与核查说明</span></a></nav>
   </aside></div>
   <main id="main">
 <div class="brief" data-no-print>
@@ -1216,7 +1226,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </div>
 
 <footer class="foot">
-  <div class="fr"><span>AI 免费内容与权益速递 · 第 060 期</span><span>__DATELINE__</span></div>
+  <div class="fr"><span>AI 免费内容与权益速递 · 第 060 期</span><span>扫描截止 2026-11-06 13:46（GMT+8）</span></div>
   <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
   <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
 </footer>
