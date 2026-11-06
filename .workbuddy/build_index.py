@@ -49,6 +49,21 @@ def pit_range(text):
     return "%d–%d" % (min(nums), max(nums)) if nums else "—"
 
 
+def _date_tagline(text):
+    """取刊头日期行里的「本期定位」，不依赖行尾格式。
+
+    与 build_index_web.py 的同名函数保持一致（两个索引脚本独立运行、各自一份）。
+    ⚠️ 058 期起刊头日期行在结尾 `**` 后多了一个句号，旧正则要求
+    ``\\*\\*\\s*$`` 因而整条失配，静默回退到「主题」行 → 058/059/060
+    三期都显示成同一句固定主题。改为按行首日期认行、单独剥行尾标记。
+    """
+    for ln in text.split("\n")[:8]:
+        if re.match(r"^\*\*\d{4}-\d{2}-\d{2}（[^）]*）·\s*", ln):
+            s = re.sub(r"^\*\*\d{4}-\d{2}-\d{2}（[^）]*）·\s*", "", ln)
+            return re.sub(r"\*\*\s*[。.!！]?\s*$", "", s.rstrip()).strip()
+    return None
+
+
 def theme_of(text):
     """取本期定位。
 
@@ -56,9 +71,9 @@ def theme_of(text):
     各期几乎一样（都是"AI 免费内容发布 · 免费内容 · 免费额度"），没有区分度。
     001 期的日期行没有副题（格式是「第 001 期 · 日期」），回落到主题行。
     """
-    m = re.search(r"(?m)^\*\*\d{4}-\d{2}-\d{2}（[^）]*）·\s*(.+?)\*\*\s*$", text)
-    if m:
-        return m.group(1).strip()
+    tagline = _date_tagline(text)
+    if tagline:
+        return tagline
     m = re.search(r"(?m)^\*\*主题[：:]\s*(.+?)\*\*\s*$", text)
     if m:
         return m.group(1).strip()

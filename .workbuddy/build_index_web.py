@@ -52,10 +52,28 @@ def pit_range(text):
     return "%d–%d" % (min(nums), max(nums)) if nums else "—"
 
 
+def _date_tagline(text):
+    """取刊头日期行里的「本期定位」，不依赖行尾格式。
+
+    ⚠️ 058 期踩过的坑：旧规则是 ``\\*\\*日期（周X）· (.+?)\\*\\*\\s*$``，
+    要求整行**以 `**` 结尾且后面只能是空白**。058 起刊头在结尾 `**` 后
+    多写了一个句号（`……没更新）**。`），整条规则静默失配 → 回退到
+    `**主题：…**` 行 → 058/059/060 三期在目录里全显示成同一句固定主题
+    「AI 免费内容发布 · 免费内容（生成/分发）· 免费额度」，看不出头条。
+    现在改为：只扫刊头前 8 行，按「行首 `**日期（周X）·`」认行，
+    再单独剥掉行尾 `**` 与可选句末标点，换行尾写法也不影响。
+    """
+    for ln in text.split("\n")[:8]:
+        if re.match(r"^\*\*\d{4}-\d{2}-\d{2}（[^）]*）·\s*", ln):
+            s = re.sub(r"^\*\*\d{4}-\d{2}-\d{2}（[^）]*）·\s*", "", ln)
+            return re.sub(r"\*\*\s*[。.!！]?\s*$", "", s.rstrip()).strip()
+    return None
+
+
 def theme_of(text):
-    m = re.search(r"(?m)^\*\*\d{4}-\d{2}-\d{2}（[^）]*）·\s*(.+?)\*\*\s*$", text)
-    if m:
-        return m.group(1).strip()
+    tagline = _date_tagline(text)
+    if tagline:
+        return tagline
     m = re.search(r"(?m)^\*\*主题[：:]\s*(.+?)\*\*\s*$", text)
     if m:
         return m.group(1).strip()
