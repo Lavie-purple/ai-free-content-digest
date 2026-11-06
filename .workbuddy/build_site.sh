@@ -40,6 +40,9 @@ python .workbuddy/build_index_web.py | head -1
 python .workbuddy/build_index.py | head -2
 
 echo "=== 6/6 守卫 ==="
+# ⚠️ 头条守卫不能加管道：set -e 下 `cmd | tail` 只会看 tail 的退出码（恒 0），
+#    exit 1 会被吞掉。直接跑，失败就中断出刊。
+python .workbuddy/check_headlines.py
 python .workbuddy/check_views.py | tail -2
 python .workbuddy/check_site_freshness.py | tail -2
 echo "SITE DONE"

@@ -10,11 +10,30 @@
     这里**不做物理归档**（不把旧期挪进子目录）——因为自动化需要跨期回读历史
     日报来避免重复，挪走会打断它。索引解决"找得到"，不牺牲"读得到"。
 """
-import io, os, re
+import io, json, os, re
 
 WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(WS, "INDEX.md")
 DEF = "AI免费内容与权益速递-"
+
+# ---------------------------------------------------------------- 头条台账
+# 2026-11-06 用户要求：往期总目录只显示「当天发生了什么」这条新闻本身，
+# 不要把「本报告改进了什么 / 纠错 / 挂账 / 补登 / 口径 / 轮次 / 方法论」当头条。
+# 那些内容留在正文里给读者看即可，不占头条位。
+# 头条改由 data/headlines.json 显式登记；新增一期必须登记，
+# check_headlines.py 会守（缺行或写回元叙述即 exit 1）。
+HEADLINES_PATH = os.path.join(WS, ".workbuddy", "data", "headlines.json")
+
+
+def load_headlines():
+    if not os.path.exists(HEADLINES_PATH):
+        return {}
+    with io.open(HEADLINES_PATH, encoding="utf-8") as f:
+        d = json.load(f)
+    return {k: v for k, v in d.items() if not k.startswith("_")}
+
+
+HEADLINES = load_headlines()
 
 
 def tables_in(text):
@@ -84,13 +103,16 @@ def _strip_lead(s):
     return _LEAD_RE.sub("", s, count=1)
 
 
-def theme_of(text):
+def theme_of(text, no=None):
     """取本期定位。
 
     优先取日期行后面的**副题**（如「刷新版」「分发入口专题版」），因为「主题」行
     各期几乎一样（都是"AI 免费内容发布 · 免费内容 · 免费额度"），没有区分度。
     001 期的日期行没有副题（格式是「第 001 期 · 日期」），回落到主题行。
     """
+    # 台账优先：与 build_index_web.py 保持同一真源
+    if no and no in HEADLINES:
+        return HEADLINES[no]
     tagline = _date_tagline(text)
     if tagline:
         return _strip_lead(tagline)
@@ -115,7 +137,7 @@ def main():
         tot += size
         hp = os.path.splitext(p)[0] + ".html"
         html = "%d B" % os.path.getsize(hp) if os.path.exists(hp) else "—"
-        rows.append((no, d.group(1) if d else "—", theme_of(txt), size, tables_in(txt), html, pit_range(txt), fn))
+        rows.append((no, d.group(1) if d else "—", theme_of(txt, no), size, tables_in(txt), html, pit_range(txt), fn))
 
     led = os.path.join(WS, "AI信息源分级清单-T0-T4.md")
     ledstat = "—"

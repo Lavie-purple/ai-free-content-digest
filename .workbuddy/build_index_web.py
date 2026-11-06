@@ -20,6 +20,7 @@
 """
 import html as H
 import io
+import json
 import os
 import re
 import urllib.parse
@@ -32,6 +33,25 @@ OUT = os.path.join(WS, "archive.html")
 DEF = "AI免费内容与权益速递-"
 
 ACCENT = "#bf3327"
+
+# ---------------------------------------------------------------- 头条台账
+# 2026-11-06 用户要求：往期总目录只显示「当天发生了什么」这条新闻本身，
+# 不要把「本报告改进了什么 / 纠错 / 挂账 / 补登 / 口径 / 轮次 / 方法论」当头条。
+# 那些内容留在正文里给读者看即可，不占头条位。
+# 头条改由 data/headlines.json 显式登记；新增一期必须登记，
+# check_headlines.py 会守（缺行或写回元叙述即 exit 1）。
+HEADLINES_PATH = os.path.join(WS, ".workbuddy", "data", "headlines.json")
+
+
+def load_headlines():
+    if not os.path.exists(HEADLINES_PATH):
+        return {}
+    with io.open(HEADLINES_PATH, encoding="utf-8") as f:
+        d = json.load(f)
+    return {k: v for k, v in d.items() if not k.startswith("_")}
+
+
+HEADLINES = load_headlines()
 
 
 def tables_in(text):
@@ -92,7 +112,10 @@ def _strip_lead(s):
     return _LEAD_RE.sub("", s, count=1)
 
 
-def theme_of(text):
+def theme_of(text, no=None):
+    # 台账优先：目录头条是显式登记的新闻事件，不再从刊头定位语推导
+    if no and no in HEADLINES:
+        return HEADLINES[no]
     tagline = _date_tagline(text)
     if tagline:
         return _strip_lead(tagline)
@@ -154,7 +177,7 @@ def main():
         hp = os.path.splitext(fn)[0] + ".html"
         has_html = os.path.exists(os.path.join(WS, hp))
         issues.append({
-            "no": no, "date": d.group(1) if d else "—", "theme": theme_of(txt),
+            "no": no, "date": d.group(1) if d else "—", "theme": theme_of(txt, no),
             "size": size, "tables": tables_in(txt), "pit": pit_range(txt),
             "md": fn, "html": hp if has_html else None,
             "abstract": abstract_of(txt),
@@ -223,7 +246,7 @@ def main():
   <div class="acts">%s</div>
 </article>""" % (
             esc(it["no"]), esc(it["date"]), format(it["size"], ","), it["tables"],
-            esc(url_of(it["html"] or it["md"])), esc(title_of(it["theme"])), ab, "".join(btns))
+            esc(url_of(it["html"] or it["md"])), esc(title_of(it["theme"], 80)), ab, "".join(btns))
 
     # ---------------------------------------------------------------- 小行
     def row(it):
@@ -237,7 +260,7 @@ def main():
     <span class="pit">避坑 %s</span>
     <span class="kind">%s</span>
   </a>
-</li>""" % (esc(url_of(link)), esc(it["no"]), esc(it["date"][5:]), esc(title_of(it["theme"], 46)),
+</li>""" % (esc(url_of(link)), esc(it["no"]), esc(it["date"][5:]), esc(title_of(it["theme"], 72)),
             esc(it["pit"]), kind)
 
     from datetime import date
