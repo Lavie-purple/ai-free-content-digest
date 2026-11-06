@@ -70,15 +70,37 @@ def _date_tagline(text):
     return None
 
 
+_LEAD_RE = re.compile(r"^本期(?:头条)?是\s*")
+_EPISODE_RE = re.compile(r"^本期是「(.+?)」的一期\**\s*——\s*")
+
+
+def _strip_lead(s):
+    """剥掉刊头定位语的引导壳，目录里直接露头条（2026-11-06 用户要求）。
+
+    · 040–058 写「本期头条是「…」—— 说明」／「本期头条是 …」：
+      只剥「本期头条是」，**保留引号** —— 引号是各期正文里引述标题的一部分，
+      且 054–056 的引号有嵌套，盲目删「」会把句子切坏。
+    · 059/060 写「本期是「X」的一期 —— 说明」：「的一期」不是头条内容，
+      整段壳换成「X —— 说明」。
+    · 001–039 本来就是「刷新版」「分发入口专题版」这类副题，没有壳，原样返回。
+    """
+    if not s:
+        return s
+    m = _EPISODE_RE.match(s)
+    if m:
+        return m.group(1) + " —— " + s[m.end():]
+    return _LEAD_RE.sub("", s, count=1)
+
+
 def theme_of(text):
     tagline = _date_tagline(text)
     if tagline:
-        return tagline
+        return _strip_lead(tagline)
     m = re.search(r"(?m)^\*\*主题[：:]\s*(.+?)\*\*\s*$", text)
     if m:
-        return m.group(1).strip()
+        return _strip_lead(m.group(1).strip())
     m = re.search(r"(?m)^\*\*(.+?)\*\*\s*$", text.lstrip("\n").split("\n", 1)[-1])
-    return m.group(1).strip() if m else "—"
+    return _strip_lead(m.group(1).strip()) if m else "—"
 
 
 def abstract_of(text, n=4, maxlen=110):
