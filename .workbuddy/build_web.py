@@ -31,6 +31,61 @@ FOLD_SECTIONS = {
 }
 
 
+# ---------------------------------------------------------------- 章节语义判据
+# 2026-11-07：往期 59 期统一版式时发现，s04–s09 这组编号只对 047 期之后成立。
+# 002–046 期的章节顺序是「四、免费内容生成工具 / 五、限时活动表」，按编号折叠会
+# 把实用的限时表收进审计层、把生成工具标成「马上要办」。改为**认标题不认编号**：
+# 标题里出现这些词即归入对应语义，与它排第几章无关。
+KIND_WORDS = (
+    ("limit", ("限时活动", "截止时间")),
+    ("howto", ("选型速查",)),
+    ("audit", ("纠错", "避坑", "信源", "核查")),
+)
+KIND_FOLD = ("limit", "audit")          # 这两类才折叠
+KIND_GROUP = {"content": "本期内容", "limit": "马上要办",
+              "howto": "怎么用", "audit": "审计层 · 默认折叠"}
+KIND_RANK = {"head": 0, "content": 1, "limit": 2, "howto": 3, "audit": 4}
+
+
+def _cn_num(n):
+    """1–10 转汉字章号（目录里的 no 是「04」这种两位数）。"""
+    s = "〇一二三四五六七八九十"
+    return s[n] if 0 <= n < len(s) else str(n)
+
+
+def kind_of(title):
+    """按标题判定章节类别；摘要单独排在最前。"""
+    t = re.sub(r"（[^）]*）", "", title or "")
+    if "摘要" in t:
+        return "head"
+    for kind, words in KIND_WORDS:
+        if any(w in t for w in words):
+            return kind
+    return "content"
+
+
+def fold_label(title, kind, sid=None):
+    """折叠条的章节名。
+
+    默认用原标题（去掉编号与括注）；但只要既有文案在说同一件事就沿用它 ——
+    这样 060 及之后各期的折叠条一个字都不会变，改动不会波及已发布的页面。
+    「限时表」统一叫「权益台账与脚注」（047 期以来的既有说法）。
+    """
+    m = re.match(r"^([一二三四五六七八九十]+)、\s*(.+)", title or "")
+    num, name = (m.group(1), m.group(2)) if m else ("", title or "")
+    name = re.sub(r"（[^）]*）", "", name).strip()
+    old = FOLD_SECTIONS.get(sid or "")
+    if old:
+        old_name = old.split("·")[-1].strip()
+        if kind == "limit" and "台账" in old_name:
+            return old
+        if old_name and (old_name in name or name in old_name):
+            return old
+    if kind == "limit":
+        name = "权益台账与脚注"
+    return ("第%s章 · %s" % (num, name)) if num else name
+
+
 def _headline(issue, src_text):
     """目录头条的唯一真源是 data/headlines.json（check_headlines 保证每期登记）。"""
     p = os.path.join(WS, ".workbuddy", "data", "headlines.json")
@@ -52,17 +107,21 @@ def _headline(issue, src_text):
 
 
 def _fold(html_body):
-    """把 FOLD_SECTIONS 里的章节正文（h2 之后）包进 <details>。
+    """把「限时表 / 审计层」章节的正文（h2 之后）包进 <details>。
 
     ① section / h2 的数量与结构不变 —— verify_web 的计数判据照旧通过；
     ② 正文一字不删，只移进 details —— 保真检查照旧通过；
-    ③ 命中数必须等于预期，少一个就报错，不允许「零命中也算通过」。
+    ③ 判据是**章节标题的语义**，不是 sNN 编号：002–046 期第四章是「生成工具」、
+       第五章才是限时表，按编号会折错章；
+    ④ 一章都没折到就报错，不允许「零命中也算通过」。
     """
     hit = []
 
     def one(m):
         sid, extra, h2, inner = m.group(1), m.group(2), m.group(3), m.group(4)
-        if sid not in FOLD_SECTIONS:
+        title = re.sub(r"<[^>]+>", "", h2)
+        kind = kind_of(title)
+        if kind not in KIND_FOLD:
             return m.group(0)
         hit.append(sid)
         return ('<section id="%s" class="sec%s folded">\n%s\n'
@@ -70,19 +129,24 @@ def _fold(html_body):
                 '<summary><span class="fold-t">展开：%s</span>'
                 '<span class="fold-hint">默认收起 · 点此展开</span></summary>\n'
                 '%s\n</details>\n</section>'
-                % (sid, extra, h2, sid, FOLD_SECTIONS[sid], inner))
+                % (sid, extra, h2, sid, fold_label(title, kind, sid), inner))
 
     pat = re.compile(
         r'<section id="(s\d{2}|s-abs)" class="sec([^"]*)">\n'
         r'(<h2[\s\S]*?</h2>)\n([\s\S]*?)\n</section>')
     out = pat.sub(one, html_body)
-    missing = [k for k in FOLD_SECTIONS if k not in hit]
-    assert not missing, ("折叠章节缺命中（零命中不是通过）", missing, hit)
+    # 058 纪律：零命中不是通过，是没找到对象。真出现（比如章节标题改了用词）
+    # 就直接失败，别让整页静默地不折叠。
+    assert hit, "折叠零命中：没有任何章节被判为限时表或审计层"
     return out
 
 
-def _brief(issue, date_line, headline, html_body):
-    """30 秒速览卡：三个数字全部从已渲染表体实算，与正文同源。"""
+def _brief(issue, date_line, headline, html_body, limit_aid="s04", limit_cn="第四章"):
+    """30 秒速览卡：三个数字全部从已渲染表体实算，与正文同源。
+
+    limit_aid / limit_cn 是「限时活动与截止时间表」实际所在的章节锚点与汉字章号 ——
+    047 期起它在第四章，002–046 期在第五章，写死会把「看必办清单」指到「生成工具」。
+    """
     n_crit = html_body.count('data-st="crit"')
     n_soon = html_body.count('data-st="soon"')
     n_rows = len(re.findall(r'<tr data-st="', html_body))
@@ -94,15 +158,15 @@ def _brief(issue, date_line, headline, html_body):
             '<div class="brief-m"><span>本期表体 <b>%d</b> 行</span>'
             '<span>其中必办 <b>%d</b> 条</span>'
             '<span>今明换挡 <b>%d</b> 条</span></div>\n'
-            '<div class="brief-a"><a href="#s04" data-open="s04">看必办清单</a>'
+            '<div class="brief-a"><a href="#%s" data-open="%s">看必办清单</a>'
             '<a href="quick.html">只看极速版</a>'
             '<button type="button" id="foldAll" aria-expanded="false">展开全部章节</button></div>\n'
-            '<p class="brief-n">下方是本期新闻正文（未折叠）；第四章权益台账与纠错、避坑、'
+            '<p class="brief-n">下方是本期新闻正文（未折叠）；%s权益台账与纠错、避坑、'
             '信源、核查等审计层默认收起，点标题展开。目录跳转、全文检索命中与打印时会自动展开。'
-            '卡片数字是本期表体口径，全量三态分布以第四章脚注为准。原文一字未删。</p>\n'
+            '卡片数字是本期表体口径，全量三态分布以%s脚注为准。原文一字未删。</p>\n'
             '</div>\n'
             % (esc(issue), (" · " + day) if day else "", esc(headline),
-               n_rows, n_crit, n_soon))
+               n_rows, n_crit, n_soon, limit_aid, limit_aid, limit_cn, limit_cn))
 
 
 def pick_default():
@@ -508,23 +572,19 @@ def build():
 
     # 目录显示顺序（2026-11-07 用户选定方案 A）：
     # 正文物理顺序、章节编号、折叠分组一律不动，只重排「目录 / 顶栏」的呈现次序 ——
-    # 04 是读者最该先看的行动清单，从文末提到第四位；07「按任务选型速查」是给读者
-    # 做决策用的，从审计层里提出来；05/06/08/09 归到最后。代价是点 04 会跳到文末
-    # （A 方案已接受，跳转时由 openFold 自动展开该章）。
-    TOC_ORDER = ["s-abs", "s01", "s02", "s03", "s04", "s07",
-                 "s05", "s06", "s08", "s09"]
-    TOC_GROUPS = {"s-abs": "本期内容", "s04": "马上要办",
-                  "s07": "怎么用", "s05": "审计层 · 默认折叠"}
-
+    # 限时表是读者最该先看的行动清单，提到内容章之后；「按任务选型速查」是给读者
+    # 做决策用的，从审计层里提出来；纠错/避坑/信源/核查归到最后。代价是点它可能
+    # 跳到文末（A 方案已接受，跳转时由 openFold 自动展开该章）。
+    # 判据是**标题语义**：002–046 期的限时表在第五章、选型速查在第七或第六章，
+    # 写死 s04/s07 会把「免费内容生成工具」当成行动清单。
     def _toc_rank(x):
-        return TOC_ORDER.index(x[0]) if x[0] in TOC_ORDER else len(TOC_ORDER)
+        return KIND_RANK.get(kind_of(x[2]), 5)
 
     # 重排与分组只对「第 NNN 期」日报生效：《第四章表体明细附录》是 12 个
     # 「第 NNN 期」小节、aid 全是 s-abs，套这组规则会插入 12 个「本期内容」标签。
     toc_view = [x for x in toc if x[1] or x[0] == "s-abs"]
     if is_digest:
-        toc_view = sorted(toc_view, key=_toc_rank)
-    groups = TOC_GROUPS if is_digest else {}
+        toc_view = sorted(toc_view, key=_toc_rank)   # sorted 稳定，同类保持原序
 
     # 目录行只留章节名：标题尾部那串括号是写给人看的口径注解（复核时点、补入条数、
     # 「正文之后」等），正文 h2 里原样保留。用户 2026-11-07 反馈「括号内的内容太长了」
@@ -537,9 +597,14 @@ def build():
         return esc(re.sub(r"（[^）]*）\s*$", "", t)), hint
 
     items = []
+    prev_kind = None
     for aid, no, t, is_h3, sub in toc_view:
-        if aid in groups:
-            items.append('<p class="toc-g">%s</p>' % groups[aid])
+        # 组名在「顶层条目换类别」时插一次；h3 子项不重复插。
+        kind = kind_of(t)
+        grp = "content" if kind == "head" else kind
+        if is_digest and not is_h3 and grp != prev_kind:
+            items.append('<p class="toc-g">%s</p>' % KIND_GROUP[grp])
+            prev_kind = grp
         label, hint = _toc_label(t) if is_digest else (esc(t), "")
         items.append(
             '<a class="toc-a" href="#%s"><span class="toc-n">%s</span>'
@@ -569,14 +634,21 @@ def build():
     # —— 047 期修订后第四章物理位置在文末，编号仍是 04，不加分隔读者会以为是排序错了
     def _nav_t(t):
         return esc(re.sub(r"（[^）]*）\s*$", "", t))
-    # 顶栏与目录同序；分隔竖线从「文末的第四章」移到「审计层」起点（s05）——
-    # 04 现在是第四位，再挂 tail 就成了一条没有意义的竖线。
-    nav_html = "".join(
-        '<a href="#%s"%s><b>%s</b>%s</a>' % (
-            aid, ' class="tail"' if aid == "s05" else "",
-            no if no != "00" else "\u00b7\u00b7", _nav_t(t))
-        for aid, no, t, is_h3, sub in toc_view
-    )
+    # 顶栏与目录同序；分隔竖线挂在「审计层第一个条目」上 —— 判据同样是标题语义，
+    # 因为 002–046 期的审计层起点不是 s05。写死编号会挂错位置。
+    nav_items = []
+    tail_done = False
+    for aid, no, t, is_h3, sub in toc_view:
+        grp = kind_of(t)
+        grp = "content" if grp == "head" else grp
+        mark = ""
+        if is_digest and grp == "audit" and not tail_done:
+            mark, tail_done = ' class="tail"', True
+        nav_items.append(
+            '<a href="#%s"%s><b>%s</b>%s</a>' % (
+                aid, mark, no if no != "00" else "\u00b7\u00b7", _nav_t(t))
+        )
+    nav_html = "".join(nav_items)
 
     note_html = "".join("<p>%s</p>" % inline(x) for x in note)
 
@@ -587,7 +659,14 @@ def build():
               .replace("__SHELLCLASS__", shell_cls)
               .replace("__BODYCLASS__", body_cls))
     if is_digest:
-        html_body = _brief(issue, date_line, _headline(issue, src), html_body) + html_body
+        # 限时表在**哪一章**按标题语义取：047 期起是第四章，002–046 期是第五章。
+        # 目录里存的标题已剥掉「五、」这种编号，章号改从 no 字段取。
+        _lim = [(aid, no) for aid, no, t, is_h3, sub in toc if kind_of(t) == "limit"]
+        _aid = _lim[0][0] if _lim else "s04"
+        _no = _lim[0][1] if _lim else "04"
+        _cn = ("第%s章" % _cn_num(int(_no))) if _no.isdigit() else "第四章"
+        html_body = _brief(issue, date_line, _headline(issue, src), html_body,
+                           _aid, _cn) + html_body
     doc = doc.replace("__NAV__", nav_html).replace("__BODY__", html_body)
     doc = doc.replace("__METAS__", esc(" \u00b7 ".join(re.sub(r"\*\*", "", x) for x in metas)))
     # 没抓到复核时点就整段去掉，不把占位符留在页面上

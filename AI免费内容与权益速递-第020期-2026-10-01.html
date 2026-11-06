@@ -111,6 +111,7 @@ code{
 .tb-nav a:hover{color:var(--ink); background:var(--surface-2)}
 .tb-nav a.active{color:var(--accent-ink); background:var(--accent-soft)}
 .tb-nav a.active b{color:var(--accent-ink)}
+.tb-nav a.tail{margin-left:6px; padding-left:14px; border-left:1px solid var(--rule-2)}
 .tb-tools{display:flex; align-items:center; gap:var(--s2); margin-left:auto}
 .search{position:relative; display:flex; align-items:center; flex:0 0 auto}
 .search input{
@@ -177,6 +178,42 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
 }
 .pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
 .pubnote p:last-child{margin-bottom:0}
+
+.vs{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  margin:18px 0 20px; border:1px solid var(--rule); background:var(--surface);
+  box-shadow:var(--shadow);
+}
+.vs-i{
+  display:block; padding:10px 14px; text-decoration:none; color:var(--ink-2);
+  border-right:1px solid var(--rule); transition:background 120ms ease;
+}
+.vs-i:last-child{border-right:0}
+.vs-i:hover{background:var(--surface-2)}
+.vs-k{display:block; font-size:13.5px; font-weight:600; line-height:1.45}
+.vs-k i{font-style:normal; margin-right:5px; opacity:.75}
+.vs-d{display:block; font-size:11.5px; color:var(--faint); line-height:1.5; margin-top:1px}
+.vs-i.is-on{background:var(--ink); color:var(--bg); cursor:default}
+.vs-i.is-on .vs-d{color:var(--bg); opacity:.6}
+.vs-i.is-on .vs-k i{opacity:.85}
+/* 只给「极速」的图标上强调色：整行标红会盖过当前页的实心块，反而让人以为它才是当前页 */
+.vs-quick .vs-k i{color:var(--accent-ink); opacity:1}
+.vs-quick.is-on .vs-k i{color:var(--bg)}
+@media (max-width:640px){
+  /* 窄屏不要三行堆叠：日报页顶已有固定导航条 + 刊头 + 说明框，
+     再来三行切换器会把首屏全占掉。压成单行三格，副标题不出。 */
+  .vs{grid-template-columns:repeat(3,1fr); margin-top:14px}
+  .vs-i{
+    padding:9px 6px; text-align:center;
+    border-right:1px solid var(--rule); border-bottom:0;
+  }
+  .vs-i:last-child{border-right:0}
+  .vs-k{font-size:12px; line-height:1.3}
+  .vs-k i{margin-right:3px}
+  .vs-d{display:none}
+}
+@media print{.vs{display:none !important}}
+
 .summary-note{}
 
 /* ============================================================ 主栅格 */
@@ -196,9 +233,45 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
   background-image:none; line-height:1.45;
 }
 .toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+/* 「正文之后」标记：只说明点它跳到文末，不用括号、不加底色（2026-11-07）。
+   单独占一行 —— 196px 侧栏里跟在章节名后面会把标题挤到折行。 */
+.toc-hint{
+  display:block; margin-top:1px; font-family:var(--fm); font-size:9.5px;
+  letter-spacing:.06em; color:var(--faint); opacity:.8;
+}
+/* 目录分组标签：一条细线 + 小字，不加框（2026-11-07 方案 A） */
+.toc-g{
+  font-family:var(--fm); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--faint); margin:14px 0 4px; padding-top:11px; border-top:1px solid var(--rule);
+}
+.toc-g:first-child{margin-top:0; padding-top:0; border-top:0}
 .toc-a:hover{color:var(--ink); border-left-color:var(--rule-2)}
 .toc-a.active{color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft)}
 .toc-a.active .toc-n{color:var(--accent-ink)}
+
+/* 《常驻权益总账》只有一个章节（全量表），左侧 196px 目录栏纯占宽度：
+   收成主区顶部一行可展开控件，表格铺满整栏。目录条目一个不删，点开即见。 */
+.shell.shell-wide{grid-template-columns:minmax(0,1fr); gap:0}
+/* 总账页最后就是这张表，表格外框底 = 内容结束。再照别的页留 96px 页脚上边距，
+   深色底上会读成「表格下面塌了一块空白」（用户 2026-11-07 截图框出的那块）。
+   只收这一页，其它页仍是 var(--s7)。 */
+body.ledger-page .shell{padding-bottom:var(--s5)}
+.toc-fold{
+  margin:0 0 var(--s4); padding:8px var(--s3);
+  border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface);
+}
+.toc-fold>summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px;
+  font-family:var(--fm); font-size:11px; letter-spacing:.12em; color:var(--muted);
+}
+.toc-fold>summary::-webkit-details-marker{display:none}
+.toc-fold>summary::before{content:"+"; font-size:15px; line-height:1; color:var(--accent-ink)}
+.toc-fold[open]>summary::before{content:"−"}
+.toc-fold-nav{display:grid; gap:2px; margin-top:8px; padding-top:8px; border-top:1px solid var(--rule)}
+.toc-fold-nav .toc-a{padding-top:6px; padding-bottom:6px}
+/* 总账页没有侧栏抽屉，窄屏的汉堡按钮点了会开一个空抽屉 */
+body.ledger-page #menuBtn{display:none !important}
+@media print{ .toc-fold{display:none !important} }
 
 main{min-width:0}
 .sec{scroll-margin-top:76px; padding-top:var(--s5)}
@@ -278,7 +351,12 @@ blockquote{margin:0}
   width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
   background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
 }
-.tblwrap.scrolly .tbl{border:0; border-radius:0}
+/* 表头吸顶的前提：表格自身不能 overflow:hidden。
+   它会新建一个滚动容器，把 th{position:sticky} 整个废掉 —— 实测在容器内滚动
+   400px 后表头跑到容器上方 305px，正好被 sticky 的筛选条压掉半行（用户
+   2026-11-06「这里老是被上面截断」）。外框与圆角由 .tblwrap.scrolly 承担，
+   这里不需要再裁切；非滚动容器里的 .tbl 仍保留 overflow:hidden 裁圆角。 */
+.tblwrap.scrolly .tbl{border:0; border-radius:0; overflow:visible}
 .tbl thead th{
   position:sticky; top:0; z-index:2; text-align:left; vertical-align:bottom;
   font-family:var(--fm); font-size:11.5px; letter-spacing:.09em; text-transform:uppercase;
@@ -311,6 +389,13 @@ blockquote{margin:0}
 .ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over)}
 .ledger tbody tr[data-st="over"] td{color:var(--muted)}
 .ledger td[data-col="st"]{white-space:normal; overflow-wrap:anywhere}
+/* 《常驻权益总账》全量表专用列宽（2026-11-06 用户截图：活动列一大片空白、
+   截止列被挤成一字一行）。日报 4.1 的 date=76px 是给短日历日用的，不能套过来。
+   三列按内容量配比分宽，仍是 fixed 布局 —— 长状态句不会把整表撑爆。 */
+.tbl.ledger.ledger-full th[data-col="body"]{width:28%}
+.tbl.ledger.ledger-full th[data-col="date"]{width:32%}
+.tbl.ledger.ledger-full th[data-col="st"]{width:40%}
+.tbl.ledger.ledger-full tbody td{overflow-wrap:anywhere}
 .st{
   display:inline-block; width:9px; height:9px; border-radius:99px; margin-right:8px; vertical-align:1px;
   background:var(--rule-2);
@@ -323,6 +408,14 @@ tr[data-st="soon"] .st-txt{color:var(--soon)}
 tr[data-st="live"] .st-txt{color:var(--live)}
 tr[data-st="warn"] .st-txt{color:var(--plan)}
 tr[data-st="over"] .st-txt{color:var(--over)}
+/* 长状态格：默认收 4 行，点一下展开全文。文字一个字都不删，只是不默认铺开。 */
+.st-txt.cbody.clamp{
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical;
+  overflow:hidden; cursor:pointer; border-radius:4px;
+}
+.st-txt.cbody.clamp:hover{background:var(--surface-2)}
+.st-txt.cbody.clamp:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media print{ .st-txt.cbody.clamp{display:block; overflow:visible} }
 .chips{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:10px var(--s3);
   background:var(--surface-2); border-bottom:1.5px solid var(--rule-strong); position:sticky; top:0; z-index:3}
 /* 截止表待在可滚动容器里，容器顶部已经被 chips 占住——表头要吸在它下方，
@@ -632,6 +725,51 @@ mark.hl.cur{background:var(--accent); color:#fff}
   a{background-image:none}
   @page{size:A4 portrait; margin:12mm}
 }
+
+/* ---- 30 秒速览卡（060 期 A 方案） ---- */
+.brief{
+  background:var(--surface); border:1px solid var(--rule-2); border-left:4px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4);
+  margin:0 0 var(--s5); box-shadow:var(--shadow);
+}
+.brief-k{font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.06em;
+  color:var(--faint); margin:0 0 var(--s2)}
+.brief-h{font-family:var(--fu); font-weight:700; font-size:var(--fs-xl); line-height:1.5;
+  color:var(--ink); margin:0 0 var(--s3); text-wrap:balance}
+.brief-m{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-m span{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:99px; padding:5px 12px}
+.brief-m b{font-family:var(--fm); color:var(--accent-ink); font-size:var(--fs-mid)}
+.brief-a{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-a a,.brief-a button{font-family:var(--fu); font-size:var(--fs-sm);
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--rule-2);
+  border-radius:var(--r1); padding:8px 14px; text-decoration:none; cursor:pointer}
+.brief-a a:hover,.brief-a button:hover{border-color:var(--accent)}
+.brief-n{font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  color:var(--muted); margin:0}
+
+/* ---- 审计层折叠：details 只做逻辑容器，展开后排版与原来完全一致 ---- */
+.folded{padding-top:var(--s4)}
+.audit-fold{margin:0}
+.audit-fold>summary{
+  display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap; list-style:none;
+  padding:var(--s3) var(--s4); margin:0 0 var(--s3); cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r2);
+  font-family:var(--fu); font-size:var(--fs-mid); font-weight:700; color:var(--ink);
+}
+.audit-fold>summary::-webkit-details-marker{display:none}
+.audit-fold>summary::before{content:"+"; font-family:var(--fm); font-size:19px;
+  font-weight:400; color:var(--accent-ink); line-height:1}
+.audit-fold[open]>summary::before{content:"\2212"}
+.audit-fold[open]>summary{margin-bottom:var(--s5)}
+.fold-t{flex:1}
+.fold-hint{font-family:var(--fm); font-size:var(--fs-xs); font-weight:400; color:var(--faint)}
+.audit-fold>p{margin-bottom:var(--s4)}
+.audit-fold h3:first-child{margin-top:0}
+@media print{
+  .audit-fold>summary{display:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
 </style>
 </head>
 <body>
@@ -642,7 +780,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <header class="topbar" data-no-print>
   <div class="tb-in">
     <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#020</b></span>
-    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s04"><b>04</b>限时活动与截止时间表</a><a href="#s05"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s08"><b>08</b>本期信源体系更新</a><a href="#s09"><b>09</b>来源与核查说明</a></nav>
+    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s04"><b>04</b>限时活动与截止时间表</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s05" class="tail"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s08"><b>08</b>本期信源体系更新</a><a href="#s09"><b>09</b>来源与核查说明</a></nav>
     <div class="tb-tools">
       <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">⌕</button>
       <div class="search">
@@ -666,23 +804,35 @@ mark.hl.cur{background:var(--accent); color:#fff}
   <h1 class="mh-t">AI 免费内容与权益速递</h1>
   <p class="mh-sub">主题：AI 免费内容发布 · 免费内容（生成/分发）· 免费额度</p>
   <div class="pubnote"><p>本期扫描范围仍为 <strong>T0–T4 分级路由</strong>（本期将用户随任务附上的完整 T0–T4 信源清单（含 <code>https://aihot.news/</code>）与现有台账做了交叉核对：清单内条目已全部覆盖于台账 196 条之中，<code>aihot.news</code> 已作为 T4 主条目长期登记；台账维持 196 条、本期无新增信源），扫描截止 <strong>2026-10-01 13:54（GMT+8）</strong>。</p><p>⚠️ <strong>本期是 10/1 上午出刊</strong>：落在 9/30（019 期）之后、10/4（掘金第二期截止）之前——<strong>本期的关键动作是：把 9/30 单日 10 条推进为「回扫已收口」、把 019 期「Claude Tag Credits 10/1 起生效」纠错为「10/1 过期」、把老混元从「10/1 起高危」推进为「高危窗口今日正式开启」、把 Claude Code 云会话 credit 作为新免费额度登记、并入 9/30–10/1 真实新情报（TeleOCR / Index-Translate / 1,337 Chart Prompts / Holo4 / GLM-5.3 安全警示）</strong>。刊头显式声明扫描时点（避坑 40：上午出刊，上午的发布已覆盖；10/1 太平洋时间今晚才到期的条目按下期回扫处理）。</p><p>与 003–019 期的关系：<strong>只做增量与纠错，不重复已固化内容</strong>。</p><p><strong>本期四条主线</strong>：① <strong>9/30 单日 10 条回扫</strong>：截至出刊按避坑 78/84 纪律默认全部于 9/30 24:00 收口、标 ⚪ 已结束，下期追是否有静默延期；② <strong>Claude Tag Credits 纠错</strong>：019 期写成「10/1 起正式生效」，实为<strong>太平洋时间 10/1 23:59 过期</strong>（support.claude.com 促销条款原文 "expire ... October 1, 2026"），属「生效日/到期日看反」（避坑 91）；③ <strong>老混元高危窗口 10/1 正式开启</strong>（Q04 连续第 8 期，厂商仍只给「9 月底」，无确切停服日）；④ <strong>两条新免费额度/资产</strong>：Claude Code 云会话 credit（$250 Max / $100 Pro，10/7 前领取、11/5 过期）+ 一批免费开源内容生成资产（TeleOCR / Index-Translate / 1,337 Chart Prompts / Holo4）。</p></div>
+  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">76 条 · 一条一行</span></a><span class="vs-i vs-full is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 020 期 · 十节</span></span><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">164 条 · 无截止日</span></a></nav>
 </header>
 
 <div class="shell">
   <div class="drawerwrap" id="drawerwrap"><aside class="rail" id="rail" aria-label="目录">
     <p class="rail-t">本期目录</p>
-    <nav><a class="toc-a" href="#s-abs"><span class="toc-n">··</span>摘要</a>
-<a class="toc-a" href="#s01"><span class="toc-n">01</span>AI 免费内容发布</a>
-<a class="toc-a" href="#s02"><span class="toc-n">02</span>免费内容生成工具</a>
-<a class="toc-a" href="#s03"><span class="toc-n">03</span>常驻免费额度与 API</a>
-<a class="toc-a" href="#s04"><span class="toc-n">04</span>限时活动与截止时间表</a>
-<a class="toc-a" href="#s05"><span class="toc-n">05</span>本期纠错清单</a>
-<a class="toc-a" href="#s06"><span class="toc-n">06</span>避坑提示</a>
-<a class="toc-a" href="#s07"><span class="toc-n">07</span>按任务选型速查</a>
-<a class="toc-a" href="#s08"><span class="toc-n">08</span>本期信源体系更新</a>
-<a class="toc-a" href="#s09"><span class="toc-n">09</span>来源与核查说明</a></nav>
+    <nav><p class="toc-g">本期内容</p>
+<a class="toc-a" href="#s-abs"><span class="toc-n">··</span><span class="toc-t">摘要</span></a>
+<a class="toc-a" href="#s01"><span class="toc-n">01</span><span class="toc-t">AI 免费内容发布</span></a>
+<a class="toc-a" href="#s02"><span class="toc-n">02</span><span class="toc-t">免费内容生成工具</span></a>
+<a class="toc-a" href="#s03"><span class="toc-n">03</span><span class="toc-t">常驻免费额度与 API</span></a>
+<p class="toc-g">马上要办</p>
+<a class="toc-a" href="#s04"><span class="toc-n">04</span><span class="toc-t">限时活动与截止时间表</span></a>
+<p class="toc-g">怎么用</p>
+<a class="toc-a" href="#s07"><span class="toc-n">07</span><span class="toc-t">按任务选型速查</span></a>
+<p class="toc-g">审计层 · 默认折叠</p>
+<a class="toc-a" href="#s05"><span class="toc-n">05</span><span class="toc-t">本期纠错清单</span></a>
+<a class="toc-a" href="#s06"><span class="toc-n">06</span><span class="toc-t">避坑提示</span></a>
+<a class="toc-a" href="#s08"><span class="toc-n">08</span><span class="toc-t">本期信源体系更新</span></a>
+<a class="toc-a" href="#s09"><span class="toc-n">09</span><span class="toc-t">来源与核查说明</span></a></nav>
   </aside></div>
   <main id="main">
+<div class="brief" data-no-print>
+<p class="brief-k">30 秒速览 · 第 020 期 · 2026-10-01</p>
+<p class="brief-h">Claude Tag Credits 10/1 过期；Claude Code 云会话新增 $250/$100 免费额度</p>
+<div class="brief-m"><span>本期表体 <b>73</b> 行</span><span>其中必办 <b>3</b> 条</span><span>今明换挡 <b>4</b> 条</span></div>
+<div class="brief-a"><a href="#s04" data-open="s04">看必办清单</a><a href="quick.html">只看极速版</a><button type="button" id="foldAll" aria-expanded="false">展开全部章节</button></div>
+<p class="brief-n">下方是本期新闻正文（未折叠）；第四章权益台账与纠错、避坑、信源、核查等审计层默认收起，点标题展开。目录跳转、全文检索命中与打印时会自动展开。卡片数字是本期表体口径，全量三态分布以第四章脚注为准。原文一字未删。</p>
+</div>
 <section id="s-abs" class="sec summary">
 <h2><span class="sn">··</span><span class="h2t">摘要</span><span class="h2sub">（3 秒版）</span></h2>
 <ul class="ul"><li><strong>本期最该打勾的一条纠错（019 期写反了）</strong>：<strong>Claude Tag Credits 的 10/1 是「过期日」不是「生效日」</strong>——Anthropic 帮助中心促销条款原文 "all promotional credits expire at 11:59 PM Pacific Time on October 1, 2026"；Enterprise $25,000 / Team $2,500 的 credit <strong>今晚太平洋时间收口</strong>，且 9/2 起必须「连 GitHub 才发放」。019 期把它写成「🟢 明天 10/1 起正式生效」是方向性错误，本期翻为 🔴 最后一天（见纠错清单 #1 + 避坑 91/95）。</li><li><strong>本期最该打勾的一条回扫（9/30 单日 10 条）</strong>：<strong>截至出刊，10 条全部按 9/30 24:00 收口处理、标 ⚪ 已结束</strong>——Qoder Qwen3.8-Flash 0.0×、文心 4.0 全系列免费、混元 Hy3、WorkBuddy 三类积分、百炼 8 折、Trae 企业、Qoder 600、皖美视听均按计划收口；<strong>按避坑 78 纪律，下期逐条追是否有静默延期</strong>（本期无法逐家登厂商页核验，先默认收口）。</li><li><strong>本期最该打勾的一条新免费额度（直接可薅）</strong>：<strong>Claude Code 云会话 credit</strong>——9/23 起 Max 送 $250、Pro 送 $100，<strong>10/7 前领取、11/5 过期</strong>，仅限云会话、不绑 Projects/Routines；这是比 Tag Credits 更「到手即减」的一笔（见三·4 + 避坑 95）。</li><li><strong>本期两条免费内容生成资产（不用额度、即插即用）</strong>：<strong>1,337 Chart Prompts</strong>（669 浅 + 668 深共 1,337 套图表风格，可粘进 Codex/Claude Code 改图表）+ <strong>B站 Index-Translate</strong>（150 语言、35B MoE、Apache 2.0 开源翻译模型）——前者是「提示词库」新形态（避坑 93）、后者是可直接自部署的免费翻译能力。</li><li><strong>本期一条安全侧硬警示</strong>：<strong>Anthropic 9/29 警示智谱 GLM-5.3 是「迄今网络能力最强、且未带任何护栏的开源权重」</strong>——把「开源」和「安全已审」当两件事（避坑 92）；企业内网更该拦、不是更该放。</li><li><strong>本期一条持续追踪（连续多期无进展）</strong>：<strong>ZCode 开源仓库 + 信通院/绿盟审计报告截至 10/1 仍未公开</strong>——措辞维持「已整改、未公开」；<strong>老混元平台停服确切日 Q04 连续第 8 期仍未澄清</strong>，10/1 高危窗口已开。</li></ul>
@@ -875,8 +1025,10 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </div>
 <blockquote class="bq"><p><strong>为什么比 Tag Credits 更值得记</strong>：Tag Credits 是"组织级、绑 Slack、9/2 起还要先连 GitHub 才发放、且今晚太平洋时间就过期"；<strong>云会话 credit 是个人订阅内含、10/7 前领、11/5 才过期、直接减云会话账单</strong>——到手路径更短（避坑 95 同源：凡"自动发放"的 credit，先确认"激活/领取"动作是否完成）。<strong>本刊把它登为 🟢 新免费额度（10/7 前领）</strong>。</p></blockquote>
 </section>
-<section id="s04" class="sec">
+<section id="s04" class="sec folded">
 <h2><span class="sn">04</span><span class="h2t">限时活动与截止时间表</span><span class="h2sub">（10/1 上午复核）</span></h2>
+<details class="audit-fold" id="fold-s04">
+<summary><span class="fold-t">展开：第四章 · 权益台账与脚注</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <div class="tblwrap scrolly">
 <div class="chips" role="group" aria-label="按状态筛选"><span class="chips-label">按状态筛</span><button class="chip on" data-f="all" aria-pressed="true">全部<b data-c="all">0</b></button><button class="chip" data-f="crit" aria-pressed="false">🔴 必办<b data-c="crit">0</b></button><button class="chip" data-f="soon" aria-pressed="false">🟠 今明换挡<b data-c="soon">0</b></button><button class="chip" data-f="live" aria-pressed="false">🟢 生效中<b data-c="live">0</b></button><button class="chip" data-f="warn" aria-pressed="false">⚠ 口径存疑<b data-c="warn">0</b></button><button class="chip" data-f="over" aria-pressed="false">○ 已结束<b data-c="over">0</b></button><span class="chips-count" id="ledgerCount" aria-live="polite"></span></div>
 <table class="tbl ledger c3">
@@ -958,9 +1110,12 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <blockquote class="bq"><p><strong>本期表内三态分布（按每行状态列首个色标记，来自 <code>extract_deadlines</code>/<code>check_deadlines</code> 实跑）</strong>：🔴 必办 3 条 / 🟠 到期前换挡 4 条 / 🟡 一般项 2 条 / 🟢 长期项 38 条 / ⚪ 已结束 26 条（共 73 条）。</p><p><strong>到期巡检（<code>--today 2026-10-01</code> 基准，脚本实跑）</strong>：A 已过期但未标已结束 1（老混元·模糊「9 月底」日期，按 Q04 连续第 8 期未澄清、刻意保持 🔴 高危窗口开启）+ B 14 天内到期 12 + C 已结束 25 + D 日期待人工确认 24 + E 窗口外 11 = 73。</p><p><strong>本轮的关键动作（相对 019 期的日期/状态推进）</strong>：<strong>9/30 单日 10 条从「🟡 今天最后一天」推进为「⚪ 已结束（回扫收口）」</strong>；<strong>Claude Tag Credits 从「🟢 生效」纠正为「🔴 今天最后一天（实为过期）」</strong>；<strong>老混元从「🔴 10/1 起高危」推进为「🔴 高危窗口今日正式开启」</strong>；<strong>新增 Claude Code 云会话 credit（🟢，10/7 前领）</strong>；<strong>智谱双节促销推进为「倒计时第 6 天」</strong>。</p><p><strong>按接下来 10 天内的紧急度排序</strong>：<strong>10/1（Claude Tag 过期 + 老混元高危窗口开启）→ 10/4 24:00（掘金第二期截止）→ 10/7（智谱夜间免费 + Seedance 折扣 + Hy Image3.5 免费窗口三线同日收口）→ 10/10（Hy4 新用户窗口）→ 10/14（GPT-5.5 下线，已确认未提前）→ 10/15（Step 5 权重）→ 10/18（AgentCore）→ 10/20（佛山申报）</strong>。</p><p><strong>⚠️ 本期维持 10/7 的"季度级成本重估日"提醒</strong>：<strong>10/7 之后紧接着 10/14 与 10/15——这三天密集程度超过 9/30</strong>。另 <strong>10/1 起老混元高危窗口</strong>：<strong>今天起立刻核是否停服</strong>（避坑 70 / 85 同源）。</p></blockquote>
+</details>
 </section>
-<section id="s05" class="sec">
+<section id="s05" class="sec folded">
 <h2><span class="sn">05</span><span class="h2t">本期纠错清单</span><span class="h2sub">（对 019 期）</span></h2>
+<details class="audit-fold" id="fold-s05">
+<summary><span class="fold-t">展开：第五章 · 本期纠错清单</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <div class="tblwrap">
 <table class="tbl c4">
 <thead><tr><th>#</th><th>019 期写法</th><th>实际情况</th><th>影响</th></tr></thead><tbody>
@@ -972,15 +1127,19 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </tbody></table>
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
+</details>
 </section>
-<section id="s06" class="sec">
+<section id="s06" class="sec folded">
 <h2><span class="sn">06</span><span class="h2t">避坑提示</span><span class="h2sub">（本期新增 5 条：91–95；86–90 自 019 期沿用）</span></h2>
+<details class="audit-fold" id="fold-s06">
+<summary><span class="fold-t">展开：第六章 · 避坑提示</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <ol class="ol big"><li><span class="lin">91</span><span class="lit">⚠️ <strong>带具体日期的额度，先找"expires（过期）"再找"from（生效）"——Claude Tag Credits 的 10/1 是过期不是生效</strong> —— 本期 019 把 Claude Tag Credits 写成"🟢 10/1 起正式生效"，但 Anthropic 促销条款原文是 "all promotional credits expire at 11:59 PM Pacific Time on October 1, 2026"。三条可执行动作：① <strong>凡带具体日期的 credit，先 grep 原文里的 "expire/expires/过期"，别只看 "from/生效"</strong>——活动页常把"起始日"写得很大、"过期日"藏在条款里；② <strong>这类"自动发放"的 credit 常在截止日静默消失、不另行通知</strong>，记入台账时状态列写"🔴 最后一天"而非"🟢 生效"，否则下期回扫会整个漏掉；③ <strong>跨时区更要小心</strong>："10/1 23:59 PT" 在北京是 10/2 下午，出刊时点若已过点，直接标已结束。</span></li></ol>
 <ol class="ol big"><li><span class="lin">92</span><span class="lit">⚠️ <strong>"开源权重" ≠ "安全已审"——Anthropic 指 GLM-5.3 是迄今网络能力最强、且未带任何护栏的开源权重</strong> —— 9/29 Anthropic 公告称智谱 GLM-5.3（320B 混合架构，llama.cpp 已合入）是"most cyber-capable open-weights model yet, shipped with no safeguards"。三条可执行动作：① <strong>把"开源"和"安全已审"当两件事</strong>——开源只解决了"你能拿到权重"，没解决"它会不会干危险的事"；② <strong>部署前先过一遍自己场景的红线</strong>（尤其代码执行 / 联网 / 文件读写类），别因为"免费可下载"就直接进生产；③ <strong>企业内网更该拦、不是更该放</strong>——内网数据 + 未护栏模型 = 更高的横向移动风险。</span></li></ol>
 <ol class="ol big"><li><span class="lin">93</span><span class="lit">⚠️ <strong>"免费内容生成"的新形态是「提示词库 / 资产库」，比模型更轻、即插即用</strong> —— 本期 1,337 Chart Prompts（669 浅 + 668 深共 1,337 套图表风格，可粘进 Codex/Claude Code 改 line/bar 图）即此类。三条可执行动作：① <strong>这类不占额度、不绑账号，先做资产盘点</strong>——比"再找一个免费模型"更短路径；② <strong>注意许可（个人 / 商用）</strong>——1,337 Chart Prompts 商用许可待核，个人用优先；③ <strong>它们常与某个编码 Agent 绑定</strong>，换工具要重测（粘进 Claude Code 与粘进 Cursor 的渲染可能不同）。</span></li></ol>
 <ol class="ol big"><li><span class="lin">94</span><span class="lit">⚠️ <strong>"分发入口"也会收缩——Reddit 11/13 砍 RSS、次年 3 月削公开 API</strong> —— 9/30 多家源报道 Reddit 将终止 RSS 支持、削减公开 API 访问（理由指向 AI 爬虫滥用）。三条可执行动作：① <strong>别把 RSS / 公开 API 当永久基础设施</strong>（避坑 61 同源：GitHub Models 也是"说没就没"）；② <strong>11/13 前把依赖 Reddit RSS 的舆情/信源监测迁到官方 API / 自有爬虫 / T4 聚合器</strong>；③ <strong>做"分发入口线"时把"少了哪些"和"多了哪些"一起记</strong>——入口收缩也是成本（影响内容监测覆盖度）。</span></li></ol>
 <ol class="ol big"><li><span class="lin">95</span><span class="lit">⚠️ <strong>"自动发放 + 需先连 GitHub 才生效"的 credit 是两段式门槛——Claude Tag 9/2 起必须连 GitHub 才拿到</strong> —— Claude Tag Credits 自动发放但绑定"连 GitHub"前置条件；Claude Code 云会话 credit 也要先连 GitHub（<code>/web-setup</code>）再启动会话才扣减。三条可执行动作：① <strong>把"发放"和"激活"当两步</strong>——看到"已发放"不等于"已到手"；② <strong>截止日前检查"激活状态"而非只看"已发放"</strong>——Claude Tag 若 9/2 后没连 GitHub，credit 等于没拿，今晚太平洋时间就过期；③ <strong>企业/团队额度是共享池</strong>，先确认管理员动作（连 GitHub、绑定组织）是否完成，再算"我们拿到了多少"。</span></li></ol>
 <p>（前 90 条沿用 002–019 期：Gemini 免费层按模型选 / Sora 无免费档 / 百炼地域陷阱 / Pika 缩水 / "79.9 元 DeepSeek 永久会员"是谣言 / 通用兑换码是骗局 / 水印与商用条款要逐条看 / 一次性积分 ≠ 免费额度 / 地方词元券不通用 / 二手 Token 别碰 / 先交钱的"认证福利"一律是骗子 / 文心一格已停服 / "完全免费"视频模型要看限速承诺 / Bolt Forge 的免费付的是数据 / 智谱夜间免费要接受慢速 / 老混元平台停服 / B.AI 条款代价 / AutoClaw 积分不是钱 / 抖音 AI 工坊是邀请制 / "免费额度大全"时效性以天计 / 匿名模型的"零留存"要按平台分账 / 匿名模型窗口是"厂商认领那天关闭" / AI 漫剧算力账算不平 / 两边都在"到期下线"且都是运维事故级 / "免费 API 横评"类文章本周已出现三处硬伤 / 别再找"Qoder 免费 800 次" / 匿名模型风险从"它是谁"升级为"它是不是一个模型" / 平台补贴大全是本周最容易下错注的一类内容 / "开源插件与运行时" ≠ "开源权重" / "邀请制大额度"要算两笔账 / "匿名免费"全流程的时序与三条判断 / AI 编程工具会把整个 Git 历史传走且关不掉 / "永久免费"会悄悄过期 / 平台补贴数字与行业回调数字必须对着读 / "每天领 X Credits"真正的成本是"记得领" / 平台补贴数字有"三个版本"且差额本身是信息 / "越界"是这一代 AI Agent 的共同失败模式 / "匿名档"免费 API 门槛最低但承诺最少 / "即将开源"不能写进本周的零成本方案 / 报告的"出刊时点"会直接决定内容完整性 / "开放"要拆成四层读（能用 / 能下载 / 能跑 / 能商用）/ 许可证比参数量更能决定免费模型有没有用 / "AI 自主入侵"类头条的三查 / "注册送额度"的真实成本是身份与时间 / token 数没有比较价值，只有"能跑多少次"才有 / "前沿模型不再是默认答案"的驱动因素是账单不是榜单 / "已结束"不是终态，"延期"是常态 / 总分 ≠ 适配，只看分项 / "开源"分三层：权重 ≠ 代码可审 ≠ 数据政策 / 平台与政策的官方数字和整理稿数字按问题类型选口径 / 厂商文档内部自相矛盾时按最小值估算 / 地推礼与注册礼当两笔账 / 平台扶持分三层问 / 代币价值在拿到换算率前只当描述 / 同一个榜单上只有"能下载权重的"可被审计 / 平台"招募计划"缺三项中任一项当传闻 / "未来几周"≠已发布≠本周可用 / 迁移新模型先跑一周 parity week / DevDay "too much stuff"是运维信号、立刻核已保存配置 / "按任务成本降 50%"主要来自牌价不是 token 减少 / 把"免费/捆绑的 LLM 访问"当永久基础设施是错的 / 判断厂商"免费"先问"免费算力的入口归谁" / 平台扶持的"报名入口"往往=限时赛事入口 / 免费模型清单是动态目录须带核对日期 / 节日促销谷价是短暂拐点别当长期便宜 / DevDay 传闻只有 keynote 官宣才算数（71）/ 匿名免费模型别挂生产（72）/ 免费但要绑卡是双重门槛（73）/ 第三方排名只作方向（74）/ 倒排纪律合成每日检查单（75）/ DevDay 前一天是改配置末班车（76）/ 官方定档 ≠ 节点冻结（77）/ 单日 N 条到期提前两天列清单（78）/ 迁移按套餐分层且 API 不受影响（79）/ 老混元 10/1 高危窗口（80）/ keynote 后先核原文再看总结（81）/ 传闻在 keynote 当天升官方（82）/ 平台免费档与权重可商用是两笔账（83）/ 提前两天列的清单到期当天翻成核对（84）/ 倒排日是给自己设的、模糊截止最后一天后高危（85）/ 订阅"不涨价但砍额度"是变相调价（86）/ "传闻→官宣"纪律的正面回报（87）/ 订阅权益外溢是把已付成本复用（88）/ 基础设施开源 ≠ 模型权重开源（89）/ 引用安全评测数字先问评测条件（90）。）</p>
+</details>
 </section>
 <section id="s07" class="sec">
 <h2><span class="sn">07</span><span class="h2t">按任务选型速查</span><span class="h2sub">（更新版）</span></h2>
@@ -1023,8 +1182,10 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
-<section id="s08" class="sec">
+<section id="s08" class="sec folded">
 <h2><span class="sn">08</span><span class="h2t">本期信源体系更新</span></h2>
+<details class="audit-fold" id="fold-s08">
+<summary><span class="fold-t">展开：第八章 · 信源体系更新</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <h3 id="h3-21"><span class="h3n">1</span>本期实际命中分布</h3>
 <div class="tblwrap">
 <table class="tbl c3 w1 w1m" style="--w1:179px;--w1m:179px">
@@ -1070,19 +1231,23 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <blockquote class="bq"><p>已同步核对 <code>AI信息源分级清单-T0-T4.md</code>：本期<strong>无新信源登记（台账维持 196 条）</strong>；把「AIHOT 不覆盖权益类条目」升级为<strong>第十六次逐期确认</strong>；第 8 类缺口"模型蒸馏与许可证争议"子类延续（GLM-5.3 无护栏警示）。</p></blockquote>
+</details>
 </section>
-<section id="s09" class="sec">
+<section id="s09" class="sec folded">
 <h2><span class="sn">09</span><span class="h2t">来源与核查说明</span></h2>
+<details class="audit-fold" id="fold-s09">
+<summary><span class="fold-t">展开：第九章 · 来源与核查说明</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <ul class="ul"><li><strong>T0 官方/一手</strong>：</li><li><strong>Anthropic（Claude Tag 促销条款 + GLM-5.3 安全警示，本期核心命中）</strong>——support.claude.com「Claude Tag 推出促销活动」：Enterprise $25,000 / Team（10+ 席位）$2,500，<strong>all promotional credits expire at 11:59 PM Pacific Time on October 1, 2026</strong>；9/2 起须连 GitHub 才发放；仅覆盖 Slack 内 Claude Tag，不含 Code/Cowork/Chat/API。另 9/29 公告：<strong>GLM-5.3 是"most cyber-capable open-weights model yet, shipped with no safeguards"</strong>（320B 混合架构，llama.cpp 已合入）。</li><li><strong>Anthropic（Claude Code 云会话 credit，本期命中）</strong>——9/23 起 Max $250 / Pro $100 一次性 credit，<strong>10/7 前领取、11/5 过期</strong>，仅限云会话（不含 Projects/Routines）；需连 GitHub 后启动会话才扣减。</li><li><strong>中国电信 Xingchen AGI（TeleOCR，本期命中）</strong>——1.2B 文档解析模型，OmniDocBench v1.6 96.87，ICDAR 2026 Sci-ImageMiner 第一；9/30 开源，<strong>许可待核</strong>（避坑 42）。</li><li><strong>B站（Index-Translate，本期命中）</strong>——150 语言翻译模型，35B MoE，<strong>Apache 2.0</strong>，Hugging Face 可下。</li><li><strong>OpenAI（GPT-5.5 10/14 定档维持，沿用）</strong>——help.openai.com + developers.openai.com/codex/models 维持：10/14 从 ChatGPT / ChatGPT Work / Codex 全套餐下线；API 不受影响；迁移 <code>gpt-5.6-sol</code>（Free/Go 用 <code>gpt-6-luna</code>）；018 期 keynote 确认未提前。</li><li><strong>智谱 AI（Coding Plan 双节促销，glm-ai.chat FAQ + BlockBeats，9/25 起沿用）</strong>——9/25–10/7 取消高峰、全天按非高峰 50% 积分计费（本期倒计时第 6 天）；GLM-5.3-Flash 夜间免费（23:00–09:00）延至 10/7，仅 ZCode/AutoClaw 内 Flash 不扣、其他 Agent 双倍。</li><li><strong>腾讯混元（Hy Image3.5 preview / 老混元平台，沿用）</strong>——Hy Image3.5 preview：Miora / WorkRally / OnSolo 三端出图免费至 10/7；<strong>老混元大模型平台 10/1 高危窗口正式开启</strong>（9/25 自设倒排日已过 6 天），须迁 TokenHub。</li><li><strong>Hugging Face / GitHub（本期开源资产主力）</strong>——H Company Holo4（27B、OSWorld 85.2%、开放权重）、Ornith-1.5 DFlash（9B/35B-A3B/397B、HF 免费权重）、蚂蚁 InclusionAI Ling-3.1-Flash（560B MoE、25B 激活、1M 上下文）、IFM K2-Horizon MoVA（36B/4B、512K、Apache 2.0）、OpenClaw v2026.9.7、1,337 Chart Prompts、PostHog Jeeves。</li></ul>
 <ul class="ul"><li><strong>T1/T2/T3 关键来源（本期）</strong>：</li><li><strong>TechCrunch（Reddit RSS/API 调整，9/30，本期命中）</strong>——Reddit 11/13 终止 RSS、次年 3 月削公开 API（理由：AI 爬虫滥用）；避坑 94 素材。</li><li><strong>The Neuron / AI Weekly / aisengtech（9/30 开源综述，本期命中）</strong>——TwIL-LM3-Pro、Echo、Topos-2、TeleOCR、Index-Translate、Ornith-1.5、Holo4、Ling-3.1-Flash、K2-Horizon MoVA 等当日开源清单。</li><li><strong>数字生命卡兹克（DevDay 整理，沿用）</strong>——GPT-6.1 Sol / Dots / $500 档 / Pro 20x→10x 等；与官方汇总交叉核。</li><li><strong>Simon Willison（GitHub Models 退役复盘，沿用）</strong>——避坑 61 一手来源。</li><li><strong>BlockBeats（智谱 Coding Plan，沿用）</strong>——谷价精确口径 + 入口收紧解读。</li><li><strong>ClawLabsAI/free-ai-models（每日免费模型榜，沿用）</strong>——动态目录核对源（本期未见快照变化）。</li></ul>
 <ul class="ul"><li><strong>核查纪律声明</strong>：本期所有"免费额度 / 限时活动"类条目，<strong>凡来自第三方整理或社区口径的，均标注 ⚠️ 与来源层级</strong>。<strong>官方一手口径优先</strong>：Claude Tag Credits 的"过期"原文取自 support.claude.com 促销条款（非二手转述）；GLM-5.3 安全警示取自 Anthropic 9/29 公告。<strong>本期两条纠正</strong>：① Claude Tag Credits 的 10/1 实为过期（019 期看反，见纠错 #1 + 避坑 91）；② 9/30 单日 10 条回扫默认收口（见一·1 + 避坑 78）。<strong>本期回扫</strong>：火山方舟 5 折（9/28）、MiMo OpenCode Flash（~9/29）、DevDay（9/29）、西安黑客松（9/27）均已在前两期回扫确认无静默延期；<strong>9/30 单日 10 条本期翻为 ⚪ 已结束，下期追静默延期</strong>（按避坑 78/84 纪律）；<strong>ZCode 开源仓库 + 信通院/绿盟审计报告截至 10/1 仍未公开</strong>，措辞维持"已整改、未公开"（沿用 010 期避坑）。<strong>命名纪律（019 期纠错 #1 沿用）</strong>：<code>gpt-6-sol</code> 偷跑标识 / GPT-6 Sol / GPT-6.1 Sol / GPT-5.6 Sol 四套近名并存，引用一律以官方发布页写法为准。</li></ul>
+</details>
 </section>
   </main>
 </div>
 
 <footer class="foot">
-  <div class="fr"><span>AI 免费内容与权益速递 · 第 020 期</span><span>2026-10-01（周四）· 9/30 单日 10 条回扫（全部收口）+ Claude Tag Credits 10/1 实为「过期」而非「生效」（019 期看反）+ 老混元高危窗口正式开启 + Claude Code 云会话 $250/$100 新免费额度 + 一批免费开源内容生成资产上线</span></div>
-  <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；第四章「限时活动与截止时间表」支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
+  <div class="fr"><span>AI 免费内容与权益速递 · 第 020 期</span><span>扫描截止 2026-10-01 13:54（GMT+8）</span></div>
+  <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
   <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
 </footer>
 
@@ -1181,6 +1346,22 @@ mark.hl.cur{background:var(--accent); color:#fff}
     apply();
   }
 
+  /* ---------- 长状态格：点击展开全文 ---------- */
+  [].slice.call(document.querySelectorAll(".st-txt.cbody.clamp")).forEach(function(el){
+    el.setAttribute("tabindex","0");
+    el.setAttribute("role","button");
+    el.setAttribute("aria-expanded","false");
+    function open(){
+      el.classList.remove("clamp");
+      el.setAttribute("aria-expanded","true");
+      el.removeAttribute("title");
+    }
+    el.addEventListener("click", open);
+    el.addEventListener("keydown", function(ev){
+      if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); }
+    });
+  });
+
   /* ---------- 全文检索 ---------- */
   var q=document.getElementById("q"), qn=document.getElementById("qn"),
       marks=[], cur=-1, lastQ="";
@@ -1220,6 +1401,11 @@ mark.hl.cur{background:var(--accent); color:#fff}
       node.parentNode.replaceChild(frag,node);
     });
     qn.textContent=marks.length;
+    /* 折叠区内的命中也要看得见：命中即展开所在章节（toggle 事件会补做入场动画与顶栏量高） */
+    marks.forEach(function(m){
+      var d=m.closest?m.closest("details.audit-fold"):null;
+      if(d) d.open=true;
+    });
     if(marks.length){ cur=-1; jump(1); }
     lastQ=v;
   }
@@ -1293,6 +1479,44 @@ mark.hl.cur{background:var(--accent); color:#fff}
       document.body.classList.remove("nav-open");
       menuBtn.setAttribute("aria-expanded","false");
     }
+  });
+
+  /* ---------- 审计层折叠：全部展开 / 目录跳转 / 搜索 / 打印 ----------
+     折叠区在 display:none 里时，IntersectionObserver 不会给 .rise 加 .in，
+     顶栏量高也会把隐藏的 .chips 读成 0 —— 展开时两样都要补做。 */
+  var folds=[].slice.call(document.querySelectorAll("details.audit-fold"));
+  function openFold(id){ folds.forEach(function(d){ if(!id||d.id==="fold-"+id) d.open=true; }); }
+  document.querySelectorAll("[data-open]").forEach(function(a){
+    a.addEventListener("click",function(){ openFold(a.getAttribute("data-open")); });
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      var h=a.getAttribute("href")||"";
+      if(/^#s\d{2}$/.test(h)) openFold(h.slice(1));
+    });
+  });
+  var foldAll=document.getElementById("foldAll");
+  if(foldAll) foldAll.addEventListener("click",function(){
+    var allOpen=folds.every(function(d){return d.open;});
+    folds.forEach(function(d){ d.open=!allOpen; });
+    foldAll.textContent=allOpen?"展开全部章节":"收起全部章节";
+    foldAll.setAttribute("aria-expanded",allOpen?"false":"true");
+  });
+  folds.forEach(function(d){
+    d.addEventListener("toggle",function(){
+      if(!d.open) return;
+      d.querySelectorAll(".rise:not(.in)").forEach(function(el){el.classList.add("in");});
+      syncMetrics();
+    });
+  });
+  var printState=[];
+  window.addEventListener("beforeprint",function(){
+    printState=folds.map(function(d){return d.open;});
+    folds.forEach(function(d){d.open=true;});
+    document.querySelectorAll(".audit-fold .rise:not(.in)").forEach(function(el){el.classList.add("in");});
+  });
+  window.addEventListener("afterprint",function(){
+    folds.forEach(function(d,i){ d.open=printState[i]; });
   });
 
   /* ---------- 回到顶部 ---------- */

@@ -233,9 +233,45 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
   background-image:none; line-height:1.45;
 }
 .toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+/* 「正文之后」标记：只说明点它跳到文末，不用括号、不加底色（2026-11-07）。
+   单独占一行 —— 196px 侧栏里跟在章节名后面会把标题挤到折行。 */
+.toc-hint{
+  display:block; margin-top:1px; font-family:var(--fm); font-size:9.5px;
+  letter-spacing:.06em; color:var(--faint); opacity:.8;
+}
+/* 目录分组标签：一条细线 + 小字，不加框（2026-11-07 方案 A） */
+.toc-g{
+  font-family:var(--fm); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--faint); margin:14px 0 4px; padding-top:11px; border-top:1px solid var(--rule);
+}
+.toc-g:first-child{margin-top:0; padding-top:0; border-top:0}
 .toc-a:hover{color:var(--ink); border-left-color:var(--rule-2)}
 .toc-a.active{color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft)}
 .toc-a.active .toc-n{color:var(--accent-ink)}
+
+/* 《常驻权益总账》只有一个章节（全量表），左侧 196px 目录栏纯占宽度：
+   收成主区顶部一行可展开控件，表格铺满整栏。目录条目一个不删，点开即见。 */
+.shell.shell-wide{grid-template-columns:minmax(0,1fr); gap:0}
+/* 总账页最后就是这张表，表格外框底 = 内容结束。再照别的页留 96px 页脚上边距，
+   深色底上会读成「表格下面塌了一块空白」（用户 2026-11-07 截图框出的那块）。
+   只收这一页，其它页仍是 var(--s7)。 */
+body.ledger-page .shell{padding-bottom:var(--s5)}
+.toc-fold{
+  margin:0 0 var(--s4); padding:8px var(--s3);
+  border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface);
+}
+.toc-fold>summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px;
+  font-family:var(--fm); font-size:11px; letter-spacing:.12em; color:var(--muted);
+}
+.toc-fold>summary::-webkit-details-marker{display:none}
+.toc-fold>summary::before{content:"+"; font-size:15px; line-height:1; color:var(--accent-ink)}
+.toc-fold[open]>summary::before{content:"−"}
+.toc-fold-nav{display:grid; gap:2px; margin-top:8px; padding-top:8px; border-top:1px solid var(--rule)}
+.toc-fold-nav .toc-a{padding-top:6px; padding-bottom:6px}
+/* 总账页没有侧栏抽屉，窄屏的汉堡按钮点了会开一个空抽屉 */
+body.ledger-page #menuBtn{display:none !important}
+@media print{ .toc-fold{display:none !important} }
 
 main{min-width:0}
 .sec{scroll-margin-top:76px; padding-top:var(--s5)}
@@ -315,7 +351,12 @@ blockquote{margin:0}
   width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
   background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
 }
-.tblwrap.scrolly .tbl{border:0; border-radius:0}
+/* 表头吸顶的前提：表格自身不能 overflow:hidden。
+   它会新建一个滚动容器，把 th{position:sticky} 整个废掉 —— 实测在容器内滚动
+   400px 后表头跑到容器上方 305px，正好被 sticky 的筛选条压掉半行（用户
+   2026-11-06「这里老是被上面截断」）。外框与圆角由 .tblwrap.scrolly 承担，
+   这里不需要再裁切；非滚动容器里的 .tbl 仍保留 overflow:hidden 裁圆角。 */
+.tblwrap.scrolly .tbl{border:0; border-radius:0; overflow:visible}
 .tbl thead th{
   position:sticky; top:0; z-index:2; text-align:left; vertical-align:bottom;
   font-family:var(--fm); font-size:11.5px; letter-spacing:.09em; text-transform:uppercase;
@@ -348,6 +389,13 @@ blockquote{margin:0}
 .ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over)}
 .ledger tbody tr[data-st="over"] td{color:var(--muted)}
 .ledger td[data-col="st"]{white-space:normal; overflow-wrap:anywhere}
+/* 《常驻权益总账》全量表专用列宽（2026-11-06 用户截图：活动列一大片空白、
+   截止列被挤成一字一行）。日报 4.1 的 date=76px 是给短日历日用的，不能套过来。
+   三列按内容量配比分宽，仍是 fixed 布局 —— 长状态句不会把整表撑爆。 */
+.tbl.ledger.ledger-full th[data-col="body"]{width:28%}
+.tbl.ledger.ledger-full th[data-col="date"]{width:32%}
+.tbl.ledger.ledger-full th[data-col="st"]{width:40%}
+.tbl.ledger.ledger-full tbody td{overflow-wrap:anywhere}
 .st{
   display:inline-block; width:9px; height:9px; border-radius:99px; margin-right:8px; vertical-align:1px;
   background:var(--rule-2);
@@ -677,6 +725,51 @@ mark.hl.cur{background:var(--accent); color:#fff}
   a{background-image:none}
   @page{size:A4 portrait; margin:12mm}
 }
+
+/* ---- 30 秒速览卡（060 期 A 方案） ---- */
+.brief{
+  background:var(--surface); border:1px solid var(--rule-2); border-left:4px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4);
+  margin:0 0 var(--s5); box-shadow:var(--shadow);
+}
+.brief-k{font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.06em;
+  color:var(--faint); margin:0 0 var(--s2)}
+.brief-h{font-family:var(--fu); font-weight:700; font-size:var(--fs-xl); line-height:1.5;
+  color:var(--ink); margin:0 0 var(--s3); text-wrap:balance}
+.brief-m{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-m span{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:99px; padding:5px 12px}
+.brief-m b{font-family:var(--fm); color:var(--accent-ink); font-size:var(--fs-mid)}
+.brief-a{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-a a,.brief-a button{font-family:var(--fu); font-size:var(--fs-sm);
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--rule-2);
+  border-radius:var(--r1); padding:8px 14px; text-decoration:none; cursor:pointer}
+.brief-a a:hover,.brief-a button:hover{border-color:var(--accent)}
+.brief-n{font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  color:var(--muted); margin:0}
+
+/* ---- 审计层折叠：details 只做逻辑容器，展开后排版与原来完全一致 ---- */
+.folded{padding-top:var(--s4)}
+.audit-fold{margin:0}
+.audit-fold>summary{
+  display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap; list-style:none;
+  padding:var(--s3) var(--s4); margin:0 0 var(--s3); cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r2);
+  font-family:var(--fu); font-size:var(--fs-mid); font-weight:700; color:var(--ink);
+}
+.audit-fold>summary::-webkit-details-marker{display:none}
+.audit-fold>summary::before{content:"+"; font-family:var(--fm); font-size:19px;
+  font-weight:400; color:var(--accent-ink); line-height:1}
+.audit-fold[open]>summary::before{content:"\2212"}
+.audit-fold[open]>summary{margin-bottom:var(--s5)}
+.fold-t{flex:1}
+.fold-hint{font-family:var(--fm); font-size:var(--fs-xs); font-weight:400; color:var(--faint)}
+.audit-fold>p{margin-bottom:var(--s4)}
+.audit-fold h3:first-child{margin-top:0}
+@media print{
+  .audit-fold>summary{display:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
 </style>
 </head>
 <body>
@@ -687,7 +780,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <header class="topbar" data-no-print>
   <div class="tb-in">
     <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#056</b></span>
-    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s05"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s08"><b>08</b>本期信源体系更新</a><a href="#s09"><b>09</b>来源与核查说明</a><a href="#s04" class="tail"><b>04</b>限时活动与截止时间表</a></nav>
+    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s04"><b>04</b>限时活动与截止时间表</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s05" class="tail"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s08"><b>08</b>本期信源体系更新</a><a href="#s09"><b>09</b>来源与核查说明</a></nav>
     <div class="tb-tools">
       <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">⌕</button>
       <div class="search">
@@ -711,24 +804,35 @@ mark.hl.cur{background:var(--accent); color:#fff}
   <h1 class="mh-t">AI 免费内容与权益速递</h1>
   <p class="mh-sub"></p>
   <div class="pubnote"><p>扫描截止 <strong>2026-11-02 16:00（GMT+8）</strong>，<strong>窗口 = 上一期（055）扫描截止 11/1 13:30 → 本期截止</strong>，约 <strong>26.5 小时</strong>。</p><p>⚠️ <strong>本期的性质：隔日出刊</strong>。<strong>055 期是 11/1 的第一轮（窗口 10/31 19:00 → 11/1 13:30，约 18.5 小时），本期是 11/2 的第一轮（窗口 11/1 13:30 → 11/2 16:00，约 26.5 小时）—— 两期不合并、不互相覆盖</strong>：055 期窗口 10/31 19:00 → 11/1 13:30，本期窗口 11/1 13:30 → 11/2 16:00，<strong>窗口起点＝上期截止点，各期内容各自独立成立</strong>。</p><p>⚠️ <strong>窗口换算（美西 / 北京双向）</strong>：<strong>起于北京 11/1 13:30 ＝ 美西 11/1 01:30 PT；止于北京 11/2 16:00 ＝ 美西 11/2 00:00 PT</strong>（北京比美西太平洋时间快 <strong>16</strong> 小时 —— ⚠️ <strong>换季已生效</strong>：美国 2026 年夏令时于 <code>11/1</code> 02:00 PT 结束（＝北京 <code>11/1</code> 17:00），<strong>本窗口完全落在冬令时（<code>PST</code>，UTC−8）区间内</strong>，故换算系数从 055 期及此前的 <code>+15</code> 小时改为 <strong><code>+16</code> 小时</strong>。046 期已改正过一次该换算，本期是<strong>第二次因换季而变</strong>—— <strong>判据是「美西 11/1 01:30 → 11/2 00:00」这两个数本身</strong>）。⚠️ <strong>本窗口横跨美西两个日历日</strong>（美西 11/1 与 11/2）。</p><p>⚠️ <strong>本期的实抓规模</strong>：<strong>全量扫 274 个抓取件（另补抓 60 余个专项一手页）、共解析出 3,185 条带时间戳条目、落在窗口内的 <code>53</code> 条</strong>（<strong>窗口内条目绝大多数是社区讨论与媒体转述</strong>）；<strong>逐条归因后，真正产生免费内容条目的只有 4 条</strong>（见第一章第 5 节逐条归因）：<strong>① <code>OpenAI</code> 官方「<code>ChatGPT</code> 与 <code>Codex</code> 额度合池」文档 ＋ 官方「设备 / 支付卡上限」文档（两份都是一手，且两份都逐字把 <code>Free</code> 排除在外 —— 这是本报告至今第一次拿到 <code>OpenAI</code> 官方把「免费档不受影响」写成明文）② <code>Hugging Face</code> <code>downloads</code> 字段的口径纠错（近 <code>30</code> 天滚动窗口，不是累计量）③ <code>Runware</code> <code>heygen</code> 促销 <code>endsAt</code> 的跨期纠错（055 期的结论与 055 期自己的归档文件不一致）④ 小米 <code>HachimoDock</code> 开源硬件（一手 <code>GitHub</code> 仓库 + 自有许可证原文）</strong>；<strong>另有 2 个往期挂账项的一手销项</strong>（<code>Kimi K3.1 Pro</code> 权重仍未放出、<code>Anthropic</code> <code>S-1</code> 修订件仍止于 <code>10/26</code> —— <strong>两者都是「复核同值」，不销项</strong>）。</p><p>⚠️ <strong>本期最有工程价值的三条</strong>：<strong>① 「同一厂商可以在同一周内连发两份官方文档，而两份文档对「免费档受不受影响」的答案完全相反（一份是覆盖 <code>Free</code> 的能力、一份是不覆盖 <code>Free</code> 的限额）—— 必须逐份读、不能互相替代」</strong> —— <code>Codex</code> 覆盖 <code>Free</code>、但额度合池只覆盖 <code>Plus/Pro/Business</code>；<strong>② 「流通量字段」这类指标必须先确认官方口径再记账</strong> —— 本期发现 <code>HF</code> <code>downloads</code> 是<strong>滚动 <code>30</code> 天窗口</strong>，<strong>往期多期把它当累计量写成「单期涨 <code>X</code>、涨 <code>Y%</code>」，那些增速表述本期一律作废</strong>（新立避坑 249）；<strong>③ 「上期给的结论」与「上期自己的归档文件」可以互相矛盾</strong> —— 055 期写「<code>heygen</code> 的 <code>endsAt</code> 回到 <code>10/31</code>」，而 055 期自己归档的那份 <code>runware.ai/pricing</code> 里写的是 <code>2026-11-30</code>（新立避坑 250）。</p><p>与 001–055 期的关系：<strong>只做增量与纠错，不重复已固化内容</strong>。<strong>本期纠错 4 条（见第五章）</strong>，其中<strong>一条是「<code>HF</code> <code>downloads</code> 的口径错了 —— 往期多期的「单期涨 <code>X</code>」表述作废」</strong>、<strong>一条是「055 期关于 <code>Runware</code> <code>heygen</code> 的结论与 055 期自己的归档文件不一致」</strong>、<strong>一条是「055 期记的 <code>freellm</code> 六项是「全部同值」—— 本期实读仍是同值，但同值的口径要写清是哪六项、怎么数的」</strong>、<strong>一条是「055 期把 <code>Anthropic</code> 官方 <code>Ultra</code> 档的「取消已验证账户 5 小时限额」与「<code>Free</code> 档」混在一处，本期拆开」</strong>。<strong>本期新增避坑 3 条：249–251</strong>。</p></div>
-  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">72 条 · 一条一行</span></a><span class="vs-i vs-full is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 056 期 · 十节</span></span><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">157 条 · 无截止日</span></a></nav>
+  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">76 条 · 一条一行</span></a><span class="vs-i vs-full is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 056 期 · 十节</span></span><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">164 条 · 无截止日</span></a></nav>
 </header>
 
 <div class="shell">
   <div class="drawerwrap" id="drawerwrap"><aside class="rail" id="rail" aria-label="目录">
     <p class="rail-t">本期目录</p>
-    <nav><a class="toc-a" href="#s-abs"><span class="toc-n">··</span>摘要</a>
-<a class="toc-a" href="#s01"><span class="toc-n">01</span>AI 免费内容发布</a>
-<a class="toc-a" href="#s02"><span class="toc-n">02</span>免费内容生成工具</a>
-<a class="toc-a" href="#s03"><span class="toc-n">03</span>常驻免费额度与 API</a>
-<a class="toc-a" href="#s05"><span class="toc-n">05</span>本期纠错清单</a>
-<a class="toc-a" href="#s06"><span class="toc-n">06</span>避坑提示</a>
-<a class="toc-a" href="#s07"><span class="toc-n">07</span>按任务选型速查</a>
-<a class="toc-a" href="#s08"><span class="toc-n">08</span>本期信源体系更新</a>
-<a class="toc-a" href="#s09"><span class="toc-n">09</span>来源与核查说明</a>
-<a class="toc-a" href="#s04"><span class="toc-n">04</span>限时活动与截止时间表（正文之后 · 11/2 16:00 复核 · 过期 &gt;7 天已归档）</a></nav>
+    <nav><p class="toc-g">本期内容</p>
+<a class="toc-a" href="#s-abs"><span class="toc-n">··</span><span class="toc-t">摘要</span></a>
+<a class="toc-a" href="#s01"><span class="toc-n">01</span><span class="toc-t">AI 免费内容发布</span></a>
+<a class="toc-a" href="#s02"><span class="toc-n">02</span><span class="toc-t">免费内容生成工具</span></a>
+<a class="toc-a" href="#s03"><span class="toc-n">03</span><span class="toc-t">常驻免费额度与 API</span></a>
+<p class="toc-g">马上要办</p>
+<a class="toc-a" href="#s04"><span class="toc-n">04</span><span class="toc-t">限时活动与截止时间表<span class="toc-hint">正文之后</span></span></a>
+<p class="toc-g">怎么用</p>
+<a class="toc-a" href="#s07"><span class="toc-n">07</span><span class="toc-t">按任务选型速查</span></a>
+<p class="toc-g">审计层 · 默认折叠</p>
+<a class="toc-a" href="#s05"><span class="toc-n">05</span><span class="toc-t">本期纠错清单</span></a>
+<a class="toc-a" href="#s06"><span class="toc-n">06</span><span class="toc-t">避坑提示</span></a>
+<a class="toc-a" href="#s08"><span class="toc-n">08</span><span class="toc-t">本期信源体系更新</span></a>
+<a class="toc-a" href="#s09"><span class="toc-n">09</span><span class="toc-t">来源与核查说明</span></a></nav>
   </aside></div>
   <main id="main">
+<div class="brief" data-no-print>
+<p class="brief-k">30 秒速览 · 第 056 期</p>
+<p class="brief-h">OpenAI：12 月起 ChatGPT 与 Codex 额度合池，Free 档不在范围内</p>
+<div class="brief-m"><span>本期表体 <b>95</b> 行</span><span>其中必办 <b>3</b> 条</span><span>今明换挡 <b>5</b> 条</span></div>
+<div class="brief-a"><a href="#s04" data-open="s04">看必办清单</a><a href="quick.html">只看极速版</a><button type="button" id="foldAll" aria-expanded="false">展开全部章节</button></div>
+<p class="brief-n">下方是本期新闻正文（未折叠）；第四章权益台账与纠错、避坑、信源、核查等审计层默认收起，点标题展开。目录跳转、全文检索命中与打印时会自动展开。卡片数字是本期表体口径，全量三态分布以第四章脚注为准。原文一字未删。</p>
+</div>
 <p><strong>2026-11-02（周一）· 本期头条是「<code>OpenAI</code> 官方第一次把「<code>ChatGPT</code> 与 <code>Codex</code> 的额度将从 12 月起合并成一个 <code>token</code> 池」写成了一份独立的官方帮助中心文档 —— 并且在同一份文档里逐字写明「<code>Free</code> 档不在这次合并的范围内」」</strong>。一手 <code>help.openai.com/en/articles/20001625-understanding-chatgpt-and-codex-usage-limits</code>（<code>200</code> / <code>49,809</code> 字节，官方 <code>Updated: 11 hours ago</code>）：<code>Starting in December, Plus, Pro, and Business plans' usage allowance will be shared across ChatGPT and Codex as we bring the agentic capabilities of Work into the main ChatGPT experience.</code>、<code>Your usage for ChatGPT and Codex will be measured in tokens, the units of information a model processes and generates.</code>、<code>Instant chat will not draw from your usage.</code>。<strong>对免费读者最要紧的一句在同一份官方文档的另一处</strong>：<code>Codex is included across ChatGPT plans, including Free and Go.</code>（一手 <code>help.openai.com/en/articles/11369540-codex-in-chatgpt</code>，<code>200</code> / <code>128,587</code> 字节，官方 <code>Updated: 8 days ago</code>）—— <strong>即「<code>Codex</code> 能用」与「额度合池」是两件事，前者覆盖 <code>Free</code>、后者不覆盖</strong>。<strong>同期还拿到第二份官方一手文档</strong>：<code>help.openai.com/en/articles/20001559-understanding-card-and-device-limits-in-chatgpt</code>（<code>200</code> / <code>71,201</code> 字节，官方 <code>Updated: 2 days ago</code>）逐字写明付费账号的「设备 / 支付卡上限」，<strong>并同样逐字把 <code>Free</code> 排除在外</strong>：<code>Device limits apply to ChatGPT Go, ChatGPT Plus, ChatGPT Pro 100, ChatGPT Pro 200, and ChatGPT Pro 500 plans. ChatGPT Free and ChatGPT Business, Enterprise, and Edu workspace plans do not count toward the limit.</code>。<strong>另外三条硬条目</strong>：<strong>① 本期推翻了往期多期对 <code>Hugging Face</code> <code>downloads</code> 字段的口径 —— 它是「近 <code>30</code> 天滚动窗口」而不是累计量</strong>（官方模型页逐字 <code>Downloads last month</code>，且另有独立字段 <code>downloadsAllTime</code>）<strong>② <code>Runware</code> 那条 <code>heygen</code> 促销的 <code>endsAt</code> —— 055 期记的「回到 <code>10/31</code>」被本期用 055 期自己的归档文件推翻</strong>（055 期的归档文件里写的就是 <code>2026-11-30</code>，055 期的结论与自己的证据不一致）<strong>③ 小米孵化、已开源的 <code>HachimoDock</code>（哈基米机）—— 一手 <code>GitHub</code> 仓库 <code>YizhengWw/HachimoDock</code>，<code>642</code> stars、<code>60</code> forks、许可证为「非商业」自有许可</strong></p>
 <section id="s-abs" class="sec summary">
 <h2><span class="sn">··</span><span class="h2t">摘要</span><span class="h2sub">（3 秒版）</span></h2>
@@ -910,13 +1014,19 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
-<section id="s05" class="sec">
+<section id="s05" class="sec folded">
 <h2><span class="sn">05</span><span class="h2t">本期纠错清单</span><span class="h2sub">（对 055 期）</span></h2>
+<details class="audit-fold" id="fold-s05">
+<summary><span class="fold-t">展开：第五章 · 本期纠错清单</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <ol class="ol"><li><span class="lin">1</span><span class="lit"><strong>⚠️ 055 期与更早各期对 <code>Hugging Face</code> <code>downloads</code> 字段的口径全部错了 —— 它是「近 <code>30</code> 天滚动窗口」，不是累计量</strong>。055 期第三章第 4 节写「<code>downloads</code> <strong>仍是 <code>69,231</code></strong>」，055 期第四章脚注③的强制动作⑳写「<code>文心 Unlimited OCR 2</code> 的 <code>HF</code> 下载量是否继续增长（<strong>本期 <code>downloads</code> 增量 <code>0</code>、<code>likes</code> <code>466</code> → <code>480</code></strong>）」，054 期写「<code>18,141</code> → <code>69,231</code>，涨了 <code>51,090</code>」并写成「<strong>涨 <code>281%</code></strong>」，053 期写「单期涨 <code>9,784</code>」—— <strong>这四处全部作废</strong>。<strong>本期实读官方模型页</strong>：一手 <code>hf-mirror.com/moonshotai/Kimi-K3</code>（<code>200</code> / <code>573,278</code> 字节）页面把这一栏的标签逐字写成 <strong><code>Downloads last month</code></strong>，而同一个页面的数据块里另有一个独立字段 <strong><code>downloadsAllTime: 5997142</code></strong>（对照同页 <code>downloads: 813134</code>）。<strong>⚠️ 本期实测的第二个证据</strong>：把 055 期与本期两期归档的 <code>HF</code> 模型列表逐条 diff，<strong>可比模型 <code>347</code> 个 —— 上升 <code>136</code> 个、下降 <code>169</code> 个、同值 <code>42</code> 个</strong> —— <strong>一个累计计数器不可能下降</strong>（下降样本含 <code>Qwen/Qwen3.5-4B</code> <code>−391,676</code>、<code>Qwen/Qwen3.8-Flash-Next</code> <code>−133,041</code>、<code>moonshotai/Kimi-K3</code> <code>−52,907</code>）。<strong>要害问题</strong>：<strong>往期多期写的「单期涨 <code>X</code>」「涨 <code>Y%</code>」是在描述一个滚动窗口的差值，把它当累计增长讲会误导读者对「这个模型有多受欢迎」的判断</strong>。<strong>处置：本期起 <code>HF</code> 的 <code>downloads</code> 一律写「近 <code>30</code> 天」口径，并同时给出 <code>downloadsAllTime</code>；本期起不对 <code>downloads</code> 的升降写「热度上升 / 下降」结论</strong>（新立避坑 249）。</span></li><li><span class="lin">2</span><span class="lit"><strong>⚠️ 055 期第五章纠错第 4 条的结论与 055 期自己的归档文件不一致 —— 本期用 055 期归档的那份文件推翻它</strong>。055 期写「<code>Runware</code> 那条 <code>heygen</code> 促销的 <code>endsAt</code> 在本期回到 <code>2026-10-31</code>」，理由是「逐条 diff：<code>14</code> 条全部同值、<code>0</code> 条新增、<code>0</code> 条消失、<code>0</code> 条 <code>endsAt</code> 改动」—— <strong>这两句话自相矛盾</strong>：<strong>若 <code>0</code> 条 <code>endsAt</code> 改动，054 期的 <code>11/30</code> 就原样延续</strong>。<strong>本期实读 055 期自己归档的 <code>tmp_055/runware_pricing6.html</code>（<code>745,859</code> 字节）</strong>：逐字就是 <code>until November 30, 2026</code> 与 <code>endsAt: "2026-11-30"</code> —— <strong>即 055 期读到的值与它写出的结论相反</strong>。<strong>本期把 050–056 七期的归档文件逐期列出</strong>（第一章第 4 节）：<code>050</code>–<code>053</code> 四期全是 <code>2026-10-31</code>，<strong><code>054</code> 起变成 <code>2026-11-30</code>，<code>055</code> 与 <code>056</code> 都是 <code>2026-11-30</code></strong> —— <strong>即 054 期记的「官方延长了 <code>30</code> 天」是对的，055 期「推翻」它才是错的</strong>。<strong>要害问题</strong>：<strong>这不是措辞问题、是一条已经写进往期报告的「事实」被后续一期「推翻」成了另一个事实</strong> —— <strong>读者若据此以为「那条促销在 <code>10/31</code> 就结束了」，会错过 <code>11/30</code> 这个真正的截止日</strong>。<strong>处置：本期把该行的截止日改回 <code>11/30</code> 并在表体尾注里逐期列出七期归档证据</strong>（新立避坑 250：<strong>「上期给的结论」必须与「上期自己的归档文件」对账，不能直接继承</strong>）。</span></li><li><span class="lin">3</span><span class="lit"><strong>⚠️ 055 期记的 <code>freellm</code> 六项「全部同值」—— 结论成立，但计数口径没写清，本期补齐</strong>。055 期写「<code>freellm.net</code> 六项计数器 <strong><code>541</code> / <code>306</code> / <code>31</code> / <code>459</code> / <code>249</code> / <code>Latest … 2026-10-27</code> —— 六项全部同值</strong>」。<strong>本期实读确认结论成立</strong>（按 <code>hero-stat-num</code> / <code>hero-stat-label</code> 结构化配对解析：本期与 055 期逐项相同）。<strong>⚠️ 但 055 期没有写清这六项是怎么数的</strong> —— <strong>若按全文 grep 计数，原文件 <code>541</code> 命中 <code>12</code> 次、剥掉 <code>&lt;script&gt;</code> 后 <code>9</code> 次，而 055 期记的 <code>10</code> 次是两者之间的中间值</strong>（<strong>避坑 248 的同族：同一个数字、不同的计数口径，会让「同值 / 变了」的判断本身失去意义</strong>）。<strong>处置：本期在第三章第 5 节把六项的标签逐项写出来（<code>541</code> = <code>Models Tracked</code>、<code>306</code> = <code>Free &amp; Online</code>、<code>31</code> = <code>Providers</code>、<code>459</code> = <code>No Credit Card</code>），并注明是结构化配对解析而非全文 grep</strong>。</span></li><li><span class="lin">4</span><span class="lit"><strong>⚠️ 055 期把 <code>Anthropic</code> 官方 <code>Ultra</code> 档的「取消已验证账户 5 小时限额」与「<code>Free</code> 档」混在一处表述 —— 本期拆开</strong>。055 期记 <code>Anthropic</code> 订阅档改版时写「<strong>与免费读者相关的只有 <code>Free</code> 档 —— 官方对照表两格都写 <code>Limited</code></strong>」—— <strong>本期实读官方定价页确认 <code>Free</code> 档两格都是 <code>Limited</code> 这条仍成立</strong>，<strong>但 055 期同一段把「<code>Ultra</code> 取消已验证账户 5 小时限额」与「<code>Free</code> 档」放在同一句里讨论，容易读成「<code>Free</code> 档也放开了 5 小时限额」</strong>。<strong>⚠️ 本期实读官方帮助文档 <code>help.openai.com/en/articles/11369540-codex-in-chatgpt</code> 逐字 <code>Codex is included across ChatGPT plans, including Free and Go.</code></strong> —— <strong>即 <code>Free</code> 档确实能用 <code>Codex</code>，但这与「<code>Ultra</code> 取消 5 小时限额」是两回事</strong>。<strong>处置：本期在第三章与第五章把这三层（<code>Free</code> 档能用 <code>Codex</code> / <code>Free</code> 档不受额度合池影响 / <code>Free</code> 档不受设备上限影响）分别写清，不合并成一句</strong>（新立避坑 251）。</span></li></ol>
+</details>
 </section>
-<section id="s06" class="sec">
+<section id="s06" class="sec folded">
 <h2><span class="sn">06</span><span class="h2t">避坑提示</span><span class="h2sub">（本期新增 3 条：249–251）</span></h2>
+<details class="audit-fold" id="fold-s06">
+<summary><span class="fold-t">展开：第六章 · 避坑提示</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <ol class="ol big"><li><span class="lin">249</span><span class="lit"><strong>「流通量」这类指标必须先确认官方口径再记账 —— 同一个字段名可能是「累计量」，也可能是「滚动窗口值」，而两者的差值含义完全不同</strong>。<strong>本期样本</strong>：<code>Hugging Face</code> 模型页的 <code>downloads</code> 字段 —— <strong>官方标签逐字是 <code>Downloads last month</code>，而同一个页面的数据块里另有 <code>downloadsAllTime</code></strong>。<strong>⚠️ 判据：① 记账前先在官方页面上找到这个数字的</strong>标签文案<strong>（不是只看 JSON 里的字段名）；② 若页面同时提供「窗口值」与「累计值」，两个都要取、并明确标注哪个是哪个；③ 若跨期出现「下降」，那一定是滚动窗口而不是累计量 —— 累计计数器不会下降；④ 不要对滚动窗口的差值写「增速 / 涨 <code>Y%</code>」这类结论</strong>。<strong>⚠️ 本报告此前多期在这个字段上写错了，本期起全部作废并改正</strong>（详见第五章纠错第 1 条）。</span></li><li><span class="lin">250</span><span class="lit"><strong>「上期给的结论」必须与「上期自己的归档文件」对账 —— 两者可以互相矛盾，而矛盾的往往不是措辞、是一条已经写进往期报告的「事实」</strong>。<strong>本期样本</strong>：<code>Runware</code> 的 <code>heygen-video-1-0-launch-promo</code> —— <strong>055 期写「<code>endsAt</code> 回到 <code>2026-10-31</code>」，而 055 期自己归档的 <code>tmp_055/runware_pricing6.html</code> 里逐字写的就是 <code>endsAt: "2026-11-30"</code></strong>。<strong>⚠️ 判据：① 继承往期结论前，先去读往期自己归档的那份原始文件（本期是 <code>tmp_055/runware_pricing6.html</code>，不是重抓一遍）；② 往期结论与往期归档不一致时，</strong>以归档文件为准<strong>，并把跨期逐期列出来（本报告列了 <code>050</code>–<code>056</code> 七期）；③ 本报告过去有「单期 diff 结果不足以断言趋势，至少要连续两期」这条纪律（新立于 055 期）—— 本期把它升级为「</strong>连续两期还不够，要与往期归档对账<strong>」</strong>。<strong>⚠️ 这条纪律的通用形态：一条「纠错」也可能本身是错的，而它一旦发布，读者就会按错的结论行动</strong>。</span></li><li><span class="lin">251</span><span class="lit"><strong>同一厂商可以在一周内连发两份官方文档，而两份文档对「免费档受不受影响」的答案完全相反 —— 必须逐份读、不能互相替代，更不能合并成一句「免费档不受影响」</strong>。<strong>本期样本</strong>：<code>OpenAI</code> 官方两份帮助中心文档 —— <strong>① <code>20001625-understanding-chatgpt-and-codex-usage-limits</code> 逐字 <code>Starting in December, Plus, Pro, and Business plans' usage allowance will be shared across ChatGPT and Codex…</code>（</strong>额度合池不覆盖 <code>Free</code><strong>）；</strong>② <code>11369540-codex-in-chatgpt</code> 逐字 <code>Codex is included across ChatGPT plans, including Free and Go.</code>（<strong><code>Codex</code> 这个能力覆盖 <code>Free</code></strong>）<strong>。</strong>⚠️ 判据：判断「免费档受不受某次官方变更影响」时，要把「该次变更涉及的是<strong>能力</strong>还是<strong>限额</strong>」分开读 —— <strong>能力类变更常常覆盖免费档、限额类变更常常不覆盖</strong>；② 同一厂商、同一周、同一主题的两份官方文档<strong>必须各引一次原文</strong>，不能因为「都跟 <code>ChatGPT</code> 有关」就用一份代替另一份<strong>。</strong>⚠️ 与避坑 244 同族但方向相反<strong>：244 说的是「两种形态的官方对照表不能互相替代」，</strong>251 说的是「同一主题的两份官方文档也不能互相替代」**。</span></li></ol>
+</details>
 </section>
 <section id="s07" class="sec">
 <h2><span class="sn">07</span><span class="h2t">按任务选型速查</span><span class="h2sub">（延续 055 期 · 本期更新 5 处）</span></h2>
@@ -932,24 +1042,32 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
-<section id="s08" class="sec">
+<section id="s08" class="sec folded">
 <h2><span class="sn">08</span><span class="h2t">本期信源体系更新</span></h2>
+<details class="audit-fold" id="fold-s08">
+<summary><span class="fold-t">展开：第八章 · 信源体系更新</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <p><strong>⚠️ 本期新增 3 条 T0 清单条目</strong>：<strong>① <code>OpenAI</code> 官方帮助中心 <code>help.openai.com</code>（单篇文章 <code>20001625</code> 与 <code>20001559</code>）</strong>（<strong>理由</strong>：<strong>本期实访拿到本报告至今第一次「<code>OpenAI</code> 官方就额度合池与账号上限写成独立文档」的两份一手页，且两份都逐字写明免费档的处理方式</strong> —— <strong>官方帮助中心与官方 <code>news</code> RSS 是两个不同的层：<code>news</code> 只有产品发布，帮助中心才有配额与限制口径</strong>）<strong>② <code>Hugging Face</code> 模型页的「数据块」（<code>api/models</code> 与模型页内嵌的 <code>downloadsAllTime</code> 字段）</strong>（<strong>理由</strong>：<strong>这是本期发现「<code>downloads</code> 是滚动窗口」的唯一官方证据所在</strong> —— <strong><code>api/models</code> 列表接口只给 <code>downloads</code>，模型页才给 <code>downloadsAllTime</code> 与标签文案 <code>Downloads last month</code></strong>）<strong>③ 小米 <code>HachimoDock</code> 官方仓库（<code>github.com/YizhengWw/HachimoDock</code>）</strong>（<strong>理由</strong>：<strong>本报告至今第一个「国内厂商孵化、以自有非商业许可开源、且客户端与固件都可直接下载」的完整硬件方案</strong>）。</p>
 <p><strong>⚠️ 本期用户补充的 T0–T4 清单与台账的差异</strong>：本轮把用户本轮提供的清单（含 <code>aihot.news</code> 入口）逐条比对 —— <strong>台账中已有 <code>aihot.news</code> 的同一家源（<code>aihot.virxact.com</code>，<code>034</code>–<code>055</code> 期连续二十二期同结论：两个入口同一家的两处，</strong>不重复登记<strong>）；其余条目（<code>T0</code> 根节点 <code>97</code> 条、<code>T1</code> <code>19</code> 条、<code>T2</code> <code>18</code> 条、<code>T3</code> <code>36</code> 条、<code>T4</code> <code>12</code> 条）</strong>逐条核对写法差异后全部命中，无一条需要改口径<strong>。⚠️ </strong>本期实跑了一次「用户清单 → 实抓清单」的归一化比对<strong>（把 <code>www.</code> 前缀、<code>hf-mirror.com</code> 与 <code>huggingface.co</code>、<code>/feed</code> 与 <code>/rss</code> 这类同源变体归一后逐条对）：</strong>用户清单 <code>183</code> 条中 <code>163</code> 条直接命中实抓清单<strong>；</strong>余下 <code>20</code> 条逐条核对后确认均为同源变体或非可抓页面<strong> —— </strong>其中 <code>3</code> 条是本期真正补抓的新入口<strong>：<code>openai.com/research/</code>（<code>200</code> / <code>365,232</code> 字节）、<code>anthropic.com/engineering</code>（<code>200</code> / <code>325,227</code> 字节）、<code>docs.github.com/en/rest/releases</code>（<code>200</code> / <code>340,836</code> 字节）；</strong>其余为 API 形态或前端页（<code>x.com</code> / <code>mp.weixin.qq.com</code> / <code>s.weibo.com</code> 等），本期实访不可读或无 RSS，按「不新增抓取位」处理**。</p>
 <p><strong>⚠️ 本期媒体转述源（官方页已核到、但本条仍属媒体先报道的）</strong>：<code>the-decoder.com</code> 两篇 <code>OpenAI</code> 报道（窗口内 <code>pubDate</code> ＝ 北京 <code>11/1 17:51</code> 与 <code>11/2 04:05</code>）—— <strong>官方逐字口径已核到，本报告只采用官方版本</strong>；<code>quantum位</code> 窗口内三篇（<code>Claude</code> 游戏复刻禁令 / <code>GPT-6.2 Astra</code> 灰测 / 小米 <code>HachimoDock</code>）—— <strong>其中只有 <code>HachimoDock</code> 那篇对应到一手官方仓库并进了表体</strong>，另两篇<strong>官方页未核到，本期不进表体</strong>（详见第二章第 3、4 节）。</p>
 <p><strong>⚠️ 本期未做的核对（如实记）</strong>：<strong>① <code>豆包工作 30 天订阅</code>（A 档，已过 <code>16</code> 天）—— 连续第 <code>10</code> 期零命中</strong>（<code>volcengine.com/product/doubao-work</code> <code>200</code> / <code>169,565</code> 字节但正文提取后 <code>178</code> 字节 <code>JS</code> 壳）② <code>国家超算互联网</code> 的官方页找到「夜间免费」那一栏（<code>www.scnet.cn</code> 关键词零命中，<strong>连续第 <code>4</code> 期</strong>，且字节数与 055 期完全相同）③ <code>MOSS-Image</code> 的 <code>ModelScope</code> 侧下载量口径（该站本期仍无下载量字段）④ <code>Mistral Large 4</code> 的 <code>Mistral API</code> 官方单价（<code>docs.mistral.ai</code> 不可达，连续第 <code>16</code> 次）⑤ <code>Mistral</code> 官方公告页原文（<code>000</code>，连续第 <code>16</code> 次）⑥ <code>Mistral Large 4</code> demo 免费预算的<strong>具体额度数字</strong>与<strong>「发布后第一周」的日历日</strong>（<strong>本期未复核 —— 该官方逐字口径页本期不可达</strong>）⑦ <code>AutoClaw</code> 国际站 <code>M10W4</code> 页那句残留文案 ⑧ <code>AutoClaw</code> 国内站 <code>M10W5</code> 是否发布（<strong>答案仍是「没有 <code>M10W5</code> 这个编号」</strong>）⑨ <code>Kimi K3.1 Pro</code> 权重是否在 <code>11/4</code> 前放出（<strong>本期 <code>HF</code> 官方名下仍无 <code>K3.1</code>，且离 <code>11/4</code> 只剩 <code>2</code> 天</strong>）⑩ <code>K2</code> 系列 <code>10/31</code> 停新<strong>当日新用户能否注册</strong>（<strong>官方公告原文已核到，但「如期执行」需登录态实测</strong>）⑪ <code>OpenCode</code> 免费档清单 <code>9</code> 条是否稳定、<code>LongCat</code> 是否回归（<strong><code>9</code> 条逐条 ID 同值；<code>LongCat</code> 仍未回归</strong>）⑫ <code>Runware</code> 那 <code>9</code> 条已过期仍在数组里的条目会不会被清理（<strong>条数稳定、一条未清，连续第三期</strong>）⑬ <code>Unsloth</code> 官网量化基准页全文（<strong>本期三档口径再核一遍：原文件 <code>15</code> / <code>8</code> → 剥 <code>&lt;svg&gt;</code> 后 <code>0</code> / <code>0</code></strong>）⑭ <code>mistral.ai</code> 抓取恢复（连续第 <code>16</code> 次）⑮ <code>platform.reflection.ai</code> 定价（连续第 <code>18</code> 期 <code>403</code>）⑯ 老混元 <code>Q04</code>（连续第 <code>44</code> 期）⑰ <code>Anthropic</code> <code>S-1</code> 修订件（本期仍止于 <code>10/26</code>，同值）⑱ <code>freellm</code> 那 <code>9</code> 条的逐条归因（该站不提供可存档的模型 ID 清单，不猜）⑲ <code>文心 Unlimited OCR 2</code> 的 <code>HF</code> 下载量<strong>累计口径</strong>（<strong>本期首次取得 <code>downloadsAllTime</code> = <code>109,519</code></strong>）⑳ <code>WebAI</code> 完整 API 文档（<code>next.opera.com/web-ai/</code> 本期仍 <code>451</code>，连续第 <code>6</code> 期）㉑ <code>Gemini 4 Carbon</code> 的具体发布日（<strong>两种 slug 本期仍 <code>404</code></strong>，且 <code>deepmind.google</code> 博客首页本期 <code>Carbon</code> 零命中）㉒ <code>Antigravity</code> 免费档具体可用模型清单与 <code>Basic weekly rate limits</code> 的具体数字（官方 <code>/models</code> 本期 <code>404</code>、<code>/pricing</code> 本期 <code>000</code>）㉓ <code>OpenRouter</code> 公告页「<code>CSAM</code> 筛查」对具体模型的适用差异（本期该页仍是重定向壳）㉔ <code>GPT-6.1 Terra</code> Free 档细表（<code>platform.openai.com/docs/models</code> 本期仍 <code>403</code>，连续第 <code>9</code> 期）㉕ <code>B</code> 类 14 天内到期的条数逐条复核（见第四章脚注①）㉖ <code>OXR</code> 免费 API 的超额扣费与单请求 <code>20</code> 页 / <code>10MB</code> 上限<strong>实测</strong>（<strong>本期该官方规则页 <code>404</code>，口径未复核</strong>）㉗ <code>AutoClaw</code> <code>M11W1</code> 两站点起始日差异是否对齐（<strong>本期官方自己仍不对齐</strong>：国际站逐字 <code>Event period: October 31, 00:00 – November 8, 23:59 (UTC+8)</code>、国内站逐字 <code>活动时间 11 月 2 日（周一）00:00—11 月 8 日（周日）23:59（北京时间）</code>）㉘ <code>OpenRouter</code> 两篇新博客正文㉙ <code>Ollie</code> 官方关停公告原文（<strong>本期复核同值：<code>ollie.ai/farewell</code> <code>200</code> / <code>39,733</code> 字节，逐字 <code>Ollie is sunsetting on Nov 6, 2026</code> 命中 <code>8</code> 次</strong>）㉚ <code>Anthropic</code> 文本水印检测 API 是否从私有预览放开（<strong>本期未复核</strong>）㉛ <code>Kimi K3.1 Pro</code> 的 <code>15</code> 元代金券<strong>到底能用在哪个模型上</strong>（<strong>官方只写「不可用于 <code>K3.1 Pro</code>」</strong>）㉜ <code>ChatGPT</code> 与 <code>Codex</code> 合池的<strong>具体上线日</strong>与<strong>各档 <code>token</code> 配额数字</strong>（<strong>官方只写 <code>Starting in December</code>，数字完全没有</strong>）㉝ <code>OpenAI</code> 设备 / 支付卡上限的<strong>具体数字阈值</strong>（<strong>官方只给 <code>Device limit reached</code> 这句提示，没有数字</strong>）</p>
 <p><strong>⚠️ 本期的一个方法论记录（新立避坑 250 的来源）</strong>：<strong>本期把 <code>050</code>–<code>056</code> 七期的 <code>runware.ai/pricing</code> 归档文件逐期列出，发现 055 期的「纠错」与 055 期自己的归档文件直接矛盾</strong>。<strong>055 期那条纠错的推理链是「逐条 diff 显示 <code>0</code> 条 <code>endsAt</code> 改动 → 所以 <code>endsAt</code> 回到了 <code>10/31</code>」—— 但「<code>0</code> 条改动」本身就意味着「没回到 <code>10/31</code>」</strong>。<strong>处置：本期立避坑 250 —— 「继承往期结论前，先与往期自己的归档文件对账」</strong>。</p>
+</details>
 </section>
-<section id="s09" class="sec">
+<section id="s09" class="sec folded">
 <h2><span class="sn">09</span><span class="h2t">来源与核查说明</span></h2>
+<details class="audit-fold" id="fold-s09">
+<summary><span class="fold-t">展开：第九章 · 来源与核查说明</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <p><strong>⚠️ 本期一手来源占比</strong>：<strong>本期 <code>4</code> 条产生免费内容条目的硬条目，<code>4</code> 条全部有一手官方页或一手仓库</strong>（<code>OpenAI</code> 官方帮助中心两篇文档 ＋ <code>OpenAI</code> 官方 <code>Codex</code> 档位文档、<code>Hugging Face</code> 官方模型页、<code>GitHub</code> 官方仓库 API ＋ <code>README.md</code> ＋ <code>LICENSE</code> ＋ <code>Releases</code>）—— <strong>没有一条是纯媒体转述</strong>。</p>
 <p><strong>⚠️ 本期的一个「官方页可达但正文取不到」案例（如实记）</strong>：<code>deepmind.google/discover/blog/</code> 与 <code>deepmind.google/discover/blog/gemini-4-carbon/</code> 本期分别返回 <code>200</code> / <code>29,009</code> 字节与 <code>404</code> / <code>194,095</code> 字节 —— <strong>而 <code>29,009</code> 字节那一份里 <code>Carbon</code> 命中 <code>0</code> 次</strong>，<strong>即博客首页取到的是导航壳、条目正文不在这个响应里</strong>。<strong>这与 053 期记的「<code>deepmind.google</code> 博客首页核到过条目」矛盾</strong> —— <strong>本期如实写「本期取不到」，不继承 053 期那次的成功</strong>（避坑 243 的延伸：<strong>「以前取到过」不等于「这次还能取到」</strong>）。</p>
 <p><strong>⚠️ 本期的一个「同一厂商两个官方渠道内容口径不一致」的案例</strong>：<strong><code>OpenAI</code> 官方 <code>news</code> RSS（<code>openai.com/news/rss.xml</code>，<code>200</code> / <code>814,947</code> 字节）最新一条仍是 <code>Fri, 30 Oct 2026 09:00:00 GMT</code> 的 <code>Fair use benefits everyone</code></strong> —— <strong>而额度合池与设备上限这两件事，本期是</strong>在帮助中心、<strong>不在 <code>news</code> 上</strong>。<strong>即「官方变更」与「官方发布」是两个不同的层，读者要看的免费额度口径大多在帮助中心</strong>。</p>
 <p><strong>⚠️ 本期的一个「媒体先报、官方后证但官方口径更窄」的案例</strong>：<code>the-decoder.com</code> 窗口内那篇标题逐字 <code>OpenAI's upcoming chat-and-work merger in ChatGPT signals the end of all-you-can-prompt pricing</code> —— <strong>官方文档逐字写的是 <code>Instant chat will not draw from your usage.</code>，即 <code>Instant</code> 仍然不扣额度</strong>。<strong>本报告只采用官方逐字写明的内容，不采用媒体的概括性判断</strong>（避坑 243 的延伸：<strong>「媒体报的机制」与「官方写的机制」要分开记，官方没写就不写</strong>）。</p>
 <p><strong>⚠️ 本期的一个「官方页与自己的归档文件互相印证」的正面案例</strong>：一手 <code>hf-mirror.com/moonshotai/Kimi-K3</code> 模型页（<code>200</code> / <code>573,278</code> 字节）—— <strong>页面上既有逐字标签 <code>Downloads last month</code>，又有 <code>downloadsAllTime</code> 字段</strong> —— <strong>两处官方证据互相印证，读者可自行核对</strong>（<strong>这正是本章希望的状态：每条结论都能落到官方页面上的一处逐字</strong>）。</p>
+</details>
 </section>
-<section id="s04" class="sec">
+<section id="s04" class="sec folded">
 <h2><span class="sn">04</span><span class="h2t">限时活动与截止时间表（正文之后 · 11/2 16:00 复核 · 过期 &gt;7 天已归档）</span></h2>
+<details class="audit-fold" id="fold-s04">
+<summary><span class="fold-t">展开：第四章 · 权益台账与脚注</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <blockquote class="bq"><p><strong>本章自 047 期修订起移到正文九章之后</strong> —— 前面九章约 2.3 万字可以连贯读完，本章与《常驻权益总账》作为参考资料放在后面。<strong>本章即往期所称「第四章」，编号与全部历史引用不变。</strong></p><p></p><p><strong>本章只留两类</strong>：<strong>4.1 有确切截止日的限时动作</strong> ／ <strong>4.2 无截止日但本期有变化</strong>。<strong>未变动的常驻权益不再逐期重印</strong>，全量 157 条移入《<a href="常驻权益总账.md">常驻权益总账</a>》；<strong>已过期 &gt;7 天且已收口</strong>的条目移入归档（<code>.workbuddy/data/deadline_archive.md</code>）—— 规则见脚注 ④。</p><p></p><p><strong>049 期起第四章表体已瘦身</strong>：<strong>每行只留「谁 / 到什么时候 / 要不要动手」+ 一句边界</strong>，<strong>被裁掉的长论证一字未删地存放在 <a href="details.html"><code>details.html</code></a>（《第四章表体明细附录》，本期 95 行）</strong> —— <strong>「表体里没有」不等于「没有写过」。</strong></p></blockquote>
 <h3 id="h3-25"><span class="h3n">4</span>1 限时动作（有确切截止日 · 55 条）</h3>
 <div class="tblwrap scrolly">
@@ -1080,12 +1198,13 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p><strong>⑤ 056 期的工程纪律（本期实测，都写在这里）</strong>：</p>
 <ul class="ul"><li><strong>① ⚠️ 重算器「只重算了状态列」是本期最大的一个漏项 —— 而它藏在一个看起来正常运行的重算器里</strong> —— <strong><code>recalc_daysNNN.py</code> 从 049 期起只扫状态列的「距今 <code>N</code> 天」，而截止列里的「距结束 <code>N</code> 天」／「距开卖 <code>N</code> 天」</strong>从来没有任何脚本读过<strong>。</strong>结果是这些数字自写入那天起就冻在原地、跨了 <code>7</code> 期也没人发现<strong>（因为它们不报错、也不违反任何断言 —— </strong>断言只管它扫到的那些 token<strong>）。</strong>⚠️ 本期处置：<code>recalc_days056.py</code> 把扫描面从「状态列」扩到「截止列 + 状态列」，token 类别从 <code>2</code> 类扩到 <code>4</code> 类（<code>距今</code> / <code>距结束</code> / <code>距开卖</code> / <code>已过</code>），并断言全表 <code>38</code> 处全部满足「天数 == 截止日 − 基准日」<strong>。</strong>⚠️ 这条的通用形态（新立避坑 252）：一个守卫只覆盖了它被写出来那一刻想到的那种写法 —— 而当「同一个语义换一种写法」出现时，守卫不会失败，它只是沉默。所以「守卫全绿」只在「写法集合没变」的前提下有意义。**</li><li><strong>② ⚠️ 「上期给的结论」与「上期自己的归档文件」对账，本期抓到一个真错</strong> —— <strong>055 期写「<code>Runware</code> 的 <code>heygen</code> 促销 <code>endsAt</code> 回到 <code>2026-10-31</code>」，理由是「逐条 diff <code>0</code> 条改动」—— 这两句话自相矛盾</strong>（若 <code>0</code> 条改动，054 期的 <code>2026-11-30</code> 就该原样延续）。<strong>本期直接去读 055 期自己归档的 <code>tmp_055/runware_pricing6.html</code>：逐字就是 <code>endsAt: "2026-11-30"</code></strong> —— <strong>即 055 期读到的值与它写出的结论相反</strong>。<strong>本期把 <code>050</code>–<code>056</code> 七期归档逐期列出：<code>050</code>–<code>053</code> 四期全是 <code>2026-10-31</code>、<code>054</code> 起变成 <code>2026-11-30</code>、<code>055</code> 与 <code>056</code> 都是 <code>2026-11-30</code></strong> —— <strong>即 054 期记的「官方延长了 <code>30</code> 天」是对的，055 期「推翻」它才是错的</strong>（新立避坑 250）。<strong>⚠️ 本期没有重抓一遍页面就下判断 —— 用的是往期归档，因为「上期当时看到的是什么」只能从上期自己的归档里回答。</strong></li><li><strong>③ ⚠️ 「同一个字段名是累计量还是滚动窗口值」必须先看官方页面的标签文案</strong> —— <strong><code>HF</code> 的 <code>downloads</code> 本期实测跨期下降了 <code>169</code> 个模型（<code>347</code> 个可比模型里 <code>169</code> 降、<code>178</code> 升、<code>0</code> 同值）</strong> —— <strong>累计计数器不可能下降，所以「下降」这个现象本身就是口径证据</strong>。<strong>随后在模型页上找到逐字标签 <code>Downloads last month</code>，以及同页数据块里另一个独立字段 <code>downloadsAllTime: 5997142</code></strong> —— <strong>两个数都在、只是此前只取了前一个、还把它当成了后一个</strong>（新立避坑 249）。<strong>⚠️ 这条的通用形态：判断一个指标是「存量」还是「流量」，不要看字段名、看</strong>页面上的标签文案<strong>；也不要只看单期值 —— </strong>要看它会不会下降<strong>。</strong></li><li><strong>④ ⚠️ 脚本断言必须是「逐字短语」，且必须</strong>读回落盘文件<strong>再断言</strong> —— <strong>本期 <code>gen_table056.py</code> 的断言链跑在「写出后重新读回 <code>tmp_table056.md</code>」的结果上</strong>（不是校验内存里的字典），并额外加了三条：<strong>改写行数守恒 / 未改写行唯一 / 表体关键口径 == 正文关键口径</strong>。<strong>⚠️ 本期实测踩到一次断言本身写错</strong>：初稿的「清除旧值」断言匹配到了我自己<strong>引用</strong>旧结论的那句话（<code>055 期写「…在本期回到 2026-10-31」</code>）—— <strong>而那句话是本期纠错第 2 条的证据链、必须保留</strong>。<strong>处置：把断言从「子串不存在」改成「断言式表述不存在」，并另加一条「引用式表述必须存在」</strong> —— <strong>断言要精确到「语句的语气」，否则「删掉证据」与「删掉错误」在字符串层面长得一样。</strong></li><li><strong>⑤ ⚠️ 「分类统计」必须在 <code>slim</code> 之后取</strong> —— <strong><code>slim_table.py</code> 会改写状态列措辞，而 <code>classify()</code> 按字面文本判定</strong>。<strong>055 期实测撞上过一次（<code>slim</code> 前后 <code>unclear</code> 差 <code>1</code>），本期把这条固化成流程顺序</strong>：<strong><code>slim</code> 两轮 → <code>extract_deadlines.py</code> 重跑 → 取两套口径分布 → 注入脚注 → 再跑一次 <code>extract</code> 复核数字未漂移</strong>。<strong>⚠️ 与「<code>recalc_days</code> 必须跑在 <code>split_ledger</code> 之前」是同一族 —— 都是「流水线里某一步的顺序会改变下游读到的内容」。</strong></li></ul>
 <p>*本期完。*</p>
+</details>
 </section>
   </main>
 </div>
 
 <footer class="foot">
-  <div class="fr"><span>AI 免费内容与权益速递 · 第 056 期</span><span>__DATELINE__</span></div>
+  <div class="fr"><span>AI 免费内容与权益速递 · 第 056 期</span><span>扫描截止 2026-11-02 16:00（GMT+8）</span></div>
   <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
   <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
 </footer>
@@ -1240,6 +1359,11 @@ mark.hl.cur{background:var(--accent); color:#fff}
       node.parentNode.replaceChild(frag,node);
     });
     qn.textContent=marks.length;
+    /* 折叠区内的命中也要看得见：命中即展开所在章节（toggle 事件会补做入场动画与顶栏量高） */
+    marks.forEach(function(m){
+      var d=m.closest?m.closest("details.audit-fold"):null;
+      if(d) d.open=true;
+    });
     if(marks.length){ cur=-1; jump(1); }
     lastQ=v;
   }
@@ -1313,6 +1437,44 @@ mark.hl.cur{background:var(--accent); color:#fff}
       document.body.classList.remove("nav-open");
       menuBtn.setAttribute("aria-expanded","false");
     }
+  });
+
+  /* ---------- 审计层折叠：全部展开 / 目录跳转 / 搜索 / 打印 ----------
+     折叠区在 display:none 里时，IntersectionObserver 不会给 .rise 加 .in，
+     顶栏量高也会把隐藏的 .chips 读成 0 —— 展开时两样都要补做。 */
+  var folds=[].slice.call(document.querySelectorAll("details.audit-fold"));
+  function openFold(id){ folds.forEach(function(d){ if(!id||d.id==="fold-"+id) d.open=true; }); }
+  document.querySelectorAll("[data-open]").forEach(function(a){
+    a.addEventListener("click",function(){ openFold(a.getAttribute("data-open")); });
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      var h=a.getAttribute("href")||"";
+      if(/^#s\d{2}$/.test(h)) openFold(h.slice(1));
+    });
+  });
+  var foldAll=document.getElementById("foldAll");
+  if(foldAll) foldAll.addEventListener("click",function(){
+    var allOpen=folds.every(function(d){return d.open;});
+    folds.forEach(function(d){ d.open=!allOpen; });
+    foldAll.textContent=allOpen?"展开全部章节":"收起全部章节";
+    foldAll.setAttribute("aria-expanded",allOpen?"false":"true");
+  });
+  folds.forEach(function(d){
+    d.addEventListener("toggle",function(){
+      if(!d.open) return;
+      d.querySelectorAll(".rise:not(.in)").forEach(function(el){el.classList.add("in");});
+      syncMetrics();
+    });
+  });
+  var printState=[];
+  window.addEventListener("beforeprint",function(){
+    printState=folds.map(function(d){return d.open;});
+    folds.forEach(function(d){d.open=true;});
+    document.querySelectorAll(".audit-fold .rise:not(.in)").forEach(function(el){el.classList.add("in");});
+  });
+  window.addEventListener("afterprint",function(){
+    folds.forEach(function(d,i){ d.open=printState[i]; });
   });
 
   /* ---------- 回到顶部 ---------- */

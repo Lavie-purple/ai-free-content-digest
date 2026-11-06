@@ -111,6 +111,7 @@ code{
 .tb-nav a:hover{color:var(--ink); background:var(--surface-2)}
 .tb-nav a.active{color:var(--accent-ink); background:var(--accent-soft)}
 .tb-nav a.active b{color:var(--accent-ink)}
+.tb-nav a.tail{margin-left:6px; padding-left:14px; border-left:1px solid var(--rule-2)}
 .tb-tools{display:flex; align-items:center; gap:var(--s2); margin-left:auto}
 .search{position:relative; display:flex; align-items:center; flex:0 0 auto}
 .search input{
@@ -177,6 +178,42 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
 }
 .pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
 .pubnote p:last-child{margin-bottom:0}
+
+.vs{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  margin:18px 0 20px; border:1px solid var(--rule); background:var(--surface);
+  box-shadow:var(--shadow);
+}
+.vs-i{
+  display:block; padding:10px 14px; text-decoration:none; color:var(--ink-2);
+  border-right:1px solid var(--rule); transition:background 120ms ease;
+}
+.vs-i:last-child{border-right:0}
+.vs-i:hover{background:var(--surface-2)}
+.vs-k{display:block; font-size:13.5px; font-weight:600; line-height:1.45}
+.vs-k i{font-style:normal; margin-right:5px; opacity:.75}
+.vs-d{display:block; font-size:11.5px; color:var(--faint); line-height:1.5; margin-top:1px}
+.vs-i.is-on{background:var(--ink); color:var(--bg); cursor:default}
+.vs-i.is-on .vs-d{color:var(--bg); opacity:.6}
+.vs-i.is-on .vs-k i{opacity:.85}
+/* 只给「极速」的图标上强调色：整行标红会盖过当前页的实心块，反而让人以为它才是当前页 */
+.vs-quick .vs-k i{color:var(--accent-ink); opacity:1}
+.vs-quick.is-on .vs-k i{color:var(--bg)}
+@media (max-width:640px){
+  /* 窄屏不要三行堆叠：日报页顶已有固定导航条 + 刊头 + 说明框，
+     再来三行切换器会把首屏全占掉。压成单行三格，副标题不出。 */
+  .vs{grid-template-columns:repeat(3,1fr); margin-top:14px}
+  .vs-i{
+    padding:9px 6px; text-align:center;
+    border-right:1px solid var(--rule); border-bottom:0;
+  }
+  .vs-i:last-child{border-right:0}
+  .vs-k{font-size:12px; line-height:1.3}
+  .vs-k i{margin-right:3px}
+  .vs-d{display:none}
+}
+@media print{.vs{display:none !important}}
+
 .summary-note{}
 
 /* ============================================================ 主栅格 */
@@ -196,9 +233,45 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
   background-image:none; line-height:1.45;
 }
 .toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+/* 「正文之后」标记：只说明点它跳到文末，不用括号、不加底色（2026-11-07）。
+   单独占一行 —— 196px 侧栏里跟在章节名后面会把标题挤到折行。 */
+.toc-hint{
+  display:block; margin-top:1px; font-family:var(--fm); font-size:9.5px;
+  letter-spacing:.06em; color:var(--faint); opacity:.8;
+}
+/* 目录分组标签：一条细线 + 小字，不加框（2026-11-07 方案 A） */
+.toc-g{
+  font-family:var(--fm); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--faint); margin:14px 0 4px; padding-top:11px; border-top:1px solid var(--rule);
+}
+.toc-g:first-child{margin-top:0; padding-top:0; border-top:0}
 .toc-a:hover{color:var(--ink); border-left-color:var(--rule-2)}
 .toc-a.active{color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft)}
 .toc-a.active .toc-n{color:var(--accent-ink)}
+
+/* 《常驻权益总账》只有一个章节（全量表），左侧 196px 目录栏纯占宽度：
+   收成主区顶部一行可展开控件，表格铺满整栏。目录条目一个不删，点开即见。 */
+.shell.shell-wide{grid-template-columns:minmax(0,1fr); gap:0}
+/* 总账页最后就是这张表，表格外框底 = 内容结束。再照别的页留 96px 页脚上边距，
+   深色底上会读成「表格下面塌了一块空白」（用户 2026-11-07 截图框出的那块）。
+   只收这一页，其它页仍是 var(--s7)。 */
+body.ledger-page .shell{padding-bottom:var(--s5)}
+.toc-fold{
+  margin:0 0 var(--s4); padding:8px var(--s3);
+  border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface);
+}
+.toc-fold>summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px;
+  font-family:var(--fm); font-size:11px; letter-spacing:.12em; color:var(--muted);
+}
+.toc-fold>summary::-webkit-details-marker{display:none}
+.toc-fold>summary::before{content:"+"; font-size:15px; line-height:1; color:var(--accent-ink)}
+.toc-fold[open]>summary::before{content:"−"}
+.toc-fold-nav{display:grid; gap:2px; margin-top:8px; padding-top:8px; border-top:1px solid var(--rule)}
+.toc-fold-nav .toc-a{padding-top:6px; padding-bottom:6px}
+/* 总账页没有侧栏抽屉，窄屏的汉堡按钮点了会开一个空抽屉 */
+body.ledger-page #menuBtn{display:none !important}
+@media print{ .toc-fold{display:none !important} }
 
 main{min-width:0}
 .sec{scroll-margin-top:76px; padding-top:var(--s5)}
@@ -278,7 +351,12 @@ blockquote{margin:0}
   width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
   background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
 }
-.tblwrap.scrolly .tbl{border:0; border-radius:0}
+/* 表头吸顶的前提：表格自身不能 overflow:hidden。
+   它会新建一个滚动容器，把 th{position:sticky} 整个废掉 —— 实测在容器内滚动
+   400px 后表头跑到容器上方 305px，正好被 sticky 的筛选条压掉半行（用户
+   2026-11-06「这里老是被上面截断」）。外框与圆角由 .tblwrap.scrolly 承担，
+   这里不需要再裁切；非滚动容器里的 .tbl 仍保留 overflow:hidden 裁圆角。 */
+.tblwrap.scrolly .tbl{border:0; border-radius:0; overflow:visible}
 .tbl thead th{
   position:sticky; top:0; z-index:2; text-align:left; vertical-align:bottom;
   font-family:var(--fm); font-size:11.5px; letter-spacing:.09em; text-transform:uppercase;
@@ -311,6 +389,13 @@ blockquote{margin:0}
 .ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over)}
 .ledger tbody tr[data-st="over"] td{color:var(--muted)}
 .ledger td[data-col="st"]{white-space:normal; overflow-wrap:anywhere}
+/* 《常驻权益总账》全量表专用列宽（2026-11-06 用户截图：活动列一大片空白、
+   截止列被挤成一字一行）。日报 4.1 的 date=76px 是给短日历日用的，不能套过来。
+   三列按内容量配比分宽，仍是 fixed 布局 —— 长状态句不会把整表撑爆。 */
+.tbl.ledger.ledger-full th[data-col="body"]{width:28%}
+.tbl.ledger.ledger-full th[data-col="date"]{width:32%}
+.tbl.ledger.ledger-full th[data-col="st"]{width:40%}
+.tbl.ledger.ledger-full tbody td{overflow-wrap:anywhere}
 .st{
   display:inline-block; width:9px; height:9px; border-radius:99px; margin-right:8px; vertical-align:1px;
   background:var(--rule-2);
@@ -323,6 +408,14 @@ tr[data-st="soon"] .st-txt{color:var(--soon)}
 tr[data-st="live"] .st-txt{color:var(--live)}
 tr[data-st="warn"] .st-txt{color:var(--plan)}
 tr[data-st="over"] .st-txt{color:var(--over)}
+/* 长状态格：默认收 4 行，点一下展开全文。文字一个字都不删，只是不默认铺开。 */
+.st-txt.cbody.clamp{
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical;
+  overflow:hidden; cursor:pointer; border-radius:4px;
+}
+.st-txt.cbody.clamp:hover{background:var(--surface-2)}
+.st-txt.cbody.clamp:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media print{ .st-txt.cbody.clamp{display:block; overflow:visible} }
 .chips{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:10px var(--s3);
   background:var(--surface-2); border-bottom:1.5px solid var(--rule-strong); position:sticky; top:0; z-index:3}
 /* 截止表待在可滚动容器里，容器顶部已经被 chips 占住——表头要吸在它下方，
@@ -632,6 +725,51 @@ mark.hl.cur{background:var(--accent); color:#fff}
   a{background-image:none}
   @page{size:A4 portrait; margin:12mm}
 }
+
+/* ---- 30 秒速览卡（060 期 A 方案） ---- */
+.brief{
+  background:var(--surface); border:1px solid var(--rule-2); border-left:4px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4);
+  margin:0 0 var(--s5); box-shadow:var(--shadow);
+}
+.brief-k{font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.06em;
+  color:var(--faint); margin:0 0 var(--s2)}
+.brief-h{font-family:var(--fu); font-weight:700; font-size:var(--fs-xl); line-height:1.5;
+  color:var(--ink); margin:0 0 var(--s3); text-wrap:balance}
+.brief-m{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-m span{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:99px; padding:5px 12px}
+.brief-m b{font-family:var(--fm); color:var(--accent-ink); font-size:var(--fs-mid)}
+.brief-a{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-a a,.brief-a button{font-family:var(--fu); font-size:var(--fs-sm);
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--rule-2);
+  border-radius:var(--r1); padding:8px 14px; text-decoration:none; cursor:pointer}
+.brief-a a:hover,.brief-a button:hover{border-color:var(--accent)}
+.brief-n{font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  color:var(--muted); margin:0}
+
+/* ---- 审计层折叠：details 只做逻辑容器，展开后排版与原来完全一致 ---- */
+.folded{padding-top:var(--s4)}
+.audit-fold{margin:0}
+.audit-fold>summary{
+  display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap; list-style:none;
+  padding:var(--s3) var(--s4); margin:0 0 var(--s3); cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r2);
+  font-family:var(--fu); font-size:var(--fs-mid); font-weight:700; color:var(--ink);
+}
+.audit-fold>summary::-webkit-details-marker{display:none}
+.audit-fold>summary::before{content:"+"; font-family:var(--fm); font-size:19px;
+  font-weight:400; color:var(--accent-ink); line-height:1}
+.audit-fold[open]>summary::before{content:"\2212"}
+.audit-fold[open]>summary{margin-bottom:var(--s5)}
+.fold-t{flex:1}
+.fold-hint{font-family:var(--fm); font-size:var(--fs-xs); font-weight:400; color:var(--faint)}
+.audit-fold>p{margin-bottom:var(--s4)}
+.audit-fold h3:first-child{margin-top:0}
+@media print{
+  .audit-fold>summary{display:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
 </style>
 </head>
 <body>
@@ -642,7 +780,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <header class="topbar" data-no-print>
   <div class="tb-in">
     <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#022</b></span>
-    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s04"><b>04</b>限时活动与截止时间表</a><a href="#s05"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示（本期新增 5 条：101–105；96–100 自 021 期沿用）</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s08"><b>08</b>本期信源体系更新</a><a href="#s09"><b>09</b>来源与核查说明</a></nav>
+    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s04"><b>04</b>限时活动与截止时间表</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s05" class="tail"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s08"><b>08</b>本期信源体系更新</a><a href="#s09"><b>09</b>来源与核查说明</a></nav>
     <div class="tb-tools">
       <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">⌕</button>
       <div class="search">
@@ -666,23 +804,35 @@ mark.hl.cur{background:var(--accent); color:#fff}
   <h1 class="mh-t">AI 免费内容与权益速递</h1>
   <p class="mh-sub">主题：AI 免费内容发布 · 免费内容（生成/分发）· 免费额度</p>
   <div class="pubnote"><p>本期扫描范围仍为 <strong>T0–T4 分级路由</strong>（用户随任务附上的完整 T0–T4 信源清单（含 <code>https://aihot.news/</code>）与现有台账做了交叉核对：清单内条目已全部覆盖于台账 198 条之中，<code>aihot.news</code> 已作为 T4 主条目长期登记；<strong>本期新增 Allen Institute for AI（Ai2）/ AWS Strands Labs / ELYZA / Institute for Foundation Models（IFM）四条信源，台账由 198 → 202 条</strong>），扫描截止 <strong>2026-10-03 02:00（GMT+8）</strong>。</p><p>⚠️ <strong>本期是 10/3 凌晨出刊</strong>：落在 10/2（021 期 19:33）之后、10/4（掘金第二期 24:00 截止）之前——<strong>本期的关键动作是：把 021 期「9/30 单日 10 条·已结束」里两条误判的（Qoder Qwen3.8-Flash、混元 Hy3）改回 🟢 续期</strong>、把 10/2 晚间–10/3 凌晨的<strong>开源内容生成资产四连</strong>（Ai2 AstaBrief / AWS Strands Decider / ELYZA / IFM K2 Horizon，均为 Apache 2.0 或全量开源）并入本期、<strong>补登 020/021 两期均漏掉的 Gemini 4 Argon 与腾讯混元 Hy3 正式版</strong>。刊头显式声明扫描时点（避坑 40：凌晨出刊，覆盖到 02:00 为止的发布；10/3 白天与太平洋时间 10/3 的条目按下期处理）。</p><p>与 003–021 期的关系：<strong>只做增量与纠错，不重复已固化内容</strong>。</p><p><strong>本期四条主线</strong>：① <strong>两条「延期反转」纠错</strong>——<strong>Qoder Qwen3.8-Flash 计费系数 0.0× 并未在 9/30 收口</strong>，Qoder 官方已公告自 <strong>2026-10-01 起继续免费、结束时间未定</strong>（021 期把它归入「已结束」是<strong>用错了回扫信源</strong>，见纠错 #1 + 避坑 101）；<strong>腾讯 WorkBuddy（9/30 晚公布调整）把 Hy3 限免与 Hy4 preview 夜间限免整体延至 10/31</strong>（未体验用户 10/10 23:59 前首开仍享 14 天每日免费）。② <strong>10/2 晚间–10/3 凌晨的开源资产四连</strong>：Ai2 AstaBrief 8B（Apache 2.0，权重+训练数据+工作流）、AWS Strands Decider 2B（Apache 2.0 决策模型）、ELYZA Thinking 1.0-llm-jp-4（Apache 2.0 日语）、IFM K2 Horizon（0.9B–375B 六模型，权重/数据/代码/日志/checkpoint 全开源）。③ <strong>两条补登（020/021 均漏）</strong>：Gemini 4 Argon（$2/$10 首发价、1M 输出上限、AA 53 分平 GPT-6 Astra）与腾讯混元 Hy3 正式版（2950 亿总参 / 210 亿激活 / 256K，Apache 2.0 可商用）。④ <strong>倒计时推进</strong>：掘金第二期 <strong>10/4 24:00 截止（距今 1 天）</strong>；智谱双节三线 + Claude Code 云会话 credit 领取各剩 <strong>4 天</strong>；GPT-5.5 迁移窗口剩 <strong>11 天</strong>。</p></div>
+  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">76 条 · 一条一行</span></a><span class="vs-i vs-full is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 022 期 · 十节</span></span><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">164 条 · 无截止日</span></a></nav>
 </header>
 
 <div class="shell">
   <div class="drawerwrap" id="drawerwrap"><aside class="rail" id="rail" aria-label="目录">
     <p class="rail-t">本期目录</p>
-    <nav><a class="toc-a" href="#s-abs"><span class="toc-n">··</span>摘要</a>
-<a class="toc-a" href="#s01"><span class="toc-n">01</span>AI 免费内容发布</a>
-<a class="toc-a" href="#s02"><span class="toc-n">02</span>免费内容生成工具</a>
-<a class="toc-a" href="#s03"><span class="toc-n">03</span>常驻免费额度与 API</a>
-<a class="toc-a" href="#s04"><span class="toc-n">04</span>限时活动与截止时间表</a>
-<a class="toc-a" href="#s05"><span class="toc-n">05</span>本期纠错清单</a>
-<a class="toc-a" href="#s06"><span class="toc-n">06</span>避坑提示（本期新增 5 条：101–105；96–100 自 021 期沿用）</a>
-<a class="toc-a" href="#s07"><span class="toc-n">07</span>按任务选型速查</a>
-<a class="toc-a" href="#s08"><span class="toc-n">08</span>本期信源体系更新</a>
-<a class="toc-a" href="#s09"><span class="toc-n">09</span>来源与核查说明</a></nav>
+    <nav><p class="toc-g">本期内容</p>
+<a class="toc-a" href="#s-abs"><span class="toc-n">··</span><span class="toc-t">摘要</span></a>
+<a class="toc-a" href="#s01"><span class="toc-n">01</span><span class="toc-t">AI 免费内容发布</span></a>
+<a class="toc-a" href="#s02"><span class="toc-n">02</span><span class="toc-t">免费内容生成工具</span></a>
+<a class="toc-a" href="#s03"><span class="toc-n">03</span><span class="toc-t">常驻免费额度与 API</span></a>
+<p class="toc-g">马上要办</p>
+<a class="toc-a" href="#s04"><span class="toc-n">04</span><span class="toc-t">限时活动与截止时间表</span></a>
+<p class="toc-g">怎么用</p>
+<a class="toc-a" href="#s07"><span class="toc-n">07</span><span class="toc-t">按任务选型速查</span></a>
+<p class="toc-g">审计层 · 默认折叠</p>
+<a class="toc-a" href="#s05"><span class="toc-n">05</span><span class="toc-t">本期纠错清单</span></a>
+<a class="toc-a" href="#s06"><span class="toc-n">06</span><span class="toc-t">避坑提示</span></a>
+<a class="toc-a" href="#s08"><span class="toc-n">08</span><span class="toc-t">本期信源体系更新</span></a>
+<a class="toc-a" href="#s09"><span class="toc-n">09</span><span class="toc-t">来源与核查说明</span></a></nav>
   </aside></div>
   <main id="main">
+<div class="brief" data-no-print>
+<p class="brief-k">30 秒速览 · 第 022 期 · 2026-10-03</p>
+<p class="brief-h">Qoder Qwen3.8-Flash 继续免费、腾讯 Hy3/Hy4 夜间限免延至 10/31</p>
+<div class="brief-m"><span>本期表体 <b>81</b> 行</span><span>其中必办 <b>2</b> 条</span><span>今明换挡 <b>6</b> 条</span></div>
+<div class="brief-a"><a href="#s04" data-open="s04">看必办清单</a><a href="quick.html">只看极速版</a><button type="button" id="foldAll" aria-expanded="false">展开全部章节</button></div>
+<p class="brief-n">下方是本期新闻正文（未折叠）；第四章权益台账与纠错、避坑、信源、核查等审计层默认收起，点标题展开。目录跳转、全文检索命中与打印时会自动展开。卡片数字是本期表体口径，全量三态分布以第四章脚注为准。原文一字未删。</p>
+</div>
 <section id="s-abs" class="sec summary">
 <h2><span class="sn">··</span><span class="h2t">摘要</span><span class="h2sub">（3 秒版）</span></h2>
 <ul class="ul"><li><strong>本期最该打勾的一条纠错（021 期回扫翻车）</strong>：<strong>Qoder Qwen3.8-Flash 计费系数 0.0× 没有在 9/30 收口</strong>——Qoder 官方（阿里云开发者社区活动说明页 + IT之家 9/29）已公告 <strong>自 2026-10-01 起继续免费、结束时间未定、将提前在官方页面公告</strong>；活动覆盖 Qoder CN 桌面端 / IDE / JetBrains 插件 / CLI / 网页版 / 移动端全系个人可访问产品，自动生效、无需领取，Credits 余额为 0 也能用（企业订阅不适用）。021 期用"当日技术事件流"回扫权益类到期，<strong>用错了源</strong>（见纠错 #1 + 避坑 101）。</li><li><strong>本期最该打勾的一条延期</strong>：<strong>腾讯 WorkBuddy 把 Hy3 限免 + Hy4 preview 夜间限免整体延至 10/31</strong>（9/30 晚公布调整）。已体验 Hy4 preview 的用户：闲时夜间 23:00–次日 8:00 继续免费，<strong>截至 10/31</strong>；未体验用户：<strong>10/10 23:59 前首次开启</strong>，自当日起 14 天内享每日免费额度（10/10 首开可用至 10/24）。⚠️ 官方同时明确 <strong>Hy4 preview 属大语言模型、暂不具备多模态能力</strong>——调它做图像/视频任务会由多模态模型完成并按常规扣积分（见一·2 + 三·3）。</li><li><strong>本期最该打勾的一条新免费开源资产</strong>：<strong>Ai2 AstaBrief 8B</strong>——<strong>Apache 2.0</strong>，权重 + 训练数据 + 示例工作流全部公开（Hugging Face）；基于 Qwen3-8B、SFT + DPO 两段式；科学报告生成<strong>单篇平均 51.1s</strong>（对照 Claude 驱动的 Asta Thinking mode 178.5s，约 3.5×）。<strong>它最实在的价值是"敏感未发表数据不出门"</strong>——机构可完全内网部署（见二 + 避坑 105）。</li><li><strong>本期第二条新免费开源资产</strong>：<strong>AWS Strands Decider 2B</strong>——<strong>Apache 2.0</strong> 决策模型（<strong>不生成文本</strong>，只在给定选项里选一个 + 校准置信度），底座 Qwen3.5-2B、砍掉 LM head 换约 100 万参数指针头；笔记本 CPU / 消费级 GPU 可跑，延迟约 115ms；权重在 HF、代码+训练数据+训练脚本在 GitHub。⚠️ <strong>JevBench 公开集 0.723 准确率、Brier 0.342</strong>——别直接拿去做有后果的决策（见二 + 避坑 103）。</li><li><strong>本期第三、四条</strong>：<strong>ELYZA Thinking 1.0-llm-jp-4</strong>（KDDI 旗下 ELYZA，33B / 32B-A3B，<strong>Apache 2.0 可商用</strong>，主打日语）+ <strong>IFM K2 Horizon</strong>（0.9B / 3.7B / 7B / 36B-A4B / 375B-A23B 等<strong>六个模型</strong>，权重、训练数据与配方、训练代码、中间 checkpoint、细粒度训练日志、评测<strong>全开源</strong>；r/LocalLLaMA AMA 定于 10/5 20:00–22:00 PT）。</li><li><strong>本期两条补登（020/021 两期均漏）</strong>：① <strong>Gemini 4 Argon</strong>（Google DeepMind 前沿模型，<strong>9/30 美东时间发布</strong>，首发仅对 Fairwind 计划内的可信网络防御者开放；首发价 <strong>$2/$10</strong>，缓存输入 95% 折扣，后续 $4/$20；<strong>输出上限 100 万 token</strong>）；② <strong>腾讯混元 Hy3 正式版</strong>（<strong>2950 亿总参 / 210 亿激活 / 256K 上下文</strong>，<strong>Apache 2.0 可免费商用</strong>，已接入 WorkBuddy / 元宝 / Marvis / ima，API 在 TokenHub）。</li><li><strong>本期评测侧两条</strong>：① <strong>Gemini 4 Argon 的"第一"要先问谁跑的</strong>——Google 自跑 18 项基准中的 9 项、且自跑项胜率明显更高；Artificial Analysis 给 Argon <strong>52.6</strong>（低于 Claude Opus 5.5 的 57.6），Vals 却给第一（68.9%）（见避坑 104）；② <strong>Claude Sonnet 5.5 在 AA Intelligence Index 得 56 分（第 2）但每任务 $7.60</strong>（约 Sonnet 5 的 1.5 倍，因平均消耗约 193K 输出 token，为已测模型中最高）——与 021 期 AA Coding Agent Index 的 $14.19 同源（避坑 96）。</li><li><strong>本期持续追踪</strong>：<strong>老混元平台停服 Q04 连续第 10 期仍未澄清</strong>（10/3 高危窗口已开启第 2 天）；<strong>GPT-5.5 10/14 下线窗口剩 11 天、Q17（Codex 迁移目标是否更新）仍待核</strong>。</li></ul>
@@ -888,8 +1038,10 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </div>
 <blockquote class="bq"><p><strong>为什么它仍排在额度章末尾但必须保留</strong>：它是全场<strong>唯一一条"个人订阅内含、领取后还能存一个月"的额度</strong>。<strong>10/7 这一天同时压着智谱三线 + ZCode 额度包 + MiniMax 双倍积分 + 本 credit</strong>——按避坑 78，<strong>今天（10/3）就该把 10/7 的动作清单写下来</strong>，别等到当天。</p></blockquote>
 </section>
-<section id="s04" class="sec">
+<section id="s04" class="sec folded">
 <h2><span class="sn">04</span><span class="h2t">限时活动与截止时间表</span><span class="h2sub">（10/3 凌晨复核）</span></h2>
+<details class="audit-fold" id="fold-s04">
+<summary><span class="fold-t">展开：第四章 · 权益台账与脚注</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <div class="tblwrap scrolly">
 <div class="chips" role="group" aria-label="按状态筛选"><span class="chips-label">按状态筛</span><button class="chip on" data-f="all" aria-pressed="true">全部<b data-c="all">0</b></button><button class="chip" data-f="crit" aria-pressed="false">🔴 必办<b data-c="crit">0</b></button><button class="chip" data-f="soon" aria-pressed="false">🟠 今明换挡<b data-c="soon">0</b></button><button class="chip" data-f="live" aria-pressed="false">🟢 生效中<b data-c="live">0</b></button><button class="chip" data-f="warn" aria-pressed="false">⚠ 口径存疑<b data-c="warn">0</b></button><button class="chip" data-f="over" aria-pressed="false">○ 已结束<b data-c="over">0</b></button><span class="chips-count" id="ledgerCount" aria-live="polite"></span></div>
 <table class="tbl ledger c3">
@@ -979,9 +1131,12 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <blockquote class="bq"><p><strong>本期表内三态分布（按每行状态列首个色标记，来自 <code>extract_deadlines</code>/<code>check_deadlines</code> 实跑）</strong>：🔴 必办 2 条 / 🟠 到期前换挡 6 条 / 🟡 一般项 2 条 / 🟢 长期项 44 条 / ⚪ 已结束 27 条（共 81 条）。</p><p><strong>到期巡检（<code>--today 2026-10-03</code> 基准，脚本实跑）</strong>：A 已过期但未标已结束 1（老混元·模糊「9 月底」日期，按 Q04 连续第 10 期未澄清、刻意保持 🔴 高危窗口开启）+ B 14 天内到期 15 + C 已结束 27 + D 日期待人工确认 25 + E 窗口外 13 = 81。⚠️ 本期 ⚪ 27 与 C 27 <strong>相等</strong>（GitHub Models 的「2026-07-30」仍在 D 类，但本期新增的"9/30 单日批次其余 6 条"一行以「9/30 24:00」计入 C，恰好抵平）。</p><p><strong>本轮的关键动作（相对 021 期的日期/状态推进）</strong>：<strong>Qoder Qwen3.8-Flash 从 ⚪ 已结束改回 🟢 生效中</strong>（本报告首个"由终止状态改回生效中"条目）；<strong>腾讯 WorkBuddy Hy3 / Hy4 夜间限免由"9/30 收口"改为"10/31 收口"</strong>；<strong>智谱三线 + ZCode 额度包 + 云会话 credit 推进为"倒计时/领取剩 4 天"</strong>；<strong>掘金第二期推进为"距今 1 天"</strong>；<strong>9/30 单日批次拆分为"其余 6 条维持 ⚪ + 2 条改判 🟢"</strong>。</p><p><strong>按接下来 10 天内的紧急度排序</strong>：<strong>10/4 24:00（掘金第二期截止，距今 1 天）→ 10/7（智谱夜间免费 + ZCode 额度包 + Seedance 折扣 + Hy Image3.5 免费 + MiniMax 双倍积分 + Claude Code 云会话 credit 领取，六线同日收口，距今 4 天）→ 10/10（Hy4 新用户窗口 + 企鹅教师助手，距今 7 天）→ 10/14（GPT-5.5 下线 + Bolt Forge + 珠海算力券，剩 11 天）→ 10/15（Step 5 权重 + CorelDRAW 券）→ 10/18（AgentCore）→ 10/20（佛山申报）→ 10/31（腾讯双线 + 学生促销 + Laya）</strong>。</p><p><strong>⚠️ 本期新增一条"集中日"提醒</strong>：<strong>10/7 比 021 期列的更挤</strong>——除原有三线外，<strong>ZCode 1 亿 Token 额度包（本期登记）、MiniMax 签到双倍积分（本期登记）、Claude Code 云会话 credit 领取</strong>也压在 10/7。<strong>今天就该把 10/7 的动作清单写下来</strong>（避坑 78）。</p></blockquote>
+</details>
 </section>
-<section id="s05" class="sec">
+<section id="s05" class="sec folded">
 <h2><span class="sn">05</span><span class="h2t">本期纠错清单</span><span class="h2sub">（对 021 期）</span></h2>
+<details class="audit-fold" id="fold-s05">
+<summary><span class="fold-t">展开：第五章 · 本期纠错清单</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <div class="tblwrap">
 <table class="tbl c4">
 <thead><tr><th>#</th><th>021 期写法</th><th>实际情况</th><th>影响</th></tr></thead><tbody>
@@ -993,15 +1148,19 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </tbody></table>
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
+</details>
 </section>
-<section id="s06" class="sec">
+<section id="s06" class="sec folded">
 <h2><span class="sn">06</span><span class="h2t">避坑提示（本期新增 5 条：101–105；96–100 自 021 期沿用）</span></h2>
+<details class="audit-fold" id="fold-s06">
+<summary><span class="fold-t">展开：第六章 · 避坑提示</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <ol class="ol big"><li><span class="lin">101</span><span class="lit">⚠️ <strong>不要用"当日技术事件流"回扫"权益类条目"的到期/延期——那是拿弱项源验证弱项</strong> —— 021 期用 AIHOT 当日技术流回扫 9/30 单日 10 条，得出"无静默延期信号"，<strong>结果 Qoder Qwen3.8-Flash 早在 9/29 就公告延期了</strong>。根因：AIHOT 这一层的<strong>强项是"当日技术事件"、弱项正是"当日限时额度类权益"</strong>（本报告已连续十八期确认）。三条可执行动作：① <strong>回扫额度/权益类条目，必须回厂商官方公告页或帮助中心/定价页</strong>，不得用聚合器的技术流代办；② <strong>"无信号"不等于"没发生"</strong>——它只等于"你没看对地方"，写结论时要写成"未在 X 源发现"，而不是"无延期"；③ <strong>每期开扫前先做一次"上期定稿后的缺口回看"</strong>，把两期之间的空档补上（本期 Gemini 4 Argon / Hy3 正式版就是空档漏项）。</span></li></ol>
 <ol class="ol big"><li><span class="lin">102</span><span class="lit">⚠️ <strong>限时权益的"延期"常常伪装成"活动调整"而非"延期公告"，且同批次条目不会整批同命运</strong> —— 腾讯 WorkBuddy 把 Hy3 限免与 Hy4 夜间限免延至 10/31，措辞是"9/30 晚公布调整"，<strong>不是一纸延期通知</strong>；同一批 9/30 到期的条目里，Qoder 与 Hy3 续了、其余 6 条没续。三条可执行动作：① <strong>凡"9/30 单日 N 条到期"这类批次，验收到期时必须逐条回官方页</strong>，不许"一件查了当十件都查了"；② <strong>把"已结束"写成"截至 X 日未见续期公告"</strong>，保留改判通道（避坑 47 同源）；③ <strong>多段式窗口（新用户 N 天 / 老用户夜间）必须拆开算</strong>——腾讯这次两条线的终点不同、"首开"动作各算各的。</span></li></ol>
 <ol class="ol big"><li><span class="lin">103</span><span class="lit">⚠️ <strong>开源"决策模型"的 Apache 2.0 + pip 可装，不等于"可用于生产决策"</strong> —— AWS Strands Decider 2B（Apache 2.0、本地 115ms）在 <strong>JevBench 公开集只有 0.723 准确率、Brier 0.342</strong>，而 <strong>JevBench 本身就是这批模型阵营（Jev / Decider）自己参与定义的榜</strong>。三条可执行动作：① <strong>决策模型只做"廉价预筛"，有后果的动作（付款、删除、对外发布）仍要人工或阈值门</strong>；② <strong>别用"它自己那派的榜"给自己背书</strong>（避坑 74 同源：第三方排名只作方向）；③ <strong>上线前用你自己的真实数据跑一遍混淆矩阵</strong>——置信度再"校准"，也代替不了你业务里的代价矩阵。</span></li></ol>
 <ol class="ol big"><li><span class="lin">104</span><span class="lit">⚠️ <strong>榜单上的"第一"要先问"谁跑的"</strong> —— Gemini 4 Argon 的"夺回榜首"要打折扣：<strong>Google 在 18 项对外披露的基准里自己跑了 9 项，且自跑项的胜率明显更高</strong>；且<strong>同一模型在两家独立榜单上结论相反</strong>（Artificial Analysis 给 52.6，低于 Claude Opus 5.5 的 57.6；Vals 却把它排到 41 个模型里的第一，68.9%）。三条可执行动作：① <strong>看榜单第一，先看"这批数字是谁生成的"</strong>，厂商自跑项要单独标注；② <strong>至少交叉两家独立榜</strong>，结论相反时以"你自己的任务集"为准；③ <strong>榜上的"每任务成本"要连带看 token 消耗</strong>（Argon 跑同一评测用了 1.1 亿 token，而中位数是 8,200 万——<strong>啰嗦会吃掉价格优势</strong>）。</span></li></ol>
 <ol class="ol big"><li><span class="lin">105</span><span class="lit">⚠️ <strong>"首发优惠价"是有期限的营销价，不是标价；"开源完整度"解决的是复现，不是好用</strong> —— 本期两条同时踩中这一点：<strong>Gemini 4 Argon 首发 $2/$10 → 标准 $4/$20</strong>（Google 未公布优惠期时长）；<strong>MAI-Transcribe-2-Streaming $0.54/音频小时只保到 2026 年底</strong>（微软未公布之后的价格）。另一边，<strong>IFM K2 Horizon 把开源推到了"权重+数据+代码+日志+checkpoint"的极致，Ai2 AstaBrief 给了"权重+数据+工作流"</strong>，但<strong>"给得越多 ≠ 越好用"</strong>——AstaBrief 主要训练与评测完成于 2025 年，对标的是当时前沿。三条可执行动作：① <strong>凡写"introductory price""优惠至 X 年"的，预算按标准价做</strong>，并单独备注优惠期；② <strong>把"开源完整度"与"任务适配度"分两栏评估</strong>——前者决定能不能复现，后者要靠你自己的测试集；③ <strong>看到"用了同样 token 数"的对比要警惕</strong>——本期的真相是"同一任务不同模型消耗差一倍以上"。</span></li></ol>
 <p>（前 100 条沿用 002–021 期：Gemini 免费层按模型选 / Sora 无免费档 / 百炼地域陷阱 / Pika 缩水 / "79.9 元 DeepSeek 永久会员"是谣言 / 通用兑换码是骗局 / 水印与商用条款要逐条看 / 一次性积分 ≠ 免费额度 / 地方词元券不通用 / 二手 Token 别碰 / 先交钱的"认证福利"一律是骗子 / 文心一格已停服 / "完全免费"视频模型要看限速承诺 / Bolt Forge 的免费付的是数据 / 智谱夜间免费要接受慢速 / 老混元平台停服 / B.AI 条款代价 / AutoClaw 积分不是钱 / 抖音 AI 工坊是邀请制 / "免费额度大全"时效性以天计 / 匿名模型的"零留存"要按平台分账 / 匿名模型窗口是"厂商认领那天关闭" / AI 漫剧算力账算不平 / 两边都在"到期下线"且都是运维事故级 / "免费 API 横评"类文章本周已出现三处硬伤 / 别再找"Qoder 免费 800 次" / 匿名模型风险从"它是谁"升级为"它是不是一个模型" / 平台补贴大全是本周最容易下错注的一类内容 / "开源插件与运行时" ≠ "开源权重" / "邀请制大额度"要算两笔账 / "匿名免费"全流程的时序与三条判断 / AI 编程工具会把整个 Git 历史传走且关不掉 / "永久免费"会悄悄过期 / 平台补贴数字与行业回调数字必须对着读 / "每天领 X Credits"真正的成本是"记得领" / 平台补贴数字有"三个版本"且差额本身是信息 / "越界"是这一代 AI Agent 的共同失败模式 / "匿名档"免费 API 门槛最低但承诺最少 / "即将开源"不能写进本周的零成本方案 / 报告的"出刊时点"会直接决定内容完整性 / "开放"要拆成四层读（能用 / 能下载 / 能跑 / 能商用）/ 许可证比参数量更能决定免费模型有没有用 / "AI 自主入侵"类头条的三查 / "注册送额度"的真实成本是身份与时间 / token 数没有比较价值，只有"能跑多少次"才有 / "前沿模型不再是默认答案"的驱动因素是账单不是榜单 / "已结束"不是终态，"延期"是常态 / 总分 ≠ 适配，只看分项 / "开源"分三层：权重 ≠ 代码可审 ≠ 数据政策 / 平台与政策的官方数字和整理稿数字按问题类型选口径 / 厂商文档内部自相矛盾时按最小值估算 / 地推礼与注册礼当两笔账 / 平台扶持分三层问 / 代币价值在拿到换算率前只当描述 / 同一个榜单上只有"能下载权重的"可被审计 / 平台"招募计划"缺三项中任一项当传闻 / "未来几周"≠已发布≠本周可用 / 迁移新模型先跑一周 parity week / DevDay "too much stuff"是运维信号、立刻核已保存配置 / "按任务成本降 50%"主要来自牌价不是 token 减少 / 把"免费/捆绑的 LLM 访问"当永久基础设施是错的 / 判断厂商"免费"先问"免费算力的入口归谁" / 平台扶持的"报名入口"往往=限时赛事入口 / 免费模型清单是动态目录须带核对日期 / 节日促销谷价是短暂拐点别当长期便宜 / DevDay 传闻只有 keynote 官宣才算数（71）/ 匿名免费模型别挂生产（72）/ 免费但要绑卡是双重门槛（73）/ 第三方排名只作方向（74）/ 倒排纪律合成每日检查单（75）/ DevDay 前一天是改配置末班车（76）/ 官方定档 ≠ 节点冻结（77）/ 单日 N 条到期提前两天列清单（78）/ 迁移按套餐分层且 API 不受影响（79）/ 老混元 10/1 高危窗口（80）/ keynote 后先核原文再看总结（81）/ 传闻在 keynote 当天升官方（82）/ 平台免费档与权重可商用是两笔账（83）/ 提前两天列的清单到期当天翻成核对（84）/ 倒排日是给自己设的、模糊截止最后一天后高危（85）/ 订阅"不涨价但砍额度"是变相调价（86）/ "传闻→官宣"纪律的正面回报（87）/ 订阅权益外溢是把已付成本复用（88）/ 基础设施开源 ≠ 模型权重开源（89）/ 引用安全评测数字先问评测条件（90）/ 带具体日期的额度先找"expires"再找"from"（91）/ "开源权重"≠"安全已审"（92）/ "免费内容生成"的新形态是提示词库（93）/ "分发入口"也会收缩（94）/ "自动发放+需先连 GitHub 才生效"的 credit 是两段式门槛（95）/ 评测总分第一掩盖每任务成本最高（96）/ "开放权重数周后发布"是路线图话术（97）/ 音频 beta 全员开放带质量代价（98）/ 免费工具入口平台侧反复迁移（99）/ 监管把 agent 自主入侵从头条变传票（100）。）</p>
+</details>
 </section>
 <section id="s07" class="sec">
 <h2><span class="sn">07</span><span class="h2t">按任务选型速查</span><span class="h2sub">（更新版）</span></h2>
@@ -1052,8 +1211,10 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
-<section id="s08" class="sec">
+<section id="s08" class="sec folded">
 <h2><span class="sn">08</span><span class="h2t">本期信源体系更新</span></h2>
+<details class="audit-fold" id="fold-s08">
+<summary><span class="fold-t">展开：第八章 · 信源体系更新</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <h3 id="h3-21"><span class="h3n">1</span>本期实际命中分布</h3>
 <div class="tblwrap">
 <table class="tbl c3 w1 w1m" style="--w1:179px;--w1m:179px">
@@ -1102,19 +1263,23 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 <blockquote class="bq"><p>已同步核对 <code>AI信息源分级清单-T0-T4.md</code>：<strong>本期新增 4 条信源（Allen Institute for AI / AWS Strands Labs / ELYZA / Institute for Foundation Models），台账 198 → 202 条</strong>；把「AIHOT 不覆盖权益类条目」升级为<strong>第十八次逐期确认</strong>并首次写成操作禁令；第 8 类缺口"模型蒸馏与许可证争议"子类延续。</p></blockquote>
+</details>
 </section>
-<section id="s09" class="sec">
+<section id="s09" class="sec folded">
 <h2><span class="sn">09</span><span class="h2t">来源与核查说明</span></h2>
+<details class="audit-fold" id="fold-s09">
+<summary><span class="fold-t">展开：第九章 · 来源与核查说明</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <ul class="ul"><li><strong>T0 官方/一手</strong>：</li><li><strong>Allen Institute for AI / Ai2（AstaBrief 8B，本期核心命中，新增信源）</strong>——10/2 开源 AstaBrief 8B：基于 Qwen3-8B，SFT（47K 例，教师模型为 Claude 3.5/3.7 Sonnet、o3、o4-mini、GPT-4.1）+ DPO（约 6K 偏好对，两名裁判 GPT-4.1 与 DeepSeek-R1 一致才保留）；8×H100 上用 Ai2 open-instruct 训练；<strong>Apache 2.0</strong>，权重 + 训练数据 + 基于自有 PDF 的示例工作流公开；Asta 平台 Fast mode 单篇 51.1s（Thinking mode 178.5s）。<strong>Ai2 自陈主要训练与评测完成于 2025 年、未对当前前沿重跑</strong>（避坑 105）。</li><li><strong>AWS Strands Labs（Strands Decider 2B，本期命中，新增信源）</strong>——10/1–10/2 开源决策模型：Qwen3.5-2B 躯干删 LM head + 约 100 万参数指针头（rank-16 LoRA）；<strong>Apache 2.0</strong>；权重 HF、代码 / 训练数据 / 训练脚本 GitHub；<strong>JevBench 公开集 0.723 准确率、Brier 0.342</strong>；本地延迟约 115ms（RTX 3090）/ 约 153ms（M3 MacBook）；起源是 AWS 杰出工程师 Marc Brooker 看过 TypeSafe 的 Jev 后自建原型（避坑 103）。</li><li><strong>ELYZA / KDDI（Thinking 1.0-llm-jp-4，本期命中，新增信源）</strong>——10/2 免费开放 33B 与 32B-A3B 两档，基于 NII 的 LLM-jp-4 后训练，<strong>Apache 2.0 可商用</strong>；同日成立 ELYZA RSI Research（自陈仍处前期研究阶段）。⚠️ "部分基准超越 LLM-jp-4.1"为自报（避坑 74 同源）。</li><li><strong>IFM（K2 Horizon，本期命中，新增信源）</strong>——六个模型（0.9B / 3.7B / 7B / 36B-A4B 的 MoVA / 375B-A23B 等），<strong>权重、训练数据与配方、训练代码、中间 checkpoint、细粒度训练日志、评测全部开源</strong>；AMA 定于 10/5 20:00–22:00 PT。</li><li><strong>腾讯 WorkBuddy / 腾讯混元（本期两条延期 + 一条补登）</strong>——① 9/30 晚公布调整：<strong>Hy3 模型限免与 Hy4 preview 模型夜间限免截止日均延至 10/31</strong>；已体验用户夜间 23:00–次日 8:00 免费（截至 10/31），未体验用户 10/10 23:59 前首开享 14 天每日免费；⚠️ Hy4 preview 属大语言模型、暂不具备多模态能力（图像/视频任务转多模态模型并按常规扣积分）。② <strong>Hy3 正式版</strong>（10/1）：MoE 总参 2950 亿 / 激活 210 亿 / 256K 上下文，<strong>Apache 2.0 可商用</strong>，已接入 WorkBuddy / 元宝 / Marvis / ima，API 在腾讯云 TokenHub。</li><li><strong>阿里 Qoder（Qwen3.8-Flash 延期，本期核心纠错项）</strong>——官方公告：原定 2026-09-30 23:59:59 结束，<strong>现延期、自 2026-10-01 起继续免费，结束时间未定、将提前在官方页面公告</strong>；覆盖 Qoder CN 桌面端 / IDE / JetBrains 插件 / CLI / 网页版 / 移动端等全系个人可访问产品，自动生效、无需领取，Credits 余额为 0 也可用；<strong>企业订阅不适用</strong>。另一笔独立的账：Qoder CN 桌面端每日可领 100 通用 Credits（10:00 开新一轮、30 天有效、不被 0.0× 模型扣减）。</li><li><strong>智谱 AI（ZCode 免费额度包 + 双节三线，沿用 + 本期登记）</strong>——<strong>ZCode 免费额度包：9/28–10/7，10 万份、每份 1 亿 Token</strong>；付费与符合条件的回归用户另可得 4 张周额度重置卡 + 4 张 5 小时额度重置卡。双节三线（9/25–10/7 全天谷价、GLM-5.3-Flash 夜间免费至 10/7、Seedance 折扣至 10/7）沿用，本期倒计时第 4 天。</li><li><strong>Google DeepMind（Gemini 4 Argon + TEE 联邦学习，本期补登）</strong>——Argon：9/30 美东发布，首发仅 Fairwind 计划内可信网络防御者；<strong>$2/$10 首发价（缓存输入 95% 折扣），标准价 $4/$20</strong>；<strong>输出上限 100 万 token</strong>（由 64K 提升）；<strong>未公布公开 model ID / 泛化开放日期 / 输入上下文窗口</strong>。TEE 联邦学习：10/3 00:15，访问策略发布至公共透明日志 Rekor、二进制可复现构建，Gboard 已部署（英语 / 日语下一词预测）。</li><li><strong>OpenAI（GPT-6 家族实用指南，10/2）</strong>——官方指南明确三档定位（Astra / 6.1 Sol / Luna）与模型卡价格（$10/$50/$1、$2/$10/$0.10、$0.10/$0.50/$0.01），四款共享 1.05M 上下文 / 128K 最大输出；<strong>属文档而非发布</strong>（不引入新模型 / 价格 / 基准）。GPT-5.5 10/14 下线定档维持、API 不受影响。</li><li><strong>Microsoft（MAI 语音三件套，10/1）</strong>——MAI-Transcribe-2-Streaming（60 语言、首字约 320ms、<strong>$0.54/音频小时优惠至 2026 年底</strong>）、MAI-Voice-2.1（23 语言 / 26 locale、跨语言同一声线、<strong>$22/百万字符</strong>）、MAI-Voice-2.1-Flash（约 45s 音频 / 150ms 端到端、快 55%、便宜约 60%、<strong>$15/百万字符</strong>）；经 Foundry / MAI Playground / Vercel 开放，两个 Voice 模型另在 OpenRouter。</li><li><strong>NVIDIA（DGX Spark 64GB，10/2）</strong>——64GB 统一内存版 <strong>$4,999 起，10/23 由 Acer/ASUS/Dell/Gigabyte/HP/MSI 发售</strong>；<strong>128GB FE 同步涨价至 $6,950</strong>（10/2 生效）；单机可跑约 1000 亿参数；两台经 ConnectX-7 池化 128GB、约 1.7× 吞吐。</li><li><strong>Artificial Analysis / Arena / Vals AI（评测，本期命中）</strong>——Argon 在 AA 得 52.6（低于 Opus 5.5 的 57.6）、每任务 $1.99，但 Vals 排它为 41 个模型第一（68.9%）、Arena Text 第一（1525）；<strong>Google 自跑 18 项基准中的 9 项、自跑项胜率更高</strong>（避坑 104）。Claude Sonnet 5.5 在 AA Intelligence Index 得 56（第 2），<strong>每任务 $7.60</strong>（约 Sonnet 5 的 1.5 倍，因平均消耗约 193K 输出 token，为已测最高）。</li></ul>
 <ul class="ul"><li><strong>T1/T2/T3 关键来源（本期）</strong>：</li><li><strong>IT之家 / 驱动中国 / 手机同花顺（10/2，本期命中）</strong>——腾讯 WorkBuddy 延长大模型限免至 10/31 与 Hy3 正式版发布的中文落地报道（⚠️ 均按二手口径标注；官方口径以 WorkBuddy 9/30 晚公告为准）。</li><li><strong>什么值得买《全网 AI 产品免费权益清单（截至 2026.10.01）》（10/1，本期命中）</strong>——<strong>校出 Qoder Qwen3.8-Flash 延期的触发线索源</strong>；本报告据此回到 Qoder 官方公告页与阿里云开发者社区活动说明页定事实（T4 找线索、T0 定事实）。</li><li><strong>TechCrunch / VentureBeat / Singularity.Kiwi（AWS Strands Decider 2B，本期命中）</strong>——决策模型"克隆潮"的第三方记录。</li><li><strong>路透社 / Bloomberg（Anthropic IPO 与 OpenAI 融资，本期命中）</strong>——Anthropic 已邀机构投资者在 IPO 前质询高管（Bloomberg 报道估值近 2 万亿美元，最早 11/9 当周启动路演）；OpenAI 以安全为由排除 2026 年上市、以约 1.4 万亿美元估值私域融资（⚠️ 媒体口径，非官方）。<strong>背景锚（非本期增量）</strong>：NVIDIA 于 <strong>9/2 签署、9/3 披露</strong>收购 Hugging Face 的协议（约 119 亿美元购买价 + 至多约 10 亿美元员工留任股权，预计 2027 上半年交割）——<strong>截至 10/1 尚未交割</strong>，本报告在引用"HF 开放权重"时按"平台仍承诺保持开放与多云多芯片"的口径处理。</li><li><strong>ClawLabsAI/free-ai-models / freellm.net / freetokens.custats.info（沿用）</strong>——动态目录核对源（本期未见快照变化；freellm.net 计数器仍为 488+ 模型 / 30 家提供方）。</li></ul>
 <ul class="ul"><li><strong>核查纪律声明</strong>：本期所有"免费额度 / 限时活动"类条目，<strong>凡来自第三方整理或社区口径的，均标注 ⚠️ 与来源层级</strong>。<strong>官方一手口径优先</strong>：Qoder Qwen3.8-Flash 延期取自 Qoder 官方公告 + 阿里云开发者社区活动说明页；腾讯双线延期取自 WorkBuddy 9/30 晚公告（经 IT之家 / 驱动中国转述）；Ai2 AstaBrief / AWS Strands Decider / ELYZA / IFM K2 Horizon 均取自厂商官方博客或模型卡。<strong>本期三条状态变更</strong>：① Qoder Qwen3.8-Flash 由 ⚪ 已结束<strong>改回 🟢 生效中</strong>（纠错 #1，本报告首个"由终止状态改回生效中"条目）；② 腾讯 WorkBuddy Hy3 / Hy4 夜间限免由"9/30 收口"改为"<strong>10/31 收口</strong>"；③ 9/30 单日批次拆分为"其余 6 条维持 ⚪ + 2 条改判 🟢"。<strong>本期补登两条</strong>：Gemini 4 Argon、腾讯混元 Hy3 正式版（020/021 均漏，见纠错 #4）。<strong>本期回扫</strong>：火山方舟 5 折（9/28）、MiMo OpenCode Flash（~9/29）、DevDay（9/29）、西安黑客松（9/27）、Claude Tag Credits（10/1）均已在前几期回扫确认；<strong>ZCode 开源仓库 + 信通院 / 绿盟审计报告截至 10/3 仍未公开</strong>，措辞维持"已整改、未公开"（沿用 010 期避坑）。<strong>命名纪律（019 期纠错 #1 沿用）</strong>：<code>gpt-6-sol</code> 偷跑标识 / GPT-6 Sol / GPT-6.1 Sol / GPT-5.6 Sol 四套近名并存，引用一律以官方发布页写法为准。<strong>scan 时点纪律（避坑 40 沿用）</strong>：本期为 <strong>10/3 02:00（GMT+8）凌晨出刊</strong>，10/3 白天及太平洋时间 10/3 的条目按下期回扫处理。</li></ul>
+</details>
 </section>
   </main>
 </div>
 
 <footer class="foot">
-  <div class="fr"><span>AI 免费内容与权益速递 · 第 022 期</span><span>2026-10-03（周六）· 10/2 晚间–10/3 凌晨真实增量（Ai2 AstaBrief 8B / AWS Strands Decider 2B / ELYZA Thinking 1.0 / IFM K2 Horizon / Microsoft MAI 语音三件套 / NVIDIA DGX Spark 64GB / OpenAI GPT-6 家族指南）+ 两条「延期反转」纠错（Qoder Qwen3.8-Flash 10/1 起继续免费 · 腾讯 WorkBuddy Hy3 + Hy4 夜间限免延至 10/31）+ 两条补登（Gemini 4 Argon / 腾讯混元 Hy3 正式版）+ 掘金第二期进入最后一天（明天截止）+ 智谱三线收口与 Claude Code 云会话 credit 各剩 4 天</span></div>
-  <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；第四章「限时活动与截止时间表」支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
+  <div class="fr"><span>AI 免费内容与权益速递 · 第 022 期</span><span>扫描截止 2026-10-03 02:00（GMT+8）</span></div>
+  <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
   <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
 </footer>
 
@@ -1213,6 +1378,22 @@ mark.hl.cur{background:var(--accent); color:#fff}
     apply();
   }
 
+  /* ---------- 长状态格：点击展开全文 ---------- */
+  [].slice.call(document.querySelectorAll(".st-txt.cbody.clamp")).forEach(function(el){
+    el.setAttribute("tabindex","0");
+    el.setAttribute("role","button");
+    el.setAttribute("aria-expanded","false");
+    function open(){
+      el.classList.remove("clamp");
+      el.setAttribute("aria-expanded","true");
+      el.removeAttribute("title");
+    }
+    el.addEventListener("click", open);
+    el.addEventListener("keydown", function(ev){
+      if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); }
+    });
+  });
+
   /* ---------- 全文检索 ---------- */
   var q=document.getElementById("q"), qn=document.getElementById("qn"),
       marks=[], cur=-1, lastQ="";
@@ -1252,6 +1433,11 @@ mark.hl.cur{background:var(--accent); color:#fff}
       node.parentNode.replaceChild(frag,node);
     });
     qn.textContent=marks.length;
+    /* 折叠区内的命中也要看得见：命中即展开所在章节（toggle 事件会补做入场动画与顶栏量高） */
+    marks.forEach(function(m){
+      var d=m.closest?m.closest("details.audit-fold"):null;
+      if(d) d.open=true;
+    });
     if(marks.length){ cur=-1; jump(1); }
     lastQ=v;
   }
@@ -1325,6 +1511,44 @@ mark.hl.cur{background:var(--accent); color:#fff}
       document.body.classList.remove("nav-open");
       menuBtn.setAttribute("aria-expanded","false");
     }
+  });
+
+  /* ---------- 审计层折叠：全部展开 / 目录跳转 / 搜索 / 打印 ----------
+     折叠区在 display:none 里时，IntersectionObserver 不会给 .rise 加 .in，
+     顶栏量高也会把隐藏的 .chips 读成 0 —— 展开时两样都要补做。 */
+  var folds=[].slice.call(document.querySelectorAll("details.audit-fold"));
+  function openFold(id){ folds.forEach(function(d){ if(!id||d.id==="fold-"+id) d.open=true; }); }
+  document.querySelectorAll("[data-open]").forEach(function(a){
+    a.addEventListener("click",function(){ openFold(a.getAttribute("data-open")); });
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      var h=a.getAttribute("href")||"";
+      if(/^#s\d{2}$/.test(h)) openFold(h.slice(1));
+    });
+  });
+  var foldAll=document.getElementById("foldAll");
+  if(foldAll) foldAll.addEventListener("click",function(){
+    var allOpen=folds.every(function(d){return d.open;});
+    folds.forEach(function(d){ d.open=!allOpen; });
+    foldAll.textContent=allOpen?"展开全部章节":"收起全部章节";
+    foldAll.setAttribute("aria-expanded",allOpen?"false":"true");
+  });
+  folds.forEach(function(d){
+    d.addEventListener("toggle",function(){
+      if(!d.open) return;
+      d.querySelectorAll(".rise:not(.in)").forEach(function(el){el.classList.add("in");});
+      syncMetrics();
+    });
+  });
+  var printState=[];
+  window.addEventListener("beforeprint",function(){
+    printState=folds.map(function(d){return d.open;});
+    folds.forEach(function(d){d.open=true;});
+    document.querySelectorAll(".audit-fold .rise:not(.in)").forEach(function(el){el.classList.add("in");});
+  });
+  window.addEventListener("afterprint",function(){
+    folds.forEach(function(d,i){ d.open=printState[i]; });
   });
 
   /* ---------- 回到顶部 ---------- */

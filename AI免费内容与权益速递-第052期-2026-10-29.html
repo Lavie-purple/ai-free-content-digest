@@ -233,9 +233,45 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
   background-image:none; line-height:1.45;
 }
 .toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+/* 「正文之后」标记：只说明点它跳到文末，不用括号、不加底色（2026-11-07）。
+   单独占一行 —— 196px 侧栏里跟在章节名后面会把标题挤到折行。 */
+.toc-hint{
+  display:block; margin-top:1px; font-family:var(--fm); font-size:9.5px;
+  letter-spacing:.06em; color:var(--faint); opacity:.8;
+}
+/* 目录分组标签：一条细线 + 小字，不加框（2026-11-07 方案 A） */
+.toc-g{
+  font-family:var(--fm); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--faint); margin:14px 0 4px; padding-top:11px; border-top:1px solid var(--rule);
+}
+.toc-g:first-child{margin-top:0; padding-top:0; border-top:0}
 .toc-a:hover{color:var(--ink); border-left-color:var(--rule-2)}
 .toc-a.active{color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft)}
 .toc-a.active .toc-n{color:var(--accent-ink)}
+
+/* 《常驻权益总账》只有一个章节（全量表），左侧 196px 目录栏纯占宽度：
+   收成主区顶部一行可展开控件，表格铺满整栏。目录条目一个不删，点开即见。 */
+.shell.shell-wide{grid-template-columns:minmax(0,1fr); gap:0}
+/* 总账页最后就是这张表，表格外框底 = 内容结束。再照别的页留 96px 页脚上边距，
+   深色底上会读成「表格下面塌了一块空白」（用户 2026-11-07 截图框出的那块）。
+   只收这一页，其它页仍是 var(--s7)。 */
+body.ledger-page .shell{padding-bottom:var(--s5)}
+.toc-fold{
+  margin:0 0 var(--s4); padding:8px var(--s3);
+  border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface);
+}
+.toc-fold>summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px;
+  font-family:var(--fm); font-size:11px; letter-spacing:.12em; color:var(--muted);
+}
+.toc-fold>summary::-webkit-details-marker{display:none}
+.toc-fold>summary::before{content:"+"; font-size:15px; line-height:1; color:var(--accent-ink)}
+.toc-fold[open]>summary::before{content:"−"}
+.toc-fold-nav{display:grid; gap:2px; margin-top:8px; padding-top:8px; border-top:1px solid var(--rule)}
+.toc-fold-nav .toc-a{padding-top:6px; padding-bottom:6px}
+/* 总账页没有侧栏抽屉，窄屏的汉堡按钮点了会开一个空抽屉 */
+body.ledger-page #menuBtn{display:none !important}
+@media print{ .toc-fold{display:none !important} }
 
 main{min-width:0}
 .sec{scroll-margin-top:76px; padding-top:var(--s5)}
@@ -315,7 +351,12 @@ blockquote{margin:0}
   width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
   background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
 }
-.tblwrap.scrolly .tbl{border:0; border-radius:0}
+/* 表头吸顶的前提：表格自身不能 overflow:hidden。
+   它会新建一个滚动容器，把 th{position:sticky} 整个废掉 —— 实测在容器内滚动
+   400px 后表头跑到容器上方 305px，正好被 sticky 的筛选条压掉半行（用户
+   2026-11-06「这里老是被上面截断」）。外框与圆角由 .tblwrap.scrolly 承担，
+   这里不需要再裁切；非滚动容器里的 .tbl 仍保留 overflow:hidden 裁圆角。 */
+.tblwrap.scrolly .tbl{border:0; border-radius:0; overflow:visible}
 .tbl thead th{
   position:sticky; top:0; z-index:2; text-align:left; vertical-align:bottom;
   font-family:var(--fm); font-size:11.5px; letter-spacing:.09em; text-transform:uppercase;
@@ -348,6 +389,13 @@ blockquote{margin:0}
 .ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over)}
 .ledger tbody tr[data-st="over"] td{color:var(--muted)}
 .ledger td[data-col="st"]{white-space:normal; overflow-wrap:anywhere}
+/* 《常驻权益总账》全量表专用列宽（2026-11-06 用户截图：活动列一大片空白、
+   截止列被挤成一字一行）。日报 4.1 的 date=76px 是给短日历日用的，不能套过来。
+   三列按内容量配比分宽，仍是 fixed 布局 —— 长状态句不会把整表撑爆。 */
+.tbl.ledger.ledger-full th[data-col="body"]{width:28%}
+.tbl.ledger.ledger-full th[data-col="date"]{width:32%}
+.tbl.ledger.ledger-full th[data-col="st"]{width:40%}
+.tbl.ledger.ledger-full tbody td{overflow-wrap:anywhere}
 .st{
   display:inline-block; width:9px; height:9px; border-radius:99px; margin-right:8px; vertical-align:1px;
   background:var(--rule-2);
@@ -677,6 +725,51 @@ mark.hl.cur{background:var(--accent); color:#fff}
   a{background-image:none}
   @page{size:A4 portrait; margin:12mm}
 }
+
+/* ---- 30 秒速览卡（060 期 A 方案） ---- */
+.brief{
+  background:var(--surface); border:1px solid var(--rule-2); border-left:4px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4);
+  margin:0 0 var(--s5); box-shadow:var(--shadow);
+}
+.brief-k{font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.06em;
+  color:var(--faint); margin:0 0 var(--s2)}
+.brief-h{font-family:var(--fu); font-weight:700; font-size:var(--fs-xl); line-height:1.5;
+  color:var(--ink); margin:0 0 var(--s3); text-wrap:balance}
+.brief-m{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-m span{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:99px; padding:5px 12px}
+.brief-m b{font-family:var(--fm); color:var(--accent-ink); font-size:var(--fs-mid)}
+.brief-a{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-a a,.brief-a button{font-family:var(--fu); font-size:var(--fs-sm);
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--rule-2);
+  border-radius:var(--r1); padding:8px 14px; text-decoration:none; cursor:pointer}
+.brief-a a:hover,.brief-a button:hover{border-color:var(--accent)}
+.brief-n{font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  color:var(--muted); margin:0}
+
+/* ---- 审计层折叠：details 只做逻辑容器，展开后排版与原来完全一致 ---- */
+.folded{padding-top:var(--s4)}
+.audit-fold{margin:0}
+.audit-fold>summary{
+  display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap; list-style:none;
+  padding:var(--s3) var(--s4); margin:0 0 var(--s3); cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r2);
+  font-family:var(--fu); font-size:var(--fs-mid); font-weight:700; color:var(--ink);
+}
+.audit-fold>summary::-webkit-details-marker{display:none}
+.audit-fold>summary::before{content:"+"; font-family:var(--fm); font-size:19px;
+  font-weight:400; color:var(--accent-ink); line-height:1}
+.audit-fold[open]>summary::before{content:"\2212"}
+.audit-fold[open]>summary{margin-bottom:var(--s5)}
+.fold-t{flex:1}
+.fold-hint{font-family:var(--fm); font-size:var(--fs-xs); font-weight:400; color:var(--faint)}
+.audit-fold>p{margin-bottom:var(--s4)}
+.audit-fold h3:first-child{margin-top:0}
+@media print{
+  .audit-fold>summary{display:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
 </style>
 </head>
 <body>
@@ -687,7 +780,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <header class="topbar" data-no-print>
   <div class="tb-in">
     <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#052</b></span>
-    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s05"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s08"><b>08</b>本期信源体系更新</a><a href="#s09"><b>09</b>来源与核查说明</a><a href="#s04" class="tail"><b>04</b>限时活动与截止时间表</a></nav>
+    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费额度与 API</a><a href="#s04"><b>04</b>限时活动与截止时间表</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s05" class="tail"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s08"><b>08</b>本期信源体系更新</a><a href="#s09"><b>09</b>来源与核查说明</a></nav>
     <div class="tb-tools">
       <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">⌕</button>
       <div class="search">
@@ -711,24 +804,35 @@ mark.hl.cur{background:var(--accent); color:#fff}
   <h1 class="mh-t">AI 免费内容与权益速递</h1>
   <p class="mh-sub"></p>
   <div class="pubnote"><p>扫描截止 <strong>2026-10-29 15:30（GMT+8）</strong>，<strong>窗口 = 上一期（051）扫描截止 10/29 14:30 → 本期截止</strong>，约 <strong>1.0 小时</strong>。</p><p>⚠️ <strong>本期的性质：同日增补轮</strong>。<strong>051 期是 10/29 的第一轮（窗口 10/28 09:05 → 10/29 14:30，约 29.4 小时），本期是同一天的第二轮 —— 两期不合并、不互相覆盖</strong>：051 期窗口 10/28 09:05 → 10/29 14:30，本期窗口 10/29 14:30 → 10/29 15:30，<strong>窗口起点＝上期截止点，各期内容各自独立成立</strong>。</p><p>⚠️ <strong>窗口换算（美西 / 北京双向）</strong>：<strong>起于北京 10/29 14:30 ＝ 美西 10/29 00:30 PT；止于北京 10/29 15:30 ＝ 美西 10/29 01:30 PT</strong>（北京比美西太平洋时间快 15 小时，夏令时期间；046 期已改正该换算，047–052 期沿用）。⚠️ <strong>本窗口完全落在美西同一天内</strong>（10/29 00:30 → 01:30 PT），<strong>换算没错的判据是「美西 10/29 00:30 → 01:30」这两个数本身</strong>。</p><p>⚠️ <strong>本期是一个「短窗口」期（约 1 小时），本报告按「短窗口出刊」的纪律处理 —— 即：先实抓核实窗口内确有落在线后的硬条目，再决定出刊或挂账</strong>。<strong>本轮实抓结论是「窗口内确有硬条目，但条数少、主体是往期挂账项的销项」</strong>，具体是：<strong>全量扫 273 个抓取件（另补抓 50 余个专项一手页）、共解析出 3,071 条带时间戳条目、落在窗口内的仅 <code>2</code> 条</strong>（且<strong>两条均为媒体转述</strong>：雷峰网 <code>AI</code> 行业观察与 <code>大语言模型收入榜</code>，<strong>不产生免费内容条目</strong>）；<strong>但本轮实访另拿到 <code>1</code> 条落在线后的官方一手新条目</strong>（<code>GLM-5.3-flashX-Legal</code> 于 10/29 上线 <code>AutoClaw</code>，官方博客逐字标 <code>Oct 29 2026</code>）+ <strong><code>3</code> 个往期挂账项的一手销项</strong>（见第一章第 4 节逐条归因）。</p><p>⚠️ <strong>本期最有工程价值的三条</strong>：<strong>① 「同一个页面上的多个数字，可能分属多个不同活动」</strong> —— <code>AutoClaw</code> 国际站 <code>M10W4</code> 页的正文是 <code>40 million Tokens</code>，但该页的相关卡片区同时挂着 <code>85M</code>、<code>100M+</code>、<code>132M</code> 三个数，<strong>本轮逐一实访四个活动页后确认三者分属 <code>M10W3</code>（上周档）、<code>free-token-event</code>（10/4–10/11，已过期）、<code>Weekly-Perks-M10W2</code>（10/12–10/16，已过期）</strong> —— <strong>没有一个数是错的，错的是把卡片文案当活动正文</strong>（避坑 227 的同族）；<strong>② <code>SEC EDGAR</code> 的 <code>403</code> 是 <code>User-Agent</code> 问题，不是封锁</strong> —— 本期把 UA 换成带联系方式的合规格式后，<code>browse-edgar</code> 与 <code>data.sec.gov</code> 双双返回 <code>200</code>，<strong>一个被记了多期（<code>sec_edgar</code> 连续 <code>403</code>）的阻塞项就此打通</strong>；<strong>③ 051 期的表格改写其实一行都没进交付物，本期修掉了</strong> —— 详见第五章与第四章脚注 ⑤ 的<strong>两层根因</strong>（避坑 230、231）。</p><p>与 001–051 期的关系：<strong>只做增量与纠错，不重复已固化内容</strong>。<strong>本期纠错 6 条（见第五章）</strong>，其中<strong>两条是「051 期的正文结论成立、但第四章表体与《常驻权益总账》没跟上」</strong>（<code>OpenRouter</code> 目录三个数、百度 <code>Unlimited OCR 2</code> 下载量）、<strong>一条是「051 期漏改了一行」</strong>（<code>Runware</code> 分发层 <code>Kling 4.0</code> 促销）、<strong>一条是「本期拿到一手答案」</strong>（<code>Anthropic</code> <code>S-1</code> 原文）、<strong>一条是「本期推翻 051 期的一个判断」</strong>（<code>freellm</code> 五项上升是阶段性的）、<strong>一条是「本期发现的一个反直觉事实」</strong>（官方促销数组<strong>从不自动删除过期条目</strong>，有 <code>7</code> 条的 <code>endsAt</code> 已过仍留在数组里）。<strong>本期新增避坑 5 条：228–232</strong>。</p></div>
-  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">68 条 · 一条一行</span></a><span class="vs-i vs-full is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 052 期 · 十节</span></span><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">140 条 · 无截止日</span></a></nav>
+  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">76 条 · 一条一行</span></a><span class="vs-i vs-full is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 052 期 · 十节</span></span><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">164 条 · 无截止日</span></a></nav>
 </header>
 
 <div class="shell">
   <div class="drawerwrap" id="drawerwrap"><aside class="rail" id="rail" aria-label="目录">
     <p class="rail-t">本期目录</p>
-    <nav><a class="toc-a" href="#s-abs"><span class="toc-n">··</span>摘要</a>
-<a class="toc-a" href="#s01"><span class="toc-n">01</span>AI 免费内容发布</a>
-<a class="toc-a" href="#s02"><span class="toc-n">02</span>免费内容生成工具</a>
-<a class="toc-a" href="#s03"><span class="toc-n">03</span>常驻免费额度与 API</a>
-<a class="toc-a" href="#s05"><span class="toc-n">05</span>本期纠错清单</a>
-<a class="toc-a" href="#s06"><span class="toc-n">06</span>避坑提示</a>
-<a class="toc-a" href="#s07"><span class="toc-n">07</span>按任务选型速查</a>
-<a class="toc-a" href="#s08"><span class="toc-n">08</span>本期信源体系更新</a>
-<a class="toc-a" href="#s09"><span class="toc-n">09</span>来源与核查说明</a>
-<a class="toc-a" href="#s04"><span class="toc-n">04</span>限时活动与截止时间表（正文之后 · 10/29 15:30 复核 · 过期 &gt;7 天已归档）</a></nav>
+    <nav><p class="toc-g">本期内容</p>
+<a class="toc-a" href="#s-abs"><span class="toc-n">··</span><span class="toc-t">摘要</span></a>
+<a class="toc-a" href="#s01"><span class="toc-n">01</span><span class="toc-t">AI 免费内容发布</span></a>
+<a class="toc-a" href="#s02"><span class="toc-n">02</span><span class="toc-t">免费内容生成工具</span></a>
+<a class="toc-a" href="#s03"><span class="toc-n">03</span><span class="toc-t">常驻免费额度与 API</span></a>
+<p class="toc-g">马上要办</p>
+<a class="toc-a" href="#s04"><span class="toc-n">04</span><span class="toc-t">限时活动与截止时间表<span class="toc-hint">正文之后</span></span></a>
+<p class="toc-g">怎么用</p>
+<a class="toc-a" href="#s07"><span class="toc-n">07</span><span class="toc-t">按任务选型速查</span></a>
+<p class="toc-g">审计层 · 默认折叠</p>
+<a class="toc-a" href="#s05"><span class="toc-n">05</span><span class="toc-t">本期纠错清单</span></a>
+<a class="toc-a" href="#s06"><span class="toc-n">06</span><span class="toc-t">避坑提示</span></a>
+<a class="toc-a" href="#s08"><span class="toc-n">08</span><span class="toc-t">本期信源体系更新</span></a>
+<a class="toc-a" href="#s09"><span class="toc-n">09</span><span class="toc-t">来源与核查说明</span></a></nav>
   </aside></div>
   <main id="main">
+<div class="brief" data-no-print>
+<p class="brief-k">30 秒速览 · 第 052 期</p>
+<p class="brief-h">智谱 AutoClaw 同页四个 Token 数实为四个活动；Anthropic S-1 列免费档风险</p>
+<div class="brief-m"><span>本期表体 <b>83</b> 行</span><span>其中必办 <b>3</b> 条</span><span>今明换挡 <b>4</b> 条</span></div>
+<div class="brief-a"><a href="#s04" data-open="s04">看必办清单</a><a href="quick.html">只看极速版</a><button type="button" id="foldAll" aria-expanded="false">展开全部章节</button></div>
+<p class="brief-n">下方是本期新闻正文（未折叠）；第四章权益台账与纠错、避坑、信源、核查等审计层默认收起，点标题展开。目录跳转、全文检索命中与打印时会自动展开。卡片数字是本期表体口径，全量三态分布以第四章脚注为准。原文一字未删。</p>
+</div>
 <p><strong>2026-10-29（周四）· 本期头条是「一个被追问了三期的矛盾，今天有了确切答案」—— <code>智谱 AutoClaw</code> 国际站同一个页面上同时出现 <code>40M</code>、<code>85M</code>、<code>100 million</code>、<code>132M</code> 四个 Token 数，本期逐一实访四个活动页后确认：这是「四个不同活动被同一页的相关卡片混在一起看」，没有哪一个数是错的；错的是读法。同期还拿到了 <code>Anthropic</code> 向 <code>SEC</code> 提交的 <code>S-1</code> 招股书原文（<code>14,169,255</code> 字节），</strong>官方第一次在法律文件里把「免费档」写成风险因素<strong>（<code>our free trials and free tiers</code> 失败会影响增长、<code>The availability of free tiers may cannibalize potential paid subscriptions</code>），并逐字写出一个此前无人登记的免费项目 —— <code>Claude for Teachers</code>；<code>GLM-5.3-flashX-Legal</code> 于今天（10/29）在 <code>AutoClaw</code> 上线（官方逐字 <code>Harvey LAB</code> 全通过率 <code>19.2%</code>）；此外本期拿到了一个被记了多期的工程级发现 —— </strong><code>SEC EDGAR</code> 的 <code>403</code> 不是站点封锁，是 <code>User-Agent</code> 不合规，换成带联系方式的合规 UA 后立刻可读**</p>
 <section id="s-abs" class="sec summary">
 <h2><span class="sn">··</span><span class="h2t">摘要</span><span class="h2sub">（3 秒版）</span></h2>
@@ -887,13 +991,19 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
-<section id="s05" class="sec">
+<section id="s05" class="sec folded">
 <h2><span class="sn">05</span><span class="h2t">本期纠错清单</span><span class="h2sub">（对 051 期）</span></h2>
+<details class="audit-fold" id="fold-s05">
+<summary><span class="fold-t">展开：第五章 · 本期纠错清单</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <ol class="ol"><li><span class="lin">1</span><span class="lit"><strong>⚠️ 051 期正文写了 <code>OpenRouter</code> 目录 <code>457/19/16</code>，但第四章表体与《常驻权益总账》仍是 050 期的 <code>464/19/16</code> —— 本期补上（表格层改写漏进交付物）</strong>：<strong>根因有两层</strong> —— <strong>第一层</strong>：<code>gen_table051.py</code> 读 050 期 md 生成 <code>tmp_table051.md</code>，<strong>但 051 期的最终 md 是由 <code>inject051.py</code> 从 <code>tmp_051_body_a.md</code> 注入的，而那个源文件里存的是未改写的旧表格</strong>，<code>inject051.py</code> 一跑就把改写覆盖回去；<strong>第二层</strong>：<code>gen_table051.py</code> 的写出逻辑写成了 <code>for k in body: if k in REWRITE:</code> —— <strong><code>k</code> 是整行、永远不是 <code>REWRITE</code> 的键</strong>，<strong>所以改写一行都没进输出</strong>（<strong>脚本内的断言只校验 <code>REWRITE</code> 字典本身，没校验输出文件，所以断言全过而产物是错的</strong>）。<strong>本期两处都修好，并新增「表体关键口径 vs 正文」的一致性断言</strong>（新立避坑 230、231）。</span></li><li><span class="lin">2</span><span class="lit"><strong>051 期正文写了 <code>百度</code> <code>Unlimited OCR 2</code> 的 <code>downloads 8,357</code>，但表体与总账仍是 <code>513</code> —— 同上根因，本期补上</strong>。</span></li><li><span class="lin">3</span><span class="lit"><strong>051 期记的「<code>Runware</code> <code>Kling 4.0</code> 的 <code>15%</code> 促销已按避坑 223 改写为『官方数组仍列为在售』」—— 实际那一行没被改到（漏改）</strong>：<strong>051 期的 <code>REWRITE</code> 键只匹配到「快手可灵 <code>Kling 4.0</code>」模型行、没匹配到「<code>Runware</code> 分发层 <code>Kling 4.0</code> 促销」行</strong>（<strong>两行活动名都含 <code>Kling 4.0</code>，键不够长</strong>）。<strong>本期把键写全并已生效</strong> —— <strong>表体现读数为「官方促销数组仍列为在售、截止日＝本期基准日当天（避坑 223）」</strong>。</span></li><li><span class="lin">4</span><span class="lit"><strong>051 期记「<code>freellm</code> 五项上升、<code>Models Tracked</code> 回到 <code>541</code>」—— 本期推翻</strong>：<strong>六项全部同值</strong>（<code>541</code> / <code>306</code> / <code>31</code> / <code>459</code> / <code>249</code> / <code>2026-10-27</code>）。<strong>上升是阶段性的、不是趋势</strong>（避坑 216：<strong>否定判断有有效期</strong>）。</span></li><li><span class="lin">5</span><span class="lit"><strong>051 期记「<code>sec_edgar</code> 连续 <code>403</code>」—— 本期更正归因</strong>：<strong>不是站点封锁，是 <code>User-Agent</code> 不合规</strong>；<strong>换成带联系方式的合规 UA 后返回 <code>200</code></strong>，<strong>并因此拿到 <code>Anthropic</code> <code>S-1</code> 原文（<code>14,169,255</code> 字节）</strong> —— <strong>051 期挂账项⑬销项</strong>（新立避坑 232）。</span></li><li><span class="lin">6</span><span class="lit"><strong>051 期记「<code>AutoClaw</code> 国际站『<code>40M</code> vs <code>100 million</code>』矛盾（本期未实访该页，追踪项不销项）」—— 本期销项</strong>：<strong>四个数分属四个活动页</strong>（<code>40M</code> = <code>M10W4</code> 当前周档 / <code>85M</code> = <code>M10W3</code> 上周档 / <code>100 million</code> = <code>free-token-event</code> 10/4–10/11 已过期 / <code>132M</code> = <code>Weekly-Perks-M10W2</code> 10/12–10/16 已过期），<strong>没有一个数是错的</strong>（新立避坑 228）。</span></li></ol>
+</details>
 </section>
-<section id="s06" class="sec">
+<section id="s06" class="sec folded">
 <h2><span class="sn">06</span><span class="h2t">避坑提示</span><span class="h2sub">（本期新增 5 条：228–232）</span></h2>
+<details class="audit-fold" id="fold-s06">
+<summary><span class="fold-t">展开：第六章 · 避坑提示</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <ol class="ol big"><li><span class="lin">228</span><span class="lit"><strong>同一个页面上的多个数字，可能分属多个不同活动</strong> —— <code>AutoClaw</code> 国际站 <code>M10W4</code> 页的正文是 <code>40 million Tokens</code>，但该页的相关卡片区同时挂着 <code>85M</code>、<code>100M+</code>、<code>132M</code> 三个数。<strong>逐一实访四个活动页后确认三者分属不同活动页、且两个已过期</strong>。<strong>错的是「把同一个页面上的相关卡片文案当成活动正文」这种读法</strong> —— <strong>必须点进每个数对应的页面看它自己的活动期与规则</strong>（避坑 227 的同族：<strong>列表页的卡片文案不是条目正文</strong>）。</span></li><li><span class="lin">229</span><span class="lit"><strong>聚合站的「收录时间」不是「发布时间」，窗口归属要看 <code>publishedAt</code></strong> —— <code>aihot.news</code> 的公开 API 同时给 <code>publishedAt</code> 与 <code>discoveredAt</code> 两个时间戳。<strong>本期就抓到一条 <code>publishedAt 10/28 16:00</code>、<code>discoveredAt 10/29 02:05</code> 的条目（<code>MOSS-Image</code>）</strong> —— <strong>若按 <code>discoveredAt</code> 归期，会把上期窗口的发布算进本期</strong>（避坑 208 的新变种）。</span></li><li><span class="lin">230</span><span class="lit"><strong>官方促销数组（及任何「促销列表」）从不自动删除过期条目</strong> —— <code>Runware</code> 官方 <code>pricing</code> 页的 <code>14</code> 条促销里，<strong>有 <code>7</code> 条的 <code>endsAt</code> 已早于基准日却仍在数组中</strong>（最久的一条已过 <code>50</code> 天）。<strong>判据必须是 <code>endsAt</code> 与基准日的比较，不能用「数组里还在」判断活动有效性</strong>（避坑 223 的完整现场）。</span></li><li><span class="lin">231</span><span class="lit"><strong>脚本里的「改写」必须断言它真的进了输出文件</strong> —— 051 期的 <code>gen_table051.py</code> 内部断言全过（键唯一命中、值在输出中恰好出现一次 —— 但那个「输出」是字典值本身、不是落盘文件），<strong>而写出循环的判断写错了一层</strong>，导致 <code>10</code> 行改写一行没进交付物。<strong>正确做法</strong>：<strong>① 写出后重新读回落盘文件、逐条断言改写后的行在其中；② 断言「未改写的行数 == 原行数 − 改写行数」；③ 断言「表体里能查到本期正文要用的每一个关键数」</strong>（本期 <code>gen_table052.py</code> 三条全加）。</span></li><li><span class="lin">232</span><span class="lit"><strong>同一个 URL 的 <code>403</code>，可能是 <code>User-Agent</code> 不合规而不是站点封锁</strong> —— 本报告连续多期把 <code>sec_edgar</code> 的 <code>403</code> 记成「站点拒绝访问」，<strong>实际换成带联系方式的合规 UA（<code>AI-Free-Content-Report research@example.com</code>）即返回 <code>200</code></strong>。<strong>归因错了，后续每一期都会重复记「未核到」</strong> —— <strong>遇到 <code>403</code> 且响应页标题是 <code>Your Request Originates from an Undeclared Automated Tool</code> 时，先换合规 UA 再判死</strong>。</span></li></ol>
+</details>
 </section>
 <section id="s07" class="sec">
 <h2><span class="sn">07</span><span class="h2t">按任务选型速查</span><span class="h2sub">（延续 051 期 · 本期更新 4 处）</span></h2>
@@ -910,19 +1020,27 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
-<section id="s08" class="sec">
+<section id="s08" class="sec folded">
 <h2><span class="sn">08</span><span class="h2t">本期信源体系更新</span></h2>
+<details class="audit-fold" id="fold-s08">
+<summary><span class="fold-t">展开：第八章 · 信源体系更新</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <p><strong>⚠️ 本期无新增 T0–T4 清单条目</strong>（<code>aihot.news</code> 与台账 <code>aihot.virxact.com</code> 是同一家的两个入口，034–052 连续十九期同结论：一致，无新增项、无缺项、不产生条目增删）。</p>
 <p><strong>⚠️ 本期新发现的一个可用接口（一手，非清单条目）</strong>：<code>aihot.news/api/v1/items?limit=30</code>（<code>200</code> / <code>31,839</code> 字节）—— <strong>该站公开的 JSON API，返回结构化条目，含 <code>id</code> / <code>title</code> / <code>originalTitle</code> / <code>summary</code> / <code>source</code> / <code>links</code> / <code>publishedAt</code> / <code>discoveredAt</code> / <code>category</code> / <code>score</code> / <code>selected</code> / <code>reason</code> / <code>attribution</code> 13 个字段</strong>。<strong>⚠️ 本报告只把它当「时间戳可核对的线索源」用</strong> —— <strong><code>publishedAt</code> 与 <code>discoveredAt</code> 分开给，正是避坑 229 的现场</strong>（<strong>该接口是本期新立避坑 229 的依据</strong>）。</p>
 <p><strong>⚠️ 本期打通的一个被记了多期的阻塞入口</strong>：<code>SEC EDGAR</code> —— <strong><code>www.sec.gov/cgi-bin/browse-edgar</code>（检索页）+ <code>data.sec.gov/submissions/CIK…json</code>（申报索引）+ <code>www.sec.gov/Archives/edgar/data/…</code>（原文）三层</strong>（<strong>全部需带联系方式的合规 <code>User-Agent</code></strong>）。<strong>本报告此前把它记成「<code>403</code> 不可用」，实为请求头问题</strong>（避坑 232）。</p>
+</details>
 </section>
-<section id="s09" class="sec">
+<section id="s09" class="sec folded">
 <h2><span class="sn">09</span><span class="h2t">来源与核查说明</span></h2>
+<details class="audit-fold" id="fold-s09">
+<summary><span class="fold-t">展开：第九章 · 来源与核查说明</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <p><strong>⚠️ 本期一手源（直接实访厂商页面 / 官方 API / 官方法律文件，非转述）</strong>：<code>autoclaw.z.ai/blog/news/M10W4/</code>（<strong><code>40 million Tokens</code> 逐字出处</strong>）、<code>/blog/news/M10W3/</code>（<strong><code>85M</code> 逐字出处</strong>）、<code>/blog/news/free-token-event/</code>（<strong><code>100M+</code> 与 <code>Event Period: Oct 4, 16:00 UTC – Oct 11, 16:00 UTC</code> 逐字出处</strong>）、<code>/blog/model/GLM-5.3-flashX-Legal/</code>（<strong><code>19.2% all-pass rate on Harvey LAB</code> 逐字出处</strong>）、<code>sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm</code>（<strong><code>14,169,255</code> 字节 · <code>Claude for Teachers</code> 逐字 · 营收拆分逐字 · 免费档风险因素四段逐字的出处</strong>）、<code>data.sec.gov/submissions/CIK0002130357.json</code>（<strong><code>CIK</code> / 申报日 / 受理号 / 主文档名的出处</strong>）、<code>www.sec.gov/cgi-bin/browse-edgar?...</code>（<strong><code>CIK 0002130357</code> 的出处</strong>）、<code>openrouter.ai/api/v1/models</code>（<strong><code>457/19/16</code> 与逐条 diff 的出处</strong>）、<code>openrouter.ai/announcements</code>（<strong><code>13</code> 条链接逐条同值的出处</strong>）、<code>runware.ai/pricing</code>（<strong><code>14</code> 条促销逐条与 <code>7</code> 条已过期仍在数组的出处</strong>）、<code>opencode.ai/docs/zen</code> 与 <code>docs/go</code>（<strong><code>9</code> 条免费档与 <code>LongCat</code> <code>11</code> 处的出处</strong>）、<code>antigravity.google/pricing</code>（<strong><code>$0/month</code> / <code>Unlimited</code> × <code>2</code> / <code>Basic weekly rate limits</code> 逐字同值的出处</strong>）、<code>aihot.news/api/v1/items</code>（<strong><code>publishedAt</code> / <code>discoveredAt</code> 双时间戳的出处</strong>）、<code>fal.ai/api/models?keywords=</code>（<strong><code>40</code> 条目录、<code>kling/v4/image-to-video</code> 与两条促销逐字同值的出处</strong>）、<code>hf-mirror.com/api/models?sort=trendingScore&amp;limit=100</code> 与 <code>?author=moonshotai&amp;limit=100</code>（<strong><code>19</code> 仓无 <code>K3.1</code>、trending 榜同序的出处</strong>）、<code>hf-mirror.com/api/models?search=Unlimited-OCR&amp;limit=20</code>（<strong><code>downloads 8,357</code> 的出处</strong>）、<code>api.github.com/orgs/meituan-longcat/repos</code>（<strong><code>38</code> 个仓库与 <code>WBench</code> 的 <code>pushed_at</code> / <code>releases 0</code> / <code>tags 0</code> 的出处</strong>）、<code>freellm.net</code> 与 <code>freellm.net/providers/openrouter</code>（<strong>六项计数器与专页 <code>19</code> 个模型的出处</strong>）。</p>
 <p><strong>⚠️ 本期未做的核对（如实记）</strong>：<strong>① <code>K2</code> 系列 10/31 停新「是否如期执行」（要等 10/31 之后才能核）② 老混元 <code>Q04</code> 连续第 <code>40</code> 期未决 ③ <code>freellm</code> 那 9 条的逐条归因（该站不提供可存档的模型 ID 清单，不猜）④ <code>Unsloth</code> 官网量化基准页全文（<code>91.5</code>/<code>89.9</code>/<code>45%</code>/<code>98.0</code>/<code>150GB</code> 那组数在官网零命中）⑤ <code>platform.reflection.ai</code> 定价（连续第 <code>14</code> 期）⑥ <code>mistral.ai/news</code> 抓取恢复（连续第 <code>12</code> 次）⑦ <code>Genie 4</code> 的候补名单开放范围与额度 ⑧ <code>Qwen 3.8</code> 数据流向问题的厂商回应 ⑨ <code>Antigravity</code> 付费三档（<code>Pro</code> / <code>Ultra</code> / 组织档）的具体价格 ⑩ <code>OpenRouter</code> 新路由算法在</strong>免费档<strong>上的实测差异（官方未按档位拆分其 <code>16.9%</code> 等数字）⑪ <code>B</code> 类 14 天内到期的条数逐条复核（见第四章脚注③）⑫ <code>OpenRouter</code>「CSAM 筛查」对</strong>具体模型<strong>的适用差异 ⑬ <code>MOSS-Image</code> 的官方一手页全文（</strong>本期已定位原文链接 <code>openmoss.ai/blog/cn/moss-image/</code>，但按 <code>publishedAt 10/28</code> 归期，属 051 期窗口 —— 本期只登记不展开<strong>）</strong></p>
+</details>
 </section>
-<section id="s04" class="sec">
+<section id="s04" class="sec folded">
 <h2><span class="sn">04</span><span class="h2t">限时活动与截止时间表（正文之后 · 10/29 15:30 复核 · 过期 &gt;7 天已归档）</span></h2>
+<details class="audit-fold" id="fold-s04">
+<summary><span class="fold-t">展开：第四章 · 权益台账与脚注</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <blockquote class="bq"><p><strong>本章自 047 期修订起移到正文九章之后</strong> —— 前面九章约 2.3 万字可以连贯读完，本章与《常驻权益总账》作为参考资料放在后面。<strong>本章即往期所称「第四章」，编号与全部历史引用不变。</strong></p><p></p><p><strong>本章只留两类</strong>：<strong>4.1 有确切截止日的限时动作</strong> ／ <strong>4.2 无截止日但本期有变化</strong>。<strong>未变动的常驻权益不再逐期重印</strong>，全量 140 条移入《<a href="常驻权益总账.md">常驻权益总账</a>》；<strong>已过期 &gt;7 天且已收口</strong>的条目移入归档（<code>.workbuddy/data/deadline_archive.md</code>）—— 规则见脚注 ④。</p></blockquote>
 <h3 id="h3-22"><span class="h3n">4</span>1 限时动作（有确切截止日 · 58 条）</h3>
 <div class="tblwrap scrolly">
@@ -1037,12 +1155,13 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p><strong>⑤ 052 期的三个工程纪律（本期实测，都写在这里）</strong>：</p>
 <ul class="ul"><li><strong>① 「脚本改写」必须断言它真的进了落盘文件</strong> —— <strong>051 期的 <code>gen_table051.py</code> 内部断言全过（键唯一命中、值在输出中恰好出现一次 —— 但那个「输出」是字典值本身、不是落盘文件），而写出循环的判断写错了一层</strong>（<code>for k in body: if k in REWRITE:</code> —— <strong><code>k</code> 是整行、永远不是 <code>REWRITE</code> 的键</strong>），<strong>结果 <code>10</code> 行改写一行没进交付物</strong>（新立避坑 231）。<strong>本期三处都修了</strong>：<strong>① 写出循环改成「用键在行里找」并断言「一行最多命中一个键」「改写行数 == REWRITE 条数」② 断言「未改写的行数 == 原行数 − 改写行数」且每条未改写行在输出中恰好出现一次 ③ 新增「表体关键口径 vs 正文关键口径」一致性断言（<code>457/19/16</code>、<code>8,357</code>、<code>40 million Tokens</code>、<code>14,169,255</code>、<code>19.2% all-pass rate on Harvey LAB</code>、<code>14</code> 条促销 —— 六项逐条查得到）</strong>。</li><li><strong>② 「注入源文件」必须与最终产物同步</strong> —— <strong>051 期的正文是由 <code>inject051.py</code> 从 <code>tmp_051_body_a.md</code> 注入的，而那个源文件里存的是未改写的旧表格</strong>，<strong><code>inject051.py</code> 一跑就把 <code>gen_table051.py</code> 的改写覆盖回去</strong>（这是 051 期漏改的第一层根因，与 051 期记忆里写过的「改了正文必须改这两个源文件」是同一条纪律的表格版本）。<strong>本期的做法：<code>gen_table052.py</code> 的输入直接取 051 期 md 的现行文本（而不是取上一期的 <code>tmp_table</code>），并在注入后逐条核对表体关键口径</strong>。</li><li><strong>③ <code>403</code> 的归因要先排除请求头</strong> —— <strong>本报告连续多期把 <code>SEC EDGAR</code> 的 <code>403</code> 记成「站点拒绝访问」，实际是 <code>User-Agent</code> 不合规</strong>；<strong>换成带联系方式的合规 UA（<code>AI-Free-Content-Report research@example.com</code>）后同一 URL 返回 <code>200</code></strong> —— <strong>并因此拿到 <code>Anthropic</code> <code>S-1</code> 原文（<code>14,169,255</code> 字节）、销掉 051 期挂账项⑬</strong>（新立避坑 232）。<strong>归因错了，后续每一期都会重复记「未核到」</strong>。</li></ul>
 <p>*本期完。*</p>
+</details>
 </section>
   </main>
 </div>
 
 <footer class="foot">
-  <div class="fr"><span>AI 免费内容与权益速递 · 第 052 期</span><span>__DATELINE__</span></div>
+  <div class="fr"><span>AI 免费内容与权益速递 · 第 052 期</span><span>扫描截止 2026-10-29 15:30（GMT+8）</span></div>
   <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
   <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
 </footer>
@@ -1197,6 +1316,11 @@ mark.hl.cur{background:var(--accent); color:#fff}
       node.parentNode.replaceChild(frag,node);
     });
     qn.textContent=marks.length;
+    /* 折叠区内的命中也要看得见：命中即展开所在章节（toggle 事件会补做入场动画与顶栏量高） */
+    marks.forEach(function(m){
+      var d=m.closest?m.closest("details.audit-fold"):null;
+      if(d) d.open=true;
+    });
     if(marks.length){ cur=-1; jump(1); }
     lastQ=v;
   }
@@ -1270,6 +1394,44 @@ mark.hl.cur{background:var(--accent); color:#fff}
       document.body.classList.remove("nav-open");
       menuBtn.setAttribute("aria-expanded","false");
     }
+  });
+
+  /* ---------- 审计层折叠：全部展开 / 目录跳转 / 搜索 / 打印 ----------
+     折叠区在 display:none 里时，IntersectionObserver 不会给 .rise 加 .in，
+     顶栏量高也会把隐藏的 .chips 读成 0 —— 展开时两样都要补做。 */
+  var folds=[].slice.call(document.querySelectorAll("details.audit-fold"));
+  function openFold(id){ folds.forEach(function(d){ if(!id||d.id==="fold-"+id) d.open=true; }); }
+  document.querySelectorAll("[data-open]").forEach(function(a){
+    a.addEventListener("click",function(){ openFold(a.getAttribute("data-open")); });
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      var h=a.getAttribute("href")||"";
+      if(/^#s\d{2}$/.test(h)) openFold(h.slice(1));
+    });
+  });
+  var foldAll=document.getElementById("foldAll");
+  if(foldAll) foldAll.addEventListener("click",function(){
+    var allOpen=folds.every(function(d){return d.open;});
+    folds.forEach(function(d){ d.open=!allOpen; });
+    foldAll.textContent=allOpen?"展开全部章节":"收起全部章节";
+    foldAll.setAttribute("aria-expanded",allOpen?"false":"true");
+  });
+  folds.forEach(function(d){
+    d.addEventListener("toggle",function(){
+      if(!d.open) return;
+      d.querySelectorAll(".rise:not(.in)").forEach(function(el){el.classList.add("in");});
+      syncMetrics();
+    });
+  });
+  var printState=[];
+  window.addEventListener("beforeprint",function(){
+    printState=folds.map(function(d){return d.open;});
+    folds.forEach(function(d){d.open=true;});
+    document.querySelectorAll(".audit-fold .rise:not(.in)").forEach(function(el){el.classList.add("in");});
+  });
+  window.addEventListener("afterprint",function(){
+    folds.forEach(function(d,i){ d.open=printState[i]; });
   });
 
   /* ---------- 回到顶部 ---------- */

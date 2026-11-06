@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AI 免费内容与权益速递 · 第 004 期</title>
+<meta name="description" content="2026-09-15（周二）· 晚间信源扩版 · 主题：AI 免费内容发布 · 免费内容（生成/发布/分发）· 免费额度">
+<meta name="color-scheme" content="light dark">
+<script>
+/* 防闪烁：先定主题，再渲染 */
+(function(){try{
+  var t=localStorage.getItem("aihs-theme");
+  if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";}
+  document.documentElement.setAttribute("data-theme",t);
+}catch(e){}})();
+</script>
+<style>
+/* ============================================================
+   令牌层 —— 报刊纸（亮） / 夜读（暗），单一强调色：朱红
+   ============================================================ */
+:root{
+  --bg:#f2eee5; --bg-2:#eae4d7; --surface:#fbf9f3; --surface-2:#f6f2e8;
+  --ink:#1b1913; --ink-2:#3a362d; --muted:#5f584a; --faint:#736a5a;
+  --rule:rgba(27,25,19,.16); --rule-2:rgba(27,25,19,.34); --rule-strong:rgba(27,25,19,.62);
+  --accent:#bf3327; --accent-ink:#a02a20; --accent-soft:rgba(191,51,39,.10);
+  --crit:#8c1a10; --soon:#8f5e12; --live:#3b6a4d; --plan:#38587a; --over:#6e675c;
+  --hl:#ffe08a; --shadow:0 1px 2px rgba(40,32,20,.10),0 8px 28px rgba(40,32,20,.07);
+  --grain:.05;
+  --fd:"Source Han Serif SC","Noto Serif SC","Songti SC","STSong","SimSun",Georgia,"Times New Roman",serif;
+  --fu:"Source Han Sans SC","PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  --fm:"JetBrains Mono","Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace;
+  --fs-xs:12px; --fs-sm:13.5px; --fs-tbl:14px; --fs-mid:15px;
+  --fs-base:17px; --fs-lg:19px; --fs-xl:23px;
+  --fs-2xl:30px; --fs-3xl:42px; --fs-4xl:clamp(60px,9.8vw,138px);
+  --s1:4px; --s2:8px; --s3:16px; --s4:24px; --s5:40px; --s6:64px; --s7:96px;
+  --r1:3px; --r2:8px; --r3:14px;
+  --ease:cubic-bezier(.16,1,.3,1); --fast:170ms; --base:340ms;
+  /* 顶栏与筛选条的实际高度：抽屉定位、吸顶偏移都要跟它们对齐。
+     初值只是兜底，页面加载后由 JS 量出真值覆盖（字号/换行都会改变高度）。 */
+  --tb-h:57px; --chips-h:47px;
+}
+html[data-theme="dark"]{
+  --bg:#131210; --bg-2:#191713; --surface:#1c1a16; --surface-2:#232019;
+  --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;
+  --rule:rgba(236,231,220,.15); --rule-2:rgba(236,231,220,.3); --rule-strong:rgba(236,231,220,.55);
+  --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.14);
+  --crit:#ff3b30; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#9c9387;
+  --hl:#6b5a12; --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
+  --grain:.045;
+}
+
+/* ============================================================ 基础层 */
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--fu); font-size:var(--fs-base); line-height:1.9;
+  font-feature-settings:"kern" 1;
+  text-rendering:optimizeLegibility;
+  /* 长英文专名 / URL / 模型 ID 在窄屏会把行撑破（320px 实测溢出 4px）。
+     用 break-word 而不是 anywhere：后者会改变 min-content，连带把表格列宽算歪。 */
+  overflow-wrap:break-word;
+}
+body::before{ /* 氛围层：纸面暖光 */
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(70rem 42rem at 8% -12%, var(--accent-soft), transparent 62%),
+    radial-gradient(56rem 40rem at 102% 4%, rgba(56,88,122,.10), transparent 58%);
+}
+.grain{position:fixed; inset:0; pointer-events:none; z-index:1; opacity:var(--grain); mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+html[data-theme="dark"] .grain{mix-blend-mode:screen}
+a{
+  color:inherit; text-decoration:none;
+  background-image:linear-gradient(var(--accent),var(--accent)); background-size:0% 1px;
+  background-repeat:no-repeat; background-position:0 100%;
+  transition:background-size var(--fast) ease-out,color var(--fast) ease-out;
+}
+a:hover{background-size:100% 1px; color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:2px}
+.skip{position:absolute; left:-9999px; top:0; z-index:99; background:var(--surface); padding:12px 18px; border:1px solid var(--rule-2)}
+.skip:focus{left:12px; top:12px}
+code{
+  font-family:var(--fm); font-size:.87em; padding:.1em .38em; border-radius:var(--r1);
+  background:var(--surface-2); border:1px solid var(--rule); color:var(--ink-2);
+}
+
+/* ============================================================ 顶部条 */
+.topbar{
+  position:sticky; top:0; z-index:30;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(10px) saturate(1.1);
+  border-bottom:1px solid var(--rule);
+}
+@supports not (backdrop-filter:blur(1px)){.topbar{background:var(--bg)}}
+.tb-in{
+  max-width:1240px; margin:0 auto; padding:0 var(--s4);
+  display:flex; align-items:center; gap:var(--s3); min-height:56px;
+}
+.tb-brand{font-family:var(--fd); font-weight:700; letter-spacing:.04em; white-space:nowrap; font-size:var(--fs-sm)}
+.tb-brand .tbb-short{display:none}
+.tb-brand b{color:var(--accent-ink); font-family:var(--fm); font-weight:700; margin-left:6px; letter-spacing:0}
+.tb-nav{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; flex:1}
+.tb-nav::-webkit-scrollbar{display:none}
+.tb-nav a{
+  font-size:var(--fs-xs); color:var(--muted); padding:7px 9px; border-radius:var(--r1); white-space:nowrap;
+  background-image:none; transition:color var(--fast),background var(--fast);
+}
+.tb-nav a b{font-family:var(--fm); margin-right:5px; color:var(--faint); font-weight:600}
+.tb-nav a:hover{color:var(--ink); background:var(--surface-2)}
+.tb-nav a.active{color:var(--accent-ink); background:var(--accent-soft)}
+.tb-nav a.active b{color:var(--accent-ink)}
+.tb-nav a.tail{margin-left:6px; padding-left:14px; border-left:1px solid var(--rule-2)}
+.tb-tools{display:flex; align-items:center; gap:var(--s2); margin-left:auto}
+.search{position:relative; display:flex; align-items:center; flex:0 0 auto}
+.search input{
+  font-family:var(--fu); font-size:var(--fs-sm); color:var(--ink);
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:99px;
+  padding:8px 14px 8px 32px; width:220px;
+  transition:width var(--base) var(--ease),border-color var(--fast);
+}
+.search input::placeholder{color:var(--faint)}
+/* 计数与上下条按钮只在「有输入」时占位，空态下把这段内边距还给占位符 */
+.search input:not(:placeholder-shown){padding-right:76px}
+.search input:focus{width:280px; border-color:var(--accent); outline:none}
+.search .si{position:absolute; left:11px; font-size:13px; color:var(--faint); pointer-events:none}
+.search .sc{
+  position:absolute; right:8px; font-family:var(--fm); font-size:11px; color:var(--faint);
+  display:flex; gap:4px; align-items:center; opacity:0; pointer-events:none;
+  transition:opacity var(--fast);
+}
+.search input:not(:placeholder-shown) ~ .sc,
+.search input:focus ~ .sc{opacity:1; pointer-events:auto}
+.search .sc button{
+  border:1px solid var(--rule); background:var(--surface-2); color:var(--ink-2); cursor:pointer;
+  border-radius:var(--r1); font-size:11px; padding:2px 5px; line-height:1.4;
+}
+.search .sc button:hover{border-color:var(--accent); color:var(--accent-ink)}
+.iconbtn{
+  width:38px; height:38px; display:inline-grid; place-items:center; cursor:pointer;
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:99px;
+  color:var(--ink-2); font-size:15px; transition:transform var(--fast),border-color var(--fast),color var(--fast);
+}
+.iconbtn:hover{border-color:var(--accent); color:var(--accent-ink); transform:translateY(-1px)}
+#menuBtn{display:none}
+#searchBtn{display:none}   /* 只在手机端露出来：点开一条全宽搜索栏 */
+.progress{position:fixed; top:0; left:0; height:2px; width:0; background:var(--accent); z-index:31; transition:width 90ms linear}
+
+/* ============================================================ 刊头 */
+.masthead{position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:var(--s6) var(--s4) var(--s4)}
+.mh-top{
+  display:flex; justify-content:space-between; align-items:baseline; gap:var(--s3);
+  font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.14em; color:var(--muted);
+  text-transform:uppercase; padding-bottom:var(--s2); flex-wrap:wrap;
+  /* 窄屏换行时避免把「…增量与纠错口径」拆成只剩一个「径」字的孤行 */
+  text-wrap:pretty;
+}
+.mh-top em{font-style:normal; color:var(--accent-ink)}
+.mh-rule{height:0; border-top:3px solid var(--ink); border-bottom:1px solid var(--ink); padding-top:3px; margin-bottom:var(--s4)}
+h1.mh-t{
+  font-family:var(--fu); font-weight:800; letter-spacing:-.005em;
+  font-size:clamp(34px,5.4vw,62px); line-height:1.06; margin:0 0 var(--s3); text-wrap:balance;
+}
+.mh-sub{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted); letter-spacing:.06em; margin:0 0 var(--s5)}
+.mh-sub b{color:var(--ink-2); font-weight:600}
+.mh-num{
+  position:absolute; right:var(--s4); top:clamp(74px,7.4vw,106px);
+  font-family:var(--fd); font-weight:700; font-size:var(--fs-4xl); line-height:.8;
+  color:transparent; -webkit-text-stroke:1.5px var(--rule);
+  letter-spacing:-.03em; pointer-events:none; user-select:none; z-index:-1;
+}
+@supports not (-webkit-text-stroke:1px #000){.mh-num{color:var(--bg-2)}}
+html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
+.pubnote{
+  border-left:3px solid var(--accent); background:var(--surface); box-shadow:var(--shadow);
+  padding:var(--s3) var(--s4); margin:0 0 var(--s5); border-radius:0 var(--r2) var(--r2) 0;
+}
+.pubnote p{margin:0 0 6px; font-size:var(--fs-mid); color:var(--ink-2); font-family:var(--fu); line-height:1.75}
+.pubnote p:last-child{margin-bottom:0}
+
+.vs{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  margin:18px 0 20px; border:1px solid var(--rule); background:var(--surface);
+  box-shadow:var(--shadow);
+}
+.vs-i{
+  display:block; padding:10px 14px; text-decoration:none; color:var(--ink-2);
+  border-right:1px solid var(--rule); transition:background 120ms ease;
+}
+.vs-i:last-child{border-right:0}
+.vs-i:hover{background:var(--surface-2)}
+.vs-k{display:block; font-size:13.5px; font-weight:600; line-height:1.45}
+.vs-k i{font-style:normal; margin-right:5px; opacity:.75}
+.vs-d{display:block; font-size:11.5px; color:var(--faint); line-height:1.5; margin-top:1px}
+.vs-i.is-on{background:var(--ink); color:var(--bg); cursor:default}
+.vs-i.is-on .vs-d{color:var(--bg); opacity:.6}
+.vs-i.is-on .vs-k i{opacity:.85}
+/* 只给「极速」的图标上强调色：整行标红会盖过当前页的实心块，反而让人以为它才是当前页 */
+.vs-quick .vs-k i{color:var(--accent-ink); opacity:1}
+.vs-quick.is-on .vs-k i{color:var(--bg)}
+@media (max-width:640px){
+  /* 窄屏不要三行堆叠：日报页顶已有固定导航条 + 刊头 + 说明框，
+     再来三行切换器会把首屏全占掉。压成单行三格，副标题不出。 */
+  .vs{grid-template-columns:repeat(3,1fr); margin-top:14px}
+  .vs-i{
+    padding:9px 6px; text-align:center;
+    border-right:1px solid var(--rule); border-bottom:0;
+  }
+  .vs-i:last-child{border-right:0}
+  .vs-k{font-size:12px; line-height:1.3}
+  .vs-k i{margin-right:3px}
+  .vs-d{display:none}
+}
+@media print{.vs{display:none !important}}
+
+.summary-note{}
+
+/* ============================================================ 主栅格 */
+.shell{
+  position:relative; z-index:2; max-width:1240px; margin:0 auto;
+  padding:0 var(--s4) var(--s7); display:grid; grid-template-columns:196px minmax(0,1fr); gap:var(--s6);
+}
+.rail{position:sticky; top:78px; align-self:start; max-height:calc(100vh - 110px); overflow:auto; padding-bottom:var(--s4)}
+.drawerwrap{min-width:0}
+.rail-t{
+  font-family:var(--fm); font-size:10.5px; letter-spacing:.18em; color:var(--faint);
+  text-transform:uppercase; padding-bottom:var(--s2); margin-bottom:var(--s2); border-bottom:1px solid var(--rule);
+}
+.toc-a{
+  display:grid; grid-template-columns:26px 1fr; gap:6px; align-items:baseline;
+  font-size:var(--fs-sm); color:var(--muted); padding:7px 0 7px 8px; border-left:2px solid transparent;
+  background-image:none; line-height:1.45;
+}
+.toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+/* 「正文之后」标记：只说明点它跳到文末，不用括号、不加底色（2026-11-07）。
+   单独占一行 —— 196px 侧栏里跟在章节名后面会把标题挤到折行。 */
+.toc-hint{
+  display:block; margin-top:1px; font-family:var(--fm); font-size:9.5px;
+  letter-spacing:.06em; color:var(--faint); opacity:.8;
+}
+/* 目录分组标签：一条细线 + 小字，不加框（2026-11-07 方案 A） */
+.toc-g{
+  font-family:var(--fm); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--faint); margin:14px 0 4px; padding-top:11px; border-top:1px solid var(--rule);
+}
+.toc-g:first-child{margin-top:0; padding-top:0; border-top:0}
+.toc-a:hover{color:var(--ink); border-left-color:var(--rule-2)}
+.toc-a.active{color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft)}
+.toc-a.active .toc-n{color:var(--accent-ink)}
+
+/* 《常驻权益总账》只有一个章节（全量表），左侧 196px 目录栏纯占宽度：
+   收成主区顶部一行可展开控件，表格铺满整栏。目录条目一个不删，点开即见。 */
+.shell.shell-wide{grid-template-columns:minmax(0,1fr); gap:0}
+/* 总账页最后就是这张表，表格外框底 = 内容结束。再照别的页留 96px 页脚上边距，
+   深色底上会读成「表格下面塌了一块空白」（用户 2026-11-07 截图框出的那块）。
+   只收这一页，其它页仍是 var(--s7)。 */
+body.ledger-page .shell{padding-bottom:var(--s5)}
+.toc-fold{
+  margin:0 0 var(--s4); padding:8px var(--s3);
+  border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface);
+}
+.toc-fold>summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px;
+  font-family:var(--fm); font-size:11px; letter-spacing:.12em; color:var(--muted);
+}
+.toc-fold>summary::-webkit-details-marker{display:none}
+.toc-fold>summary::before{content:"+"; font-size:15px; line-height:1; color:var(--accent-ink)}
+.toc-fold[open]>summary::before{content:"−"}
+.toc-fold-nav{display:grid; gap:2px; margin-top:8px; padding-top:8px; border-top:1px solid var(--rule)}
+.toc-fold-nav .toc-a{padding-top:6px; padding-bottom:6px}
+/* 总账页没有侧栏抽屉，窄屏的汉堡按钮点了会开一个空抽屉 */
+body.ledger-page #menuBtn{display:none !important}
+@media print{ .toc-fold{display:none !important} }
+
+main{min-width:0}
+.sec{scroll-margin-top:76px; padding-top:var(--s5)}
+.sec h2{
+  font-family:var(--fu); font-weight:800; font-size:var(--fs-2xl); line-height:1.24;
+  margin:0 0 var(--s4); display:flex; align-items:baseline; gap:var(--s3);
+  padding-bottom:var(--s3); border-bottom:2px solid var(--ink); flex-wrap:wrap;
+}
+.sn{font-family:var(--fm); font-size:var(--fs-sm); color:var(--accent-ink); letter-spacing:.08em; font-weight:700}
+.h2sub{font-family:var(--fu); font-size:var(--fs-sm); font-weight:400; color:var(--muted); letter-spacing:.04em}
+h3{
+  font-family:var(--fu); font-weight:700; font-size:var(--fs-lg); line-height:1.5;
+  margin:var(--s5) 0 var(--s3); text-wrap:balance;
+}
+.h3n{
+  font-family:var(--fm); font-size:var(--fs-sm); color:var(--surface); background:var(--ink);
+  padding:1px 7px; border-radius:var(--r1); margin-right:9px; vertical-align:2px;
+}
+main p{margin:0 0 var(--s3); font-family:var(--fd); font-size:var(--fs-base); line-height:1.92; color:var(--ink-2)}
+main p:last-child{margin-bottom:0}
+main strong{font-weight:700; color:var(--ink)}
+.sec>p{margin-bottom:var(--s4)}
+
+/* 摘要区：要点卡片 */
+.summary .ul{list-style:none; margin:0 0 var(--s4); padding:0; display:grid; gap:var(--s2)}
+.summary .ul li{
+  position:relative; background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2);
+  padding:var(--s3) var(--s4) var(--s3) 58px; font-family:var(--fu); font-size:15.5px; line-height:1.8;
+  color:var(--ink-2); box-shadow:var(--shadow);
+  transition:transform var(--base) var(--ease),border-color var(--fast);
+}
+.summary .ul li:hover{transform:translateX(4px); border-color:var(--rule-2)}
+.summary .ul li::before{
+  counter-increment:sum;
+  content:"0" counter(sum);
+  position:absolute; left:var(--s3); top:var(--s3);
+  font-family:var(--fm); font-size:20px; font-weight:700; color:var(--accent); line-height:1.1;
+  white-space:nowrap;   /* 窄屏下「01」会被折成上下两个数字，竖排数字看着像排版事故 */
+}
+.summary .ul{counter-reset:sum}
+
+/* 列表 */
+.ul{margin:0 0 var(--s4); padding-left:0; list-style:none}
+.ul li{position:relative; padding-left:22px; margin-bottom:var(--s2); font-family:var(--fd); line-height:1.9; color:var(--ink-2)}
+.ul li::before{content:""; position:absolute; left:4px; top:.82em; width:7px; height:1.5px; background:var(--accent)}
+.ol{list-style:none; margin:0 0 var(--s4); padding:0; display:grid; gap:var(--s3)}
+.ol li{display:grid; grid-template-columns:34px 1fr; gap:var(--s3); align-items:start; font-family:var(--fd); line-height:1.9; color:var(--ink-2)}
+.lin{font-family:var(--fm); font-weight:700; color:var(--accent); font-size:var(--fs-sm); padding-top:.42em; letter-spacing:.02em}
+.ol.big li{
+  background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4); box-shadow:var(--shadow);
+}
+.ol.big .lin{font-size:22px; color:var(--accent); padding-top:.1em; line-height:1.1}
+ol.ol:not(.big) li{margin-bottom:0}
+
+/* 引用块（编者按 / 读法 / 免责声明） */
+.bq{
+  margin:0 0 var(--s4); padding:var(--s3) var(--s4);
+  border-left:2px solid var(--rule-strong); background:var(--surface-2);
+  border-radius:0 var(--r2) var(--r2) 0;
+}
+.bq p{
+  margin:0 0 8px; font-family:var(--fd); font-size:15.5px; line-height:1.85; color:var(--muted);
+}
+.bq p:last-child{margin-bottom:0}
+.bq p::before{content:"“"; color:var(--accent); font-family:var(--fd); font-size:1.5em; line-height:0; vertical-align:-.18em; margin-right:.12em}
+.bq p::after{content:"”"; color:var(--accent); font-family:var(--fd); font-size:1.5em; line-height:0; vertical-align:-.18em; margin-left:.12em}
+.bq strong{color:var(--ink-2)}
+
+/* 引用块 */
+blockquote{margin:0}
+
+/* 表格 */
+.tblwrap{position:relative; margin:0 0 var(--s5)}
+.tblwrap.scrolly{max-height:74vh; overflow:auto; border:1px solid var(--rule); border-radius:var(--r2); background:var(--surface); box-shadow:var(--shadow)}
+.tbl{
+  width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
+  background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
+}
+/* 表头吸顶的前提：表格自身不能 overflow:hidden。
+   它会新建一个滚动容器，把 th{position:sticky} 整个废掉 —— 实测在容器内滚动
+   400px 后表头跑到容器上方 305px，正好被 sticky 的筛选条压掉半行（用户
+   2026-11-06「这里老是被上面截断」）。外框与圆角由 .tblwrap.scrolly 承担，
+   这里不需要再裁切；非滚动容器里的 .tbl 仍保留 overflow:hidden 裁圆角。 */
+.tblwrap.scrolly .tbl{border:0; border-radius:0; overflow:visible}
+.tbl thead th{
+  position:sticky; top:0; z-index:2; text-align:left; vertical-align:bottom;
+  font-family:var(--fm); font-size:11.5px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; padding:12px var(--s3);
+  background:var(--surface-2); border-bottom:1.5px solid var(--rule-strong); white-space:nowrap;
+}
+.tbl tbody td{padding:11px var(--s3); border-bottom:1px solid var(--rule); vertical-align:top; color:var(--ink-2)}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl tbody tr{transition:background var(--fast)}
+.tbl tbody tr:hover{background:var(--surface-2)}
+.tbl td:first-child{color:var(--ink); font-weight:600}
+/* 首列条目名被压到逐字换行时，给一个按内容算出的下限（由编译器写入 --w1） */
+.tbl.w1 tbody td:first-child{min-width:var(--w1,120px); overflow-wrap:break-word}
+.tbl code{background:transparent; border-color:var(--rule); padding:.05em .3em}
+.tbl strong{color:var(--ink)}
+.tbl tr[hidden]{display:none}
+
+/* 截止时间表：状态色条 + 筛选 */
+.ledger{border-left:3px solid transparent}
+/* 固定列宽：状态列原先 nowrap 会把该列 min-content 撑到整句宽（实测 779px），
+   把「活动」列榨到 126px 逐字换行。改为固定布局 + 状态列允许换行。 */
+.tbl.ledger{table-layout:fixed}
+.tbl.ledger th[data-col="date"]{width:76px}
+.tbl.ledger th[data-col="st"]{width:190px}
+.ledger tbody tr{box-shadow:inset 3px 0 0 var(--rule-2)}
+.ledger tbody tr[data-st="crit"]{box-shadow:inset 3px 0 0 var(--crit)}
+.ledger tbody tr[data-st="soon"]{box-shadow:inset 3px 0 0 var(--soon)}
+.ledger tbody tr[data-st="live"]{box-shadow:inset 3px 0 0 var(--live)}
+.ledger tbody tr[data-st="warn"]{box-shadow:inset 3px 0 0 var(--plan)}
+.ledger tbody tr[data-st="over"]{box-shadow:inset 3px 0 0 var(--over)}
+.ledger tbody tr[data-st="over"] td{color:var(--muted)}
+.ledger td[data-col="st"]{white-space:normal; overflow-wrap:anywhere}
+/* 《常驻权益总账》全量表专用列宽（2026-11-06 用户截图：活动列一大片空白、
+   截止列被挤成一字一行）。日报 4.1 的 date=76px 是给短日历日用的，不能套过来。
+   三列按内容量配比分宽，仍是 fixed 布局 —— 长状态句不会把整表撑爆。 */
+.tbl.ledger.ledger-full th[data-col="body"]{width:28%}
+.tbl.ledger.ledger-full th[data-col="date"]{width:32%}
+.tbl.ledger.ledger-full th[data-col="st"]{width:40%}
+.tbl.ledger.ledger-full tbody td{overflow-wrap:anywhere}
+.st{
+  display:inline-block; width:9px; height:9px; border-radius:99px; margin-right:8px; vertical-align:1px;
+  background:var(--rule-2);
+}
+.st-crit{background:var(--crit)} .st-soon{background:var(--soon)} .st-live{background:var(--live)}
+.st-warn{background:var(--plan)} .st-over{background:var(--over)}
+.st-txt{font-weight:600}
+tr[data-st="crit"] .st-txt{color:var(--crit)}
+tr[data-st="soon"] .st-txt{color:var(--soon)}
+tr[data-st="live"] .st-txt{color:var(--live)}
+tr[data-st="warn"] .st-txt{color:var(--plan)}
+tr[data-st="over"] .st-txt{color:var(--over)}
+/* 长状态格：默认收 4 行，点一下展开全文。文字一个字都不删，只是不默认铺开。 */
+.st-txt.cbody.clamp{
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical;
+  overflow:hidden; cursor:pointer; border-radius:4px;
+}
+.st-txt.cbody.clamp:hover{background:var(--surface-2)}
+.st-txt.cbody.clamp:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media print{ .st-txt.cbody.clamp{display:block; overflow:visible} }
+.chips{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:10px var(--s3);
+  background:var(--surface-2); border-bottom:1.5px solid var(--rule-strong); position:sticky; top:0; z-index:3}
+/* 截止表待在可滚动容器里，容器顶部已经被 chips 占住——表头要吸在它下方，
+   否则两者都 top:0、chips 的 z-index 更高，表头第一行会被整个盖住。 */
+.tblwrap.scrolly .tbl thead th{top:var(--chips-h)}
+.chips-label{font-family:var(--fm); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin-right:4px}
+.chip{
+  font-family:var(--fu); font-size:12.5px; color:var(--ink-2); cursor:pointer;
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:99px;
+  padding:4px 11px; display:inline-flex; align-items:center; gap:6px; transition:all var(--fast) ease-out;
+}
+.chip b{font-family:var(--fm); font-size:10.5px; color:var(--faint); font-weight:600}
+.chip:hover{border-color:var(--accent); color:var(--accent-ink)}
+.chip.on{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.chip.on b{color:var(--bg); opacity:.7}
+.chips-count{margin-left:auto; font-family:var(--fm); font-size:11px; color:var(--faint)}
+.scrollhint{display:none; font-family:var(--fm); font-size:11px; color:var(--faint); text-align:right; margin:6px 0 0}
+
+/* 页脚 */
+.foot{
+  position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:var(--s5) var(--s4) var(--s6);
+  border-top:2px solid var(--ink); font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+}
+.foot .fr{display:flex; justify-content:space-between; gap:var(--s3); flex-wrap:wrap; padding-bottom:var(--s2);
+  border-bottom:1px solid var(--rule); margin-bottom:var(--s3); font-family:var(--fm); font-size:11px; letter-spacing:.1em; text-transform:uppercase}
+.foot p{margin:0 0 8px; line-height:1.8}
+.foot strong{color:var(--ink-2)}
+
+/* 悬浮控件 */
+.fab{position:fixed; right:18px; bottom:18px; z-index:32; display:flex; flex-direction:column; gap:8px; opacity:.72; transition:opacity var(--fast)}
+.fab:hover,.fab:focus-within{opacity:1}
+@media (hover:none){.fab{opacity:1}}
+.fab .iconbtn{width:44px; height:44px; box-shadow:var(--shadow); background:var(--surface)}
+
+/* 搜索高亮 */
+mark.hl{background:var(--hl); color:var(--ink); padding:0 .1em; border-radius:2px}
+mark.hl.cur{background:var(--accent); color:#fff}
+
+/* 入场：一次编排好的序列 */
+@media (prefers-reduced-motion:no-preference){
+  .rise{opacity:0; transform:translateY(18px)}
+  .rise.in{opacity:1; transform:none; transition:opacity var(--base) var(--ease),transform var(--base) var(--ease)}
+  .masthead{animation:mhIn 760ms var(--ease) both}
+  @keyframes mhIn{from{opacity:0; transform:translateY(22px)}to{opacity:1;transform:none}}
+  .masthead .mh-top{animation:mhIn 620ms 80ms var(--ease) both}
+  .masthead .mh-t{animation:mhIn 700ms 140ms var(--ease) both}
+  .masthead .pubnote{animation:mhIn 700ms 220ms var(--ease) both}
+  .shell{animation:mhIn 700ms 300ms var(--ease) both}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
+
+/* ============================================================ 响应式 */
+@media (max-width:1080px){
+  .shell{grid-template-columns:minmax(0,1fr); gap:0}
+  /* 抽屉：外层 fixed + overflow:hidden 当裁剪盒，内层才平移。
+     若直接平移 fixed 的 .rail，它会把文档 scrollWidth 撑宽 326px（实测）。 */
+  .drawerwrap{
+    position:fixed; inset:var(--tb-h) 0 0 0; overflow:hidden; z-index:29;
+    visibility:hidden; pointer-events:none; transition:visibility 0s linear var(--base);
+  }
+  body.nav-open .drawerwrap{visibility:visible; pointer-events:auto; transition-delay:0s}
+  .rail{
+    position:absolute; top:0; right:0; bottom:0; width:min(86vw,320px);
+    max-height:none; background:var(--surface); border-left:1px solid var(--rule-2);
+    padding:var(--s4); overflow:auto; box-shadow:var(--shadow);
+    transform:translateX(102%); transition:transform var(--base) var(--ease);
+  }
+  body.nav-open .rail{transform:none}
+  #menuBtn{display:inline-grid}
+  .tb-nav{display:none}
+}
+@media (max-width:820px){
+  :root{--fs-base:16.5px; --fs-2xl:25px; --s5:32px; --s6:44px}
+  .tb-in{padding:0 var(--s3); gap:var(--s2)}
+  .search input{width:168px}
+  .search input:focus{width:206px}
+  .tb-brand .tbb-long{display:none}
+  .tb-brand .tbb-short{display:inline}
+  .tbl.ledger{min-width:600px}
+  .tbl.ledger th[data-col="st"]{width:150px}
+  .masthead,.shell,.foot{padding-left:var(--s3); padding-right:var(--s3)}
+  .mh-num{right:var(--s3); -webkit-text-stroke-width:1px}
+  .tblwrap:not(.scrolly){overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .tblwrap:not(.scrolly) .tbl{min-width:640px}
+  .scrollhint{display:block}
+  .ol.big li{padding:var(--s3)}
+  .ol.big li{grid-template-columns:26px 1fr; gap:var(--s2)}
+  .summary .ul li{padding-left:52px}
+}
+/* ---------- 手机（<=600px）：换一套阅读形态，不是把桌面版等比缩小 ----------
+   三处结构性改动，都对着实测出来的毛病改：
+   ① 搜索不再隐藏。原先 <=520px 直接 display:none，手机上等于没有搜索；
+      现在收成一个图标，点开是一条全宽搜索栏（绝对定位挂在顶栏下沿，不撑高顶栏）。
+   ② 2 列表改成纵向堆叠卡片。手机上横滑表格很难用，而 2 列表堆叠后既不用滑、
+      又刚好把「名称 → 说明」的层级关系表达出来。
+   ③ 3 列及以上继续横滑，但首列粘住——横滑时不丢参照物，知道自己看的是哪一行。
+   另外把触控目标放大到 44px（图标按钮原 38px、筛选 chip 原 26px 高，都偏小）。
+*/
+@media (max-width:600px){
+  :root{--fs-base:17px; --s3:14px; --s4:20px; --s5:26px; --s6:34px; --s7:48px}
+  .mh-num{display:none}
+
+  /* 顶栏与搜索 */
+  .tb-in{min-height:52px}
+  #searchBtn{display:inline-grid}
+  .iconbtn{width:44px; height:44px; font-size:16px}
+  .tb-tools{gap:6px}
+  .search{
+    position:absolute; left:0; right:0; top:100%; z-index:35;
+    display:none; padding:10px var(--s3);
+    background:var(--surface); border-bottom:1px solid var(--rule-2); box-shadow:var(--shadow);
+  }
+  body.search-open .search{display:flex}
+  .search input{width:100%; font-size:16px; padding:11px 14px 11px 34px; -webkit-appearance:none; appearance:none}
+  .search input:focus{width:100%}
+  .search .si{left:calc(var(--s3) + 12px)}
+  .search input:not(:placeholder-shown){padding-right:104px}
+  /* 计数与上下条按钮要能点得中：原尺寸 11px/18px 高，手机上根本按不准 */
+  .search .sc{right:10px; gap:6px; font-size:13px}
+  .search .sc button{min-width:34px; min-height:34px; font-size:14px; border-radius:6px}
+
+  /* 刊头 */
+  h1.mh-t{font-size:27px; line-height:1.22}
+  .mh-top{font-size:10.5px; letter-spacing:.1em; gap:var(--s2)}
+  .mh-sub{font-size:13.5px; margin-bottom:var(--s4)}
+  .pubnote{padding:var(--s3)}
+  .pubnote p{font-size:14.5px}
+
+  /* 目录抽屉条目放大 */
+  .toc-a{padding:11px var(--s2)}
+
+  /* 章节 */
+  .sec{scroll-margin-top:calc(var(--tb-h) + 10px)}
+  .sec h2{font-size:21px}
+  h3{font-size:17px; margin:var(--s4) 0 var(--s3)}
+
+  /* 摘要卡片 */
+  .summary .ul li{padding:13px var(--s3) 13px 46px; font-size:15px; line-height:1.78}
+  .summary .ul li::before{font-size:17px; top:13px}
+
+  /* 列表 */
+  .ul li{padding-left:19px}
+  .ol{gap:var(--s2)}
+  .ol li{grid-template-columns:28px 1fr; gap:10px}
+  .ol.big li{padding:13px 14px; grid-template-columns:24px 1fr; gap:10px}
+  .ol.big .lin{font-size:19px}
+
+  /* 表格：3 列以上横滑 + 首列粘住 */
+  /* 先解开 .tbl 自己的 overflow:hidden。它原本只为了裁圆角，但 overflow:hidden
+     同样会把自己变成「滚动容器」，于是 td 的 sticky 以 table 为参照（而 table
+     并不滚动）——首列粘性会静默失效，横滑时首列照样滚走（实测截图确认）。
+     手机上优先保首列粘住，圆角让位（表格改直角，肉眼几乎无感）。 */
+  .tbl{overflow:visible; border-radius:0}
+  .tblwrap:not(.scrolly){overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .tblwrap:not(.scrolly) .tbl{min-width:600px}
+  .tblwrap:not(.scrolly) .tbl:not(.c2) tbody td:first-child,
+  .tblwrap.scrolly .tbl tbody td:first-child{
+    position:sticky; left:0; z-index:1;
+    background:var(--surface); box-shadow:1px 0 0 var(--rule-2);
+  }
+  .tblwrap:not(.scrolly) .tbl:not(.c2) thead th:first-child,
+  .tblwrap.scrolly .tbl thead th:first-child{left:0; z-index:4; background:var(--surface-2)}
+  /* 首列装长专名的表（桌面端放不下、只给了手机端下限）：放宽，别压成逐字竖排 */
+  .tblwrap:not(.scrolly) .tbl.w1m:not(.c2) tbody td:first-child,
+  .tblwrap.scrolly .tbl.w1m tbody td:first-child{
+    min-width:var(--w1m); overflow-wrap:break-word;
+  }
+  .scrollhint{text-align:left}
+
+  /* 表格：2 列纵向堆叠成卡片，彻底不横滑 */
+  .tblwrap:not(.scrolly) .tbl.c2,
+  .tblwrap.scrolly .tbl.c2{
+    display:block; min-width:0; border:0; background:transparent; border-radius:0;
+  }
+  .tbl.c2 thead{display:none}
+  .tbl.c2 tbody{display:block}
+  .tbl.c2 tbody tr{
+    display:block; background:var(--surface); border:1px solid var(--rule);
+    border-radius:var(--r2); padding:12px 14px; margin-bottom:10px; box-shadow:var(--shadow);
+  }
+  .tbl.c2 tbody tr:last-child{margin-bottom:0}
+  .tbl.c2 tbody tr:hover{background:var(--surface)}
+  .tbl.c2 tbody td{display:block; border:0; padding:0; background:transparent; box-shadow:none}
+  .tbl.c2 tbody td:first-child{
+    position:relative; padding-left:15px; margin-bottom:5px;
+    font-family:var(--fu); font-weight:700; font-size:14.5px; color:var(--ink);
+  }
+  .tbl.c2 tbody td:first-child::before{
+    content:""; position:absolute; left:0; top:.62em; width:7px; height:1.5px; background:var(--accent);
+  }
+
+  /* 截止表筛选条：改成一行横滑，避免换行成三四排把表格挤下去 */
+  .chips{
+    flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; padding:9px var(--s3); gap:7px;
+    border-radius:var(--r2) var(--r2) 0 0;
+  }
+  .chips::-webkit-scrollbar{display:none}
+  .chips-label,.chips-count{display:none}
+  .chip{flex:0 0 auto; padding:9px 14px; font-size:13px; min-height:40px}
+  .chip b{font-size:11px}
+
+  /* 截止表：手机上拆成一张张卡片，不再横滑。
+     两个理由：① 它最关键的信息是「什么时候到期」，而截止列在横滑视口之外，
+        用户得先横滑才看得到，跟这张表的用途正好相反；
+     ② 横滑时行高被状态列的长文本撑开，首列只有一行字、下面一大片空白。
+     拆成卡片后「活动 / 截止 / 状态」三行一屏读完，状态色条也还在。
+     列定位靠编译期打好的 data-col，不依赖第几列。 */
+  .tblwrap.scrolly{
+    max-height:none; overflow:visible; border:0; background:transparent; box-shadow:none;
+  }
+  .tblwrap.scrolly .chips{top:var(--tb-h)}   /* 吸在顶栏下沿，滚到哪都能筛 */
+  .tbl.ledger{display:block; min-width:0; border:0; background:transparent; table-layout:auto}
+  .tbl.ledger thead{display:none}
+  .tbl.ledger tbody{display:block}
+  .tbl.ledger tbody tr{
+    /* 日期列用 max-content：状态列文字很长时，若两列是 1fr/auto，
+       状态列会把日期列挤到几乎为 0，日期被压成「9
+/
+1
+7」逐字竖排 */
+    display:grid; grid-template-columns:max-content minmax(0,1fr); gap:5px 10px; align-items:baseline;
+    background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2);
+    padding:12px 14px; margin-bottom:9px;
+  }
+  .tbl.ledger tbody tr:last-child{margin-bottom:0}
+  .tbl.ledger tbody td{display:block; border:0; padding:0; background:transparent; box-shadow:none}
+  .tbl.ledger tbody td[data-col="body"]{grid-column:1 / -1; color:var(--ink); font-weight:600; font-size:14.5px}
+  .tbl.ledger tbody td[data-col="date"]{
+    grid-column:1; white-space:nowrap;
+    font-family:var(--fm); font-size:12.5px; color:var(--muted);
+  }
+  .tbl.ledger tbody td[data-col="st"]{grid-column:2; text-align:right; font-size:13px}
+  .tbl.ledger tbody tr:hover{background:var(--surface)}
+  /* 截止表已经拆成卡片、不再横滑，滑动提示在这里是错的 */
+  .tblwrap.scrolly .scrollhint{display:none}
+
+  /* 悬浮控件与刘海/小白条 —— env() 在不支持时整条声明被丢弃，自动退回上面的值 */
+  .fab{right:calc(14px + env(safe-area-inset-right)); bottom:calc(14px + env(safe-area-inset-bottom))}
+  .tb-in{padding-left:calc(var(--s3) + env(safe-area-inset-left));
+         padding-right:calc(var(--s3) + env(safe-area-inset-right))}
+  .masthead,.shell,.foot{
+    padding-left:calc(var(--s3) + env(safe-area-inset-left));
+    padding-right:calc(var(--s3) + env(safe-area-inset-right));
+  }
+  .foot{padding-bottom:calc(var(--s6) + env(safe-area-inset-bottom))}
+  .search{padding-left:calc(var(--s3) + env(safe-area-inset-left));
+          padding-right:calc(var(--s3) + env(safe-area-inset-right))}
+}
+/* 超窄屏（<=360px：iPhone SE 一代、小屏安卓）再收一档。
+   断点取 360 而不是 380，是为了把 375/390/414 这些在售机型都留在上面那一档
+   用 27px 主标题——375 恰恰是 iPhone SE 2/3 的宽度，也是相当常见的屏幕。 */
+@media (max-width:360px){
+  h1.mh-t{font-size:24px}
+  .mh-top{font-size:9.5px}
+  .tblwrap:not(.scrolly) .tbl{min-width:560px}
+  .tblwrap:not(.scrolly) .tbl.c2{min-width:0}
+  .summary .ul li{padding-left:42px}
+  .summary .ul li::before{font-size:16px}
+}
+
+/* ============================================================ 打印 */
+@media print{
+  :root{
+    --bg:#fff; --bg-2:#fff; --surface:#fff; --surface-2:#fff;
+    --ink:#000; --ink-2:#000; --muted:#333; --faint:#555;
+    --rule:rgba(0,0,0,.25); --rule-2:rgba(0,0,0,.5); --rule-strong:#000;
+    --accent:#000; --accent-ink:#000; --accent-soft:#fff; --shadow:none; --grain:0;
+    --crit:#000; --soon:#000; --live:#000; --plan:#000; --over:#666;
+  }
+  body{border:0; background:#fff}
+  body::before,.grain,.topbar,.fab,.rail,.drawerwrap,.chips,.scrollhint,.progress,[data-no-print]{display:none !important}
+  .shell{display:block; max-width:none; padding:0}
+  .masthead{padding:0 0 12px}
+  .mh-num{display:none}
+  main p,.ul li,.ol li,.tbl,.foot{font-size:10.5pt}
+  .sec{padding-top:14px; break-inside:auto}
+  .sec h2{font-size:16pt; border-bottom:1.5pt solid #000}
+  h3{font-size:12pt}
+  .tblwrap,.tblwrap.scrolly{max-height:none; overflow:visible; border:0; box-shadow:none}
+  .tbl{min-width:0 !important; border:1pt solid #000}
+  .tbl thead{display:table-header-group}
+  .tbl thead th{position:static; background:#fff; color:#000; border-bottom:1pt solid #000; font-size:8pt}
+  .tbl tbody td{border-bottom:.5pt solid #666; padding:5px 7px}
+  .tbl tbody tr{box-shadow:none !important; opacity:1 !important; break-inside:avoid}
+  /* 手机端那套堆叠/粘性样式在纸上要退回成真表格（窄屏下打印时两条媒体查询会同时命中，
+     print 在后面所以能覆盖；仍加 !important 防字号相关的特异性意外） */
+  .tbl.c2{display:table !important; border:1pt solid #000 !important}
+  .tbl.c2 thead{display:table-header-group !important}
+  .tbl.c2 tbody{display:table-row-group !important}
+  .tbl.c2 tbody tr{display:table-row !important; margin-bottom:0 !important; padding:0 !important}
+  .tbl.c2 tbody td{display:table-cell !important; padding:5px 7px !important}
+  .tbl.c2 tbody td:first-child::before{content:none !important}
+  .tbl.ledger{display:table !important; border:1pt solid #000 !important}
+  .tbl.ledger thead{display:table-header-group !important}
+  .tbl.ledger tbody{display:table-row-group !important}
+  .tbl.ledger tbody tr{display:table-row !important; margin:0 !important; padding:0 !important}
+  .tbl.ledger tbody td{display:table-cell !important; padding:5px 7px !important}
+  .tbl tbody td:first-child,.tbl thead th:first-child{position:static !important; box-shadow:none !important}
+  .st{background:#000 !important; border:0}
+  .ledger tbody tr{box-shadow:none !important}
+  .tbl a,.tbl a:hover{color:#000}
+  tr,.ol.big li,.summary .ul li,.pubnote{break-inside:avoid}
+  a{background-image:none}
+  @page{size:A4 portrait; margin:12mm}
+}
+
+/* ---- 30 秒速览卡（060 期 A 方案） ---- */
+.brief{
+  background:var(--surface); border:1px solid var(--rule-2); border-left:4px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4);
+  margin:0 0 var(--s5); box-shadow:var(--shadow);
+}
+.brief-k{font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.06em;
+  color:var(--faint); margin:0 0 var(--s2)}
+.brief-h{font-family:var(--fu); font-weight:700; font-size:var(--fs-xl); line-height:1.5;
+  color:var(--ink); margin:0 0 var(--s3); text-wrap:balance}
+.brief-m{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-m span{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:99px; padding:5px 12px}
+.brief-m b{font-family:var(--fm); color:var(--accent-ink); font-size:var(--fs-mid)}
+.brief-a{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-a a,.brief-a button{font-family:var(--fu); font-size:var(--fs-sm);
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--rule-2);
+  border-radius:var(--r1); padding:8px 14px; text-decoration:none; cursor:pointer}
+.brief-a a:hover,.brief-a button:hover{border-color:var(--accent)}
+.brief-n{font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  color:var(--muted); margin:0}
+
+/* ---- 审计层折叠：details 只做逻辑容器，展开后排版与原来完全一致 ---- */
+.folded{padding-top:var(--s4)}
+.audit-fold{margin:0}
+.audit-fold>summary{
+  display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap; list-style:none;
+  padding:var(--s3) var(--s4); margin:0 0 var(--s3); cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r2);
+  font-family:var(--fu); font-size:var(--fs-mid); font-weight:700; color:var(--ink);
+}
+.audit-fold>summary::-webkit-details-marker{display:none}
+.audit-fold>summary::before{content:"+"; font-family:var(--fm); font-size:19px;
+  font-weight:400; color:var(--accent-ink); line-height:1}
+.audit-fold[open]>summary::before{content:"\2212"}
+.audit-fold[open]>summary{margin-bottom:var(--s5)}
+.fold-t{flex:1}
+.fold-hint{font-family:var(--fm); font-size:var(--fs-xs); font-weight:400; color:var(--faint)}
+.audit-fold>p{margin-bottom:var(--s4)}
+.audit-fold h3:first-child{margin-top:0}
+@media print{
+  .audit-fold>summary{display:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="topbar" data-no-print>
+  <div class="tb-in">
+    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#004</b></span>
+    <nav class="tb-nav" id="topnav" aria-label="章节导航"><a href="#s-abs"><b>··</b>摘要</a><a href="#s01"><b>01</b>AI 免费内容发布</a><a href="#s02"><b>02</b>免费内容生成工具</a><a href="#s03"><b>03</b>常驻免费 API</a><a href="#s04"><b>04</b>限时活动与截止时间表</a><a href="#s07"><b>07</b>按任务选型速查</a><a href="#s05" class="tail"><b>05</b>本期纠错清单</a><a href="#s06"><b>06</b>避坑提示</a><a href="#s08"><b>08</b>信源分级体系</a><a href="#s09"><b>09</b>来源与核查说明</a></nav>
+    <div class="tb-tools">
+      <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">⌕</button>
+      <div class="search">
+        <span class="si" aria-hidden="true">⌕</span>
+        <input id="q" type="search" placeholder="全文检索…" aria-label="全文检索" autocomplete="off">
+        <span class="sc"><span id="qn">0</span><button id="qprev" type="button" aria-label="上一个">↑</button><button id="qnext" type="button" aria-label="下一个">↓</button></span>
+      </div>
+      <button class="iconbtn" id="menuBtn" type="button" aria-label="打开目录" aria-expanded="false">≡</button>
+      <button class="iconbtn" id="themeBtn" type="button" aria-label="切换明暗主题">◑</button>
+    </div>
+  </div>
+</header>
+
+<header class="masthead">
+  <span class="mh-num" aria-hidden="true">004</span>
+  <div class="mh-top">
+    <span>AI 免费内容与权益速递 · 第 004 期</span>
+    <span>2026-09-15（周二）· 晚间信源扩版 · <em>增量与纠错口径</em></span>
+  </div>
+  <div class="mh-rule" aria-hidden="true"></div>
+  <h1 class="mh-t">AI 免费内容与权益速递</h1>
+  <p class="mh-sub">主题：AI 免费内容发布 · 免费内容（生成/发布/分发）· 免费额度</p>
+  <div class="pubnote"><p>本期是<strong>信源体系升级后的第一期</strong>：扫描范围从零散检索改为按 T0–T4 分级路由（T0 根节点 97 / T1 社区 19 / T2 Newsletter 18 / T3 媒体 36 / T4 聚合 12，合计 182，已脚本核对）。</p><p>与 003 期的关系：<strong>只做增量与纠错，不重复已固化内容</strong>。新增 15 条，纠错 6 条。</p><p>所有额度与规则以各平台官方页面实时公示为准。</p></div>
+  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">76 条 · 一条一行</span></a><span class="vs-i vs-full is-on" aria-current="page"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 004 期 · 十节</span></span><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">164 条 · 无截止日</span></a></nav>
+</header>
+
+<div class="shell">
+  <div class="drawerwrap" id="drawerwrap"><aside class="rail" id="rail" aria-label="目录">
+    <p class="rail-t">本期目录</p>
+    <nav><p class="toc-g">本期内容</p>
+<a class="toc-a" href="#s-abs"><span class="toc-n">··</span><span class="toc-t">摘要</span></a>
+<a class="toc-a" href="#s01"><span class="toc-n">01</span><span class="toc-t">AI 免费内容发布</span></a>
+<a class="toc-a" href="#s02"><span class="toc-n">02</span><span class="toc-t">免费内容生成工具</span></a>
+<a class="toc-a" href="#s03"><span class="toc-n">03</span><span class="toc-t">常驻免费 API</span></a>
+<p class="toc-g">马上要办</p>
+<a class="toc-a" href="#s04"><span class="toc-n">04</span><span class="toc-t">限时活动与截止时间表</span></a>
+<p class="toc-g">怎么用</p>
+<a class="toc-a" href="#s07"><span class="toc-n">07</span><span class="toc-t">按任务选型速查</span></a>
+<p class="toc-g">审计层 · 默认折叠</p>
+<a class="toc-a" href="#s05"><span class="toc-n">05</span><span class="toc-t">本期纠错清单</span></a>
+<a class="toc-a" href="#s06"><span class="toc-n">06</span><span class="toc-t">避坑提示</span></a>
+<a class="toc-a" href="#s08"><span class="toc-n">08</span><span class="toc-t">信源分级体系</span></a>
+<a class="toc-a" href="#s09"><span class="toc-n">09</span><span class="toc-t">来源与核查说明</span></a></nav>
+  </aside></div>
+  <main id="main">
+<div class="brief" data-no-print>
+<p class="brief-k">30 秒速览 · 第 004 期 · 2026-09-15</p>
+<p class="brief-h">Agnes Video 2.5 Flash 完全免费不限量；Atria Dawn 744B 以 MIT 开源</p>
+<div class="brief-m"><span>本期表体 <b>19</b> 行</span><span>其中必办 <b>0</b> 条</span><span>今明换挡 <b>0</b> 条</span></div>
+<div class="brief-a"><a href="#s04" data-open="s04">看必办清单</a><a href="quick.html">只看极速版</a><button type="button" id="foldAll" aria-expanded="false">展开全部章节</button></div>
+<p class="brief-n">下方是本期新闻正文（未折叠）；第四章权益台账与纠错、避坑、信源、核查等审计层默认收起，点标题展开。目录跳转、全文检索命中与打印时会自动展开。卡片数字是本期表体口径，全量三态分布以第四章脚注为准。原文一字未删。</p>
+</div>
+<section id="s-abs" class="sec summary">
+<h2><span class="sn">··</span><span class="h2t">摘要</span><span class="h2sub">（3 秒版）</span></h2>
+<ul class="ul"><li><strong>本期最大新增</strong>：<strong>Pavo / Agnes AI</strong> —— Agnes Video 2.5 Flash <strong>完全免费不限量</strong> + 标准版每日 200 积分（≈100 秒高清成片），配短剧 Harness 与无限画布，AI 短剧从剧本到成片可做到 ¥0。</li><li><strong>免费分发链路补齐</strong>：<strong>AiToEarn</strong>（开源，一键分发 10+ 国内外平台，支持 MCP 与自部署）+ <strong>Nimply</strong>（免费计划 AI 不限量，可直发 7 个海外平台）。</li><li><strong>模型侧重头</strong>：上海 AI 实验室 <strong>Atria Dawn Preview</strong>（744B MoE，<strong>MIT 协议 + 免费 API</strong>）静默开源；<strong>书生-S2</strong>（9/13）发布；<strong>DeepSeek V4.1 Flash</strong>（9/10，多模态 + MIT）。</li><li><strong>Bolt Forge（9/14）</strong>：4 个开源编码模型 <strong>50 倍用量</strong>免费至 <strong>10/14</strong>，代价是贡献构建数据。</li><li><strong>本期最重要纠错</strong>：Gemini 免费 API <strong>不是统一 1,500 RPD</strong> —— Flash 系列只有 <strong>20 RPD</strong>，Flash-Lite 才有 <strong>500 RPD</strong>。选错模型差 25 倍。</li><li><strong>另一条纠错</strong>：<strong>文心一格已停服</strong>，003 期还在推荐，已移除。</li></ul>
+</section>
+<section id="s01" class="sec">
+<h2><span class="sn">01</span><span class="h2t">AI 免费内容发布</span><span class="h2sub">（本期扩版 · 重点）</span></h2>
+<blockquote class="bq"><p>这一章回答：<strong>AI 生成的内容，在哪能免费发出去？</strong> 003 期给了"平台原生 AI + Agent 平台 + 海外运营工具"三层，本期补齐最关键的一段——<strong>从成片到分发的自动化</strong>。</p></blockquote>
+<h3 id="h3-2"><span class="h3n">1</span>🆕 Pavo / Agnes AI —— 免费视频模型 + 短剧工作台（本期最值钱的一条）</h3>
+<p>新加坡 Sapiens Technology（Agnes AI 品牌），PC 端 Web，无需安装，入口 <code>app.pavo-ai.cn</code>。</p>
+<p><strong>免费额度分两档，搭配用最划算：</strong></p>
+<div class="tblwrap">
+<table class="tbl c4 w1m" style="--w1m:244px">
+<thead><tr><th>档位</th><th>免费情况</th><th>规格</th><th>限速</th></tr></thead><tbody>
+<tr><td><strong>Agnes Video 2.5 Flash</strong></td><td><strong>完全免费，零积分</strong></td><td>4–12 秒，720p，≤5 张参考图 + 音频输入</td><td>3 RPM（⚠️ 官方文档另有"1 RPM"口径，见下）</td></tr>
+<tr><td><strong>Agnes Video 2.5 标准版</strong></td><td>每日登录送 <strong>200 积分</strong>，<strong>2 积分/秒 ≈ 100 秒高清成片/天</strong></td><td>720p / 1K / 2K，多图 + 音视频参考</td><td>积分制</td></tr>
+<tr><td><strong>Agnes Image 2.1 Flash</strong>（出图）</td><td><strong>零积分</strong></td><td>文生图、角色四视图、场景设定、图生图</td><td>—</td></tr>
+<tr><td><strong>Agnes 2.0 Flash</strong>（文本）</td><td><strong>零积分</strong></td><td>剧本生成、图片反推提示词</td><td>—</td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+<p><strong>为什么它能把成本打到 0</strong>——三个工作流解决的是"返工"而不是"单次生成"：</p>
+<ul class="ul"><li><strong>短剧 Harness</strong>：一句话梗概 → 自动拆 10 集剧情 → 抽出人物/场景/道具进资产库 → 细化到景别机位的分镜脚本 → 关键帧 → 分集视频。实测输入"蜘蛛侠大战十个神秘客"，5 分钟拆出 10 集 + 十多个场景 + 一批道具，人物还分出便服/病号服/破损战衣并指定使用集数。</li><li><strong>无限画布（节点式）</strong>：文本/图片/视频/音频节点任意串联与分支。<strong>某个镜头崩了就从那个节点重开</strong>，旧版本不消失、不用重复制上下文——这是短剧制作最烧钱的地方。</li><li><strong>3D 导演台</strong>：先摆人物站位、身体比例、姿势，再定摄影机位（最多 12 机位），把"低机位仰拍""两人相距一米"这类提示词说不清的空间信息显式固定下来，再交给模型生成。</li></ul>
+<p><strong>积分账</strong>：剧本生成每 100 字 2 积分（200 积分写个小剧本绰绰有余）；两分钟音频约 20 积分。报名创作大赛额外 +1500 积分，前 50 名 +3000。</p>
+<p><strong>⚠️ 四条风险</strong>：</p>
+<ol class="ol"><li><span class="lin">1</span><span class="lit"><strong>Agnes 官方只承诺"无限期免费"，不承诺永久</strong>。文档明确写了免费计划视频模型的限速是运营限制而非永久保证。</span></li><li><span class="lin">2</span><span class="lit"><strong>限速口径打架</strong>：实测稿说 Flash 3 RPM，官方文档写 1 RPM。按 1 RPM 规划排期更稳。</span></li><li><span class="lin">3</span><span class="lit"><strong>第三方模型不免费</strong>：Pavo 里接的 Seedance 2.5、MiniMax H3 要积分或会员。</span></li><li><span class="lin">4</span><span class="lit"><strong>别把生产业务绑死在免费层</strong>——重要项目留迁移方案。</span></li></ol>
+<blockquote class="bq"><p>参考案例：成都一名 90 后眼镜店老板"栖光"，没学过影视、没有团队，用 Pavo 做的"天宫"短片在海外刷屏（云海/琼楼/仙鹤/月色仙宫连续切换）。</p></blockquote>
+<h3 id="h3-3"><span class="h3n">2</span>🆕 AiToEarn —— 开源 AI 内容营销智能体，一键分发 10+ 平台</h3>
+<p>四模块闭环 <strong>Create → Publish → Engage → Monetize</strong>：</p>
+<div class="tblwrap">
+<table class="tbl c2 w1m" style="--w1m:92px">
+<thead><tr><th>模块</th><th>能力</th></tr></thead><tbody>
+<tr><td><strong>Create</strong></td><td>提示词批量生成图文/视频，集成图片模型与主流视频生成/剪辑/翻译工具，适合矩阵号铺量</td></tr>
+<tr><td><strong>Publish</strong></td><td>统一管理并排期分发到 <strong>10+ 主流社媒</strong>：抖音、快手、小红书、视频号、公众号、TikTok、YouTube、X/Twitter、Instagram、Facebook、Threads、LinkedIn、Pinterest</td></tr>
+<tr><td><strong>Engage</strong></td><td>浏览器插件自动点赞/关注/收藏；大模型生成定制回复；高意向评论挖掘（"求链接/怎么买"）；品牌舆情监测</td></tr>
+<tr><td><strong>Monetize</strong></td><td>内容交易撮合 + 线下商户推广任务，支持 <strong>CPS / CPE / CPM</strong> 三种结算</td></tr>
+</tbody></table>
+</div>
+<p><strong>两种用法</strong>：网页直用（国内 <code>aitoearn.cn</code> / 国际 <code>aitoearn.ai</code>），或<strong>自行部署</strong>（开源）。深度支持 <strong>MCP</strong>，可直接挂到 Claude Desktop、Cursor 或任意 AI Agent。</p>
+<blockquote class="bq"><p>这是本期唯一一条把"创作 → 分发 → 互动 → 变现"四段全打通、且<strong>可自部署</strong>的开源方案。适合一人公司（OPC）和矩阵号。</p></blockquote>
+<h3 id="h3-4"><span class="h3n">3</span>🆕 Nimply —— 免费计划 AI 用量不限量（非积分制）</h3>
+<ul class="ul"><li><strong>免费包含</strong>：AI Assistant 写文案、hook、hashtag，并按平台改写（LinkedIn 版本不会读成 TikTok 版本）；<strong>AI 使用不限量而非按积分计费</strong>；AI Content Studio 生成配图。</li><li><strong>关键差异</strong>：它住在排期平台里，生成的草稿直接进日历，<strong>可自动发布</strong>到 Instagram、Facebook、X、LinkedIn、TikTok、YouTube、Pinterest。</li><li>对比同类的免费档：Simplified（5,000 AI 词 + 3 账号）、Buffer（3 渠道 + AI 助手）、Vista Social（3 profile）、Tailwind（5 帖/月）、Agorapulse（受限免费）、Marky（前 30 帖免费）。<strong>Nimply 是唯一"AI 不计量"的一个</strong>。</li></ul>
+<h3 id="h3-5"><span class="h3n">4</span>免费发布工具横向（保留 003 期结论 + 本期补 Nimply）</h3>
+<div class="tblwrap">
+<table class="tbl c3 w1 w1m" style="--w1:188px;--w1m:188px">
+<thead><tr><th>工具</th><th>免费包含</th><th>定位</th></tr></thead><tbody>
+<tr><td><strong>Nimply</strong> 🆕</td><td>AI 不限量 + 排期 + 自动发布 7 平台</td><td><strong>免费档最猛的"生成器+排期"一体</strong></td></tr>
+<tr><td><strong>Simplified</strong></td><td>5,000 AI 词 + 3 社媒账号 + 设计套件，永久免费</td><td>小账号真实运营</td></tr>
+<tr><td><strong>Buffer</strong></td><td>3 渠道 + 内置 AI 助手写文案</td><td>已有 Buffer 用户的自然选择</td></tr>
+<tr><td><strong>Vista Social</strong></td><td>3 个 profile</td><td>多平台管理</td></tr>
+<tr><td><strong>Tailwind</strong></td><td>5 帖/月</td><td>Pinterest / IG</td></tr>
+<tr><td><strong>Marky</strong></td><td>前 30 帖免费</td><td>短期试用</td></tr>
+<tr><td><strong>Agorapulse</strong></td><td>受限免费计划</td><td>有免费档但很紧</td></tr>
+<tr><td><strong>Meta AI</strong></td><td>免费，Business Suite 内写文案 + 生图</td><td>Facebook / IG 原生</td></tr>
+<tr><td><strong>CapCut（剪映海外）</strong></td><td>免费剪辑、字幕、去背、特效</td><td>短视频成片</td></tr>
+<tr><td><strong>Canva / Adobe Express</strong></td><td>免费层可出设计稿</td><td>只解决"图"，不解决"发"</td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+<blockquote class="bq"><p>⚠️ 提醒：<strong>Canva、QuillBot、ChatGPT 不算发布工具</strong>。ChatGPT/Claude 是原料，不是成品；Canva 只做图。要"系统替你维持社媒运转"，得用带排期与自动发布的平台。</p></blockquote>
+<h3 id="h3-6"><span class="h3n">5</span>三条可直接抄的零成本链路</h3>
+<div class="tblwrap">
+<table class="tbl c3 w1m" style="--w1m:316px">
+<thead><tr><th>目标</th><th>链路</th><th>成本</th></tr></thead><tbody>
+<tr><td><strong>国内图文（公众号/小红书/知乎）</strong></td><td>Kimi 或豆包出文案 → 即梦出封面（60 积分/天）→ 剪映成片 → <strong>AiToEarn 一键分发</strong> 或平台直接发</td><td>¥0</td></tr>
+<tr><td><strong>AI 短剧 / 漫剧（B站/视频号/抖音）</strong></td><td><strong>Pavo 剧场模式</strong>：一句话 → 剧本+资产+分镜 → Flash 版免费批量出片 → 每日 200 积分跑标准版出精片 → 平台发布</td><td>¥0</td></tr>
+<tr><td><strong>出海社媒（IG/X/LI/TikTok/YT/Pinterest）</strong></td><td><strong>Nimply</strong> 免费档出文案+配图+排期自动发布，或 Simplified 出稿 + Buffer 排期</td><td>¥0</td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+</section>
+<section id="s02" class="sec">
+<h2><span class="sn">02</span><span class="h2t">免费内容生成工具</span><span class="h2sub">（本期增量）</span></h2>
+<h3 id="h3-8">新增</h3>
+<div class="tblwrap">
+<table class="tbl c4 w1m" style="--w1m:246px">
+<thead><tr><th>工具</th><th>免费额度</th><th>协议 / 水印</th><th>备注</th></tr></thead><tbody>
+<tr><td><strong>Agnes Video 2.5 Flash</strong>（Pavo）</td><td><strong>完全免费、零积分</strong>，4–12s / 720p，5 图 + 音频参考</td><td>无商用授权（会员才给）</td><td>见第一章，本期限量最大方的一条</td></tr>
+<tr><td><strong>Bolt Forge</strong>（bolt.new，9/14）</td><td>个人 Pro 订阅者 4 个开源模型（GLM 5.3、GLM 5.3 Flash、Kimi K3、DeepSeek v4 Pro）<strong>最高 50× 用量</strong></td><td>—</td><td><strong>至 10/14</strong>；代价见下</td></tr>
+<tr><td><strong>Nimply AI Content Studio</strong></td><td>免费计划 AI 不限量</td><td>—</td><td>出社媒配图</td></tr>
+<tr><td><strong>Hugging Face Free</strong></td><td>$0/月：<strong>$0.10 月推理额度</strong> + 免费 CPU Spaces + 100K 公共存储</td><td>—</td><td>PRO $9/月 = 20× 推理额度 + 8× ZeroGPU</td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+<h3 id="h3-9">Bolt Forge 的代价要看清</h3>
+<ul class="ul"><li><strong>换什么</strong>：opt-in 后，AI 辅助构建会话会被脱敏（去除 PII）后路由给 <strong>Arcee AI</strong>，用于训练一个规划中的<strong>万亿参数开源模型</strong>。有 DPA 约束，训练产物公开可下载。</li><li><strong>值不值</strong>：Bolt 自家 Build Index 上，Forge 开源模型 <strong>92.2</strong> vs 顶级闭源 <strong>101.0</strong>，约 <strong>91% 的前沿性能</strong>，跑的是任何人都能下载的权重。首批训练瞄准 2026 年 10 月。</li><li><strong>细节</strong>：新用户默认走 GLM 系（Kimi K3 / DeepSeek v4 Pro 消耗更快）；Bolt Lite $9/月 waitlist 9/14 开放、<strong>10/14 关闭，与免费加成同日结束</strong>，但一旦进入价格长期有效。</li></ul>
+<h3 id="h3-10">已失效（从推荐中移除）</h3>
+<ul class="ul"><li>⚠️ <strong>文心一格已停服</strong> —— 003 期仍列为"每日免费额度"，实测入口已关。旧教程还在推荐的直接划走。</li><li>⚠️ <strong>Qoder × Qwen3.8-Max 免费调用</strong> —— 9/3 23:59 已停止领取（已领次数可用到月底）。Qoder 的首赠 300+800 积分仍在，但要区分清楚。</li><li>⚠️ <strong>Sora</strong> —— 消费端 4/26 关停、API 9/24 关停、从无免费档（003 期已标，本期保持）。</li></ul>
+</section>
+<section id="s03" class="sec">
+<h2><span class="sn">03</span><span class="h2t">常驻免费 API</span><span class="h2sub">（本期纠错 + 增量）</span></h2>
+<h3 id="h3-12">🔴 纠错：Gemini 免费层要按模型选，差 25 倍</h3>
+<p>003 期写的"约 1,500 RPD"是 freellm 的<strong>汇总口径</strong>（2026-09-14 快照）。实际按模型拆开，<strong>差别极大</strong>：</p>
+<div class="tblwrap">
+<table class="tbl c5 w1m" style="--w1m:284px">
+<thead><tr><th>模型</th><th>RPD（每天请求数）</th><th>RPM</th><th>TPM</th><th>Context</th></tr></thead><tbody>
+<tr><td><strong>Gemini 3.5 Flash-Lite</strong></td><td><strong>500</strong></td><td>15</td><td>250K</td><td>1.0M</td></tr>
+<tr><td><strong>Gemini 3.1 Flash-Lite</strong></td><td><strong>500</strong></td><td>15</td><td>250K</td><td>1.0M</td></tr>
+<tr><td>Gemini 2.5 Flash-Lite</td><td>20</td><td>10</td><td>250K</td><td>1.0M</td></tr>
+<tr><td>Gemini 3.8 Flash</td><td><strong>20</strong></td><td>5</td><td>250K</td><td>1.0M</td></tr>
+<tr><td>Gemini 3.7 / 3.6 / 3.5 / 3.0 Flash</td><td><strong>20</strong></td><td>5</td><td>250K</td><td>1.0M</td></tr>
+<tr><td>Gemma 4 26B / 31B</td><td>—</td><td>—</td><td>—</td><td>262K</td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+<p><strong>结论</strong>：想用免费额度撑自动化，<strong>选 Flash-Lite（500 RPD）</strong>，比选 Flash（20 RPD）多 25 倍。要能力就选 3.8 Flash（1M 上下文、多模态、函数调用、代码执行、搜索 grounding、结构化输出、可调思考等级），但一天只能 20 次。 另外两条硬规则：<strong>额度算在项目上，同一项目多申请几组 Key 也不会变多</strong>；RPD 在太平洋时间午夜重置。Veo 视频、Lyria 音乐、Nano Banana 图像在免费层<strong>全是 0</strong>。</p>
+<h3 id="h3-13">增量</h3>
+<div class="tblwrap">
+<table class="tbl c3">
+<thead><tr><th>平台</th><th>变化</th><th>说明</th></tr></thead><tbody>
+<tr><td><strong>Atria Dawn Preview</strong>（上海 AI 实验室 InternLM）🆕</td><td><strong>免费 API</strong>：<code>api.atria-asi.ai</code>，邮箱注册或 Google 登录，<strong>不绑卡</strong>；支持 Chat Completions / Messages / Responses</td><td>744B MoE（78 层、256 专家、每 token 激活 8 个），基座 GLM-5.2；标称 1M 上下文、<strong>API 当前配 256K</strong>；<strong>MIT 协议，代码+权重双开源，商用与二次修改都留了空间</strong>；BF16 指令版约 1.5TB（353 个分片）/ FP8 约 756GB</td></tr>
+<tr><td><strong>DeepSeek V4-Pro</strong></td><td><strong>75% API 折扣永久化</strong></td><td>促销期结束后转常态定价</td></tr>
+<tr><td><strong>讯飞星火 V4.0 主力模型</strong></td><td>全面免费（媒体实测口径，2026-09）</td><td>与 Spark Lite 永久免费是两条线</td></tr>
+<tr><td><strong>freellm.net 汇总</strong></td><td>479+ 免费模型（原 476+），<strong>237 个实时 API 验证</strong>（原 234），更新至 2026-09-14</td><td>31 家供应商</td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+<blockquote class="bq"><p>⚠️ <strong>Atria Dawn Preview 的两个坑</strong>：① 它是<strong>静默发布</strong>——没有发布会、没有技术博客、没有论文、没有定价页，意味着官方没有 SLA 承诺，随时可能下架；② 1.5TB 的体量本地部署门槛极高，个人直接走免费 API。</p></blockquote>
+</section>
+<section id="s04" class="sec folded">
+<h2><span class="sn">04</span><span class="h2t">限时活动与截止时间表</span><span class="h2sub">（9/15 晚间复核）</span></h2>
+<details class="audit-fold" id="fold-s04">
+<summary><span class="fold-t">展开：第四章 · 权益台账与脚注</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
+<div class="tblwrap scrolly">
+<div class="chips" role="group" aria-label="按状态筛选"><span class="chips-label">按状态筛</span><button class="chip on" data-f="all" aria-pressed="true">全部<b data-c="all">0</b></button><button class="chip" data-f="crit" aria-pressed="false">🔴 必办<b data-c="crit">0</b></button><button class="chip" data-f="soon" aria-pressed="false">🟠 今明换挡<b data-c="soon">0</b></button><button class="chip" data-f="live" aria-pressed="false">🟢 生效中<b data-c="live">0</b></button><button class="chip" data-f="warn" aria-pressed="false">⚠ 口径存疑<b data-c="warn">0</b></button><button class="chip" data-f="over" aria-pressed="false">○ 已结束<b data-c="over">0</b></button><span class="chips-count" id="ledgerCount" aria-live="polite"></span></div>
+<table class="tbl ledger c3">
+<thead><tr><th data-col="body">活动</th><th data-col="date">截止</th><th data-col="st">状态</th></tr></thead><tbody>
+<tr data-st="live"><td data-col="body">🔴 <strong>Bolt Forge 50× 用量</strong>（GLM 5.3 / 5.3 Flash / Kimi K3 / DeepSeek v4 Pro）</td><td data-col="date"><strong>10/14</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">9/14 刚开，需 opt-in 贡献构建数据</span></td></tr>
+<tr data-st="live"><td data-col="body">🔴 <strong>Bolt Lite $9/月 waitlist</strong></td><td data-col="date"><strong>10/14 报名截止</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">进入后价格长期有效</span></td></tr>
+<tr data-st="live"><td data-col="body">🟠 <strong>智谱 GLM-5.3-Flash 夜间免费</strong>（23:00–次日 9:00）</td><td data-col="date"><strong>9/20</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，其他 Agent 额度翻倍</span></td></tr>
+<tr data-st="live"><td data-col="body">🟠 <strong>杭州 Token 卡（约 500 元 / 10000 积分）</strong></td><td data-col="date">9/20 起申领，发完即止</td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">未开始，35 家市级大创园现场</span></td></tr>
+<tr data-st="live"><td data-col="body">🟠 <strong>百度文心快码 Comate 测试版</strong>（9 款模型不限 Token）</td><td data-col="date"><strong>9/24</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，窗口最短</span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>文心 4.0 全系列免费</strong>（文小言 App）</td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中，10 月转付费</span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>腾讯混元 Hy3</strong>（1 亿 token/天）</td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟡 <strong>WorkBuddy 教师版 1000 积分</strong></td><td data-col="date"><strong>9/30</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>腾讯混元 Hy4 preview 新用户窗口</strong></td><td data-col="date"><strong>10/10</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">9/11–10/10 新规：首次开启对话起 14 天每日免费额度</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>WorkBuddy 学生版 1000 积分</strong></td><td data-col="date"><strong>10/31</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>百度网盘教师认证（扫描会员 1 年）</strong></td><td data-col="date"><strong>10/31</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>微信小程序成长计划二期</strong>（10 亿 Token + 10 万张生图）</td><td data-col="date">报名至 2026 年底</td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">生效中</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>腾讯云 TokenHub 新人免费包</strong></td><td data-col="date"><strong>2026-12-31</strong></td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">语言/多模态每模型 100 万 Token、视频 50 积分、3D 每模型 100 积分</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>火山方舟高校师生计划</strong>（最高 1 亿 Tokens）</td><td data-col="date">长期</td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">覆盖豆包 Seed、DeepSeek-V4、GLM-5.2、Kimi-K2.7</span></td></tr>
+<tr data-st="live"><td data-col="body">🟢 <strong>成都词元券</strong>（征求意见中）</td><td data-col="date">正式入口待公布</td><td data-col="st"><span class="st st-live">🟢</span><span class="st-txt">🆕 小微补 50%、其他 30%，单主体年最高 <strong>200 万</strong>，全市年发放 ≤1 亿</span></td></tr>
+<tr data-st="over"><td data-col="body">⚪ ZCode Weekend Build V · 3 亿 token</td><td data-col="date">9/14 09:00</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
+<tr data-st="over"><td data-col="body">⚪ Arena GPT-Image-2.5 Sunburst 免费 72 小时</td><td data-col="date">9/13 23:00</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
+<tr data-st="over"><td data-col="body">⚪ Qoder × Qwen3.8-Max 免费调用</td><td data-col="date">9/3 23:59</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
+<tr data-st="over"><td data-col="body">⚪ 联通 1000 亿词元 / 混元 Hy4 老用户限免 / 夸克教师年卡 / 百度网盘教师节 VIP</td><td data-col="date">9/10 前</td><td data-col="st"><span class="st st-over">○</span><span class="st-txt">已结束</span></td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+</details>
+</section>
+<section id="s05" class="sec folded">
+<h2><span class="sn">05</span><span class="h2t">本期纠错清单</span><span class="h2sub">（对 001–003 期）</span></h2>
+<details class="audit-fold" id="fold-s05">
+<summary><span class="fold-t">展开：第五章 · 本期纠错清单</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
+<div class="tblwrap">
+<table class="tbl c4">
+<thead><tr><th>#</th><th>003 期写法</th><th>实际情况</th><th>影响</th></tr></thead><tbody>
+<tr><td>1</td><td>Gemini 免费层"约 1,500 RPD"</td><td><strong>按模型拆：Flash 系列 20 RPD，Flash-Lite 500 RPD</strong></td><td>选错模型差 25 倍，务必改选 Flash-Lite</td></tr>
+<tr><td>2</td><td>文心一格"每日免费额度"</td><td><strong>已停服</strong></td><td>移除，别再写入口</td></tr>
+<tr><td>3</td><td>DeepSeek V4.1 Flash"内测 9/10 下线"</td><td><strong>9/10 是正式发布</strong>，多模态（视觉输入）+ MIT 协议可商用</td><td>从"已结束"移回"可用"</td></tr>
+<tr><td>4</td><td>Qoder"首赠 300+800 积分"</td><td>首赠积分仍在，但 <strong>Qwen3.8-Max 免费调用活动 9/3 已停</strong></td><td>两件事要分开说</td></tr>
+<tr><td>5</td><td>阿里云百炼"仅新加坡地域有免费额度"</td><td>官方 help 页确认为<strong>仅新加坡</strong>；另有社区口径称含"华北 2（北京）"</td><td>以官方 help 页为准，社区口径降级标注</td></tr>
+<tr><td>6</td><td>freellm 476+ 模型 / 234 验证</td><td><strong>479+ / 237 验证</strong>（2026-09-14）</td><td>数字刷新</td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+</details>
+</section>
+<section id="s06" class="sec folded">
+<h2><span class="sn">06</span><span class="h2t">避坑提示</span><span class="h2sub">（本期新增 4 条）</span></h2>
+<details class="audit-fold" id="fold-s06">
+<summary><span class="fold-t">展开：第六章 · 避坑提示</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
+<ol class="ol big"><li><span class="lin">12</span><span class="lit">⚠️ <strong>Gemini 免费层别只看"1,500 RPD"这个汇总数</strong> —— 具体模型 RPD 从 20 到 500 差 25 倍；且额度算在项目上，多申请 Key 无用；Veo/Lyria/Nano Banana 在免费层额度为 0。</span></li><li><span class="lin">13</span><span class="lit">⚠️ <strong>"完全免费"的视频模型要看限速承诺</strong> —— Agnes 官方写的是"无限期免费"且限速属运营限制，不是永久保证；实测稿与官方文档的 RPM 口径还打架（3 vs 1）。重要项目必须留迁移方案。</span></li><li><span class="lin">14</span><span class="lit">⚠️ <strong>Bolt Forge 的"免费"付的是数据</strong> —— opt-in 后构建会话用于训练万亿参数模型。有 DPA 和 PII 脱敏，但涉密/客户代码不要走这条路。</span></li><li><span class="lin">15</span><span class="lit">⚠️ <strong>智谱夜间免费的速度要心里有数</strong> —— 独立实测 GLM 5.3 Flash 约 &lt;50 tok/s，DeepSeek V4 Flash 约 150 tok/s（同一 Agent 任务 14 分钟 vs 4 分钟）；同期 Coding Plan Pro 月费从 149 元涨到 538 元。<strong>免费跑闲时算力、付费买优先级</strong>，是这个组合的商业逻辑，别把实时性要求高的任务放夜间免费通道。</span></li></ol>
+<p>（前 11 条沿用 003 期：Sora 已停服 / ZCode 已过期 / 百炼地域陷阱 / Pika 缩水至 30 积分每月 / "79.9 元 DeepSeek 永久会员"是谣言 / 通用兑换码是骗局 / 水印与商用条款 / 一次性积分≠免费额度 / 地方词元券不通用 / 二手 Token 别碰 / 先交钱的"认证福利"一律是骗子。）</p>
+</details>
+</section>
+<section id="s07" class="sec">
+<h2><span class="sn">07</span><span class="h2t">按任务选型速查</span><span class="h2sub">（更新版）</span></h2>
+<div class="tblwrap">
+<table class="tbl c3 w1 w1m" style="--w1:159px;--w1m:159px">
+<thead><tr><th>我要做的事</th><th>免费组合</th><th>成本</th></tr></thead><tbody>
+<tr><td><strong>做 AI 短剧 / 漫剧</strong></td><td><strong>Pavo</strong>：Flash 免费批量出片 + 每日 200 积分跑标准版 + 无限画布分支返工 + 3D 导演台</td><td>¥0</td></tr>
+<tr><td><strong>一键分发多平台</strong></td><td><strong>AiToEarn</strong>（开源可自部署，10+ 平台，支持 MCP）或 Nimply（海外 7 平台自动发布）</td><td>¥0</td></tr>
+<tr><td><strong>国内图文矩阵</strong></td><td>Kimi/豆包文案 + 即梦封面（60/天）+ 剪映成片 → AiToEarn 排期分发</td><td>¥0</td></tr>
+<tr><td><strong>写代码 / 跑 Agent</strong></td><td>智谱 GLM-4.7-Flash（永久）+ DeepSeek V4.1 Flash（MIT 多模态）+ <strong>Bolt Forge 50×（至 10/14）</strong> + Groq</td><td>¥0</td></tr>
+<tr><td><strong>跑超大开源模型</strong></td><td><strong>Atria Dawn Preview 744B</strong>（MIT + 免费 API，不绑卡）</td><td>¥0</td></tr>
+<tr><td><strong>出图出视频（通用）</strong></td><td>即梦（60/天）+ 可灵（66/天）+ 通义万相（无日限）+ <strong>Agnes Video 2.5 Flash（免费不限量）</strong></td><td>¥0</td></tr>
+<tr><td><strong>试模型 / 横向对比</strong></td><td>OpenRouter（35+ 免费模型）+ <strong>HF Inference Providers（18 家供应商，一个端点）</strong> + NVIDIA NIM</td><td>¥0（HF 免费层含 $0.10 月推理额度）</td></tr>
+<tr><td><strong>写长文 / 读报告</strong></td><td><strong>Gemini 3.5 Flash-Lite（500 RPD，1M 上下文）</strong> + NotebookLM + Claude Free</td><td>¥0</td></tr>
+<tr><td><strong>本地 / 隐私优先</strong></td><td><strong>讯飞星火 X2.5-1.7B/4B（Apache-2.0，可商用，微调后无需开源）</strong> + Ollama + NVIDIA NIM</td><td>¥0</td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+</section>
+<section id="s08" class="sec folded">
+<h2><span class="sn">08</span><span class="h2t">信源分级体系</span><span class="h2sub">（本期启用）</span></h2>
+<details class="audit-fold" id="fold-s08">
+<summary><span class="fold-t">展开：08信源分级体系</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
+<p>扫描范围改为 <strong>T0–T4 分级路由</strong>，共 <strong>182 条</strong>（脚本核对：T0 97 / T1 19 / T2 18 / T3 36 / T4 12，其中 44 条带 RSS 可直取）。完整台账见 <strong><code>AI信息源分级清单-T0-T4.md</code></strong>。</p>
+<p><strong>本期实际命中分布</strong>：</p>
+<div class="tblwrap">
+<table class="tbl c3 w1 w1m" style="--w1:146px;--w1m:146px">
+<thead><tr><th>层级</th><th>本期命中</th><th>贡献</th></tr></thead><tbody>
+<tr><td><strong>T0 模型与开源</strong></td><td>Hugging Face Models（trending）</td><td>Atria Dawn Preview、Occamy-1.0</td></tr>
+<tr><td><strong>T0 官方一手·国外</strong></td><td>NVIDIA Blog</td><td>收购 Hugging Face（9/3，$129.3 亿）</td></tr>
+<tr><td><strong>T0 官方一手·国内</strong></td><td>DeepSeek、讯飞</td><td>V4.1 Flash（9/10）、星火 X2.5 开源（9/1）</td></tr>
+<tr><td><strong>T0 论文与预印本</strong></td><td>arXiv</td><td>Occamy-1.0 论文 2609.11977</td></tr>
+<tr><td><strong>T0 政策与监管</strong></td><td>成都市政府门户</td><td>词元券征求意见稿（年最高 200 万）</td></tr>
+<tr><td><strong>T1 社区社交</strong></td><td>小红书</td><td>平台原生 AI 生态、发布玩法</td></tr>
+<tr><td><strong>T3 媒体·国内</strong></td><td>今日头条、网易、什么值得买</td><td>Pavo 实测、9 月额度清单</td></tr>
+<tr><td><strong>T4 聚合器</strong></td><td>freellm.net</td><td>479+ 免费模型、237 实时验证</td></tr>
+</tbody></table>
+<p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
+</div>
+<p><strong>清单缺口（本期发现但清单未覆盖，建议补）</strong>：</p>
+<ol class="ol"><li><span class="lin">1</span><span class="lit"><strong>上海人工智能实验室（书生 / InternLM）</strong> —— 本期两条重头新增都出自这里，T0 国内节完全没列。</span></li><li><span class="lin">2</span><span class="lit"><strong>免费额度垂直站</strong>：freellm.net、aifree.dev、tokennav.cc/free —— 权益日报的核心弹药库。</span></li><li><span class="lin">3</span><span class="lit"><strong>中文权益清单</strong>：什么值得买、All Agent 百科 —— 国内限时福利唯一系统整理方（口径需降级标注）。</span></li><li><span class="lin">4</span><span class="lit"><strong>地方政府门户 / 经信部门</strong> —— 词元券是本期最大额度来源，清单目前只有中央部委。</span></li></ol>
+</details>
+</section>
+<section id="s09" class="sec folded">
+<h2><span class="sn">09</span><span class="h2t">来源与核查说明</span></h2>
+<details class="audit-fold" id="fold-s09">
+<summary><span class="fold-t">展开：第九章 · 来源与核查说明</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
+<ul class="ul"><li><strong>T0 官方/一手</strong>：NVIDIA 官方博客（9/4，收购 Hugging Face）、阿里云百炼帮助中心《新人免费额度》、 Google AI Studio Rate Limits 页（2026-09）、Hugging Face 定价文档（2026-09-09 核实）、DeepSeek 官方（V4.1 Flash 9/10）、讯飞（星火 X2.5 9/1 Hugging Face 开源）、成都市政府门户（词元券征求意见稿）</li><li><strong>T0 模型页</strong>：Hugging Face（<code>Accio-Lab/Occamy-1.0</code>，Apache 2.0）、arXiv 2609.11977（Occamy-1.0，9/4 v1 / 9/14 PDF）、Atria Dawn Preview 权重页与 <code>api.atria-asi.ai</code></li><li><strong>T1/T3 社区与媒体（口径已降级标注）</strong>：什么值得买《全网 AI 产品免费权益清单》2026-09-12、All Agent 百科《9 月 AI 福利窗口盘点》（核验 2026-09-10）、新浪财经头条（9 月额度按截止日排行）、今日头条/网易号（Pavo 实测，2026-09-05~09-09）、软盟资讯《6 款免费 AI 内容创作智能体平台实测》（2026-09）、nimply.io《Free AI Post Generator: 7 Best Tools Compared》、apaya.com《Best AI Social Media Tools 2026》</li><li><strong>T4 聚合</strong>：freellm.net（479+ 模型 / 237 实时验证 / 2026-09-14）、freellm.cc、scriptbyai.com（Gemini Free Tier 2026-09）、wellstsai.com（Gemini 免费层 RPM/TPM/RPD 实测，2026-09）</li><li><strong>历史期号</strong>：本系列 001 / 002 / 003 期（保留全部条目以便追溯，失效项只标状态不删除）</li></ul>
+<blockquote class="bq"><p><strong>免责声明</strong>：所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测或限时活动，随时可能调整、限速或下线。标注为"社区口径""公开报道"的条目未经厂商官方公告印证。本报告不构成付款建议。</p></blockquote>
+</details>
+</section>
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="fr"><span>AI 免费内容与权益速递 · 第 004 期</span></div>
+  <p><strong>网页版说明：</strong>本页由同名 Markdown 日报自动编译，正文一字未改。顶部可按章节跳转、可全文检索；<strong>第四章「限时活动与截止时间表」自 047 期修订起移到正文之后</strong>（前面九章可连贯读完，不再被大表截断），其 4.1 限时表支持按状态筛选（必办 / 今明换挡 / 生效中 / 口径存疑 / 已结束）；<strong>没有确切截止日的常驻权益不再逐期重印</strong>，全量在 <a href="standing.html">《常驻权益总账》</a>（同样可筛选）；表里超过 4 行的长条目<strong>点一下即可展开全文</strong>；右上角可切换明暗主题；直接打印会输出 A4 版式。</p>
+  <p><strong>免责：</strong>所有额度、活动与截止时间以各平台官方页面实时公示为准。免费档多属公测、限时活动或内测，随时可能调整、限速或下线。本页不构成付款建议。</p>
+</footer>
+
+<div class="fab" data-no-print>
+  <button class="iconbtn" id="topBtn" type="button" aria-label="回到顶部">↑</button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var root=document.documentElement, main=document.getElementById("main");
+
+  /* ---------- 主题 ---------- */
+  var themeBtn=document.getElementById("themeBtn");
+  themeBtn.addEventListener("click",function(){
+    var t=root.getAttribute("data-theme")==="dark"?"light":"dark";
+    root.setAttribute("data-theme",t);
+    try{localStorage.setItem("aihs-theme",t);}catch(e){}
+  });
+
+  /* ---------- 章节高亮 ---------- */
+  var secs=[].slice.call(document.querySelectorAll("main .sec")),
+      navA=[].slice.call(document.querySelectorAll("#topnav a")),
+      tocA=[].slice.call(document.querySelectorAll(".toc-a"));
+  function sync(id){
+    navA.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+id);});
+    tocA.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+id);});
+  }
+
+  /* ---------- 阅读进度 + 章节高亮（确定性：取最后一个越过阈值的章节） ---------- */
+  var bar=document.getElementById("progress"), ticking=false;
+  function syncNow(){
+    var cur=secs.length?secs[0].id:null;
+    for(var i=0;i<secs.length;i++){
+      if(secs[i].getBoundingClientRect().top<=150) cur=secs[i].id; else break;
+    }
+    if(cur) sync(cur);
+  }
+  function onScroll(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      var h=document.documentElement.scrollHeight-window.innerHeight;
+      bar.style.width=(h>0?Math.min(100,(window.scrollY/h)*100):0)+"%";
+      syncNow();
+      ticking=false;
+    });
+  }
+  window.addEventListener("scroll",onScroll,{passive:true});
+  window.addEventListener("resize",onScroll);
+  onScroll();
+
+  /* ---------- 入场 ---------- */
+  var rise=[].slice.call(document.querySelectorAll("main .tblwrap, main .ol, h3, .summary .ul"));
+  rise.forEach(function(el,i){ el.classList.add("rise"); el.style.transitionDelay=(Math.min(i,14)*55)+"ms"; });
+  if(window.IntersectionObserver && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    var io2=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io2.unobserve(e.target); } });
+    },{rootMargin:"0px 0px -8% 0px", threshold:.05});
+    rise.forEach(function(el){io2.observe(el);});
+    requestAnimationFrame(function(){
+      rise.forEach(function(el){
+        var r=el.getBoundingClientRect();
+        if(r.top<window.innerHeight*.95) el.classList.add("in");
+      });
+    });
+  } else { rise.forEach(function(el){el.classList.add("in");}); }
+
+  /* ---------- 截止时间表：按状态筛选 ---------- */
+  var ledger=document.querySelector(".tbl.ledger");
+  if(ledger){
+    var rows=[].slice.call(ledger.querySelectorAll("tbody tr[data-st]")),
+        chips=[].slice.call(document.querySelectorAll(".chip")),
+        cnt=document.getElementById("ledgerCount"),
+        counts={all:rows.length}, filter="all";
+    rows.forEach(function(r){var s=r.getAttribute("data-st"); counts[s]=(counts[s]||0)+1;});
+    document.querySelectorAll("[data-c]").forEach(function(b){
+      var k=b.getAttribute("data-c"); b.textContent=(counts[k]||0);
+    });
+    function apply(){
+      var shown=0;
+      rows.forEach(function(r){
+        var ok=(filter==="all"||r.getAttribute("data-st")===filter);
+        r.hidden=!ok; if(ok) shown++;
+      });
+      cnt.textContent="显示 "+shown+" / "+rows.length+" 条";
+    }
+    chips.forEach(function(c){
+      c.addEventListener("click",function(){
+        filter=c.getAttribute("data-f");
+        chips.forEach(function(x){
+          var on=(x===c); x.classList.toggle("on",on); x.setAttribute("aria-pressed",on?"true":"false");
+        });
+        apply();
+      });
+    });
+    apply();
+  }
+
+  /* ---------- 长状态格：点击展开全文 ---------- */
+  [].slice.call(document.querySelectorAll(".st-txt.cbody.clamp")).forEach(function(el){
+    el.setAttribute("tabindex","0");
+    el.setAttribute("role","button");
+    el.setAttribute("aria-expanded","false");
+    function open(){
+      el.classList.remove("clamp");
+      el.setAttribute("aria-expanded","true");
+      el.removeAttribute("title");
+    }
+    el.addEventListener("click", open);
+    el.addEventListener("keydown", function(ev){
+      if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); }
+    });
+  });
+
+  /* ---------- 全文检索 ---------- */
+  var q=document.getElementById("q"), qn=document.getElementById("qn"),
+      marks=[], cur=-1, lastQ="";
+  function clearMarks(){
+    marks.forEach(function(m){
+      var p=m.parentNode; if(!p) return;
+      p.replaceChild(document.createTextNode(m.textContent),m); p.normalize();
+    });
+    marks=[]; cur=-1;
+  }
+  function paint(){
+    clearMarks();
+    var v=q.value.trim();
+    qn.textContent="0";
+    if(v.length<1){ lastQ=""; return; }
+    var walk=document.createTreeWalker(main,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+      if(!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      var p=n.parentNode; if(!p) return NodeFilter.FILTER_REJECT;
+      if(/^(SCRIPT|STYLE|MARK|INPUT|BUTTON|CODE|svg|path)$/.test(p.nodeName)) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }});
+    var nodes=[],n;
+    while((n=walk.nextNode())) nodes.push(n);
+    var lv=v.toLowerCase();
+    nodes.forEach(function(node){
+      var val=node.nodeValue, low=val.toLowerCase(), i=low.indexOf(lv);
+      if(i<0) return;
+      var frag=document.createDocumentFragment(), last=0;
+      while(i>=0){
+        if(i>last) frag.appendChild(document.createTextNode(val.slice(last,i)));
+        var m=document.createElement("mark");
+        m.className="hl"; m.textContent=val.slice(i,i+v.length);
+        marks.push(m); frag.appendChild(m);
+        last=i+v.length; i=low.indexOf(lv,last);
+      }
+      if(last<val.length) frag.appendChild(document.createTextNode(val.slice(last)));
+      node.parentNode.replaceChild(frag,node);
+    });
+    qn.textContent=marks.length;
+    /* 折叠区内的命中也要看得见：命中即展开所在章节（toggle 事件会补做入场动画与顶栏量高） */
+    marks.forEach(function(m){
+      var d=m.closest?m.closest("details.audit-fold"):null;
+      if(d) d.open=true;
+    });
+    if(marks.length){ cur=-1; jump(1); }
+    lastQ=v;
+  }
+  function jump(d){
+    if(!marks.length) return;
+    if(cur>=0 && marks[cur]) marks[cur].classList.remove("cur");
+    cur=(cur+d+marks.length)%marks.length;
+    var el=marks[cur]; el.classList.add("cur");
+    el.scrollIntoView({block:"center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+  }
+  var timer=null;
+  q.addEventListener("input",function(){ clearTimeout(timer); timer=setTimeout(paint,140); });
+  q.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){ e.preventDefault(); jump(e.shiftKey?-1:1); }
+    if(e.key==="Escape"){ q.value=""; paint(); }
+  });
+  document.getElementById("qnext").addEventListener("click",function(){jump(1);});
+  document.getElementById("qprev").addEventListener("click",function(){jump(-1);});
+
+  /* ---------- 手机端搜索条：<=600px 时搜索收成一个图标，点开成全宽搜索栏 ---------- */
+  var sBtn=document.getElementById("searchBtn");
+  function closeSearch(){
+    document.body.classList.remove("search-open");
+    sBtn.textContent="⌕";
+    sBtn.setAttribute("aria-expanded","false");
+  }
+  sBtn.addEventListener("click",function(){
+    var open=document.body.classList.toggle("search-open");
+    sBtn.textContent=open?"✕":"⌕";
+    sBtn.setAttribute("aria-expanded",open?"true":"false");
+    if(open) q.focus();
+  });
+  document.addEventListener("keydown",function(e){
+    /* 输入框内的 Esc 交给上面那段处理（只清空，不关面板） */
+    if(e.key==="Escape" && document.body.classList.contains("search-open") && document.activeElement!==q) closeSearch();
+  });
+
+  /* ---------- 量顶栏与筛选条的实际高度写回 CSS 变量 ----------
+     --tb-h 决定抽屉从哪开始、锚点跳转留多少空；--chips-h 决定截止表表头吸在哪。
+     两者都随字号与是否换行变化，写死数值迟早对不上。 */
+  function syncMetrics(){
+    var tb=document.querySelector(".topbar"), ch=document.querySelector(".chips");
+    if(tb) root.style.setProperty("--tb-h", tb.offsetHeight+"px");
+    if(ch) root.style.setProperty("--chips-h", ch.offsetHeight+"px");
+  }
+  syncMetrics();
+  window.addEventListener("resize",syncMetrics);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(syncMetrics);
+
+  /* ---------- 移动端目录 ---------- */
+  var menuBtn=document.getElementById("menuBtn");
+  menuBtn.addEventListener("click",function(){
+    var open=document.body.classList.toggle("nav-open");
+    menuBtn.setAttribute("aria-expanded",open?"true":"false");
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      document.body.classList.remove("nav-open");
+      menuBtn.setAttribute("aria-expanded","false");
+    });
+  });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape" && document.body.classList.contains("nav-open")){
+      document.body.classList.remove("nav-open");
+      menuBtn.setAttribute("aria-expanded","false");
+    }
+  });
+  /* 点击正文区收起抽屉 */
+  main.addEventListener("click",function(){
+    if(document.body.classList.contains("nav-open")){
+      document.body.classList.remove("nav-open");
+      menuBtn.setAttribute("aria-expanded","false");
+    }
+  });
+
+  /* ---------- 审计层折叠：全部展开 / 目录跳转 / 搜索 / 打印 ----------
+     折叠区在 display:none 里时，IntersectionObserver 不会给 .rise 加 .in，
+     顶栏量高也会把隐藏的 .chips 读成 0 —— 展开时两样都要补做。 */
+  var folds=[].slice.call(document.querySelectorAll("details.audit-fold"));
+  function openFold(id){ folds.forEach(function(d){ if(!id||d.id==="fold-"+id) d.open=true; }); }
+  document.querySelectorAll("[data-open]").forEach(function(a){
+    a.addEventListener("click",function(){ openFold(a.getAttribute("data-open")); });
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      var h=a.getAttribute("href")||"";
+      if(/^#s\d{2}$/.test(h)) openFold(h.slice(1));
+    });
+  });
+  var foldAll=document.getElementById("foldAll");
+  if(foldAll) foldAll.addEventListener("click",function(){
+    var allOpen=folds.every(function(d){return d.open;});
+    folds.forEach(function(d){ d.open=!allOpen; });
+    foldAll.textContent=allOpen?"展开全部章节":"收起全部章节";
+    foldAll.setAttribute("aria-expanded",allOpen?"false":"true");
+  });
+  folds.forEach(function(d){
+    d.addEventListener("toggle",function(){
+      if(!d.open) return;
+      d.querySelectorAll(".rise:not(.in)").forEach(function(el){el.classList.add("in");});
+      syncMetrics();
+    });
+  });
+  var printState=[];
+  window.addEventListener("beforeprint",function(){
+    printState=folds.map(function(d){return d.open;});
+    folds.forEach(function(d){d.open=true;});
+    document.querySelectorAll(".audit-fold .rise:not(.in)").forEach(function(el){el.classList.add("in");});
+  });
+  window.addEventListener("afterprint",function(){
+    folds.forEach(function(d,i){ d.open=printState[i]; });
+  });
+
+  /* ---------- 回到顶部 ---------- */
+  document.getElementById("topBtn").addEventListener("click",function(){
+    window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+  });
+})();
+</script>
+</body>
+</html>
