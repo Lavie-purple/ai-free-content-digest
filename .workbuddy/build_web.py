@@ -493,14 +493,34 @@ def build():
         date_block = "<em>增量与纠错口径</em>"
     theme_line = re.sub(r"\*\*", "", metas[1]) if len(metas) > 1 else ""
 
-    # 目录
+    # 目录显示顺序（2026-11-07 用户选定方案 A）：
+    # 正文物理顺序、章节编号、折叠分组一律不动，只重排「目录 / 顶栏」的呈现次序 ——
+    # 04 是读者最该先看的行动清单，从文末提到第四位；07「按任务选型速查」是给读者
+    # 做决策用的，从审计层里提出来；05/06/08/09 归到最后。代价是点 04 会跳到文末
+    # （A 方案已接受，跳转时由 openFold 自动展开该章）。
+    TOC_ORDER = ["s-abs", "s01", "s02", "s03", "s04", "s07",
+                 "s05", "s06", "s08", "s09"]
+    TOC_GROUPS = {"s-abs": "本期内容", "s04": "马上要办",
+                  "s07": "怎么用", "s05": "审计层 · 默认折叠"}
+
+    def _toc_rank(x):
+        return TOC_ORDER.index(x[0]) if x[0] in TOC_ORDER else len(TOC_ORDER)
+
+    # 重排与分组只对「第 NNN 期」日报生效：《第四章表体明细附录》是 12 个
+    # 「第 NNN 期」小节、aid 全是 s-abs，套这组规则会插入 12 个「本期内容」标签。
+    toc_view = [x for x in toc if x[1] or x[0] == "s-abs"]
+    if is_digest:
+        toc_view = sorted(toc_view, key=_toc_rank)
+    groups = TOC_GROUPS if is_digest else {}
+
     items = []
-    for aid, no, t, is_h3, sub in ([x for x in toc]):
-        if no or aid == "s-abs":
-            items.append(
-                '<a class="toc-a" href="#%s"><span class="toc-n">%s</span>%s</a>'
-                % (aid, no if no != "00" else "\u00b7\u00b7", esc(t))
-            )
+    for aid, no, t, is_h3, sub in toc_view:
+        if aid in groups:
+            items.append('<p class="toc-g">%s</p>' % groups[aid])
+        items.append(
+            '<a class="toc-a" href="#%s"><span class="toc-n">%s</span>%s</a>'
+            % (aid, no if no != "00" else "\u00b7\u00b7", esc(t))
+        )
     toc_html = "\n".join(items)
 
     # 目录呈现：日报 / 附录照旧挂 196px 左侧栏；《常驻权益总账》只有「全量表」一节，
@@ -523,11 +543,13 @@ def build():
     # —— 047 期修订后第四章物理位置在文末，编号仍是 04，不加分隔读者会以为是排序错了
     def _nav_t(t):
         return esc(re.sub(r"（[^）]*）\s*$", "", t))
+    # 顶栏与目录同序；分隔竖线从「文末的第四章」移到「审计层」起点（s05）——
+    # 04 现在是第四位，再挂 tail 就成了一条没有意义的竖线。
     nav_html = "".join(
         '<a href="#%s"%s><b>%s</b>%s</a>' % (
-            aid, ' class="tail"' if aid == "s04" else "",
+            aid, ' class="tail"' if aid == "s05" else "",
             no if no != "00" else "\u00b7\u00b7", _nav_t(t))
-        for aid, no, t, is_h3, sub in toc if no or aid == "s-abs"
+        for aid, no, t, is_h3, sub in toc_view
     )
 
     note_html = "".join("<p>%s</p>" % inline(x) for x in note)
@@ -777,6 +799,12 @@ __VS_CSS__
   background-image:none; line-height:1.45;
 }
 .toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+/* 目录分组标签：一条细线 + 小字，不加框（2026-11-07 方案 A） */
+.toc-g{
+  font-family:var(--fm); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--faint); margin:14px 0 4px; padding-top:11px; border-top:1px solid var(--rule);
+}
+.toc-g:first-child{margin-top:0; padding-top:0; border-top:0}
 .toc-a:hover{color:var(--ink); border-left-color:var(--rule-2)}
 .toc-a.active{color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft)}
 .toc-a.active .toc-n{color:var(--accent-ink)}
@@ -879,7 +907,12 @@ blockquote{margin:0}
   width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
   background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
 }
-.tblwrap.scrolly .tbl{border:0; border-radius:0}
+/* 表头吸顶的前提：表格自身不能 overflow:hidden。
+   它会新建一个滚动容器，把 th{position:sticky} 整个废掉 —— 实测在容器内滚动
+   400px 后表头跑到容器上方 305px，正好被 sticky 的筛选条压掉半行（用户
+   2026-11-06「这里老是被上面截断」）。外框与圆角由 .tblwrap.scrolly 承担，
+   这里不需要再裁切；非滚动容器里的 .tbl 仍保留 overflow:hidden 裁圆角。 */
+.tblwrap.scrolly .tbl{border:0; border-radius:0; overflow:visible}
 .tbl thead th{
   position:sticky; top:0; z-index:2; text-align:left; vertical-align:bottom;
   font-family:var(--fm); font-size:11.5px; letter-spacing:.09em; text-transform:uppercase;

@@ -233,6 +233,12 @@ html[data-theme="dark"] .mh-num{-webkit-text-stroke-color:rgba(236,231,220,.20)}
   background-image:none; line-height:1.45;
 }
 .toc-n{font-family:var(--fm); font-size:11px; color:var(--faint)}
+/* 目录分组标签：一条细线 + 小字，不加框（2026-11-07 方案 A） */
+.toc-g{
+  font-family:var(--fm); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--faint); margin:14px 0 4px; padding-top:11px; border-top:1px solid var(--rule);
+}
+.toc-g:first-child{margin-top:0; padding-top:0; border-top:0}
 .toc-a:hover{color:var(--ink); border-left-color:var(--rule-2)}
 .toc-a.active{color:var(--accent-ink); border-left-color:var(--accent); background:var(--accent-soft)}
 .toc-a.active .toc-n{color:var(--accent-ink)}
@@ -335,7 +341,12 @@ blockquote{margin:0}
   width:100%; border-collapse:collapse; font-family:var(--fu); font-size:var(--fs-tbl); line-height:1.7;
   background:var(--surface); border:1px solid var(--rule); border-radius:var(--r2); overflow:hidden;
 }
-.tblwrap.scrolly .tbl{border:0; border-radius:0}
+/* 表头吸顶的前提：表格自身不能 overflow:hidden。
+   它会新建一个滚动容器，把 th{position:sticky} 整个废掉 —— 实测在容器内滚动
+   400px 后表头跑到容器上方 305px，正好被 sticky 的筛选条压掉半行（用户
+   2026-11-06「这里老是被上面截断」）。外框与圆角由 .tblwrap.scrolly 承担，
+   这里不需要再裁切；非滚动容器里的 .tbl 仍保留 overflow:hidden 裁圆角。 */
+.tblwrap.scrolly .tbl{border:0; border-radius:0; overflow:visible}
 .tbl thead th{
   position:sticky; top:0; z-index:2; text-align:left; vertical-align:bottom;
   font-family:var(--fm); font-size:11.5px; letter-spacing:.09em; text-transform:uppercase;
