@@ -677,6 +677,51 @@ mark.hl.cur{background:var(--accent); color:#fff}
   a{background-image:none}
   @page{size:A4 portrait; margin:12mm}
 }
+
+/* ---- 30 秒速览卡（060 期 A 方案） ---- */
+.brief{
+  background:var(--surface); border:1px solid var(--rule-2); border-left:4px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4);
+  margin:0 0 var(--s5); box-shadow:var(--shadow);
+}
+.brief-k{font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.06em;
+  color:var(--faint); margin:0 0 var(--s2)}
+.brief-h{font-family:var(--fu); font-weight:700; font-size:var(--fs-xl); line-height:1.5;
+  color:var(--ink); margin:0 0 var(--s3); text-wrap:balance}
+.brief-m{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-m span{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:99px; padding:5px 12px}
+.brief-m b{font-family:var(--fm); color:var(--accent-ink); font-size:var(--fs-mid)}
+.brief-a{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-a a,.brief-a button{font-family:var(--fu); font-size:var(--fs-sm);
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--rule-2);
+  border-radius:var(--r1); padding:8px 14px; text-decoration:none; cursor:pointer}
+.brief-a a:hover,.brief-a button:hover{border-color:var(--accent)}
+.brief-n{font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  color:var(--muted); margin:0}
+
+/* ---- 审计层折叠：details 只做逻辑容器，展开后排版与原来完全一致 ---- */
+.folded{padding-top:var(--s4)}
+.audit-fold{margin:0}
+.audit-fold>summary{
+  display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap; list-style:none;
+  padding:var(--s3) var(--s4); margin:0 0 var(--s3); cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r2);
+  font-family:var(--fu); font-size:var(--fs-mid); font-weight:700; color:var(--ink);
+}
+.audit-fold>summary::-webkit-details-marker{display:none}
+.audit-fold>summary::before{content:"+"; font-family:var(--fm); font-size:19px;
+  font-weight:400; color:var(--accent-ink); line-height:1}
+.audit-fold[open]>summary::before{content:"\2212"}
+.audit-fold[open]>summary{margin-bottom:var(--s5)}
+.fold-t{flex:1}
+.fold-hint{font-family:var(--fm); font-size:var(--fs-xs); font-weight:400; color:var(--faint)}
+.audit-fold>p{margin-bottom:var(--s4)}
+.audit-fold h3:first-child{margin-top:0}
+@media print{
+  .audit-fold>summary{display:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
 </style>
 </head>
 <body>
@@ -5174,6 +5219,11 @@ mark.hl.cur{background:var(--accent); color:#fff}
       node.parentNode.replaceChild(frag,node);
     });
     qn.textContent=marks.length;
+    /* 折叠区内的命中也要看得见：命中即展开所在章节（toggle 事件会补做入场动画与顶栏量高） */
+    marks.forEach(function(m){
+      var d=m.closest?m.closest("details.audit-fold"):null;
+      if(d) d.open=true;
+    });
     if(marks.length){ cur=-1; jump(1); }
     lastQ=v;
   }
@@ -5247,6 +5297,44 @@ mark.hl.cur{background:var(--accent); color:#fff}
       document.body.classList.remove("nav-open");
       menuBtn.setAttribute("aria-expanded","false");
     }
+  });
+
+  /* ---------- 审计层折叠：全部展开 / 目录跳转 / 搜索 / 打印 ----------
+     折叠区在 display:none 里时，IntersectionObserver 不会给 .rise 加 .in，
+     顶栏量高也会把隐藏的 .chips 读成 0 —— 展开时两样都要补做。 */
+  var folds=[].slice.call(document.querySelectorAll("details.audit-fold"));
+  function openFold(id){ folds.forEach(function(d){ if(!id||d.id==="fold-"+id) d.open=true; }); }
+  document.querySelectorAll("[data-open]").forEach(function(a){
+    a.addEventListener("click",function(){ openFold(a.getAttribute("data-open")); });
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      var h=a.getAttribute("href")||"";
+      if(/^#s\d{2}$/.test(h)) openFold(h.slice(1));
+    });
+  });
+  var foldAll=document.getElementById("foldAll");
+  if(foldAll) foldAll.addEventListener("click",function(){
+    var allOpen=folds.every(function(d){return d.open;});
+    folds.forEach(function(d){ d.open=!allOpen; });
+    foldAll.textContent=allOpen?"展开全部章节":"收起全部章节";
+    foldAll.setAttribute("aria-expanded",allOpen?"false":"true");
+  });
+  folds.forEach(function(d){
+    d.addEventListener("toggle",function(){
+      if(!d.open) return;
+      d.querySelectorAll(".rise:not(.in)").forEach(function(el){el.classList.add("in");});
+      syncMetrics();
+    });
+  });
+  var printState=[];
+  window.addEventListener("beforeprint",function(){
+    printState=folds.map(function(d){return d.open;});
+    folds.forEach(function(d){d.open=true;});
+    document.querySelectorAll(".audit-fold .rise:not(.in)").forEach(function(el){el.classList.add("in");});
+  });
+  window.addEventListener("afterprint",function(){
+    folds.forEach(function(d,i){ d.open=printState[i]; });
   });
 
   /* ---------- 回到顶部 ---------- */

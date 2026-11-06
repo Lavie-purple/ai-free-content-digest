@@ -15,6 +15,94 @@ import io, os, re, sys, html
 WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import viewswitch
+import json
+
+# ---------------------------------------------------------------- 30 秒速览 / 审计层折叠
+# 060 期 A 方案（用户 2026-11-06 选定）：完整日报首屏只留「新闻 + 一张速览卡」，
+# 权益台账与审计层默认折叠。**信息一条不删** —— 只是换落点，展开后与原文逐字一致。
+# 仅对「第 NNN 期」日报生效；《常驻权益总账》与《第四章表体明细附录》同样用本
+# 编译器生成，保持原样（它们本来就是「专门来查」的页面，不需要再折一层）。
+FOLD_SECTIONS = {
+    "s04": "第四章 · 权益台账与脚注",
+    "s05": "第五章 · 本期纠错清单",
+    "s06": "第六章 · 避坑提示",
+    "s08": "第八章 · 信源体系更新",
+    "s09": "第九章 · 来源与核查说明",
+}
+
+
+def _headline(issue, src_text):
+    """目录头条的唯一真源是 data/headlines.json（check_headlines 保证每期登记）。"""
+    p = os.path.join(WS, ".workbuddy", "data", "headlines.json")
+    key = str(int(issue)).zfill(3)
+    try:
+        d = json.load(io.open(p, encoding="utf-8-sig"))
+        v = (d.get(key) or "").strip()
+        if v:
+            return v
+    except Exception as e:
+        print("[brief] 台账读取失败：%s" % e)
+    # 兜底：摘要章首段，剥掉行内 Markdown 后截 80 字
+    m = re.search(r"(?ms)^## 摘要[^\n]*\n(.*?)(?=^## )", src_text)
+    fb = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", m.group(1) if m else "")
+    fb = re.sub(r"\*\*|`|\s+", " ", fb).strip()[:80]
+    assert fb, "头条兜底也为空（避坑 058：零命中不是通过，是没找到对象）"
+    print("[brief] 台账缺 %s 期，已用摘要兜底" % key)
+    return fb
+
+
+def _fold(html_body):
+    """把 FOLD_SECTIONS 里的章节正文（h2 之后）包进 <details>。
+
+    ① section / h2 的数量与结构不变 —— verify_web 的计数判据照旧通过；
+    ② 正文一字不删，只移进 details —— 保真检查照旧通过；
+    ③ 命中数必须等于预期，少一个就报错，不允许「零命中也算通过」。
+    """
+    hit = []
+
+    def one(m):
+        sid, extra, h2, inner = m.group(1), m.group(2), m.group(3), m.group(4)
+        if sid not in FOLD_SECTIONS:
+            return m.group(0)
+        hit.append(sid)
+        return ('<section id="%s" class="sec%s folded">\n%s\n'
+                '<details class="audit-fold" id="fold-%s">\n'
+                '<summary><span class="fold-t">展开：%s</span>'
+                '<span class="fold-hint">默认收起 · 点此展开</span></summary>\n'
+                '%s\n</details>\n</section>'
+                % (sid, extra, h2, sid, FOLD_SECTIONS[sid], inner))
+
+    pat = re.compile(
+        r'<section id="(s\d{2}|s-abs)" class="sec([^"]*)">\n'
+        r'(<h2[\s\S]*?</h2>)\n([\s\S]*?)\n</section>')
+    out = pat.sub(one, html_body)
+    missing = [k for k in FOLD_SECTIONS if k not in hit]
+    assert not missing, ("折叠章节缺命中（零命中不是通过）", missing, hit)
+    return out
+
+
+def _brief(issue, date_line, headline, html_body):
+    """30 秒速览卡：三个数字全部从已渲染表体实算，与正文同源。"""
+    n_crit = html_body.count('data-st="crit"')
+    n_soon = html_body.count('data-st="soon"')
+    n_rows = len(re.findall(r'<tr data-st="', html_body))
+    m = re.search(r"\d{4}-\d{2}-\d{2}", date_line or "")
+    day = m.group(0) if m else ""
+    return ('<div class="brief" data-no-print>\n'
+            '<p class="brief-k">30 秒速览 · 第 %s 期%s</p>\n'
+            '<p class="brief-h">%s</p>\n'
+            '<div class="brief-m"><span>本期表体 <b>%d</b> 行</span>'
+            '<span>其中必办 <b>%d</b> 条</span>'
+            '<span>今明换挡 <b>%d</b> 条</span></div>\n'
+            '<div class="brief-a"><a href="#s04" data-open="s04">看必办清单</a>'
+            '<a href="quick.html">只看极速版</a>'
+            '<button type="button" id="foldAll" aria-expanded="false">展开全部章节</button></div>\n'
+            '<p class="brief-n">下方是本期新闻正文（未折叠）；第四章权益台账与纠错、避坑、'
+            '信源、核查等审计层默认收起，点标题展开。目录跳转、全文检索命中与打印时会自动展开。'
+            '卡片数字是本期表体口径，全量三态分布以第四章脚注为准。原文一字未删。</p>\n'
+            '</div>\n'
+            % (esc(issue), (" · " + day) if day else "", esc(headline),
+               n_rows, n_crit, n_soon))
 
 
 def pick_default():
@@ -372,6 +460,11 @@ def build():
     # 摘要区（第一段无 section 的 ul）加封面卡片样式
     html_body = html_body.replace('<section id="s-abs" class="sec">', '<section id="s-abs" class="sec summary">', 1)
 
+    # 060 期 A 方案：权益台账与审计层默认折叠（仅完整日报；总账 / 附录不走这一步）
+    is_digest = bool(re.search(r"第\d{3}期", os.path.basename(SRC)))
+    if is_digest:
+        html_body = _fold(html_body)
+
     # 刊头解析
     m = re.search(r"第\s*(\d+)\s*期", title)
     issue = m.group(1) if m else "001"
@@ -420,6 +513,8 @@ def build():
     doc = PAGE.replace("__TITLE__", esc(mast)).replace("__ISSUE__", esc(issue))
     doc = doc.replace("__DATEBLOCK__", date_block).replace("__THEME__", esc(theme_line))
     doc = doc.replace("__NOTE__", note_html).replace("__TOC__", toc_html)
+    if is_digest:
+        html_body = _brief(issue, date_line, _headline(issue, src), html_body) + html_body
     doc = doc.replace("__NAV__", nav_html).replace("__BODY__", html_body)
     doc = doc.replace("__METAS__", esc(" \u00b7 ".join(re.sub(r"\*\*", "", x) for x in metas)))
 
@@ -1098,6 +1193,51 @@ mark.hl.cur{background:var(--accent); color:#fff}
   a{background-image:none}
   @page{size:A4 portrait; margin:12mm}
 }
+
+/* ---- 30 秒速览卡（060 期 A 方案） ---- */
+.brief{
+  background:var(--surface); border:1px solid var(--rule-2); border-left:4px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4);
+  margin:0 0 var(--s5); box-shadow:var(--shadow);
+}
+.brief-k{font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.06em;
+  color:var(--faint); margin:0 0 var(--s2)}
+.brief-h{font-family:var(--fu); font-weight:700; font-size:var(--fs-xl); line-height:1.5;
+  color:var(--ink); margin:0 0 var(--s3); text-wrap:balance}
+.brief-m{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-m span{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:99px; padding:5px 12px}
+.brief-m b{font-family:var(--fm); color:var(--accent-ink); font-size:var(--fs-mid)}
+.brief-a{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-a a,.brief-a button{font-family:var(--fu); font-size:var(--fs-sm);
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--rule-2);
+  border-radius:var(--r1); padding:8px 14px; text-decoration:none; cursor:pointer}
+.brief-a a:hover,.brief-a button:hover{border-color:var(--accent)}
+.brief-n{font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  color:var(--muted); margin:0}
+
+/* ---- 审计层折叠：details 只做逻辑容器，展开后排版与原来完全一致 ---- */
+.folded{padding-top:var(--s4)}
+.audit-fold{margin:0}
+.audit-fold>summary{
+  display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap; list-style:none;
+  padding:var(--s3) var(--s4); margin:0 0 var(--s3); cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r2);
+  font-family:var(--fu); font-size:var(--fs-mid); font-weight:700; color:var(--ink);
+}
+.audit-fold>summary::-webkit-details-marker{display:none}
+.audit-fold>summary::before{content:"+"; font-family:var(--fm); font-size:19px;
+  font-weight:400; color:var(--accent-ink); line-height:1}
+.audit-fold[open]>summary::before{content:"\\2212"}
+.audit-fold[open]>summary{margin-bottom:var(--s5)}
+.fold-t{flex:1}
+.fold-hint{font-family:var(--fm); font-size:var(--fs-xs); font-weight:400; color:var(--faint)}
+.audit-fold>p{margin-bottom:var(--s4)}
+.audit-fold h3:first-child{margin-top:0}
+@media print{
+  .audit-fold>summary{display:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
 </style>
 </head>
 <body>
@@ -1301,6 +1441,11 @@ __BODY__
       node.parentNode.replaceChild(frag,node);
     });
     qn.textContent=marks.length;
+    /* 折叠区内的命中也要看得见：命中即展开所在章节（toggle 事件会补做入场动画与顶栏量高） */
+    marks.forEach(function(m){
+      var d=m.closest?m.closest("details.audit-fold"):null;
+      if(d) d.open=true;
+    });
     if(marks.length){ cur=-1; jump(1); }
     lastQ=v;
   }
@@ -1374,6 +1519,44 @@ __BODY__
       document.body.classList.remove("nav-open");
       menuBtn.setAttribute("aria-expanded","false");
     }
+  });
+
+  /* ---------- 审计层折叠：全部展开 / 目录跳转 / 搜索 / 打印 ----------
+     折叠区在 display:none 里时，IntersectionObserver 不会给 .rise 加 .in，
+     顶栏量高也会把隐藏的 .chips 读成 0 —— 展开时两样都要补做。 */
+  var folds=[].slice.call(document.querySelectorAll("details.audit-fold"));
+  function openFold(id){ folds.forEach(function(d){ if(!id||d.id==="fold-"+id) d.open=true; }); }
+  document.querySelectorAll("[data-open]").forEach(function(a){
+    a.addEventListener("click",function(){ openFold(a.getAttribute("data-open")); });
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      var h=a.getAttribute("href")||"";
+      if(/^#s\\d{2}$/.test(h)) openFold(h.slice(1));
+    });
+  });
+  var foldAll=document.getElementById("foldAll");
+  if(foldAll) foldAll.addEventListener("click",function(){
+    var allOpen=folds.every(function(d){return d.open;});
+    folds.forEach(function(d){ d.open=!allOpen; });
+    foldAll.textContent=allOpen?"展开全部章节":"收起全部章节";
+    foldAll.setAttribute("aria-expanded",allOpen?"false":"true");
+  });
+  folds.forEach(function(d){
+    d.addEventListener("toggle",function(){
+      if(!d.open) return;
+      d.querySelectorAll(".rise:not(.in)").forEach(function(el){el.classList.add("in");});
+      syncMetrics();
+    });
+  });
+  var printState=[];
+  window.addEventListener("beforeprint",function(){
+    printState=folds.map(function(d){return d.open;});
+    folds.forEach(function(d){d.open=true;});
+    document.querySelectorAll(".audit-fold .rise:not(.in)").forEach(function(el){el.classList.add("in");});
+  });
+  window.addEventListener("afterprint",function(){
+    folds.forEach(function(d,i){ d.open=printState[i]; });
   });
 
   /* ---------- 回到顶部 ---------- */

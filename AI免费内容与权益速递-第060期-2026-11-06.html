@@ -677,6 +677,51 @@ mark.hl.cur{background:var(--accent); color:#fff}
   a{background-image:none}
   @page{size:A4 portrait; margin:12mm}
 }
+
+/* ---- 30 秒速览卡（060 期 A 方案） ---- */
+.brief{
+  background:var(--surface); border:1px solid var(--rule-2); border-left:4px solid var(--accent);
+  border-radius:0 var(--r2) var(--r2) 0; padding:var(--s3) var(--s4);
+  margin:0 0 var(--s5); box-shadow:var(--shadow);
+}
+.brief-k{font-family:var(--fm); font-size:var(--fs-xs); letter-spacing:.06em;
+  color:var(--faint); margin:0 0 var(--s2)}
+.brief-h{font-family:var(--fu); font-weight:700; font-size:var(--fs-xl); line-height:1.5;
+  color:var(--ink); margin:0 0 var(--s3); text-wrap:balance}
+.brief-m{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-m span{font-family:var(--fu); font-size:var(--fs-sm); color:var(--muted);
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:99px; padding:5px 12px}
+.brief-m b{font-family:var(--fm); color:var(--accent-ink); font-size:var(--fs-mid)}
+.brief-a{display:flex; flex-wrap:wrap; gap:var(--s2); margin:0 0 var(--s3)}
+.brief-a a,.brief-a button{font-family:var(--fu); font-size:var(--fs-sm);
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--rule-2);
+  border-radius:var(--r1); padding:8px 14px; text-decoration:none; cursor:pointer}
+.brief-a a:hover,.brief-a button:hover{border-color:var(--accent)}
+.brief-n{font-family:var(--fu); font-size:var(--fs-sm); line-height:1.7;
+  color:var(--muted); margin:0}
+
+/* ---- 审计层折叠：details 只做逻辑容器，展开后排版与原来完全一致 ---- */
+.folded{padding-top:var(--s4)}
+.audit-fold{margin:0}
+.audit-fold>summary{
+  display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap; list-style:none;
+  padding:var(--s3) var(--s4); margin:0 0 var(--s3); cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r2);
+  font-family:var(--fu); font-size:var(--fs-mid); font-weight:700; color:var(--ink);
+}
+.audit-fold>summary::-webkit-details-marker{display:none}
+.audit-fold>summary::before{content:"+"; font-family:var(--fm); font-size:19px;
+  font-weight:400; color:var(--accent-ink); line-height:1}
+.audit-fold[open]>summary::before{content:"\2212"}
+.audit-fold[open]>summary{margin-bottom:var(--s5)}
+.fold-t{flex:1}
+.fold-hint{font-family:var(--fm); font-size:var(--fs-xs); font-weight:400; color:var(--faint)}
+.audit-fold>p{margin-bottom:var(--s4)}
+.audit-fold h3:first-child{margin-top:0}
+@media print{
+  .audit-fold>summary{display:none !important}
+  .rise{opacity:1 !important; transform:none !important}
+}
 </style>
 </head>
 <body>
@@ -729,6 +774,13 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <a class="toc-a" href="#s04"><span class="toc-n">04</span>限时活动与截止时间表（正文之后 · 11/6 13:46 复核 · 过期 &gt;7 天已归档）</a></nav>
   </aside></div>
   <main id="main">
+<div class="brief" data-no-print>
+<p class="brief-k">30 秒速览 · 第 060 期</p>
+<p class="brief-h">百度开源 ERNIE-5.5-Flash-Base（280B/14B 激活），许可分三档有条件商用</p>
+<div class="brief-m"><span>本期表体 <b>98</b> 行</span><span>其中必办 <b>3</b> 条</span><span>今明换挡 <b>5</b> 条</span></div>
+<div class="brief-a"><a href="#s04" data-open="s04">看必办清单</a><a href="quick.html">只看极速版</a><button type="button" id="foldAll" aria-expanded="false">展开全部章节</button></div>
+<p class="brief-n">下方是本期新闻正文（未折叠）；第四章权益台账与纠错、避坑、信源、核查等审计层默认收起，点标题展开。目录跳转、全文检索命中与打印时会自动展开。卡片数字是本期表体口径，全量三态分布以第四章脚注为准。原文一字未删。</p>
+</div>
 <p><strong>2026-11-06（周五）· 本期是「两份自定义许可同一天读全」的一期</strong> —— 一笔是新的：<strong>百度在窗口内开源 <code>ERNIE-5.5-Flash-Base</code></strong>（<code>280B</code> 总参 / <code>14B</code> 激活 / <code>33.5T</code> tokens 预训练 / <code>FP8</code> 与 <code>BF16</code> 双仓库 / 各 <code>128</code> 个 <code>safetensors</code> 分片），<strong>而且这次把 <code>LICENSE</code> 全文读到了</strong>：<code>ERNIE 5.5 Flash Base Model License Agreement v1.0</code> 是<strong>分三档的有条件商用</strong>（非商用免费 ／ 商用且年相关营收 ≤ <code>US$50M</code> 免费但须署名 ＋ 一次性通知 ／ 超 <code>US$50M</code> 须书面授权），<strong>并且 <code>Territory</code> 逐字排除欧盟、英国、韩国</strong>；另一笔是欠的：<strong>059 期把 <code>Kimi K3.1 Pro</code> 的第四层「能商用」留成「未判定」，本期一次 <code>raw/main/LICENSE</code> 请求就读到了 <code>3,077</code> 字节全文</strong> —— 逐字 <code>Permission is hereby granted, free of charge … to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies</code>，<strong>能商用成立</strong>，但挂了两个门槛（<code>MaaS</code> 且关联方 <code>12</code> 个月营收 &gt; <code>US$20M</code> 须另签；商业产品 &gt; <code>1</code> 亿 <code>MAU</code> 或月营收 &gt; <code>US$20M</code> 须显著展示 <code>Kimi K3.1-Pro</code>）。<strong>一手实读</strong>：① <code>hf-mirror.com/api/models/baidu/ERNIE-5.5-Flash-Base</code>（<code>200</code> / <code>8,307</code> 字节）与 <code>-BF16</code>（<code>200</code> / <code>8,168</code> 字节）；② <code>hf-mirror.com/baidu/ERNIE-5.5-Flash-Base/raw/main/LICENSE</code>（<code>200</code> / <code>25,619</code> 字节）；③ <code>ernie.baidu.com/release/ernie-5-5-flash-base/</code>（<code>200</code> / <code>48,571</code> 字节）；④ <code>hf-mirror.com/moonshotai/Kimi-K3.1-Pro/raw/main/LICENSE</code>（<code>200</code> / <code>3,077</code> 字节）。<strong>另外三条硬条目</strong>：<strong><code>OpenRouter</code> 三档计数 <code>454/16/12</code> 全同值、成员却换了 <code>4</code> 个</strong>（<code>MiniMax</code> 四个付费模型整批下架、<code>Google</code> 两款 <code>Omni Flash</code> ＋ <code>inclusionai/ling-3.0-tiny</code> ＋ <code>openrouter/auto-code</code> 进目录）；<strong><code>Ollie</code> 今天（<code>11/6</code>）就是告别信逐字写明的 <code>sunsetting</code> 生效日</strong>；<strong><code>stealth/crouton-alpha</code> 第 <code>4</code> 天仍在、两个 <code>inkling:free</code> 没有回归</strong>。</p>
 <section id="s-abs" class="sec summary">
 <h2><span class="sn">··</span><span class="h2t">摘要</span><span class="h2sub">（3 秒版）</span></h2>
@@ -902,8 +954,10 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p><strong>⚠️ 以下条目本期没有重新抓取或没有拿到有效响应，状态沿用往期，不出现在本期「同值」的结论里</strong>：<code>豆包工作 30 天订阅</code>（<code>volcengine.com/product/doubao-work</code> 本期 <code>169,627</code> 字节，仍是 <code>JS</code> 壳、连续第 <code>16</code> 期未复核）、<code>国家超算互联网</code> 夜间免费（本期 <code>scnet.cn</code> <code>132,924</code> 字节，关键词零命中、连续第 <code>10</code> 期未复核）、<code>Mistral</code> 全站（连续第 <code>21</code> 次 <code>000</code>）、<code>x.ai/news</code>（本期 <code>000</code>）、<code>platform.reflection.ai</code> 定价（连续第 <code>23</code> 期 <code>403</code>）、<code>platform.openai.com/docs/models</code>（连续第 <code>14</code> 期 <code>403</code>）、<code>next.opera.com/web-ai/</code>（连续第 <code>11</code> 期 <code>451</code>）、<code>docs.somark.ai/free-tier-rules.md</code>（<strong>连续第 <code>6</code> 期 <code>404</code></strong>，本期 <code>576</code> 字节）、<code>AXON</code>（本期重抓 <code>20,111</code> 字节，与 059 期逐字节相同，仍无许可证与版本号 —— 连续第 <code>3</code> 期）、<code>AutoClaw</code> 两站（国内 <code>70,448</code> 逐字节相同、<code>50M</code> 命中 <code>2</code>；国际 <code>31,284</code>、<code>+2,042</code> 字节、<code>40M</code> 命中 <code>1</code>，<strong><code>M11W1</code> / <code>M10W4</code> 逐字均 <code>0</code> 命中</strong>）。</p>
 <p><strong>⚠️ 「未复核」与「已复核且同值」在本报告中是两种写法，不可混用</strong> —— 本章第 1–7 节是「已复核」，本节是「未复核」。</p>
 </section>
-<section id="s05" class="sec">
+<section id="s05" class="sec folded">
 <h2><span class="sn">05</span><span class="h2t">本期纠错清单</span><span class="h2sub">（对 059 期）</span></h2>
+<details class="audit-fold" id="fold-s05">
+<summary><span class="fold-t">展开：第五章 · 本期纠错清单</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <h3 id="h3-19"><span class="h3n">1</span>⚠️ 059 期「<code>Ollie</code> 告别信 <code>39,747 → 35,662</code>（少掉的是 <code>Next.js</code> 构建块）」—— <strong>本期同一页回到 <code>39,747</code></strong></h3>
 <p><strong>059 期的写法</strong>：「<code>Ollie</code> 告别信 <code>39,747 → 35,662</code>（少掉的是 <code>Next.js</code> 构建块，三处关键逐字未变）＋ 定价页 <code>41,791</code> 逐字节相同」，并把 <code>−4,085</code> 记成一次「字节变了、口径没变」的实证。</p>
 <p><strong>本期实测</strong>：<code>ollie.ai/farewell</code>（<code>200</code> / <strong><code>39,747</code> 字节</strong>）—— <strong>与 058 期同值、比 059 期多 <code>4,085</code></strong>；三处关键逐字（<code>Ollie is sunsetting on Nov 6, 2026</code> / <code>effective Nov 6, 2026</code> / <code>billing will be canceled and you will receive a refund</code>）<strong>全部仍在</strong>；定价页 <code>41,791</code> 字节仍与 058 / 059 两期逐字节相同。</p>
@@ -914,14 +968,18 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p><strong>本期实测</strong>：<code>hf-mirror.com/moonshotai/Kimi-K3.1-Pro/raw/main/LICENSE</code>（<code>200</code> / <strong><code>3,077</code> 字节</strong>）—— <strong>一次请求、全文可读</strong>，逐字 <code>Permission is hereby granted, free of charge … sublicense, and/or sell copies</code>，<strong>「能商用」成立，附两个门槛</strong>（见第一章第 <code>2</code> 节）。<strong>059 期自己的第一章已经列出了 <code>LICENSE</code> 是 <code>112</code> 个 <code>siblings</code> 之一、也写了「有一个 LICENSE 文件不等于允许商用」</strong> —— <strong>文件一直在，只是没点开</strong>。</p>
 <p><strong>⚠️ 两层问题</strong>：<strong>① 「未判定」被写成了「需要更多证据」</strong> —— 准确说法是「本期没有去读」，不是「读了但判不了」；<strong>② 更值得记的是它和 059 期自己纠 058 期那条同源</strong> —— 059 期第五章纠的是「时点观测被写成状态判断」，<strong>本期这条是「未执行被写成不可判定」</strong>。<strong>两者都是把「我此刻做了什么」写成了「这件事是什么性质」。</strong></p>
 <p><strong>⚠️ 处置</strong>：<strong>本期起，凡写「未判定 / 不可判定」，必须同时写清是「读不到」还是「没去读」</strong>；<strong>前者要留 <code>HTTP</code> 状态与归档件，后者必须当场补做</strong>（新立避坑 268）。<strong>本报告 059 期把 <code>Kimi</code> 挂账一整期，成本只是漏了一次 <code>curl</code>。</strong></p>
+</details>
 </section>
-<section id="s06" class="sec">
+<section id="s06" class="sec folded">
 <h2><span class="sn">06</span><span class="h2t">避坑提示</span><span class="h2sub">（本期补入 4 条：264–267）</span></h2>
+<details class="audit-fold" id="fold-s06">
+<summary><span class="fold-t">展开：第六章 · 避坑提示</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <p><strong>264. 四层开放的第四层要拆成三问，不能只问「允不允许商用」</strong> <code>ERNIE 5.5 Flash Base</code> 的 <code>25,619</code> 字节许可与 <code>Kimi K3.1-Pro</code> 的 <code>3,077</code> 字节许可，<strong>答案完全不同</strong>：百度是「非商用免费 ／ 商用 ≤ <code>US$50M</code> 免费但须署名与通知 ／ &gt; <code>US$50M</code> 须书面授权」＋ <strong><code>Territory</code> 排除欧盟／英国／韩国</strong>；<code>Kimi</code> 是「一次性无限制授权」＋ <strong><code>MaaS</code> 营收 &gt; <code>US$20M</code> 须另签</strong> ＋ <strong>&gt; <code>1</code> 亿 <code>MAU</code> 须署名</strong>。<strong>判据：第四层至少问三遍 —— ① 允不允许商用 ② 到什么规模要另签或另行授权 ③ 在哪些地区有效；有附件的还要问 ④ 附件的修订日</strong>。<strong>「有 <code>LICENSE</code> 文件」与「读过 <code>LICENSE</code> 条款」是两件事</strong>（059 期 <code>Kimi</code> 已写过前半句，本期补上实操）。<strong>⚠️ 与 053 期 <code>AXON</code>「免费但不开源」互补：那条讲「没有许可声明」，这条讲「有许可但条款分层」。</strong></p>
 <p><strong>265. <code>createdAt</code> 与「发布日」可以差半个月；有 <code>lastModified</code> 时它更接近公开时刻</strong> <code>baidu/ERNIE-5.5-Flash-Base</code> 与 <code>-BF16</code> 的 <code>createdAt</code> 都是 <strong><code>2026-10-21</code></strong>，而 <code>lastModified</code> 是 <strong><code>2026-11-05T06:33Z</code> / <code>06:37Z</code></strong>、许可 <code>Release date: November 5, 2026</code>、官方博客与三家媒体都是 <code>11/5</code> —— <strong>相差 <code>15</code> 天</strong>。<strong>避坑 261（<code>Kimi</code> 建仓 <code>11/2</code>、公开在 <code>11/4</code> 之后）的间隔是约 <code>2</code> 天，本期是它的 <code>7</code> 倍</strong>。<strong>判据：<code>createdAt</code> 只回答「仓库何时被创建」；当 <code>lastModified</code> 与官方发布日吻合时，把它作为「公开时刻」的近似，但仍不写「精确放出时刻」</strong> —— <strong>「何时放出」依然只有两次观测的差集能答</strong>。<strong>⚠️ 不要把 <code>10/21</code> 写成「百度 <code>10/21</code> 就开源了」</strong>。</p>
 <p><strong>266. 「三档计数全同值」不等于目录没变；同名不同版本还要单列</strong> <code>OpenRouter</code> 全量 <code>454</code>、零价 <code>16</code>、<code>:free</code> <code>12</code> <strong>三个数与 059 期逐一相同</strong>，<strong>但逐条 <code>ID</code> diff 换掉 <code>4</code> 个</strong>（<code>MiniMax</code> 四个付费模型出、<code>Google</code> 两款 <code>Omni Flash</code> ＋ <code>inclusionai/ling-3.0-tiny</code> ＋ <code>openrouter/auto-code</code> 进）。<strong>判据：报「同值」之前必须先跑 <code>ID</code> 级 diff；「同值」只描述计数，不描述成员，更不描述「没有变化」</strong>。<strong>第二半：乌镇峰会稿写「混元 <code>Hy4 preview</code> 发布即全面开源」，而 <code>HF</code> 的 <code>tencent/Hy4-preview</code> 是 <code>8/27</code> 的 <code>Apache-2.0</code> 旧权重，与本周正式发布的 <code>tencent/hy4</code>（<code>OpenRouter</code> 付费档）不是一件事</strong> —— <strong>同名不同版本、不同许可状态，必须分别记</strong>（与 059 期「<code>inkling</code> 免费变体与付费版」同族）。<strong>这是 058 期「<code>B</code> 桶同值但成员换一个」、059 期「<code>4.2</code> 同值但成员换一个」的第三次变形，本期规模最大（<code>4</code> 个）。</strong></p>
 <p><strong>267. <code>pricing</code> 里的 <code>"-1"</code> 不是价格 —— 用 <code>&lt;= 0</code> 判零价会凭空多出一条免费档</strong> <code>openrouter/auto-code</code> 的 <code>pricing.prompt</code> 与 <code>completion</code> 逐字都是字符串 <strong><code>"-1"</code></strong>（动态路由计价的哨兵值），上下文 <code>2,000,000</code>。<strong>若判据写成 <code>float(price) &lt;= 0</code>，它会被算进零价档，零价就从 <code>16</code> 变 <code>17</code>、并连带污染 <code>:free</code> 的对账</strong>。<strong>判据：零价必须严格相等（<code>str(v) in ("0", "0.0")</code>），负值一律单独归「动态计价」并在正文写明，不进任何免费档计数</strong>。<strong>本报告自 001 期起用的是严格相等，本期第一次遇到能把这个约束证伪的样本，故显式立条</strong>（同族：058 期「<code>endpoints</code> 返回 <code>200</code> 但数组为空」—— <strong>都是「看起来合规的返回值，业务语义完全不同」</strong>）。</p>
 <p><strong>268. 「未判定」必须写清是「读不到」还是「没去读」</strong>（本期第五章纠错②顺带立条，不计入四条速查） 059 期把 <code>Kimi</code> 第四层挂账一整期，而证据只差一次 <code>raw/main/LICENSE</code> 请求。<strong>判据：写「未判定／不可判定」时，同句必须给 <code>HTTP</code> 状态与归档路径（读不到），或当场补做（没去读）</strong>；<strong>「需要更多证据」这种措辞一律不用</strong> —— <strong>它把「我没做」包装成了「条件不具备」</strong>。</p>
+</details>
 </section>
 <section id="s07" class="sec">
 <h2><span class="sn">07</span><span class="h2t">按任务选型速查</span><span class="h2sub">（延续 059 期 · 本期更新 6 处）</span></h2>
@@ -942,12 +1000,17 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p class="scrollhint" aria-hidden="true">↔ 表格可左右滑动</p>
 </div>
 </section>
-<section id="s08" class="sec">
+<section id="s08" class="sec folded">
 <h2><span class="sn">08</span><span class="h2t">本期信源体系更新</span></h2>
+<details class="audit-fold" id="fold-s08">
+<summary><span class="fold-t">展开：第八章 · 信源体系更新</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <ul class="ul"><li><strong>本期无补入 <code>T0–T4</code> 条目</strong>：<code>aihot.news</code> 本期实访（<code>200</code> / <strong><code>222,441</code> 字节</strong>）<strong>仍是由 <code>JS</code> 渲染的 SPA</strong>（<code>__NEXT_DATA__</code> 命中 <code>0</code>），<strong>未取得可结构化的条目列表</strong> —— 与 <code>034</code>–<code>059</code> 连续二十七期同结论。<strong>用户本轮补充的 <code>T0–T4</code> 分级清单（含 <code>https://aihot.news/</code>）已并入路由口径，但清单本身不改变「可达性」与「可解析性」这两件独立的事</strong>（一个源在清单里是 <code>T0</code>，不等于它本期可解析）。</li><li><strong>⚠️ 用户本轮点名的第二个入口 <code>aihot.virxact.com</code>（<code>AI-HOT</code> <code>168</code> 信源分级）本期一并实访</strong>：<code>200</code> / <strong><code>222,441</code> 字节</strong>，<strong>与 <code>aihot.news</code> 的落盘件 <code>cmp</code> 逐字节相同</strong>（文件名不同、内容完全一致）—— <strong>所以这两个 URL 在本期是同一份 <code>JS</code> SPA 的两个入口，不是两个独立信源，也不构成两次独立观测</strong>。<strong>台账自 <code>033</code> 期起已记「同一家的两个入口」，本期补上逐字节证据</strong>。<strong>⚠️ 处置：路由去重按「内容」不按「URL 字面」</strong> —— <code>284</code> 源清单里有 <code>5</code> 个 <code>aihot*</code> 条目（<code>aihot.html</code> / <code>aihot_virxact.html</code> / <code>aihot_news.html</code> 两条 / <code>aihot_news_home.html</code>），<strong>若按 URL 逐个计一次抓取，「<code>200</code> 源数」会被虚增 <code>4</code></strong>。<strong>清单本身仍不产生条目增删</strong>。</li><li><strong>本期补入一条「验证型信源」用法</strong>：<code>hf-mirror.com/{owner}/{repo}/raw/main/LICENSE</code> —— <strong>判定四层开放第四层最快的硬证据</strong>，本期用它一次销掉 <code>Kimi</code> 的挂账、一次给百度许可定性。<strong>与 059 期补入的 <code>api.github.com/repos/{owner}/{repo}</code> → <code>license.spdx_id</code> 互补</strong>：<strong><code>GitHub</code> 那条只适用于 <code>SPDX</code> 标准许可，凡 <code>HF</code> 标签是 <code>license:other</code> 的自定义许可，只能读 <code>LICENSE</code> 全文</strong>。<strong>⚠️ 读不到 <code>LICENSE</code> 时不要写「没有许可」，要写「<code>HTTP</code> 状态 ＋ 路径」</strong>（避坑 268）。</li><li><strong>本期 <code>57</code> 个信源 <code>000</code></strong>（占目标 <code>284</code> 的 <code>20.1%</code>）：<code>midjourney</code>、<code>minicpm</code>、<code>singularis</code> / <code>singulis</code>、<code>gresearch</code>、<code>metablog</code> / <code>meta_rss</code>、<code>gblog_rss</code>、<code>deepmind_rss</code>、<code>mistral_news</code> / <code>mistral_rss</code>、<code>xai_news</code>、<code>perplexity_blog</code>、<code>superclue</code> / <code>superclue_rss</code>、<code>nda</code>、<code>ceval</code>、<code>lmarena</code>（含 <code>image</code> / <code>video</code> / <code>webdev</code> 三个子榜）、<code>oecd_ai</code>、<code>modelstudio</code>、<code>bsky</code>、<code>importai</code>、<code>sequence</code>、<code>itjuzi</code>、<code>guixingren</code>、<code>founderparks</code>、<code>hf_blog_rss</code>、<code>hf_spaces</code>、<code>hf_papers</code> / <code>hf_papers2</code>、<code>reddit</code>（<code>r_ml</code> / <code>r_artificial</code> / <code>r_openai</code> / <code>r_claudeai</code> / <code>r_singularity</code> / <code>r_sd</code> / <code>reddit_llama</code>）、<code>zdnet_ai</code>、<code>groundnews</code>、<code>googlealerts</code>、<code>inoreader</code>、<code>feedly</code>、<code>rsshub_status</code>、<code>sevenwake</code>、<code>paperweekly</code>、<code>neurips</code> / <code>icml</code>、<code>hn_front</code>、<code>v2ex</code>、<code>axios_ai</code>、<code>reuters_ai</code>、<code>restofworld</code>、<code>bloomberg_ai</code>、<code>netease_ai</code>。</li><li><strong>⚠️ 本期对 <code>000</code> 也写空文件占位（058 期纪律的落地）</strong>：<code>curl</code> 退出码 <code>000</code> 时根本不建文件，下游 <code>wc -c</code> 会报 <code>No such file</code>，<strong>容易被误读成「并发竞态」或「文件读不到」</strong>。<strong>本期 <code>fetch060.sh</code> 对 <code>000</code> 显式 <code>: &gt; 文件</code>，所以「目标 <code>284</code> / 落盘 <code>284</code>」是真实计数</strong>（059 期是「目标 <code>284</code> / 落盘 <code>223</code>」）。<strong>⚠️ 这个口径变化不可与往期直接相减</strong> —— 落盘数变多不代表可达性变好，只是空占位也算了。</li><li><strong>本期两条「可达但读不出」的记录</strong>：<code>anthropic.com/news</code>（<code>200</code> / 大页面，<strong>仍未解析出结构化条目</strong>）、<code>aihot.news</code>（见上）。</li></ul>
+</details>
 </section>
-<section id="s09" class="sec">
+<section id="s09" class="sec folded">
 <h2><span class="sn">09</span><span class="h2t">来源与核查说明</span></h2>
+<details class="audit-fold" id="fold-s09">
+<summary><span class="fold-t">展开：第九章 · 来源与核查说明</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <p><strong>核查方法</strong>：每个数字都来自本期实际请求的页面或接口（<code>tmp_060/</code> 与 <code>tmp_060_s/</code> 两个目录下均有落盘件）；<strong>逐字短语命中数一律用「剥标签后的纯文本」复核</strong>（避坑 258）；<strong>正文所有 <code>id</code> / 价格 / 日期字段直接取自 <code>JSON</code>，不做人工转写</strong>；<strong><code>HTML</code> 落盘后先查 <code>&lt;/html&gt;</code> 收尾标记再谈比对</strong>（避坑 263）—— 本期 <code>antigravity.google/pricing</code> 的 <code>137,595</code> 字节、<code>ollie.ai</code> 三页、<code>ernie.baidu.com</code> 两页均完整收尾。</p>
 <p><strong>本期一手清单（按可靠性排序）</strong>：</p>
 <div class="tblwrap">
@@ -966,9 +1029,12 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p><strong>本期未核到 / 受阻（按类型）</strong>：</p>
 <ul class="ul"><li><strong><code>5xx</code> / 连接中断</strong>：<code>tisi</code>（<code>503</code>）、<code>gsxt</code>（<code>521</code>）、<code>hf_trending</code>（<code>400</code>）、<code>ainews_rss</code> / <code>eulex</code>（各 <code>202</code>）。</li><li><strong><code>403</code>（12 个）</strong>：<code>msblog_ai</code>、<code>ms_ai_rss</code>、<code>reflection</code>、<code>scale_leaderboard</code>、<code>sec_edgar</code>、<code>zhihu</code>、<code>geekpark</code>、<code>stratechery</code>、<code>neuron</code>、<code>producthunt_ai</code>、<code>theinformation</code>、<code>particle</code>。</li><li><strong><code>404</code>（8 个）</strong>：<code>anthropic_rss</code>、<code>ant_group</code>、<code>runware_sync3</code>、<code>runware_kling</code>、<code>tbench</code>、<code>baoyu</code>、<code>apple_ml_rss</code>、<code>ibm_rss</code>；<strong>专用核验另有</strong> <code>antigravity.google/models</code>（连续第 <code>9</code> 期）、<code>docs.somark.ai/free-tier-rules.md</code>（连续第 <code>6</code> 期）、<code>api.github.com/repos/Tencent-Hunyuan/Hy4</code>（该仓库不存在）。</li><li><strong><code>429</code>（限流）</strong>：<code>venturebeat_rss</code>、<code>semantic_scholar</code>、<code>hf-mirror.com/api/models/moonshotai/Kimi-K3.1-Pro</code>。</li><li><strong>其他</strong>：<code>acl</code> / <code>gblog_ai</code>（<code>301</code>）、<code>paperswithcode</code>（<code>302</code>）、<code>replicate</code>（<code>401</code>）、<code>caict</code>（<code>412</code>）、<code>gh_unsloth_gguf</code>（<code>422</code>）、<code>op_webai_doc2</code>（<code>451</code>）、<code>arstechnica_ai</code> / <code>huxiu</code>（<code>405</code>）。</li></ul>
 <p>*本期完。*</p>
+</details>
 </section>
-<section id="s04" class="sec">
+<section id="s04" class="sec folded">
 <h2><span class="sn">04</span><span class="h2t">限时活动与截止时间表（正文之后 · 11/6 13:46 复核 · 过期 &gt;7 天已归档）</span></h2>
+<details class="audit-fold" id="fold-s04">
+<summary><span class="fold-t">展开：第四章 · 权益台账与脚注</span><span class="fold-hint">默认收起 · 点此展开</span></summary>
 <blockquote class="bq"><p><strong>本章自 047 期修订起移到正文九章之后</strong> —— 前面九章约 2.3 万字可以连贯读完，本章与《常驻权益总账》作为参考资料放在后面。<strong>本章即往期所称「第四章」，编号与全部历史引用不变。</strong></p><p></p><p><strong>本章只留两类</strong>：<strong>4.1 有确切截止日的限时动作</strong> ／ <strong>4.2 无截止日但本期有变化</strong>。<strong>未变动的常驻权益不再逐期重印</strong>，全量 164 条移入《<a href="常驻权益总账.md">常驻权益总账</a>》；<strong>已过期 &gt;7 天且已收口</strong>的条目移入归档（<code>.workbuddy/data/deadline_archive.md</code>）—— 规则见脚注 ④。</p><p></p><p><strong>049 期起第四章表体已瘦身</strong>：<strong>每行只留「谁 / 到什么时候 / 要不要动手」+ 一句边界</strong>，<strong>被裁掉的长论证一字未删地存放在 <a href="details.html"><code>details.html</code></a>（《第四章表体明细附录》，本期 98 行）</strong> —— <strong>「表体里没有」不等于「没有写过」。</strong></p></blockquote>
 <h3 id="h3-26"><span class="h3n">4</span>1 限时动作（有确切截止日 · 55 条）</h3>
 <div class="tblwrap scrolly">
@@ -1102,6 +1168,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p><strong>⚠️ 下一轮强制动作（<code>061</code> 期出刊前必须逐条过）</strong>：<strong>① <code>Vercel Labs fx</code> 归类修正</strong>（<strong>本期新立、优先于其余各条</strong>）—— 在 <code>gen_table061.py</code> 里把该行 3 处 059 期「本期」重贴为 <code>059 期</code>，让 <code>CHANGE_RE</code> 不再命中，预期 <code>4.2</code> 出 <code>1</code> 条毕业；<strong>这是 ⑤① 的销项动作，不是可选项</strong> <strong>② <code>Ollie</code> 关停后续</strong>：<code>11/6</code> 是告别信逐字写明的生效日，<strong>下期核 <code>/farewell</code>、<code>/pricing</code>、<code>/</code> 三页是否已下线</strong>；<code>Free</code> 档是否随服务一并停 —— <strong>官方从头到尾没有逐字写，连续第 <code>3</code> 期无答案</strong> ③ 两个 <code>inkling:free</code> 是否回归：<strong>本期首次给出「没有」的观测</strong>（两个 <code>/llms.txt</code> 各 <code>404</code> / <code>10</code> 字节、<code>/endpoints</code> <code>200</code> 但 <code>"endpoints": []</code>）—— <strong>⚠️ 别把「端点数组为空」写成「模型条目已下架」</strong> ④ <code>stealth/crouton-alpha</code> 第 <code>5</code> 天是否还在 ＋ <code>OpenCode</code> 那份 <code>crouton-alpha-free</code> 会不会先消失（<strong>本期两站仍同步，第 <code>4</code> 天</strong>）⑤ <code>Runware</code> 促销数组本期 <code>18</code> 条（<code>endsAt</code> 命中 <code>18</code>），核 <code>11/10</code> 两条、<code>11/15</code>、<code>11/19</code> 是否按时收口；<strong><code>pruna-p-video-upscale</code> <code>11/8</code> 是本期最近的到期项</strong> ⑥ <code>Kimi K3.1-Pro</code> <code>Highspeed</code> 版权重：<strong>本期 <code>?search=Kimi-K3.1-Highspeed</code> 返回 <code>[]</code>（<code>2</code> 字节，已归档）</strong> —— 下期若仍零命中，正文写「官方名下无此仓库」，不写「还没放出」 ⑦ <strong><code>ERNIE-5.5-Flash-Base</code> 首次复核</strong>：<code>Exhibit A</code> 的 <code>Last revised: November 6, 2026</code> 会不会再变、<code>Territory</code> 排除清单是否调整、两个仓库的 <code>lastModified</code> 是否继续同步 ⑧ <code>tencent/hy4</code> 在腾讯自有平台有没有免费档（<strong>连续第 <code>3</code> 期未复核</strong>）⑨ <code>AXON</code> 许可证与版本号（<strong>连续第 <code>3</code> 期未放出</strong>，<code>20,111</code> 字节逐字节同）⑩ 商汤 <code>6.8 Flash</code> 官方「限时免费」截止日（<strong>第 <code>4</code> 期</strong>，<code>限时</code> / <code>免费</code> 各 <code>0</code> 命中，归档件已留）⑪ <code>freellm.net</code>：<strong>本期已按 059 期约定改口径，正文直接写「该站已停止维护该字段」</strong> —— 下期不再逐期计数，只在该字段真的变动时记一条 ⑫ <code>Antigravity</code> <code>/docs/plans</code> 里 <code>Basic weekly rate limits</code> 的具体数字（<strong>连续第 <code>4</code> 期未追</strong>）＋ <code>/models</code>（<strong>连续第 <code>9</code> 期 <code>404</code></strong>）⑬ 老混元 <code>Q04</code>（<strong>连续第 <code>39</code> 期未决</strong>）⑭ <code>豆包工作</code>（<strong>连续第 <code>16</code> 期未复核</strong>）、<code>国家超算互联网</code>（<strong>连续第 <code>10</code> 期</strong>）⑮ <code>Mistral</code> 全站（<strong>连续第 <code>21</code> 次 <code>000</code></strong>）、<code>x.ai/news</code>（本期 <code>000</code>）、<code>platform.reflection.ai</code>（<strong>连续第 <code>23</code> 期 <code>403</code></strong>）、<code>platform.openai.com/docs/models</code>（<strong>连续第 <code>14</code> 期 <code>403</code></strong>）、<code>next.opera.com/web-ai/</code>（<strong>连续第 <code>11</code> 期 <code>451</code></strong>）、<code>docs.somark.ai/free-tier-rules.md</code>（<strong>连续第 <code>6</code> 期 <code>404</code></strong>）⑯ <strong>把本期「零命中」结论涉及的页面全部入档</strong>（清单见第九章，避坑 260 的落地动作，每期必做）。</p>
 <p><strong>⑤ 060 期的工程纪律（本期实测，都写在这里）</strong>：</p>
 <ul class="ul"><li><strong>① ⚠️ 继承行里的「本期」会过期，但 <code>split_ledger.py</code> 的 <code>CHANGE_RE</code> 只看字面</strong> —— <code>CHANGE_RE = re.compile(r"(本期|060\s*期)")</code>，<strong>它不判断这个「本期」是哪一期的</strong>。<strong>060 期 <code>Vercel Labs fx</code> 行是 059 期原文照搬</strong>，行内还留着 3 处 059 期的「本期」（活动名 <code>本期由 InfoQ … 带出</code>、状态列 <code>不是本期新品</code> 与 <code>本期只是首次登记</code>），<strong>结果被判成「本期有变化」，没有按 059 期 <code>AXON</code> 的先例毕业进总账</strong>。<strong>这就是 ③ 里 <code>4.2</code>「出 <code>0</code> 条」的全部原因</strong> —— <strong>不是本期真的没有条目毕业，是有一条该毕业的被一个过期措辞钩住了</strong>。<strong>⚠️ 处置：不在已固化的产物上重跑 <code>split_ledger.py</code></strong>（它重建 <code>intro</code> 会丢掉 049 期瘦身导语、<code>post</code> 会带出重复的 <code>pointer</code> 段 —— <strong>本期的修补动作本身会制造两处新错</strong>），<strong>改为在脚注点名 ＋ 列为 061 期强制动作①</strong>（<strong>新立避坑 269：继承行的「本期」必须随期号重贴</strong>）。<strong>这与 059 期「桶是筛子，不是结论」同族：这次是「正则也是筛子」</strong> —— <strong>都是把一个按字面工作的机制，当成了按语义工作的机制。</strong></li><li><strong>② ⚠️ <code>createdAt</code> 与 <code>lastModified</code> 可以差 <code>15</code> 天，脚本层不许把 <code>createdAt</code> 写进截止列</strong> —— 百度两个仓库的 <code>createdAt</code> 都是 <code>2026-10-21</code>，<code>lastModified</code> 是 <code>2026-11-05T06:33Z</code> / <code>06:37Z</code>，许可逐字 <code>Release date: November 5, 2026</code>，官方博客与三家媒体都是 <code>11/5</code> —— <strong>三者一致指向 <code>11/5</code>，只有 <code>createdAt</code> 指向 <code>10/21</code></strong>。<strong>060 期新增行的截止列写的是 <code>无结束日（license:other 自定义许可，无活动期）</code></strong>；<strong>若误用 <code>createdAt</code>，<code>D</code> 桶会少 <code>1</code> 条、<code>A</code> 桶会凭空多一条「已过 <code>16</code> 天」，并且本期头条的「开源日」会被提前半个月</strong>（避坑 265 在脚本层的落法）。</li><li><strong>③ ⚠️ 零价判据必须严格相等，不能用 <code>&lt;= 0</code></strong> —— <code>tmp_060_diff.py</code> 的 <code>zero()</code> 写成 <code>str(v) in ("0", "0.0")</code>；<code>openrouter/auto-code</code> 的 <code>pricing.prompt</code> 与 <code>completion</code> 逐字都是字符串 <code>"-1"</code>（动态路由计价哨兵），<strong>放宽成 <code>float(price) &lt;= 0</code> 会让零价 <code>16 → 17</code> 并连带污染 <code>:free</code> 对账</strong>（避坑 267）。<strong><code>gen_table060.py</code> 对这个值有逐字断言</strong>：第一次写 `<code> </code>"-1"<code> </code><code> 时断言失败，回读落盘文本才发现真值是 </code><code> </code>"-1"/"-1"<code> </code>` —— <strong>断言本身也要拿落盘文本核对，不能凭记忆写短语</strong>（053 期「回读再断言」的第二次实证）。</li><li><strong>④ ⚠️ 「零命中」的结论必须连归档件一起留</strong>（避坑 260）—— 本期清单：<code>tmp_060_s/hf_search_highspeed.json</code>（<code>[]</code> / <code>2</code> 字节）、<code>inkling_free_llms.txt</code> 与 <code>inklingsmall_free_llms.txt</code>（各 <code>404</code> / <code>10</code> 字节）、<code>inkling_free_endpoints.json</code>（<code>200</code> / <code>"endpoints": []</code>）、<code>sensetime_news.html</code>（<code>限时</code> / <code>免费</code> 各 <code>0</code>）、<code>scnet.html</code>、<code>xai_news.html</code> 与 <code>mistral_news.html</code>（<code>000</code> 空占位）。<strong>⚠️ <code>curl</code> 返回 <code>000</code> 时根本不建文件</strong> —— <code>fetch060.sh</code> 显式写空占位，否则下游会把「没有文件」误读成「文件读不到」，或把并发竞态当成零命中（058 期纪律）。</li><li><strong>⑤ ⚠️ <code>slim_table.py</code> 只留状态列第一句，当期事实必须 <code>set_status()</code> 整体改写</strong> —— 060 期 <code>gen_table060.py</code> 的 <code>12</code> 条改写<strong>全部</strong>用 <code>set_status()</code>，<strong>没有一条</strong>用 <code>append_note()</code>；两轮 <code>slim</code> 收敛后才取分类统计（055 期纪律）。<strong>这是 059 期纪律⑥第一次在下一期完整复用，且 <code>0</code> 处返工</strong> —— <strong><code>lint_table.py</code> 实跑 <code>98</code> 行、<code>R1–R4</code> 全 <code>0</code>、<code>VERDICT: CLEAN</code></strong>。</li><li><strong>⑥ ⚠️ 附录当期段的指针标签会停在上期</strong> —— <code>patch060_pointers.py</code> 把 <code>## 第 060 期</code> 段内 <strong><code>50</code> 处</strong> <code><a href="details.html">附录 059</a></code> 重贴为 <code><a href="details.html">附录 060</a></code>、历史段 <strong><code>55</code> 处</strong>未回改；正文 <strong><code>98</code> 处</strong> <code>〔附录 060〕</code> 链接化。<strong>两处计数都从落盘文件实算</strong>（脚本里对「命中 <code>0</code> 条」显式断言失败，避坑 257），<strong>不是从上期抄</strong>。<strong>⚠️ 页内不许再出现自指链接</strong>（<code>build_quick.py</code> 出口对 <code>href="index.html"</code> 直接 <code>exit 1</code>）。</li></ul>
+</details>
 </section>
   </main>
 </div>
@@ -1262,6 +1329,11 @@ mark.hl.cur{background:var(--accent); color:#fff}
       node.parentNode.replaceChild(frag,node);
     });
     qn.textContent=marks.length;
+    /* 折叠区内的命中也要看得见：命中即展开所在章节（toggle 事件会补做入场动画与顶栏量高） */
+    marks.forEach(function(m){
+      var d=m.closest?m.closest("details.audit-fold"):null;
+      if(d) d.open=true;
+    });
     if(marks.length){ cur=-1; jump(1); }
     lastQ=v;
   }
@@ -1335,6 +1407,44 @@ mark.hl.cur{background:var(--accent); color:#fff}
       document.body.classList.remove("nav-open");
       menuBtn.setAttribute("aria-expanded","false");
     }
+  });
+
+  /* ---------- 审计层折叠：全部展开 / 目录跳转 / 搜索 / 打印 ----------
+     折叠区在 display:none 里时，IntersectionObserver 不会给 .rise 加 .in，
+     顶栏量高也会把隐藏的 .chips 读成 0 —— 展开时两样都要补做。 */
+  var folds=[].slice.call(document.querySelectorAll("details.audit-fold"));
+  function openFold(id){ folds.forEach(function(d){ if(!id||d.id==="fold-"+id) d.open=true; }); }
+  document.querySelectorAll("[data-open]").forEach(function(a){
+    a.addEventListener("click",function(){ openFold(a.getAttribute("data-open")); });
+  });
+  document.querySelectorAll(".toc-a, #topnav a").forEach(function(a){
+    a.addEventListener("click",function(){
+      var h=a.getAttribute("href")||"";
+      if(/^#s\d{2}$/.test(h)) openFold(h.slice(1));
+    });
+  });
+  var foldAll=document.getElementById("foldAll");
+  if(foldAll) foldAll.addEventListener("click",function(){
+    var allOpen=folds.every(function(d){return d.open;});
+    folds.forEach(function(d){ d.open=!allOpen; });
+    foldAll.textContent=allOpen?"展开全部章节":"收起全部章节";
+    foldAll.setAttribute("aria-expanded",allOpen?"false":"true");
+  });
+  folds.forEach(function(d){
+    d.addEventListener("toggle",function(){
+      if(!d.open) return;
+      d.querySelectorAll(".rise:not(.in)").forEach(function(el){el.classList.add("in");});
+      syncMetrics();
+    });
+  });
+  var printState=[];
+  window.addEventListener("beforeprint",function(){
+    printState=folds.map(function(d){return d.open;});
+    folds.forEach(function(d){d.open=true;});
+    document.querySelectorAll(".audit-fold .rise:not(.in)").forEach(function(el){el.classList.add("in");});
+  });
+  window.addEventListener("afterprint",function(){
+    folds.forEach(function(d,i){ d.open=printState[i]; });
   });
 
   /* ---------- 回到顶部 ---------- */
