@@ -2344,3 +2344,47 @@ README `minimax-community`）—— **043/044 两期「权重未见」判定错�
 - **验证**：`verify_web` ALL GREEN（表格 `14/14`、保真缺失 `0`、未闭合标签 `0`、`section=10 h2=10 h3=19`）；**拿 `git show HEAD:` 的改前 HTML 逐 section 比对，剥掉新增的卡片 / `details` / `summary` 后 `10` 个 section 逐字一致 = 正文零丢失**；`build_site.sh` 三守卫 ALL GREEN · `check_tables` / `lint_table --strict` / `check_frozen` 高危 0 / `chk_eol` 全绿 · 首页与极速同字节。
 - **⚠️ 预估偏差要如实记**：上轮 A 案写「首屏降到 2 千字级」是**算错**了（按 65% 降幅误估）。实测改前 `56,366` 字 → 首屏 `19,544` 字（**降 65.3%**），剩下的是本期新闻本体 `1.6` 万字 + 摘要 `2.4` 千字，**折掉它们等于把完整日报变成目录页**；卡片本身 `218` 字才是 30 秒量级，极速入口已在卡上。要再降只能走 B/C。
 - **061 期无需新增维护**：卡片全自动取数、折叠自动按 `sNN` 命中，不用往台账加字段。**但 md 的章节汉字编号不能变**（`FOLD_SECTIONS` 靠 `sNN` 认人）。历史 `59` 期 HTML 本次**未批量重建**，各自重跑 `build_web.py` 即自动带上卡与折叠。另：`061` 期出刊后仍须手动 `commit + push + 线上核对`（本轮仍未授权把 push 固化进流水线）。
+
+---
+
+## 第 061 期 · 2026-11-07（窗口 北京 11/6 13:46 → 11/7 09:20，约 19.6h）
+
+### 窗口与抓取
+- 主抓取 `fetch061.sh`：284 源（与 060 同一清单），`xargs -P 16`；**落盘 284 / 200 191 / 000 59（20.8%）**，`000` 写空占位。
+- 专用核验 `fetch061_special.sh`：覆盖 060 期 16 条强制动作 + 目录 diff + `HF` 的 `author=` 全量 + `Ripple` 三件套。
+- 窗口解析 `tmp_061_window.py`：282 个抓取件 / 3,139 条带时间戳条目 / **窗口内 98 条**（`hnrss` 20、`infoq` 11、`lesswrong` 10、`techcrunch` 10、`verge` 9、`aws_ml` 8、`leiphone` 8、`decoder` 7，其余 1–3）。
+
+### 头条与四条硬条目
+1. **豆包工作个人版 `11/6` 起取消 `5` 小时额度限制** —— 雷峰网 `11/6 16:29` 首发，新京报/澎湃/每经同稿「记者获悉」；**官方两页（`volcengine.com/product/doubao-work` `169,559` B、`doubao.com/work` `57,171` B）`5小时`/`周额度`/`额度`/`免费` 各 `0` 命中**。**口径边界：取消短周期封顶 ≠ 额度变多，周额度按套餐不变。**
+2. **`Inkling 2 Small`（594B/17B，`256K`）被写成「西方 open-weight 第一」而权重未放** —— 官方只在 `Tinker` 上专有提供（页内 `free`/`credit` 各 `0` 命中）；`HF` 的 `thinkingmachines` 名下 `6` 个仓库**无此名**；媒体逐字 `weights under an Apache license to follow`；**与 7 月 `Inkling-Small`（276B/12B、`Apache-2.0`）几乎同名、状态相反**。
+3. **`OpenRouter` `454 → 460`（`+6`）、零价 `16 → 16`、`:free` `12 → 12`，换人发生在免费档** —— 出 `nvidia/nemotron-3.5-content-safety:free`（**目录已无、`/endpoints` 仍 `200` 且 `[]`**），进 `liquid/lfm-3-1.7b:free`（`262,144` 上下文、`provider: Liquid`、`created` 北京 `11/7 07:57`；描述逐字 `Prompts and outputs may be retained and used...`）。
+4. **`Ripple-65B Preview` 补登** —— `Apache-2.0`（`11,357` B 全文）、`65B` 稠密、`12T` tokens、`1M` 上下文、`TerminalBench 2.1` `80.52`；`createdAt 11/4`、`OpenRouter` 上架 `11/5 03:03`（付费 `$0.2`/`$0.6`）；**058–060 三期漏登**。
+
+### 060 期强制动作逐条答案
+① **`Vercel Labs fx` 归类修正已销项**（`gen_table061.py` 把行内 `3` 处 059 期「本期」重贴为「059 期」，`split_ledger` 后毕业进总账，`常驻未变 121 → 122`）② `Ollie` 关停日次日**三页仍逐字节同值在线**（`39,747`/`41,791`/`107,182`），`Free` 档是否停服**连续第 4 期无逐字口径** ③ 两个 `inkling:free` **连续第 2 期无回归** ④ `crouton-alpha` 第 `5` 天仍在、`llms.txt` `4,021` 同值、`OpenCode` 那份也在 ⑤ `Runware` `18 → 19` 条（新增 `minimax-h3-highspeed-lite-promo` 至 `12/31`），仍在售 `7` 条 ⑥ `Kimi K3.1-Highspeed` **连续第 2 期 `[]`** ⑦ `ERNIE` 首次复核：**许可三处关键字段全未变**（`25,619` B、`Exhibit A` 仍 `11/6`、`Territory` 未动、`lastModified` 仍 `11/5`），`downloads 13→526` / `11→241` ⑧ `tencent/Hy4` 仓库 **`404`**（不存在）⑨ `AXON` `20,111` 逐字节同（连续第 4 期）⑩ 商汤 `news` `113,853`（`−1,392`）、`限时`/`免费` 仍各 `0` ⑪ `freellm` 仍停 `2026-10-27`（第 10 期，按新口径只写一句）⑫ `Antigravity` 定价页**本期 `000`**（**不写「同上期」**）＋ `/models` 第 10 期 `404` ＋ `/docs/plans` `8,272` B 但关键词 `0` ⑬ `豆包工作订阅` 仍无一手 ⑭ `国家超算` 第 11 期、`Mistral` 第 22 次 `000` ⑮ 受阻项全部入档 ⑯ **零命中归档件逐个 `ls` 过**。
+
+### 本期纠错
+1. **`AI-HOT` 连续 `27` 期「未取得可结构化条目」 —— 错的**：判据只用 `__NEXT_DATA__`（`0` 命中），而 `<article>` 一直有 `20` 个；**060 期自己的归档件 `tmp_060_s/ai_hot.html` 同样是 `20` 个**。本期起按 `<article>` 解析（含作者、`HH:MM`、摘要、`AI` 评分），**但时间无日期，只当热榜用、不算窗口**。
+2. **`Ripple-65B` 三期漏登** —— 增量 diff 只核「`ID` 进出」与「零价/`:free` 两桶」，**付费但开放权重的条目从没进过视野**；下轮强制动作新增「每月一次付费开放权重全量扫」。
+
+### 规模与对账
+- 表体 **221** 行 ＝ `219` ＋ 补入 `2` − 移出 `0`；`4.1` `55` / `4.2` `44`（**出 `1`（fx 毕业）进 `2`**）/ 常驻未变 `122` / 总账 `166`。
+- 色标 ⚪2/🔴5/🟢152/🟡22/🟠7/⚠14/空19 = 221；`classify()` crit5/live169/over2/pending23/unclear16/switch6 = 221（**`🟢` 与 `live` 各 `+2`，正是两条新增行**）。
+- `check_deadlines` **A25 + B11 + C0 + D178 + E7 = 221**：`A +2` 与 `B −2` 是两条 `Ollie` 跨基准日；`D +2` 正是两条新增行。⚪ 与 `C` 的差额仍 `2`（同一对，六期连续）。
+
+### 本期实测的工程坑
+- **① 过期措辞钩住分类正则 —— 结清了**：`fx` 行 `本期`→`059 期`，`4.2` 真出 `1`、真进 `2`，`44 = 43 − 1 + 2` 可逐项对上。**但「行数变了」本身仍不说明任何事，必须报「出谁、进谁」。**
+- **② `:batch` 不等于半价**：`78` 个 batch `SKU` 里 `0.5×` 是常态，但 `moonshotai/kimi-k3:batch` 是基价 `11.875` 倍、`z-ai/glm-5.3:batch` `6.44` 倍。**不能靠后缀推价格方向。**
+- **③ 同一种「空」对应两种状态**：`"endpoints": []` 既可能「条目在、没端点」（两个 `inkling:free`），也可能「条目已从目录移除、端点记录还在」（`nemotron-safety:free`）。**报「下架」必须同时给「目录有没有」与「端点数组长度」。**
+- **④ `search=` 是模糊匹配，不能证明「官方有仓库」**：`?search=Ling-3.2` 返 `13` 条全是 2024–2025 的第三方 `Llama-3.2` 微调；判「官方有没有」要用 `author=` 全量（`inclusionAI` 名下最新是 `10/27` 的 `Ling-3.1-flash-1019`）。
+- **⑤ 新增行截止列不许写 `createdAt`**：`Ripple` 的 `11/4`/`11/5`/`11/6`/`11/7` 四个时间点四个含义，截止列写「无结束日」；误写会把「补登」读成「窗口内发布」，并让 `A` 桶凭空 `+1`。
+- **⑥ Pages 构建延迟 1–2 分钟**：首页首轮仍 060（`Last-Modified` 旧值、`Content-Length` 与新版同值纯属巧合），等约 45 秒再抓即 061 —— **别急着判定「没推上去」**。
+
+### 守卫（全绿）
+- `lint_table --strict` **CLEAN（99 行 / R1–R4 全 0）**；`verify_web` **ALL GREEN（17 表 / 99 状态格 / 缺失片段 0）**；`check_tables` **ALL GREEN（17 表异常 0）**；`check_frozen` **🔴 0**（引用 `29`）；`build_site.sh` **三守卫 ALL GREEN**（五页同构、`index.html == quick.html` `43,565` B、基准日 `2026-11-07`、`archive.html` 收录 `61` 期）；`chk_eol` exit 0。
+- 产物：`AI免费内容与权益速递-第061期-2026-11-07.md`（十节）/ `.html` `238,198` B；`index.html` = `quick.html` `43,565` B；`archive.html` `42,575` B；`standing.html` `352,483` B；`details.html` `2,412,512` B。
+
+### 发布
+- `git add -A` → commit **`019d907`** → `git push origin main` **`af13fc0..019d907` 一次成功**。
+- 线上核对（`Accept-Encoding: identity`，`--compressed` 本机 `libcurl` 不支持）：**五页逐字节 ALL GREEN**（首页 / 日报 / `archive` / `standing` / `details`）。
+- **`062` 期强制动作 17 条已写入 061 期脚注③**；**最紧的五条**：① `AI-HOT` 算出「`20` 条里几条落在窗口内」（需另建近似法，别拿 `HH:MM` 当日期）② `Inkling 2 Small` 的 `Apache 2.0` 权重是否真「下周」放 ③ `nemotron-safety:free` 彻底移除还是重上架（补 `llms.txt`）④ `liquid/lfm-3-1.7b:free` 能活几期 ＋ 留存条款是否改 ⑤ `iceman-free` 是否长出厂商说明。
