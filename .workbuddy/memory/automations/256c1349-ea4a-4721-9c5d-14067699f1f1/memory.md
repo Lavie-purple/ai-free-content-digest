@@ -2388,3 +2388,62 @@ README `minimax-community`）—— **043/044 两期「权重未见」判定错�
 - `git add -A` → commit **`019d907`** → `git push origin main` **`af13fc0..019d907` 一次成功**。
 - 线上核对（`Accept-Encoding: identity`，`--compressed` 本机 `libcurl` 不支持）：**五页逐字节 ALL GREEN**（首页 / 日报 / `archive` / `standing` / `details`）。
 - **`062` 期强制动作 17 条已写入 061 期脚注③**；**最紧的五条**：① `AI-HOT` 算出「`20` 条里几条落在窗口内」（需另建近似法，别拿 `HH:MM` 当日期）② `Inkling 2 Small` 的 `Apache 2.0` 权重是否真「下周」放 ③ `nemotron-safety:free` 彻底移除还是重上架（补 `llms.txt`）④ `liquid/lfm-3-1.7b:free` 能活几期 ＋ 留存条款是否改 ⑤ `iceman-free` 是否长出厂商说明。
+
+---
+
+## 第 062 期 · 2026-11-08（窗口 北京 11/7 09:20 → 11/8 19:15，约 33.9h）
+
+### 窗口与抓取
+- **隔日出刊，窗口跨美西三个日历日**（起 `11/6 17:20 PT` / 止 `11/8 03:15 PT`，冬令时 `PST` `UTC−8`）。**第一次出现「起止不在同一天、中间夹一整个美西工作日」** —— 本期没有任何一条美国厂商的发布能靠「窗口内」判定，只能靠页面自身日期字段（已写进刊头）。
+- 主抓取 `fetch062.sh`（由 `fetch061.sh` sed 生成，`D=tmp_062`）：`284` 源，`xargs -P 16`；**清单 `284` 行 / 唯一文件名 `283` 个 / 实际落盘 `281` 个**（`200` `192` = `67.6%`、`000` `56` = `19.7%`）。
+- 专用核验 `fetch062_special.sh`：061 期 17 条强制动作 + 目录 diff + `author=` 全量 + `Ripple` 仓库。
+- 窗口解析 `tmp_062_window.py`：`281` 抓取件 / `3,119` 条带时间戳条目 / **窗口内 `61` 条**（`hnrss 20, lesswrong 10, decoder 9, qbitai 8, infoq 5, techcrunch 3, verge 2, wired 2, latentspace 1, simon 1`）。
+
+### 头条与硬条目
+1. **`Inkling 2 Small` 已经能免费用了，但权重没放（免费档长在分发层）** —— `OpenCode zen` 价格表三列逐字 `Free / Free / Free`（输入 / 输出 / 缓存读），条款逐字 `free on OpenCode for a limited time. Its provider retains your data and may use it for model training`，附**十个地区排除**（欧盟、冰岛、列支敦士登、挪威、古巴、伊朗、朝鲜、俄罗斯、乌克兰、委内瑞拉）。**三处「不能免费」同时成立**：`HF` `author=thinkingmachines` 仍 `6` 仓（`2,668` B，无 `Inkling-2-Small`）；`OpenRouter` `461` 条里 `thinkingmachines` 只有 `inkling` / `inkling-small` 与 `:batch`；`Tinker` 页 `free` / `credit` **各 `0` 命中**。**结论＝用得上、拿不走、还要交数据。**
+2. **`OpenRouter` 三个计数全同值、成员整族消失**：`460 → 461`（`+1`）、零价 `16 → 16`、`:free` `12 → 12`；消失 `Inception` 三条（`mercury-2` / `mercury-2.5` / `mercury-3`，`inception` 在 `461` 条里 `0` 命中），新增 `4` 条全是 `:batch` `SKU`。**`+1` 是 4 进 3 出的净值。**
+3. **`OpenCode` 免费清单退一个进一个**：三套口径 `12/12/13` 全同值；出 `Pulse Alpha Free`（弃用日 `November 6, 2026`），进 `Inkling 2 Small Free`。**页面 `54,653 → 99,283`（`+44,630`）涨的全是条款与地区段落，不是模型数。**
+4. **`Ripple-65B` 两天 `downloads 2,013 → 5,087`（`+152.6%`）、`likes 333 → 382`**，两个变体仓库（`-NVFP4` / `-DFlash2`）都已开放。
+5. **`freellm.net` 停更 `12` 天后复活**：`170,714` B，`531+ models checked daily`（061 期 `535+`）、`240 verified via live API`（`239`）、`Latest free LLM API model update: 2026-11-8`（`2026-10-27`）、`checked 2026-11-8`。
+
+### 061 期强制动作逐条答案
+① `AI-HOT` 按 `<article>` 解析出 `20` 条，**只有 `3` 条可交叉定日**（时间只有 `HH:MM`、无日期、排序非单调），其余 `17` 条不参与计数 ② `Inkling 2 Small` 权重**仍未放**（`HF` 仍 `6` 仓）③ `nemotron-safety:free` 未回归 ④ `liquid/lfm-3-1.7b:free` 仍在（`12` 条 `:free` 成员两期未换）⑤ `iceman-free` 隐身标注**页面本来就有** → 纠错① ⑥ `crouton` 第 `6` 天仍在（`llms.txt` `4,021` 同值）⑦ `Runware` `19 → 19` 条、新增 `0`、消失 `0`、`endsAt` 变化 `0`，仍在售 `7` / 已过 `12` ⑧ `Kimi K3.1-Highspeed` 第 `3` 期空 ⑨ `ERNIE` 第 `2` 次复核许可三字段仍未变 ⑩ `AXON` `20,111` 逐字节同（第 `5` 期）⑪ 商汤 `news` `113,853` 同值 ⑫ `Antigravity` 定价页**本期拿到**（`137,564` B）⑬ 豆包工作订阅第 `18` 期无一手 ⑭ 国家超算第 `12` 期、`Mistral` 第 `23` 次 `000` ⑮ 受阻项全部入档 ⑯ 零命中归档件逐个 `ls` 过。
+
+### 本期纠错与口径收紧
+1. **纠错①**：061 期「`iceman-free` 页面没有隐身标注」**写错** —— 页面当时就写着 `Iceman Free is a stealth model`。
+2. **纠错②**：`freellm.net` 060 期「该站已停止维护该字段」→ 改为「停更 `12` 天后已恢复」。**一次观测不足以立长期结论。**
+3. **口径收紧**：`Antigravity` `pricing` 逐字有 `$0/month` / `Unlimited Tab completions` / `Unlimited Command requests` / `Basic weekly rate limits *`，**官方就是不给数字** → 定「不再追问」，不再每期写「仍未公布」。
+
+### 新增避坑 274–277
+- **274**：`-free` 后缀**不是**免费档判据 —— 正则命中 `13` 个 `ID`，多出的 `tml-free` 是条款 `PDF` 文件名子串（`tml-free-research-api-tier-terms-of-service.pdf`）。**与 058「命中 0 条不是通过」互为镜像：命中 13 条也不是 13 个。**
+- **275**：**字节数相同可能内容不同、`md5` 不同可能内容相同** —— `tinker.html` 两期同为 `602,272` 而 `md5` 不同（差 `Cloudflare` 邮箱混淆串 `/cdn-cgi/l/email-protection#…`、`data-cfemail="…"`）；`runware` 反过来 `758,198 → 758,197` 而 `19` 条促销逐字段全同。**「同值」结论一律走 `md5`；不同必须做结构 diff 并说明差在哪个片段。**
+- **276**：`AI-HOT` `20` 条 `<article>` 只有 `3` 条可交叉定日，**其余 `17` 条不参与计数**。
+- **277**：`hf-mirror` 的 `search=` 是模糊匹配（`search=Inkling-2` 返 `20` 条全为第三方），**判「官方有没有仓库」只能取 `author=` 全量**。
+
+### 规模与对账
+- 表体 **222** ＝ `221` ＋ 补入 `1` − 移出 `0`；`4.1` `55` / `4.2` `46`（**出 `0` 进 `2`**）/ 常驻未变 `121` / 总账 `167`。`Counter({3: 222})` 字段数全 `3`。
+- **`4.2` 的 `44 → 46` 成员 diff**：进 `Inkling 2 Small Free`（新登记）＋ `AXON Developer Edition`（**不是新增行** —— 一直在「常驻未变 `122`」里，因本期状态列被整体改写带上 `062 期` 标记、`CHANGE_RE` 命中而进 `4.2`）；出 `0`。**`167 = 46 + 121`、`166 = 44 + 122` 是同一件事的两面。** ⚠️ **「仅因本期复核而进出」的行会在 4.2 与总账之间来回跳** —— 不改脚本，但脚注必须点名，别让读者读成「新增权益」。
+- 色标 ⚪2/🔴5/🟢153/🟡22/🟠7/⚠14/空19 = 222；`classify()` crit5/live170/switch6/pending23/unclear16/over2 = 222。
+- `check_deadlines` **A26 + B10 + C0 + D179 + E7 = 222**；`foot062.py` 的 A/B 明细**直接由 `check_deadlines.py --all` 输出解析生成**（不手抄），断言 `len(A)==26 / len(B)==10` 与桶头一致。
+- 改写 `14` 行状态列（`set_status()` 整体改写）＋ `1` 行活动名列计数重贴（`454/16/12` → `461/16/12`，只改计数不动语义）。
+
+### 本期实测的工程坑
+- **① 断言要贴落盘原文**：`gen_table062.py` 断言「`5,087` 带反引号出现」失败 —— 落盘里那个数字**没加反引号**；改为断言 `downloads 2,013 → 5,087` 整串。
+- **② 负天数会被原样继承**：`recalc_days062.py` 首跑报 `1` 行需人工确认（MiniMax 截止 `11/7` 却写「距今 `0` 天」）→ 按 055 期纪律改写为「已过 `1` 天（`11/7` 到期，官方未给延长口径 · 060 期是 `T+1`、061 期是 `T+0`）」。**`extract_deadlines` 不解析状态列倒计时文本，必须逐行手算。**
+- **③ 单元格里连转义竖线都不行**：写了带反斜杠竖线的 `Liquid` 模型 ID → `check_tables` 报「表7 第 165 行 4 列(应 3)」+ `verify_web` 缺失片段 `1`；改成 `Liquid` 与 ID 分成两段（用 `/` 连接）后全绿。
+- **④ `headlines.json` 是 CRLF**：首次写入 `AssertionError`。**先检测 `b'\r\n' in raw` 再按原行尾写回**。`data/` CRLF、`memory/` LF，不能混。
+- **⑤ 核对域名别再错**：首轮用 `lavie-ai` 拿 `404 / 9,115` B，差点误判「Pages 没构建」。**正确域名 `https://lavie-purple.github.io/ai-free-content-digest/`**；抓取带 `?t=<ts>` + `Accept-Encoding: identity`，`details.html` 需 `180s` 超时并校验 `</html>` 收尾。
+- **⑥ 占位逻辑只对 `000` 生效** → `acl.html`(`301`) 与 `paperswithcode.html`(`302`) 未落盘（已列为 063 期强制动作 ⑯）。
+
+### 守卫（全绿）
+- `lint_table --strict` **CLEAN（101 行 / R1–R4 全 0）**；`verify_web` **ALL GREEN（17 表 / 101 状态格 / 缺失片段 0 / `section=10 h2=10 h3=24`）**；`check_tables` **ALL GREEN**；`check_frozen` **🔴 0**（引用 `29`）；`check_headlines` **ALL GREEN（62 期）**；`check_views` / `check_site_freshness` / `chk_eol` exit 0；`build_quick.py --check` 通过（`77` 条 / 基准日 `2026-11-08`）；`quick.html` 无自指 `href="index.html"`。
+- 指针：正文 `102` 处 `〔附录 062〕` → `[附录 062](details.html)`；附录 `## 第 062 期` 段 `52` 处 `[附录 061]` → `[附录 062]`，历史段 `55` 处未动（回读断言）。
+
+### 发布
+- 产物：日报 `.md` `111,863` B / `.html` `237,984` B；`index.html` = `quick.html` `44,082` B；`archive.html` `42,933` B；`standing.html` `350,987` B；`details.html` `2,591,431` B。
+- `data/headlines.json` 加 `"062": "Inkling 2 Small 在 OpenCode 上线免费档（三列 Free、数据留存、十地区不可用），权重仍未放"`（59 字）；`data/quick_items.csv` `76 → 77` 条。
+- commit **`bc3ba05`** → `git push origin main` **`0e51200..bc3ba05` 一次成功**。
+- 线上核对：`Last-Modified: Sun, 08 Nov 2026 11:27:43 GMT`，**五页 md5 全 SAME**；首页概览句实读「`65` 条现在能拿，其中 `4` 条 7 天内截止，`12` 条已结束」、页脚「本页基准日 `2026-11-08`，共 `77` 条」、`archive` 出现「第 062 期」、`details` 含「第 062 期」`3` 处。
+
+### `063` 期强制动作 16 条（已写入 062 期脚注③）
+① `Inkling 2 Small` 权重是否终于上 `HF`（`author=thinkingmachines` `6 → 7`？）＋ `inkling-2-small-free` 是否长出上下文/参数量 ② 不可用地区是否扩表（本期十个）、数据条款是否从「可能用于训练」改为「用于训练」 ③ `OpenRouter` `Inception` 整族是否回归（`inception` 能否重新命中）＋ `:batch` 是否带来同族付费版 ④ `OpenCode` 免费清单是 `12` 还是 `13`（**三套口径分别报**）⑤ `Runware` `11/8` 的 `pruna-p-video-upscale` 到期后是否留在数组（**「数组里还在 ≠ 在售」**）＋ `11/10` 两条 ⑥ `freellm.net` 能否连续两期都变（**别再拿一期写成「一直正常」**）⑦ `AXON` 许可证（第 `6` 期）＋ 会不会因本期复核在 4.2 里「跳回去」 ⑧ 商汤 `6.8 Flash` 官方「限时免费」截止日（第 `7` 期）⑨ `Ollie` 三页是否下线（**关停日第 `3` 天仍逐字节同值**）⑩ `Antigravity` 定价页连续两期拿到（本期 `137,564`）＋ 不再追问数字 ⑪ 豆包工作官方页四项关键词（第 `19` 期）⑫ `Kimi K3.1-Highspeed`（第 `4` 期空）＋ `tencent/Hy4`（第 `3` 期 `404`）⑬ 老混元 `Q04`（第 `41` 期未决）、`国家超算互联网`（第 `13` 期）⑭ `Mistral` 第 `24` 次 `000`、`x.ai/news` 第 `4` 期 `000`、`platform.reflection.ai` 第 `26` 期 `403`、`platform.openai.com/docs/models` 第 `17` 期 `403`、`next.opera.com/web-ai/` 第 `14` 期 `451`、`docs.somark.ai/free-tier-rules.md` 第 `9` 期 `404` ⑮ 「零命中 / 未取到」结论涉及的页面全部入档 ⑯ **占位逻辑改成「文件不存在就补空文件」**（`301` / `302` 也要落盘）。
