@@ -75,3 +75,4 @@ oss,小米 HachimoDock（哈基米机）,客户端 + ESP32-P4 固件 + 硬件图
 token,商汤 小浣熊 免费版（产品侧）,¥0 / 永久 ＋ 300 积分/日,,官方写「永久」，无活动截止日,live,注册即用；每日 0 点重置 · 不累计 · 仅限标准模型
 oss,商汤 SenseNova-Skills 开源技能库,"MIT 许可 · 6,009 stars",,开源仓库，无活动期,live,git clone 即用；办公技能集合
 oss,Moonshot Kimi K3.1 Pro 开放权重,2.8T 总参 / 104B 激活 / 1M 上下文（96 个 safetensors 分片）,,权重 2026-11-05 已公开（仓库 createdAt 11/2）,live,⚠️ 许可为自定义 kimi-k3.1-pro（license: other），商用需自读条款
+api,OpenCode 的 Inkling 2 Small Free（Thinking Machines 第二代）,594B 总参 / 17B 激活 · 价格表三列 Free,,官方逐字「free on OpenCode for a limited time」，未给日期,live,免 key 可调；⚠️ 会留存数据且可能用于训练；欧盟等十个地区不可用
