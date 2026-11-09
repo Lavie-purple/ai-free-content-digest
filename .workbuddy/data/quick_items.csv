@@ -1,6 +1,6 @@
 分组,名称,量,截止日,截止说明,状态,门槛
-token,AutoClaw 国内站 M11W1 万圣节档,50M Tokens,2026-11-08,11/8 23:59 失效（11/2 起）,live,登录即领，每账号一次
-token,AutoClaw 国际站 M11W1,40M Tokens（上周未领可叠加至 80M）,2026-11-08,11/8 23:59 失效（10/31 起，比国内站早两天）,live,登录即领
+token,AutoClaw 国内站 M11W1 万圣节档,50M Tokens,2026-11-08,11/8 23:59 失效（11/2 起）,over,登录即领，每账号一次
+token,AutoClaw 国际站 M11W1,40M Tokens（上周未领可叠加至 80M）,2026-11-08,11/8 23:59 失效（10/31 起，比国内站早两天）,over,登录即领
 token,AutoClaw 2.2.0 升级礼,"5,000 积分（≈5,000 万 tokens）",,领到后 7 天内有效,live,升级客户端
 over,智谱清言 双节积分 100% 返还,上限 15 万积分,2026-10-31,10/31,over,登录自动发放
 over,WorkBuddy 学生版,"1,000 积分",2026-10-31,10/31,over,学生认证
@@ -12,13 +12,13 @@ token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
 token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
 token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
 token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
-api,OpenRouter 免费档,全量 454 个模型中 16 个零价 / 12 个带 :free 后缀（2026-11-05 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期零价 −2（两个 inkling:free 整批下架、付费版原价不动）
+api,OpenRouter 免费档,全量 461 个模型中 16 个零价 / 12 个带 :free 后缀（2026-11-05 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期零价 −2（两个 inkling:free 整批下架、付费版原价不动）
 api,OpenRouter stealth/crouton-alpha,免费隐身模型 · 100 万上下文 · $0,,未公布（官方无截止日）,live,注册即用；官方逐字 This model is free to use.；无公告；OpenCode 侧另有 crouton-alpha-free（10→11）
 api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
 api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
 api,OpenCode DeepSeek V4.1 Flash Free,免费，200K 上下文,,未公布,live,仅限平台内
-api,OpenCode 免费模型清单,11 项（2026-11-05 实读，新增 crouton-alpha-free）,,未公布（清单动态变动）,live,仅限平台内
-api,MiniMax 开放平台 M3 / M2,免费试用,2026-11-07,11/7,live,注册
+api,OpenCode 免费模型清单,12 项（2026-11-09 实读，新增 crouton-alpha-free）,,未公布（清单动态变动）,live,仅限平台内
+api,MiniMax 开放平台 M3 / M2,免费试用,2026-11-07,11/7,over,注册
 over,DeepSeek Search / Fetch API,免费调用,2026-11-01,11/1 00:00 起按请求计费,over,直接调用
 api,GMI Cloud 免费档,Qwen3.8-Max / Flash、Wan3.0 全免费,,本次再延 7 天（滚动续期）,live,GMI API Key
 api,NVIDIA Nemotron 3.5 Lightning,免费端点,,未公布,live,注册
@@ -54,7 +54,7 @@ oss,Anthropic OSS Scanner,免费漏洞扫描；合格维护者另送 Claude Max 
 oss,OpenAI PHP 版本检查 Codex skill,开源免费（Apache-2.0）,,无结束日,live,GitHub 直接取
 oss,Anthropic Claude Max / Team 月度 API 额度,Max 5x $100/月、Max 20x $200/月、Team 池化上限 $500/月,,按月发放，当月未用作废,live,需在计划内满 7 天
 api,xAI The X Subscription 免费档,$0/月：每日 Grok 访问 + Cursor 起步额度（两者共用按周刷新的池）,,未公布（按周刷新）,live,$0 免费档
-api,火山方舟 Agent Plan 个人版,"1,000 次数据调用（工商 400 + 风险 400 + 宏观 200）",2026-11-08,11/8,live,订阅个人版并开启专业数据集
+api,火山方舟 Agent Plan 个人版,"1,000 次数据调用（工商 400 + 风险 400 + 宏观 200）",2026-11-08,11/8,over,订阅个人版并开启专业数据集
 over,OpenRouter MiniMax M3.1 Flash (free),免费档,2026-10-22,10/22 结束,over,—
 over,OpenCode MiniMax M3.1 Flash Free,免费模型,2026-10-22,10/22 前后下架,over,—
 over,腾讯 WorkBuddy DeepSeek 故障补偿,500 积分,2026-10-22,10/22 24:00,over,—
@@ -76,3 +76,4 @@ token,商汤 小浣熊 免费版（产品侧）,¥0 / 永久 ＋ 300 积分/日,
 oss,商汤 SenseNova-Skills 开源技能库,"MIT 许可 · 6,009 stars",,开源仓库，无活动期,live,git clone 即用；办公技能集合
 oss,Moonshot Kimi K3.1 Pro 开放权重,2.8T 总参 / 104B 激活 / 1M 上下文（96 个 safetensors 分片）,,权重 2026-11-05 已公开（仓库 createdAt 11/2）,live,⚠️ 许可为自定义 kimi-k3.1-pro（license: other），商用需自读条款
 api,OpenCode 的 Inkling 2 Small Free（Thinking Machines 第二代）,594B 总参 / 17B 激活 · 价格表三列 Free,,官方逐字「free on OpenCode for a limited time」，未给日期,live,免 key 可调；⚠️ 会留存数据且可能用于训练；欧盟等十个地区不可用
+api,AMD Radeon Token Factory 公共免费模型 API,免费模型每日重置（额度数字官方页读不到 · 三份来源「$1/日」与「$10/日」互相矛盾）,,未公布（官方只写「每日重置」，未给日历日）,live,注册即用、免绑卡 · 20 请求/分钟 · OpenAI / Anthropic 双兼容
