@@ -12,12 +12,14 @@ token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
 token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
 token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
 token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
-api,OpenRouter 免费档,全量 461 个模型中 16 个零价 / 12 个带 :free 后缀（2026-11-05 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期零价 −2（两个 inkling:free 整批下架、付费版原价不动）
-api,OpenRouter stealth/crouton-alpha,免费隐身模型 · 100 万上下文 · $0,,未公布（官方无截止日）,live,注册即用；官方逐字 This model is free to use.；无公告；OpenCode 侧另有 crouton-alpha-free（10→11）
+api,OpenRouter 免费档,全量 465 个模型中 16 个零价 / 13 个带 :free 后缀（2026-11-10 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期 6 进 2 出（crouton-alpha 下架、inkling-2-small:free 上新）
+over,OpenRouter stealth/crouton-alpha,免费隐身模型 · 100 万上下文 · $0,2026-11-09,11/9 起目录条目被删、llms.txt 404,over,—
 api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
 api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
 api,OpenCode DeepSeek V4.1 Flash Free,免费，200K 上下文,,未公布,live,仅限平台内
-api,OpenCode 免费模型清单,12 项（2026-11-09 实读，新增 crouton-alpha-free）,,未公布（清单动态变动）,live,仅限平台内
+api,OpenCode 免费模型清单,13 项（2026-11-10 实读，退一进二：出 crouton、进 LongCat 2.5 / MiniMax M3.1 Flash）,,未公布（清单动态变动）,live,仅限平台内
+api,OpenRouter Thinking Machines Inkling 2 Small (free),0 元／百万 token · 100 万上下文 · 594B 总参 / 17B 激活,,未公布（:free 条目，官方未给下架日）,live,注册即用；⚠️ HF 上没有权重（连续第 4 期），只能通过平台调用
+api,OpenCode LongCat 2.5 Free,免费（限免两周）,,起 11/9 限免两周（终点日未给）,live,仅限 OpenCode 内；⚠️ 厂商官方站 免费/限免/额度 各 0 命中，只有分发层在说
 api,MiniMax 开放平台 M3 / M2,免费试用,2026-11-07,11/7,over,注册
 over,DeepSeek Search / Fetch API,免费调用,2026-11-01,11/1 00:00 起按请求计费,over,直接调用
 api,GMI Cloud 免费档,Qwen3.8-Max / Flash、Wan3.0 全免费,,本次再延 7 天（滚动续期）,live,GMI API Key
