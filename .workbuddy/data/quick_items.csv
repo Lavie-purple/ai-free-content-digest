@@ -1,4 +1,4 @@
-分组,名称,量,截止日,截止说明,状态,门槛
+﻿分组,名称,量,截止日,截止说明,状态,门槛
 token,AutoClaw 国内站 M11W1 万圣节档,50M Tokens,2026-11-08,11/8 23:59 失效（11/2 起）,over,登录即领，每账号一次
 token,AutoClaw 国际站 M11W1,40M Tokens（上周未领可叠加至 80M）,2026-11-08,11/8 23:59 失效（10/31 起，比国内站早两天）,over,登录即领
 token,AutoClaw 2.2.0 升级礼,"5,000 积分（≈5,000 万 tokens）",,领到后 7 天内有效,live,升级客户端
@@ -36,7 +36,7 @@ api,HAL-X AI THX-01,免密钥免费 API（322M 决策模型）,,长期,live,免�
 api,Inception Mercury Decide,输出 token 免费，每秒最多 14 次决策,,长期,live,OpenRouter 端点
 api,Perplexity pplx-decider-v1-27b,API 输入 $0.04/M、输出免费；权重 Apache-2.0,,长期,live,自托管需约 49GB 显存
 api,Cloudflare Clef / Clef-flash,免费权重；Workers AI 侧输出不计费,,权重永久,live,可自托管
-api,中国电信 Xing4.0-29B-A4B,OpenRouter 免费档，262K 上下文,,未公布（限免结束日不给）,unclear,走 :free 后缀
+api,中国电信 Xing4.0-29B-A4B,OpenRouter 免费档已下架（目录里已无此条目）,,已从 OpenRouter 目录移除（065 期观测）,over,⚠️ 不要再去 :free 后缀找它
 api,商汤 日日新 Token Plan,公测期完全免费（积分制，Free 档 0 元/月）,,未公布（官方称后续可能调整）,live,注册
 api,阶跃 Step 5 Preview 渠道免费周,免费（OpenRouter / OpenCode / Cline / Kilocode / Nous）,,未公布（各渠道期限不一致）,live,走对应渠道
 api,阶跃 Step 5 Preview 新用户套餐,已关闭新增领取通道,,—,unclear,已领用户剩余权益以账户为准
