@@ -3,11 +3,11 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **65 期**（2026-09-14 ~ 2026-11-11），Markdown 合计 **7980864 B ≈ 7794 KB**。
+共 **66 期**（2026-09-14 ~ 2026-11-12），Markdown 合计 **8077259 B ≈ 7888 KB**。
 
 **站点首页**就是这份速查：**[《免费速查》](index.html)**（`index.html` 与 [`quick.html`](quick.html) 同字节）—— **80 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
 
-另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**173 条**没有确切截止日的长期权益，全量原文、不逐期重印。
+另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**175 条**没有确切截止日的长期权益，全量原文、不逐期重印。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -76,11 +76,12 @@
 | **063** | 2026-11-09 | AIHOT 上线「Token 羊毛」免费额度聚合页：51 张卡、109 处核实标注、页头写「今天还能领 ¥201」 | 103,149 B | 19 | 223920 B | 278–281 |
 | **064** | 2026-11-10 | Claude Fable 5.2 发布：Max 档含 Fable、Pro 要付 credits，发布优惠逐字排除 Free 档 | 92,236 B | 18 | 208932 B | — |
 | **065** | 2026-11-11 | Anthropic 把 Claude 扩成工作台：定价页新增 Sheets / Whiteboards 两行，Free 档逐字写 No | 88,437 B | 14 | 204016 B | — |
+| **066** | 2026-11-12 | 文心 ERNIE 5.5 Flash Preview 发布：官方写「11/25 前」开源、同日 OpenRouter 上从付费档搬进免费档 | 96,395 B | 15 | 215457 B | — |
 
 ## 台账与结构化数据（内部，不对外展示）
 
 - **信源分级台账** `AI信息源分级清单-T0-T4.md`：296 条（T0 179 / T1 19 / T2 18 / T3 44 / T4 36）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：230 条（由 `extract_deadlines.py` 从最新一期重建）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：232 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
