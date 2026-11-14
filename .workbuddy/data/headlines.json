@@ -66,5 +66,6 @@
   "064": "Claude Fable 5.2 发布：Max 档含 Fable、Pro 要付 credits，发布优惠逐字排除 Free 档",
   "065": "Anthropic 把 Claude 扩成工作台：定价页新增 Sheets / Whiteboards 两行，Free 档逐字写 No",
   "066": "文心 ERNIE 5.5 Flash Preview 发布：官方写「11/25 前」开源、同日 OpenRouter 上从付费档搬进免费档",
-  "067": "谷歌发布 Gemini 4 Hydrogen：免费用户在 Gemini 应用里只能靠自动选模用到它，Antigravity 只给付费档"
+  "067": "谷歌发布 Gemini 4 Hydrogen：免费用户在 Gemini 应用里只能靠自动选模用到它，Antigravity 只给付费档",
+  "068": "Runway 开源 27B 机器人模型 Praxis-1（Apache 2.0）；Ling 3.2 Flash 进 OpenRouter 免费区但端点为空"
 }

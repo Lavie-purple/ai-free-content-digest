@@ -81,3 +81,5 @@ api,OpenCode 的 Inkling 2 Small Free（Thinking Machines 第二代）,594B 总�
 api,AMD Radeon Token Factory 公共免费模型 API,免费模型每日重置（额度数字官方页读不到 · 三份来源「$1/日」与「$10/日」互相矛盾）,,未公布（官方只写「每日重置」，未给日历日）,live,注册即用、免绑卡 · 20 请求/分钟 · OpenAI / Anthropic 双兼容
 api,Gemini 4 Hydrogen（免费用户只能靠自动选模）,$1.50 / $7.50 每百万 token · 1M 上下文（免费档无额度口径）,,未公布（产品能力，非活动；官方未给任何期限）,live,官方逐字「via auto model selection」——下拉里点不到；无额度无次数；Antigravity 只给付费 AI Pro / Ultra
 oss,MiniMax H3-Image 开放权重（4K 生图）,自研社区许可（license: other）· 36 个文件 · 原生 4096×4096,,无结束日（开放权重）,live,⚠️ 许可排除欧盟 / 英国 / 韩国 / 美国；年营收超 $1M 或做 API 转售需另签；界面须署名 MiniMax-H3-Image
+oss,Runway Praxis-1（机器人世界动作模型，Apache 2.0）,27B 混合专家扩散 Transformer · 权重 + 推理 + 微调代码 · HF 集合 11 条,,无结束日（开放权重）,live,标准版需 80GB 显存 · 压缩版官方估算可上 RTX 5090（峰值未实测）· RoboLab-120 46.2% 为官方自测 · 支持 H100/B200/Jetson Thor
+api,inclusionAI Ling 3.2 Flash（OpenRouter 免费区）,零价 · 1M 上下文 · 文本+图片 · 单次最多 200 张图,,未公布（官方未给上下线时间）,pending,⚠️ endpoints 为空数组 · 权重仓 HF 404 —— 列表里有、暂时调不动；无付费档
