@@ -83,3 +83,5 @@ api,Gemini 4 Hydrogen（免费用户只能靠自动选模）,$1.50 / $7.50 每�
 oss,MiniMax H3-Image 开放权重（4K 生图）,自研社区许可（license: other）· 36 个文件 · 原生 4096×4096,,无结束日（开放权重）,live,⚠️ 许可排除欧盟 / 英国 / 韩国 / 美国；年营收超 $1M 或做 API 转售需另签；界面须署名 MiniMax-H3-Image
 oss,Runway Praxis-1（机器人世界动作模型，Apache 2.0）,27B 混合专家扩散 Transformer · 权重 + 推理 + 微调代码 · HF 集合 11 条,,无结束日（开放权重）,live,标准版需 80GB 显存 · 压缩版官方估算可上 RTX 5090（峰值未实测）· RoboLab-120 46.2% 为官方自测 · 支持 H100/B200/Jetson Thor
 api,inclusionAI Ling 3.2 Flash（OpenRouter 免费区）,零价 · 1M 上下文 · 文本+图片 · 单次最多 200 张图,,未公布（官方未给上下线时间）,pending,⚠️ endpoints 为空数组 · 权重仓 HF 404 —— 列表里有、暂时调不动；无付费档
+oss,美团 LongCat-2.5（开源 1.6T MoE）,MIT · 1.6T 总参 / 48B 激活 · 1M 上下文 · 文本+图+视频 · 231 个文件,,无结束日（开放权重）,live,无需申请、非 gated；Terminal Bench v2.1 88.4 / DeepSWE 64.6 均为官方自测；样例部署 194 张华为昇腾 Atlas A2、无 Nvidia 指引
+oss,MIT 韩松团队 PEAR（机器人操作 VLA，Apache 2.0）,Qwen3.8-27B + 仿真 RL · 权重 + 代码 · HF 三条（含 NVFP4 18.16B）,,无结束日（开放权重）,live,不用遥操数据、不用真机数据；LIBERO 零样本 1.6% → 74.4%；真机 YAM 30 次成功 18 次；5090 上 220+ tok/s
