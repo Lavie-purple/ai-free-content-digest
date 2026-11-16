@@ -3,11 +3,11 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **69 期**（2026-09-14 ~ 2026-11-15），Markdown 合计 **8387289 B ≈ 8191 KB**。
+共 **70 期**（2026-09-14 ~ 2026-11-16），Markdown 合计 **8497939 B ≈ 8299 KB**。
 
-**站点首页**就是这份速查：**[《免费速查》](index.html)**（`index.html` 与 [`quick.html`](quick.html) 同字节）—— **86 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
+**站点首页**就是这份速查：**[《免费速查》](index.html)**（`index.html` 与 [`quick.html`](quick.html) 同字节）—— **90 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
 
-另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**181 条**没有确切截止日的长期权益，全量原文、不逐期重印。
+另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**182 条**没有确切截止日的长期权益，全量原文、不逐期重印。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -80,11 +80,12 @@
 | **067** | 2026-11-13 | 谷歌发布 Gemini 4 Hydrogen：免费用户在 Gemini 应用里只能靠自动选模用到它，Antigravity 只给付费档 | 106,651 B | 18 | 229224 B | — |
 | **068** | 2026-11-14 | Runway 开源 27B 机器人模型 Praxis-1（Apache 2.0）；Ling 3.2 Flash 进 OpenRouter 免费区但端点为空 | 98,950 B | 12 | 220001 B | — |
 | **069** | 2026-11-15 | 美团 LongCat-2.5 以 MIT 公开 1.6T 权重：48B 激活、1M 上下文、231 个文件，无需申请 | 104,429 B | 15 | 230115 B | — |
+| **070** | 2026-11-16 | 腾讯混元 Hy4 flash 发布：WorkBuddy 内限免到 11/29，224B 总参 / 12B 激活 / 1M 上下文（媒体写「11/30 前」） | 110,650 B | 17 | 239589 B | — |
 
 ## 台账与结构化数据（内部，不对外展示）
 
 - **信源分级台账** `AI信息源分级清单-T0-T4.md`：296 条（T0 179 / T1 19 / T2 18 / T3 44 / T4 36）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：242 条（由 `extract_deadlines.py` 从最新一期重建）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：245 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）

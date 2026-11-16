@@ -43,7 +43,7 @@ api,阶跃 Step 5 Preview 新用户套餐,已关闭新增领取通道,,—,uncle
 api,阶跃 Step 5 Preview 线下体验,店内一周免费,,未公布（店内口径约一周）,live,到 AGI Bar 连 WiFi 配 Key
 api,GLM-5.3-FlashX 试用,两周试用（配额消耗 2.5 倍于普通 Flash）,,申请通过后起算,live,申请
 api,Nous Research MISSINGNO,$0.00 / 百万 token，限时免费,,未公布,live,Hermes Portal 目录
-cloud,腾讯轻量云 专家限量,免费领 1 个月轻量应用服务器,2026-11-13,11/13,live,专家认证
+cloud,腾讯轻量云 专家限量,免费领 1 个月轻量应用服务器,2026-11-13,11/13 失效（已过 3 天）；本期无续期公告,over,专家认证
 cloud,Talorys 自托管 agent,MIT，整套跑在 Cloudflare 免费层,,长期,live,自部署到自己的账号
 cloud,Odyssey Odyssey-3,免费公开研究预览（14B 世界模型）,,研究预览期免费；API 需申请,live,网页 demo
 cloud,Figma Code Layers,付费计划内创建与编辑代码层免费,2026-11-04,11/4 已到期（本期起转为已收口）,over,需付费计划账号
@@ -85,3 +85,7 @@ oss,Runway Praxis-1（机器人世界动作模型，Apache 2.0）,27B 混合专�
 api,inclusionAI Ling 3.2 Flash（OpenRouter 免费区）,零价 · 1M 上下文 · 文本+图片 · 单次最多 200 张图,,未公布（官方未给上下线时间）,pending,⚠️ endpoints 为空数组 · 权重仓 HF 404 —— 列表里有、暂时调不动；无付费档
 oss,美团 LongCat-2.5（开源 1.6T MoE）,MIT · 1.6T 总参 / 48B 激活 · 1M 上下文 · 文本+图+视频 · 231 个文件,,无结束日（开放权重）,live,无需申请、非 gated；Terminal Bench v2.1 88.4 / DeepSWE 64.6 均为官方自测；样例部署 194 张华为昇腾 Atlas A2、无 Nvidia 指引
 oss,MIT 韩松团队 PEAR（机器人操作 VLA，Apache 2.0）,Qwen3.8-27B + 仿真 RL · 权重 + 代码 · HF 三条（含 NVFP4 18.16B）,,无结束日（开放权重）,live,不用遥操数据、不用真机数据；LIBERO 零样本 1.6% → 74.4%；真机 YAM 30 次成功 18 次；5090 上 220+ tok/s
+api,腾讯混元 Hy4 flash（WorkBuddy 内限免）,WorkBuddy 客户端内限免（原价 输入 0.5 元 / 输出 2 元 每百万 token）,2026-11-29,11/29（聚合层）vs「11 月 30 日前」（媒体）两套口径并排写，表体取 11/29,live,224B 总参（含 64B Engram）/ 激活 12B · 1M 上下文 · 缓存命中 0.02 元 · 只在 WorkBuddy 内免，API 直调仍按价目计费
+api,OpenCode Zen hy4-flash-free,零价（`-free` 池第 15 个）,,未公布（官方免费池，随池调整、不预告）,live,"`-free` 目录 14 → 15 · 页 98,175 → 98,592 字（+417）· diff 10 行全落在一个模型块；池内模型随时下架，不承诺长期"
+api,Runware 4K 图像生成 5 折,4K 档 50% OFF（新挂徽标）,,未公布（促销徽标，官网页未给结束日）,live,"页 771,942 字字节与 md5 全同、内容真变 —— 只换了徽标（旧「30% OFF」卸下）；三项不变量相同不能证「没变」"
+api,阿里 Qwen4-Max（可体验，非免费额度）,付费 $1.5 / $4.5 每百万 token（1M 上下文 · 原生视觉）,,无截止日（付费旗舰；「小尺寸 Qwen4 将开源」是承诺、无型号无日期）,pending,官方博客 free / 免费 0 命中 —— 只写「可在 QwenWork / Qoder / QwenStudio 使用」，只算可体验、不进免费清单
