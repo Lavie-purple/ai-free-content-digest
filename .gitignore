@@ -5,6 +5,11 @@
 .workbuddy/tmp0*/
 tmp_live*/
 tmp_live_net_*.html
+# 每期的抓取件（几十 MB 原始页，随时可重抓）：`.workbuddy/tmp_*` 早就在忽略里，
+# 根目录这份是同一类东西的漏网之地 —— 071 期补上，否则每天 `git status` 都会挂着 80 MB。
+tmp_0*/
+tmp_071_list.txt
+.workbuddy/data/*.bak
 .workbuddy/*.tmp
 *tmp_verify_*
 
