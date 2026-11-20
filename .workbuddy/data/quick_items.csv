@@ -12,7 +12,7 @@ token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
 token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
 token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
 token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
-api,OpenRouter 免费档,全量 465 个模型中 16 个零价 / 13 个带 :free 后缀（2026-11-10 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期 6 进 2 出（crouton-alpha 下架、inkling-2-small:free 上新）
+api,OpenRouter 免费档,全量 477 个模型中 15 个零价 / 12 个带 :free 后缀（2026-11-20 实读）,,长期（动态目录）,live,注册，看 :free 后缀；本期 2 出 0 进（cohere/north-mini-code、thinkingmachines/inkling-2-small 消失；新增 pixtral-large-2502 为付费）；Ling 3.2 路由已接通 1 条
 over,OpenRouter stealth/crouton-alpha,免费隐身模型 · 100 万上下文 · $0,2026-11-09,11/9 起目录条目被删、llms.txt 404,over,—
 api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
 api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
@@ -82,7 +82,7 @@ api,AMD Radeon Token Factory 公共免费模型 API,免费模型每日重置（�
 api,Gemini 4 Hydrogen（免费用户只能靠自动选模）,$1.50 / $7.50 每百万 token · 1M 上下文（免费档无额度口径）,,未公布（产品能力，非活动；官方未给任何期限）,live,官方逐字「via auto model selection」——下拉里点不到；无额度无次数；Antigravity 只给付费 AI Pro / Ultra
 oss,MiniMax H3-Image 开放权重（4K 生图）,自研社区许可（license: other）· 36 个文件 · 原生 4096×4096,,无结束日（开放权重）,live,⚠️ 许可排除欧盟 / 英国 / 韩国 / 美国；年营收超 $1M 或做 API 转售需另签；界面须署名 MiniMax-H3-Image
 oss,Runway Praxis-1（机器人世界动作模型，Apache 2.0）,27B 混合专家扩散 Transformer · 权重 + 推理 + 微调代码 · HF 集合 11 条,,无结束日（开放权重）,live,标准版需 80GB 显存 · 压缩版官方估算可上 RTX 5090（峰值未实测）· RoboLab-120 46.2% 为官方自测 · 支持 H100/B200/Jetson Thor
-api,inclusionAI Ling 3.2 Flash（OpenRouter 免费区）,零价 · 1M 上下文 · 文本+图片 · 单次最多 200 张图,,未公布（官方未给上下线时间）,pending,⚠️ endpoints 为空数组 · 权重仓 HF 404 —— 列表里有、暂时调不动；无付费档
+api,inclusionAI Ling 3.2 Flash（OpenRouter 免费区）,零价 · 1M 上下文 · 文本+图片 · 单次最多 200 张图,,未公布（官方未给上下线时间）,live,注册；endpoints 已从 [] 变为 1 条路由（第 8 天接通）；权重仓仍 404
 oss,美团 LongCat-2.5（开源 1.6T MoE）,MIT · 1.6T 总参 / 48B 激活 · 1M 上下文 · 文本+图+视频 · 231 个文件,,无结束日（开放权重）,live,无需申请、非 gated；Terminal Bench v2.1 88.4 / DeepSWE 64.6 均为官方自测；样例部署 194 张华为昇腾 Atlas A2、无 Nvidia 指引
 oss,MIT 韩松团队 PEAR（机器人操作 VLA，Apache 2.0）,Qwen3.8-27B + 仿真 RL · 权重 + 代码 · HF 三条（含 NVFP4 18.16B）,,无结束日（开放权重）,live,不用遥操数据、不用真机数据；LIBERO 零样本 1.6% → 74.4%；真机 YAM 30 次成功 18 次；5090 上 220+ tok/s
 api,腾讯混元 Hy4 flash（WorkBuddy 内限免）,WorkBuddy 客户端内限免（原价 输入 0.5 元 / 输出 2 元 每百万 token）,2026-11-29,11/29（聚合层）vs「11 月 30 日前」（媒体）两套口径并排写，表体取 11/29,live,224B 总参（含 64B Engram）/ 激活 12B · 1M 上下文 · 缓存命中 0.02 元 · 只在 WorkBuddy 内免，API 直调仍按价目计费
@@ -90,12 +90,13 @@ api,OpenCode Zen hy4-flash-free,零价（`-free` 池第 15 个）,,未公布（�
 api,Runware 4K 图像生成 5 折,4K 档 50% OFF（数组 22 条不变；徽标清零 = 货架下架）,2026-11-17,"11/17（促销数组 `endsAt: ""2026-11-17""` 仍在册、卡片 `title` **2 → 0**、价目一个数没动；**本期已按期下架**）",over,`4K` 类促销只挂徽标、不动价目（官方帮助文案原话）；**判下架只能看徽标**。与 `MiniMax` 官方页（截止 11/18 00:00、未撤）**两个口径分岔**
 api,阿里 Qwen4-Max（可体验，非免费额度）,付费 $1.5 / $4.5 每百万 token（1M 上下文 · 原生视觉）,,无截止日（付费旗舰；「小尺寸 Qwen4 将开源」是承诺、无型号无日期）,pending,官方博客 free / 免费 0 命中 —— 只写「可在 QwenWork / Qoder / QwenStudio 使用」，只算可体验、不进免费清单
 token,智谱 AutoClaw 国内站 M11W3 每周福利（100M Tokens）,"100M Tokens ＝ 10,000 积分（本周额度是上周同类活动的 2 倍）",2026-11-22,11/22 23:59（北京时间 · 官方逐字「活动时间 11 月 16 日（周一）00:00—11 月 22 日（周日）23:59」；奖励同日 23:59 失效）,live,登录即可领取、每账号限领一次；**只在 AutoClaw 内使用**，自接 Coding Plan 或其他 API 另计费
-api,Google Antigravity 免费档三个第三方模型 11/18 移除,免费档 $0/month 不变；Claude Sonnet 4.6 / Claude Opus 4.6 / GPT-OSS-120b 三个模型下架,,"官方脚注逐字 `Will be removed on November 18, 2026.`，**到期日已过 1 天、三个模型仍在**（`Sonnet 4.6` / `Opus 4.6` / `GPT-OSS-120b`），官方未给新日期",live,"定价页本期恢复 200（183,218 字节 / 可见文本 12,481 字符）；免费档仍 4 个模型、`$0/month`、配额无数值。**当「随时可能没」用，不当「承诺保留」**（避坑 313）"
+api,Google Antigravity 免费档三个第三方模型 11/18 移除,免费档 $0/month 不变；Claude Sonnet 4.6 / Claude Opus 4.6 / GPT-OSS-120b 三个模型下架,,"官方脚注逐字 `Will be removed on November 18, 2026.` —— 到期第 2 天仍未执行、措辞未改（183,218 字节与上期同、可见文本 diff 0 行）",live,免费档四个模型全在：Gemini 3.8 Flash + Sonnet 4.6 / Opus 4.6 / GPT-OSS-120b；当「随时可能没」用
 edu,OpenAI ChatGPT for Academic Researchers 扩容至 20 万研究者,"本轮 50,000 个名额、每名额带 2 名协作者（合计最多 150,000 人）；档位是 Plus",,无截止日（名额制、先到先得；官方未给申请关闭日）—— 11/23 是开放申请日，不是截止日,live,**档位从 Pro 降到 Plus**（官方逐字 `most participants would have stayed within ChatGPT Plus usage limits`）；额度无数字、模型只写 `frontier models`；抽签改先到先得
 api,腾讯 Hy4 flash 进入 OpenRouter 目录（付费 · 标价五折）,输入 $0.035 / 输出 $0.1405 每百万 token（≈ 官方人民币价五折）,,无截止日（目录标价，未挂 `discount`、无 `:free` 变体）,pending,**付费条目**，进目录 ≠ 免费；`created` 换北京 11/16 22:18。按 7.1 折算正好是官方 0.5 元 / 2 元的一半 —— **汇率 7.1 是本报假设**
 oss,腾讯混元 Hy4 flash 开放权重,220.25B 实测总参（含 64B Engram）/ 激活 11.3B + 0.43B / 1M 上下文 / 三仓 600 个文件,,无截止日（权重永久开放；许可有商用门槛，不是时间门槛）,live,`Tencent Hy License 1.0` ＝ `Apache 2.0` 派生 + `§10`：对外做 `MaaS` 且（全球年毛收入 > US$50M 或产品 MAU > 1 亿）须另签；**纯内部使用豁免**。三仓 `gated: false`；`safetensors` 实测 220.25B ≠ 媒体 224B
 api,OpenAI GPT-6.2 Astra / Sol 发布,Astra $8 / $0.40 缓存 / $40；Sol $2 / $0.10 / $10（每百万 token）,,无截止日（模型发布；可用名单 `Plus` / `Pro` / `Enterprise` / `Edu`）,pending,"**发布名单里没有 `Free`**（官方逐字 `available to all Plus, Pro, Enterprise, and Edu users`）。`chatgpt.com/pricing` 本期 000、`/api/pricing` 未列 `gpt-6.2` → 只能说「发布页没写免费档」。`Pro 200` 首次拿到 `Ultrafast`（从 Sol 开始）"
-api,MiniMax H3-Image 4K 五折（官方页）,4K 文生图 0.4522 元/张（原价）· 编辑 0.4809 / 0.5211；**五折已撤**,2026-11-18,"11/18 00:00 到期；**本期核到已撤净**：`0.2261` / `0.2404` / `限时5折` 整页 0 命中，`6` 处徽标清零，页 311,607 → 305,754 字节",over,按原价预算，**不要沿用上期折后价**。要求最终交付图片宽 × 高 ≥ 1660 万像素。撤回落在 11/18 18:10–11/19 16:55 之间（截止后 18–41 小时），非「改日期续期」
+api,MiniMax H3-Image 4K 五折（官方页）,4K 五折回挂：0.2261 / 0.2404 / 0.2605 / 0.4275 / 0.4499 / 0.5073 元/张（原价 0.4522–1.0146）,,无截止日（新版文案删掉日期：2026-11-18 / 截止 / 结束 各 0 命中）；旧版 11/18 00:00 已过期,live,最终交付图片宽 × 高 ≥ 1660 万像素（4096² = 1677.7 万，刚好过线）；与旧版是同一活动两个版本
 api,DeepSeek 服务端搜索 / 抓取不计费,调用模型时触发的 `web tools` / `web_search` 不再单独计费（原 $0.75 / 千次归零）,,11/18 12:00（北京）起生效；结果并入上下文按 token 计,live,**单独调 `Search` / `Fetch` API 仍 $0.75 / 千次**（同页表未变）。免的是「模型自己搜」，不是「你去搜」；读进去的正文仍按 token 收
 oss,范式 Phai-A1-35B-1M 开放权重,35.1B 全 BF16 / 1M 上下文 / Apache-2.0 / 28 个文件,,无截止日（权重永久开放）；建仓 11/12，公开日 11/19,live,**「单张 3090」需 4bit 量化**：BF16 权重 70.2 GB vs 显存 24 GB（避坑 316）。底座 `Qwen3.6-35B-A3B`；`Phai-M1`（视频）仓未检索到，记预告
 oss,MatOS 材料科研智能体（开源）,"3,135 数据集 / 386 技能 / 104 工作流 / 51 角色 / 48 款计算软件",,无截止日（arXiv + GitHub 双开源）,live,基准均在同底座前提下：ResearchClawBench +33.6%、材料任务 +80.8%；DuoCompNet MAE 低 13.6%。**开源 ≠ 免费算力**，要自己的模型与机器
+token,智谱 AutoClaw 国内站 M11W4 每周福利（100M Tokens）,"100M Tokens ＝ 10,000 积分（第 2 周维持 100M）",2026-11-29,11/29 23:59（北京时间）失效；领取窗口 11/23 00:00 起（官方逐字「活动时间 11 月 23 日（周一）00:00—11 月 29 日（周日）23:59」）,live,登录客户端即领，每账号一次；与 M11W3（到 11/22 23:59）只隔 1 分钟、不重叠；额度锁在客户端、导不出 API
