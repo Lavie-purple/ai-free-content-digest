@@ -994,7 +994,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 </section>
 <section id="s03" class="sec">
 <h2><span class="sn">03</span><span class="h2t">常驻免费额度与 API</span><span class="h2sub">（本期增量）</span></h2>
-<h3 id="h3-11"><span class="h3n">1</span>⚠️ <code>HF</code> 八个跟踪仓：<strong><code>downloads</code> 一个都没动，<code>likes</code> 五个在动</strong> —— 这不是「热度停了」，是字段的刷新节奏不同</h3>
+<h3 id="h3-11"><span class="h3n">1</span>⚠️ <code>HF</code> 八个跟踪仓：<strong><code>downloads</code> 一个都没动，<code>likes</code> 四个在动</strong> —— 这不是「热度停了」，是字段的刷新节奏不同</h3>
 <p><strong>一手</strong>：<code>hf-mirror.com/api/models/&lt;repo&gt;</code>（逐仓单查，不批量）。</p>
 <div class="tblwrap">
 <table class="tbl c4 w1m" style="--w1m:269px">
@@ -1044,7 +1044,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 <p><strong>错在哪</strong>：073 与 074 的观察（模型还在、字节没变）<strong>都是对的</strong>，<strong>错在把「没看到执行」直接写成「未执行」</strong>。页面上「模型还在」有两个完全不同的原因：<strong>① 官方没执行；② 官方改了日期。</strong> 074 只读了模型列表与字节数，<strong>没读脚注里那个日期字符串</strong>，于是把 <code>②</code> 判成了 <code>①</code>。</p>
 <p><strong>改法</strong>：从本期起，凡「官方写着某日移除」的条目，<strong>状态列必须直接引用脚注原文的日期字符串</strong>，而不是引用「到期第 N 天」；<strong>日期变了就写「改期」，不写「未执行」</strong>（避坑 323）。</p>
 <h3 id="h3-19"><span class="h3n">4</span>⚠️ 074 期用 <code>downloads</code> 的涨跌描述 <code>Hy4</code> 热度 —— 与 071 期自己立的「批量重算」结论冲突</h3>
-<p><strong>证据</strong>：074 写「<code>Hy4</code> 主仓 <code>+3,790</code>、<code>Kimi</code> <code>+7,606</code>、<code>Inkling</code> <code>+10,492</code>，三条都在涨」；<strong>本期八个仓 <code>downloads</code> 一个都没动</strong>，而 <code>likes</code> 五个在动。</p>
+<p><strong>证据</strong>：074 写「<code>Hy4</code> 主仓 <code>+3,790</code>、<code>Kimi</code> <code>+7,606</code>、<code>Inkling</code> <code>+10,492</code>，三条都在涨」；<strong>本期八个仓 <code>downloads</code> 一个都没动</strong>，而 <code>likes</code> 四个在动（<code>Hy4</code> / <code>FP8</code> / <code>Inkling</code> / <code>LongCat</code>）。</p>
 <p><strong>错在哪</strong>：071 期已经判过「同一天五仓一起动 = 批量重算，不是热度回来了」，<strong>074 却又把「一起涨」当成热度证据</strong>。同一份数据，两期两种读法。</p>
 <p><strong>改法</strong>：<strong><code>downloads</code> 只记「本批次是否刷新」，不记涨跌趋势；<code>likes</code> 才是日更互动量。</strong> 本期起这条写进口径声明（第九章）。</p>
 </details>
