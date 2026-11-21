@@ -73,5 +73,6 @@
   "071": "OpenAI 把学术研究者计划扩到 20 万人：11/23 开放 5 万个名额、每人带 2 名协作者，档位从 Pro 降到 Plus",
   "072": "腾讯混元 Hy4 flash 开放权重：220.25B 总参 / 激活 11.3B / 1M，附商用门槛",
   "073": "Google Antigravity 免费档三个第三方模型 11/18 到期未撤、脚注仍写「将移除」；MiniMax 4K 五折已撤回",
-  "074": "AutoClaw 11/23-11/29 领 100M Tokens（1 万积分）；MiniMax 4K 五折撤两天后重挂、删截止日"
+  "074": "AutoClaw 11/23-11/29 领 100M Tokens（1 万积分）；MiniMax 4K 五折撤两天后重挂、删截止日",
+  "075": "Thinking Machines 开源 Inkling 2 Mini：26.4B/3.4B、权重约 20GB、Apache-2.0，可在笔记本离线跑"
 }
