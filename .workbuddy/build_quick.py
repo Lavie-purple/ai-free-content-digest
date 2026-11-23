@@ -344,6 +344,11 @@ ${ts_head}
 }
 ${ts_dark}
 *{box-sizing:border-box}
+/* hidden 属性必须压过作者样式：
+   `h3.gh` 写了 display:flex，浏览器默认的 `[hidden]{display:none}` 会被它盖掉，
+   于是筛选时表藏了、标题还杵在那儿（2026-11-23 实测：h3.hidden === true 却仍然可见）。
+   加 !important 是因为窄屏那段还把 `table.qt tr` 改成了 display:grid。 */
+[hidden]{display:none !important}
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0; background:var(--bg); color:var(--ink);
@@ -530,6 +535,14 @@ footer b{color:var(--muted); font-weight:600}
   .nm{font-size:13px}
   .need{font-size:11px; margin-top:2px}
   .tag{display:none}
+  /* 筛选条在窄屏：chip 占第一行（可换行），计数跟右，检索框整行垫底 */
+  .tools{gap:8px; margin-top:18px}
+  .chips{order:1; gap:5px}
+  .chips-label{display:none}
+  .chip{font-size:12px; padding:6px 9px}
+  .tools-count{order:2}
+  .qsearch{order:3; flex:1 1 100%; max-width:none}
+  .qtop{right:12px; bottom:14px; width:42px; height:42px}
 }
 @media print{
   body{background:#fff; color:#000}
@@ -537,7 +550,89 @@ footer b{color:var(--muted); font-weight:600}
   details.fold{display:block} details.fold summary{display:none}
   table.qt tr{break-inside:avoid}
   a{color:#000; text-decoration:none}
+  .tools,.qtop,.qempty{display:none !important}
+  mark.hl{background:none; color:inherit}
 }
+/* ---------- 筛选条 + 检索 + 回顶（2026-11-23） ----------
+   起因：极速页 8 张表 112 行，缺了日报 / 总账都有的「按状态筛」与「全文检索」，
+   想只看 7 天内到期的条目只能肉眼扫；滚到底想回顶也只能手划。
+   这里的三件是本页专属实现（日报那套绑在顶栏抽屉与单张 .tbl.ledger 上，
+   直接搬过来会把「只筛一张表」的假设带进来 —— 本页要筛的是全部 8 张）。
+   计数一律从表体实算（JS 里 counts），不写死数字。 */
+.tools{
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px 12px;
+  margin:22px 0 0; padding-top:14px; border-top:1px solid var(--rule);
+}
+.chips{display:flex; flex-wrap:wrap; align-items:center; gap:6px; flex:1 1 auto; order:1}
+.chips-label{
+  font-family:var(--fm); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--faint); margin-right:2px;
+}
+.chip{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--fs); font-size:12.5px; line-height:1;
+  padding:6px 10px; border:1px solid var(--rule-2); border-radius:999px;
+  background:transparent; color:var(--ink-2); cursor:pointer;
+  transition:color .15s,border-color .15s,background .15s;
+}
+.chip b{font-family:var(--fm); font-size:10.5px; color:var(--faint); font-weight:600}
+/* chip 上的小圆点与表格右列的 .dot 同色同尺寸 —— 两处色标必须能对上，
+   否则读者筛了「7 天内」，表里那列点却是另一种颜色，等于没说 */
+.chip .cd{width:7px; height:7px; border-radius:50%; display:inline-block; flex:0 0 auto; background:var(--live)}
+.chip[data-f="crit"] .cd{background:var(--crit)}
+.chip[data-f="soon"] .cd{background:var(--soon)}
+.chip[data-f="plan"] .cd{background:var(--plan)}
+.chip[data-f="over"] .cd{background:var(--over)}
+.chip:hover{border-color:var(--accent); color:var(--accent-ink)}
+.chip.on{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.chip.on b{color:var(--bg); opacity:.7}
+.chip:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* 检索框整行垫底（flex-basis 100% 强制换行）：chip 行撑满、计数留在同行右端，
+   检索框换到第二行占左半 —— 否则 860px 容器里三样抢一行，计数会被挤成孤零零一行。 */
+.qsearch{display:flex; align-items:center; gap:8px; flex:1 1 100%; max-width:360px; order:3}
+.qsearch input{
+  flex:1 1 auto; min-width:0;
+  font-family:var(--fs); font-size:12.5px; color:var(--ink);
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:999px;
+  padding:6px 11px; outline:none;
+}
+.qsearch input:focus{border-color:var(--accent)}
+.qsearch input::placeholder{color:var(--faint)}
+.qnav{display:flex; align-items:center; gap:3px; font-family:var(--fm); font-size:10.5px; color:var(--faint);
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+.qnav button{
+  width:21px; height:21px; padding:0; font-size:10px; line-height:1;
+  background:transparent; border:1px solid var(--rule); border-radius:3px;
+  color:var(--muted); cursor:pointer;
+}
+.qnav button:hover{color:var(--accent-ink); border-color:var(--accent)}
+.tools-count{
+  /* order 必须在检索框之前：DOM 里它是最后一个，若按原序排，
+     `flex-basis:100%` 的检索框会先占掉第二行，计数就被一起拖下去。 */
+  order:2; margin-left:auto; font-family:var(--fm); font-size:11px; color:var(--faint);
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+mark.hl{background:rgba(255,196,0,.35); color:inherit; padding:0 1px; border-radius:2px}
+mark.hl.cur{background:var(--accent); color:#fff}
+.qempty{display:none; margin:16px 0 0; font-size:13.5px; color:var(--muted)}
+.qempty.show{display:block}
+
+/* 回到顶部：表格长到 112 行，滚到底部想回顶不该靠手划 */
+.qtop{
+  position:fixed; right:18px; bottom:20px; z-index:30;
+  width:40px; height:40px; padding:0;
+  display:none; align-items:center; justify-content:center;
+  font-size:14px; line-height:1;
+  background:var(--surface); color:var(--muted);
+  border:1px solid var(--rule-2); border-radius:50%;
+  box-shadow:var(--shadow); cursor:pointer;
+  transition:color .15s,border-color .15s;
+}
+.qtop.show{display:inline-flex}
+.qtop:hover{color:var(--accent-ink); border-color:var(--accent)}
+.qtop:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
 ${vs_css}
 ${db_css}
 ${ts_css}
@@ -568,6 +663,24 @@ ${ts_css}
   额度可能调整、但不会到期；写<b>「领后 N 天」</b>的是领到手才开始算 —— 早领早用，放着不算数。
 </p>
 
+<div class="tools">
+  <div class="chips" role="group" aria-label="按状态筛选">
+    <span class="chips-label">按状态筛</span>
+    <button class="chip on" data-f="all" aria-pressed="true">全部<b data-c="all">0</b></button>
+    <button class="chip" data-f="crit" aria-pressed="false"><i class="cd" aria-hidden="true"></i>今天或已过<b data-c="crit">0</b></button>
+    <button class="chip" data-f="soon" aria-pressed="false"><i class="cd" aria-hidden="true"></i>7 天内<b data-c="soon">0</b></button>
+    <button class="chip" data-f="live" aria-pressed="false"><i class="cd" aria-hidden="true"></i>在期 / 长期<b data-c="live">0</b></button>
+    <button class="chip" data-f="plan" aria-pressed="false"><i class="cd" aria-hidden="true"></i>未公布<b data-c="plan">0</b></button>
+    <button class="chip" data-f="over" aria-pressed="false"><i class="cd" aria-hidden="true"></i>已结束<b data-c="over">0</b></button>
+  </div>
+  <div class="qsearch">
+    <input id="q" type="search" placeholder="检索本页…" aria-label="检索本页" autocomplete="off">
+    <span class="qnav"><span id="qn" aria-live="polite">0</span><button id="qprev" type="button" aria-label="上一个">&#8593;</button><button id="qnext" type="button" aria-label="下一个">&#8595;</button></span>
+  </div>
+  <span class="tools-count" id="qcount" aria-live="polite"></span>
+</div>
+<p class="qempty" id="qempty">该状态下没有条目 —— 点「全部」回来。</p>
+
 <h2>正在倒计时 <span class="cnt">${n_tick} 条 · 按剩余天数排</span>
   <span class="sub">有确切截止日的，先看这一区。橙点 7 天内到期，红点今天或已过。</span>
 </h2>
@@ -592,7 +705,165 @@ ${over}
 </footer>
 
 </div>
+<button class="qtop" id="qtop" type="button" aria-label="回到顶部">&#8593;</button>
 ${ts_js}
+<script>
+/* 极速页工具条：按状态筛选 + 全文检索 + 回到顶部（2026-11-23）
+   三者都不写死数字：筛选角标与「显示 N / M 条」都从表体实算，
+   改 CSV 行数后自动跟上（写死的话过一期就是错的）。 */
+(function(){
+  "use strict";
+  var tables=[].slice.call(document.querySelectorAll("table.qt")),
+      chips=[].slice.call(document.querySelectorAll(".chip")),
+      cnt=document.getElementById("qcount"),
+      empty=document.getElementById("qempty"),
+      q=document.getElementById("q"),
+      qn=document.getElementById("qn"),
+      filter="all", total=0, marks=[], cur=-1;
+
+  /* ---------- 筛选 ---------- */
+  var counts={all:0};
+  tables.forEach(function(t){
+    [].slice.call(t.querySelectorAll("tbody tr[data-t]")).forEach(function(r){
+      var s=r.getAttribute("data-t");
+      counts[s]=(counts[s]||0)+1; counts.all++;
+    });
+  });
+  total=counts.all;
+  [].slice.call(document.querySelectorAll("[data-c]")).forEach(function(b){
+    b.textContent=(counts[b.getAttribute("data-c")]||0);
+  });
+
+  function apply(){
+    var shown=0;
+    tables.forEach(function(t){
+      var vis=0;
+      [].slice.call(t.querySelectorAll("tbody tr[data-t]")).forEach(function(r){
+        var ok=(filter==="all"||r.getAttribute("data-t")===filter);
+        r.hidden=!ok; if(ok) vis++;
+      });
+      t.hidden=(vis===0);
+      shown+=vis;
+    });
+    /* 分区标题跟着表走：表藏了标题还留着，就是一句悬空的空话 */
+    [].slice.call(document.querySelectorAll("h3.gh")).forEach(function(h){
+      var n=h.nextElementSibling;
+      h.hidden=!!(n&&n.tagName==="TABLE"&&n.hidden);
+    });
+    [].slice.call(document.querySelectorAll("h2")).forEach(function(h){
+      var vis=0,n=h.nextElementSibling;
+      /* 只看到下一个 h2 为止。折叠块（已结束那区）自己决定显隐，
+         否则筛「已结束」时会把「长期有效」的 h2 一起点亮。 */
+      while(n&&n.tagName!=="H2"){
+        if(n.tagName==="TABLE"&&!n.hidden)
+          vis+=n.querySelectorAll("tbody tr[data-t]:not([hidden])").length;
+        n=n.nextElementSibling;
+      }
+      /* 分区标题旁的「6 条」是静态总数，筛选后只剩 3 行还写 6 就会自相矛盾：
+         筛选态改写成「筛出 N 条」，回「全部」再还原原文（原文存在 data-orig）。 */
+      var c=h.querySelector(".cnt");
+      if(c){
+        if(!c.getAttribute("data-orig")) c.setAttribute("data-orig",c.textContent);
+        c.textContent=(filter==="all")?c.getAttribute("data-orig"):("筛出 "+vis+" 条");
+      }
+      h.hidden=(vis===0);
+    });
+    [].slice.call(document.querySelectorAll("details.fold")).forEach(function(d){
+      d.hidden=![].slice.call(d.querySelectorAll("table.qt")).some(function(t){return !t.hidden;});
+      /* 筛「已结束」时它成了唯一可见内容 —— 留在折叠态会像是筛空了，
+         读者得再点一次才看得到那 23 行。只在这一档自动展开，其余情况尊重手动状态。 */
+      if(!d.hidden&&filter==="over") d.open=true;
+    });
+    cnt.textContent="显示 "+shown+" / "+total+" 条";
+    empty.classList.toggle("show", shown===0);
+    if(q.value.trim()) paint(true);   /* 筛完重算命中，否则标记会留在看不见的行里 */
+  }
+
+  chips.forEach(function(c){
+    c.addEventListener("click",function(){
+      filter=c.getAttribute("data-f");
+      chips.forEach(function(x){
+        var on=(x===c);
+        x.classList.toggle("on",on);
+        x.setAttribute("aria-pressed",on?"true":"false");
+      });
+      apply();
+    });
+  });
+
+  /* ---------- 检索 ---------- */
+  function clearMarks(){
+    marks.forEach(function(m){
+      var p=m.parentNode; if(!p) return;
+      p.replaceChild(document.createTextNode(m.textContent),m); p.normalize();
+    });
+    marks=[]; cur=-1;
+  }
+  function go(i){
+    if(!marks.length) return;
+    if(cur>=0&&marks[cur]) marks[cur].classList.remove("cur");
+    cur=(i+marks.length)%marks.length;
+    marks[cur].classList.add("cur");
+    marks[cur].scrollIntoView({block:"center",behavior:"smooth"});
+    qn.textContent=(cur+1)+" / "+marks.length;
+  }
+  function paint(silent){
+    clearMarks();
+    var v=q.value.trim();
+    qn.textContent="0";
+    if(!v) return;
+    var root=document.querySelector(".wrap");
+    var walk=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+      if(!n.nodeValue||!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      var p=n.parentNode; if(!p) return NodeFilter.FILTER_REJECT;
+      if(/^(SCRIPT|STYLE|MARK|INPUT|BUTTON|TEXTAREA|SELECT)$$/.test(p.nodeName)) return NodeFilter.FILTER_REJECT;
+      if(p.closest&&(p.closest(".tools")||p.closest(".qempty"))) return NodeFilter.FILTER_REJECT;
+      if(p.closest&&p.closest("[hidden]")) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }});
+    var nodes=[],n;
+    while((n=walk.nextNode())) nodes.push(n);
+    var lv=v.toLowerCase();
+    nodes.forEach(function(node){
+      var val=node.nodeValue, low=val.toLowerCase(), i=low.indexOf(lv);
+      if(i<0) return;
+      var frag=document.createDocumentFragment(), last=0;
+      while(i>=0){
+        if(i>last) frag.appendChild(document.createTextNode(val.slice(last,i)));
+        var m=document.createElement("mark");
+        m.className="hl";
+        m.textContent=val.slice(i,i+v.length);
+        marks.push(m); frag.appendChild(m);
+        last=i+v.length; i=low.indexOf(lv,last);
+      }
+      if(last<val.length) frag.appendChild(document.createTextNode(val.slice(last)));
+      node.parentNode.replaceChild(frag,node);
+    });
+    if(!marks.length) return;
+    if(silent) qn.textContent=marks.length; else go(0);
+  }
+  q.addEventListener("input",function(){ paint(false); });
+  q.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){ e.preventDefault(); go(cur+1); }
+    else if(e.key==="Escape"){ q.value=""; paint(false); }
+  });
+  document.getElementById("qnext").addEventListener("click",function(){ go(cur+1); });
+  document.getElementById("qprev").addEventListener("click",function(){ go(cur-1); });
+
+  /* ---------- 回到顶部 ---------- */
+  var top=document.getElementById("qtop");
+  function onScroll(){
+    top.classList.toggle("show", window.scrollY>window.innerHeight*0.9);
+  }
+  window.addEventListener("scroll",onScroll,{passive:true});
+  top.addEventListener("click",function(){
+    window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+  });
+
+  apply();
+  onScroll();
+})();
+</script>
 </body>
 </html>
 """

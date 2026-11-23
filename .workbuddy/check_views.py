@@ -229,17 +229,25 @@ def check_page(path, expect, n_quick, n_ledger, latest, latest_date=None):
     # 2026-11-23 用户问「极速视图为什么没有切换按钮」——那天之前 quick/index/archive
     # 只有 @media 跟随系统，手动切不了。三项缺一都会让按钮点了没反应：
     #   按钮本体 / 防闪烁脚本里的 localStorage 键 / 暗色变量能挂上的 data-theme。
+    # 同日二次统一：五页必须走**同一套** .themebtn + querySelectorAll；
+    # 老写法（iconbtn 不带类、getElementById("themeBtn")）一律判失败 ——
+    # 两套并存时外观与无障碍状态会各自漂移，而且改键名只改一处就会打架。
     miss = []
-    if 'id="themeBtn"' not in s:
-        miss.append("按钮 #themeBtn")
+    if not re.search(r'<button[^>]*class="[^"]*themebtn[^"]*"', s):
+        miss.append("按钮 .themebtn")
+    if not re.search(r'<button[^>]*class="[^"]*themebtn[^"]*"[^>]*aria-pressed=', s):
+        miss.append("按钮的 aria-pressed")
     if "aihs-theme" not in s:
         miss.append("localStorage 键 aihs-theme")
     if 'data-theme' not in s:
         miss.append("data-theme")
     if miss:
         err.append("%s：皮肤切换缺 %s" % (name, "、".join(miss)))
+    elif 'getElementById("themeBtn")' in s:
+        err.append("%s：皮肤切换还在用老写法 getElementById(\"themeBtn\")"
+                   " —— 应统一走 .themebtn（themeswitch.JS）" % name)
     else:
-        ok.append("皮肤切换齐全")
+        ok.append("皮肤切换齐全（.themebtn 统一实现）")
 
     return ok, err
 

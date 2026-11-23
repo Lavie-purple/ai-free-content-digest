@@ -64,7 +64,11 @@ def main():
     md = io.open(src, encoding="utf-8").read().replace("\r\n", "\n")
     mm = re.search(r"第\s*(\d{3})\s*期", os.path.basename(src))
     issue = mm.group(1) if mm else "???"
-    ISSUE_RE = re.compile(r"(?<!%s)(0\d{2})\s*期" % issue)
+    # 文件名里没有「第 NNN 期」时 issue 是 "???"，直接塞进后顾断言会得到
+    # `(?<!!!?)` 这种非法正则（nothing to repeat）—— 传参传错文件就整脚本崩，
+    # 而不是给一句人话。这里退化成「空匹配器」，R3 自然跳过。
+    ISSUE_RE = (re.compile(r"(?<!%s)(0\d{2})\s*期" % re.escape(issue))
+                if issue != "???" else None)
 
     lines = md.split("\n")
     # 标记每行归属的小节
@@ -108,7 +112,7 @@ def main():
             #   活动名列里的「（040 期全漏登）」「（040 期最高优先级运维项）」是**主键的一部分**
             #   （跨期引用靠它认行），截止列里的期号是**官方逐字口径**。
             #   **R3 的本意是「行内沿革太多」—— 沿革在状态列里，不在这两列里。**
-            if len(ISSUE_RE.findall(c[2])) >= 2:
+            if ISSUE_RE and len(ISSUE_RE.findall(c[2])) >= 2:
                 hits["R3"].append((len(ISSUE_RE.findall(c[2])), name, sec))
             d = c[1].replace("**", "").strip()
             if "4.1" in sec and STAY_RE.match(d):

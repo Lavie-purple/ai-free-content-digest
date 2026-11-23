@@ -17,10 +17,12 @@
    这里写的样式会被注入到三种不同模板里，用一个某页没有的变量就会静默变透明。
 4. **图标固定 U+25D1「◑」**，与日报顶栏那枚同字符 —— 跨页认的是同一个记号。
 
-⚠️ build_web.py 里有一份等价的内联实现（`#themeBtn` + `aihs-theme`）。
-   改这里的行为（换键名、换图标、改存值格式）必须同步那边，否则两套皮肤记忆会打架。
-   `check_views.py` 第 8 项就是用来抓这种漂移的。
+⚠️ 2026-11-23 已统一：build_web.py（日报 / 总账 / 附录）不再自己内联一份，
+   改为 import 本文件，注入 HEAD_JS / CSS / JS 三件 —— 五页同源，不会再漂移。
+   `check_views.py` 第 8 项禁止老写法复活（页面里出现 `getElementById("themeBtn")` 即失败）。
 """
+
+import re
 
 KEY = "aihs-theme"
 ICON = "\u25d1"
@@ -40,7 +42,17 @@ HEAD_JS = """<script>
 }catch(e){}})();
 </script>""" % {"key": KEY}
 
-CSS = """.themebtn{
+CSS = """/* 皮肤按钮 = 类钩子 .themebtn（行为统一） + 两种外形（按所处位置）
+   2026-11-23 二次统一：此前日报/总账/附录走 `iconbtn#themeBtn + getElementById`，
+   极速/目录走 `.themebtn + querySelectorAll` —— 两套实现，谁改了一边另一边不会跟。
+   现在三种页面**共用同一段 JS**（按类选择器绑事件、同步 aria-pressed），
+   外形仍然分两种，因为按钮所在的位置本来就不一样：
+     · 顶栏里那枚（.iconbtn）保持 38px 方形，和旁边的 ≡ ⌕ ↑ 同高；
+     · 页头/页脚独立那枚（不带 .iconbtn）是 27×24 小方块。
+   所以尺寸规则挂在 `:not(.iconbtn)` 上 —— 否则小方块规则会把顶栏图标压成
+   27×24，与邻居高低不齐（这个坑第一天就踩过）。 */
+.themebtn{cursor:pointer; text-transform:none}
+.themebtn:not(.iconbtn){
   /* 定成固定小方块而不是靠 padding 撑：◑ 在等距字体里的实际字宽不到 1em，
      用 padding 算出来的框会变成竖长条（页脚那枚实测如此）。固定宽高 + 居中一劳永逸。 */
   display:inline-flex; align-items:center; justify-content:center;
@@ -48,11 +60,10 @@ CSS = """.themebtn{
   font-family:var(--fm); font-size:13px; line-height:1; letter-spacing:0;
   color:var(--muted); background:transparent;
   border:1px solid var(--rule-2); border-radius:3px;
-  cursor:pointer; text-transform:none;
   /* 页头那行字只有 11.5px，按钮若同号会小到像标点；独立成 13px + 描边才读得出「可以点」 */
   transition:color .16s,border-color .16s,background .16s;
 }
-.themebtn:hover{color:var(--accent-ink); border-color:var(--accent); background:var(--accent-soft)}
+.themebtn:not(.iconbtn):hover{color:var(--accent-ink); border-color:var(--accent); background:var(--accent-soft)}
 .themebtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 @media print{.themebtn{display:none !important}}
 """
@@ -125,10 +136,18 @@ def dark_block(dark_vars):
 
 
 def check(html):
-    """出口自检：页面必须有按钮、有 JS、有防闪烁脚本，否则返回错误串。"""
+    """出口自检：页面必须有按钮、有 JS、有防闪烁脚本，否则返回错误串。
+
+    2026-11-23 统一后判据从「有没有 #themeBtn」放宽成「有没有 .themebtn」——
+    极速页页脚那枚故意不带 id（同页重复 id 不合法），
+    而所有页面的按钮都一定有类名。再补一条 aria-pressed：
+    两套实现并存时日报页的按钮**没有**这个属性，按下去屏幕朗读读不出状态。"""
     errs = []
-    if 'id="themeBtn"' not in html:
-        errs.append("缺皮肤切换按钮 #themeBtn")
+    btns = re.findall(r"<button[^>]*\bclass=\"[^\"]*themebtn[^\"]*\"[^>]*>", html)
+    if not btns:
+        errs.append("缺皮肤切换按钮 .themebtn")
+    elif not all("aria-pressed=" in b for b in btns):
+        errs.append("皮肤按钮缺 aria-pressed（状态无法被朗读）")
     if KEY not in html:
         errs.append("缺 localStorage 键 %s（防闪烁脚本没进页面）" % KEY)
     if "data-theme" not in html:

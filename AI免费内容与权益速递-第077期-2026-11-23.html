@@ -7,10 +7,12 @@
 <meta name="description" content="主题：AI 免费内容发布 · 免费内容（生成/分发）· 免费额度">
 <meta name="color-scheme" content="light dark">
 <script>
-/* 防闪烁：先定主题，再渲染 */
+/* 防闪烁：先定主题，再渲染（与日报页共用 localStorage 键 aihs-theme） */
 (function(){try{
   var t=localStorage.getItem("aihs-theme");
-  if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";}
+  if(t!=="light"&&t!=="dark"){
+    t=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";
+  }
   document.documentElement.setAttribute("data-theme",t);
 }catch(e){}})();
 </script>
@@ -814,6 +816,31 @@ mark.hl.cur{background:var(--accent); color:#fff}
   .db{display:flex !important; break-inside:avoid}
 }
 
+/* 皮肤按钮 = 类钩子 .themebtn（行为统一） + 两种外形（按所处位置）
+   2026-11-23 二次统一：此前日报/总账/附录走 `iconbtn#themeBtn + getElementById`，
+   极速/目录走 `.themebtn + querySelectorAll` —— 两套实现，谁改了一边另一边不会跟。
+   现在三种页面**共用同一段 JS**（按类选择器绑事件、同步 aria-pressed），
+   外形仍然分两种，因为按钮所在的位置本来就不一样：
+     · 顶栏里那枚（.iconbtn）保持 38px 方形，和旁边的 ≡ ⌕ ↑ 同高；
+     · 页头/页脚独立那枚（不带 .iconbtn）是 27×24 小方块。
+   所以尺寸规则挂在 `:not(.iconbtn)` 上 —— 否则小方块规则会把顶栏图标压成
+   27×24，与邻居高低不齐（这个坑第一天就踩过）。 */
+.themebtn{cursor:pointer; text-transform:none}
+.themebtn:not(.iconbtn){
+  /* 定成固定小方块而不是靠 padding 撑：◑ 在等距字体里的实际字宽不到 1em，
+     用 padding 算出来的框会变成竖长条（页脚那枚实测如此）。固定宽高 + 居中一劳永逸。 */
+  display:inline-flex; align-items:center; justify-content:center;
+  width:27px; height:24px; padding:0;
+  font-family:var(--fm); font-size:13px; line-height:1; letter-spacing:0;
+  color:var(--muted); background:transparent;
+  border:1px solid var(--rule-2); border-radius:3px;
+  /* 页头那行字只有 11.5px，按钮若同号会小到像标点；独立成 13px + 描边才读得出「可以点」 */
+  transition:color .16s,border-color .16s,background .16s;
+}
+.themebtn:not(.iconbtn):hover{color:var(--accent-ink); border-color:var(--accent); background:var(--accent-soft)}
+.themebtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media print{.themebtn{display:none !important}}
+
 </style>
 </head>
 <body>
@@ -833,7 +860,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
         <span class="sc"><span id="qn">0</span><button id="qprev" type="button" aria-label="上一个">↑</button><button id="qnext" type="button" aria-label="下一个">↓</button></span>
       </div>
       <button class="iconbtn" id="menuBtn" type="button" aria-label="打开目录" aria-expanded="false">≡</button>
-      <button class="iconbtn" id="themeBtn" type="button" aria-label="切换明暗主题">◑</button>
+      <button class="iconbtn themebtn" id="themeBtn" type="button" aria-label="切换明暗主题" aria-pressed="false" title="切换明暗主题">◑</button>
     </div>
   </div>
 </header>
@@ -1477,13 +1504,10 @@ mark.hl.cur{background:var(--accent); color:#fff}
   "use strict";
   var root=document.documentElement, main=document.getElementById("main");
 
-  /* ---------- 主题 ---------- */
-  var themeBtn=document.getElementById("themeBtn");
-  themeBtn.addEventListener("click",function(){
-    var t=root.getAttribute("data-theme")==="dark"?"light":"dark";
-    root.setAttribute("data-theme",t);
-    try{localStorage.setItem("aihs-theme",t);}catch(e){}
-  });
+  /* ---------- 主题 ----------
+     2026-11-23 起由 themeswitch.JS 统一处理（按 .themebtn 类绑全部按钮、
+     同步 aria-pressed）。这里不再自己写一份 —— 两套并存时日报页的按钮
+     没有 aria-pressed，点了屏幕朗读读不出状态，且换键名时只改一处会打架。 */
 
   /* ---------- 章节高亮 ---------- */
   var secs=[].slice.call(document.querySelectorAll("main .sec")),
@@ -1740,6 +1764,29 @@ mark.hl.cur{background:var(--accent); color:#fff}
   document.getElementById("topBtn").addEventListener("click",function(){
     window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
   });
+})();
+</script>
+<script>
+(function(){
+  var root=document.documentElement;
+  var btns=Array.prototype.slice.call(document.querySelectorAll(".themebtn"));
+  if(!btns.length) return;
+  function paint(){
+    var dark=root.getAttribute("data-theme")==="dark";
+    btns.forEach(function(b){
+      b.setAttribute("aria-pressed", dark?"true":"false");
+      b.setAttribute("title", dark?"当前暗色，点击切到亮色":"当前亮色，点击切到暗色");
+    });
+  }
+  btns.forEach(function(b){
+    b.addEventListener("click",function(){
+      var t=root.getAttribute("data-theme")==="dark"?"light":"dark";
+      root.setAttribute("data-theme",t);
+      try{localStorage.setItem("aihs-theme",t);}catch(e){}
+      paint();
+    });
+  });
+  paint();
 })();
 </script>
 </body>

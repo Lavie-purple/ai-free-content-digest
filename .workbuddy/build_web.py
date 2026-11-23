@@ -16,6 +16,7 @@ WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import datebadge
 import viewswitch
+import themeswitch
 import json
 
 # ---------------------------------------------------------------- 30 秒速览 / 审计层折叠
@@ -726,6 +727,11 @@ def build():
     if is_digest and not datebar_html:
         print("⚠️ 页头日期条没生成：源 md 里读不到「扫描截止 YYYY-MM-DD HH:MM」")
     doc = doc.replace("__DATEBAR__", datebar_html).replace("__DB_CSS__", datebadge.CSS)
+    # 皮肤切换三件（2026-11-23 起与极速页 / 目录页共用 themeswitch）：
+    # 防闪烁脚本 / 按钮样式 / 事件绑定。三件缺一都不会报错，只是按钮点了没反应。
+    doc = doc.replace("__TS_HEAD__", themeswitch.HEAD_JS)
+    doc = doc.replace("__TS_CSS__", themeswitch.CSS)
+    doc = doc.replace("__TS_JS__", themeswitch.JS)
 
     doc = doc.replace("__VS_CSS__", viewswitch.CSS)
     doc = doc.replace("__VIEWSWITCH__", viewswitch.render(
@@ -744,6 +750,17 @@ def build():
     doc = doc.replace("__TB_DATE__", esc(bar_date[5:]) if bar_date else "")
     doc = doc.replace("__MH_NUM__", esc(mh_num))
 
+    # head 里除了 <style>/<script> 内部，不许出现裸的 `/*` ——
+    # 2026-11-23 改主题注入时留了一段注释在 <script> 外面，结果被当成正文
+    # 渲染在页面最顶端（截图一眼看到「/＊ 防闪烁脚本由…」）。
+    # 这类错误不报错、不改数据，只有眼睛或这条断言能发现。
+    _head = doc.split("</head>")[0]
+    _bare = re.sub(r"<style[\s\S]*?</style>", "", _head)
+    _bare = re.sub(r"<script[\s\S]*?</script>", "", _bare)
+    if "/*" in _bare:
+        raise SystemExit("head 里有裸露的 /* 注释（会被渲染成正文）：%s…"
+                         % _bare[_bare.index("/*"):][:60])
+
     io.open(OUT, "w", encoding="utf-8", newline="\n").write(doc)
     print("written %s  %d bytes" % (OUT, os.path.getsize(OUT)))
     print("sections=%d  h3=%d" % (len([x for x in toc if not x[3]]), len([x for x in toc if x[3]])))
@@ -760,14 +777,7 @@ PAGE = """<!DOCTYPE html>
 <title>__TITLE__ · __ISSUE_LINE__</title>
 <meta name="description" content="__METAS__">
 <meta name="color-scheme" content="light dark">
-<script>
-/* 防闪烁：先定主题，再渲染 */
-(function(){try{
-  var t=localStorage.getItem("aihs-theme");
-  if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";}
-  document.documentElement.setAttribute("data-theme",t);
-}catch(e){}})();
-</script>
+__TS_HEAD__
 <style>
 /* ============================================================
    令牌层 —— 报刊纸（亮） / 夜读（暗），单一强调色：朱红
@@ -1492,6 +1502,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
   .rise{opacity:1 !important; transform:none !important}
 }
 __DB_CSS__
+__TS_CSS__
 </style>
 </head>
 <body__BODYCLASS__>
@@ -1511,7 +1522,7 @@ __DB_CSS__
         <span class="sc"><span id="qn">0</span><button id="qprev" type="button" aria-label="上一个">\u2191</button><button id="qnext" type="button" aria-label="下一个">\u2193</button></span>
       </div>
       <button class="iconbtn" id="menuBtn" type="button" aria-label="打开目录" aria-expanded="false">\u2261</button>
-      <button class="iconbtn" id="themeBtn" type="button" aria-label="切换明暗主题">\u25D1</button>
+      <button class="iconbtn themebtn" id="themeBtn" type="button" aria-label="切换明暗主题" aria-pressed="false" title="切换明暗主题">\u25D1</button>
     </div>
   </div>
 </header>
@@ -1552,13 +1563,10 @@ __BODY__
   "use strict";
   var root=document.documentElement, main=document.getElementById("main");
 
-  /* ---------- 主题 ---------- */
-  var themeBtn=document.getElementById("themeBtn");
-  themeBtn.addEventListener("click",function(){
-    var t=root.getAttribute("data-theme")==="dark"?"light":"dark";
-    root.setAttribute("data-theme",t);
-    try{localStorage.setItem("aihs-theme",t);}catch(e){}
-  });
+  /* ---------- 主题 ----------
+     2026-11-23 起由 themeswitch.JS 统一处理（按 .themebtn 类绑全部按钮、
+     同步 aria-pressed）。这里不再自己写一份 —— 两套并存时日报页的按钮
+     没有 aria-pressed，点了屏幕朗读读不出状态，且换键名时只改一处会打架。 */
 
   /* ---------- 章节高亮 ---------- */
   var secs=[].slice.call(document.querySelectorAll("main .sec")),
@@ -1817,6 +1825,7 @@ __BODY__
   });
 })();
 </script>
+__TS_JS__
 </body>
 </html>
 """
