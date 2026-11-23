@@ -82,7 +82,10 @@ body{
   font-family:var(--fs); font-size:15px; line-height:1.65;
   -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:860px; margin:0 auto; padding:0 20px 72px}
+/* 2026-11-23：原来钉死 860px。1920 屏上实测左 512 / 右 512 全空，正文只占 45%，
+   而同一刊的完整日报与常驻总账都是 1240px —— 三视图并排截图时本页窄一大截。
+   统一到 1240：宽屏不再白扔一半地方，与另外两页的版心右边界也对得上。 */
+.wrap{max-width:1240px; margin:0 auto; padding:0 20px 72px}
 
 /* ---------- 页头 ---------- */
 header{padding:36px 0 0}
@@ -359,6 +362,43 @@ mark.hl.cur{background:var(--accent); color:#fff}
 .qtop.show{display:inline-flex}
 .qtop:hover{color:var(--accent-ink); border-color:var(--accent)}
 .qtop:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* ---------- 宽屏（≥1080） ----------
+   版心由 860 放宽到 1240 之后，三列表若仍按 41/31/28 分，
+   「到什么时候」会空出 330 多像素只放一行短日期，行看着左重右轻。
+   宽屏按 44/32/24 重分：名称列放得下「名称 + 标签 + 门槛小字」，
+   日期列收到 24% 刚好容下「12/20（27 天）」。
+   检索框同步由 360 放到 440 —— 1240 宽的版心里 360 像根短棍。
+   注意：这段必须在「筛选条」那批规则之后（.qsearch 基础值写在 593 行），
+   否则同特异性下会被基础值盖回去。 */
+@media (min-width:1080px){
+  /* 字号要跟着版心上调：15px / 14px 是给 860 宽定的，
+     同样的字号放到 1240 里，一眼看上去就是「行很稀、字很小」。 */
+  body{font-size:16px}
+  h1{font-size:34px}
+  .lede{font-size:15.5px}
+  table.qt{font-size:15px}
+  .nm{font-size:15px}
+  .c-qty{font-size:14px}
+  .c-when{font-size:13px}
+  .need{font-size:12px}
+  .chip{font-size:12.5px}
+  /* 检索框基础值是 flex:1 1 100%（窄屏要它独占一行），
+     放到 1080+ 就变成「第一行 chip+计数、第二行只剩一个检索框、右边全空」。
+     宽屏改成可伸缩的一行：chip | 检索 | 计数。 */
+  .qsearch{order:2; flex:1 1 200px; min-width:160px; max-width:440px}
+  .tools-count{order:3}
+  /* 分区标题右侧的「N 条」原本靠 margin-left:auto 推到版心最右（860 宽时只隔 600px，
+     像个右对齐的页码）。1240 之下会隔到 1000px 开外，标题与条数读起来像两个无关的东西。
+     宽屏改成紧跟描述，扫读时「标题 → 说明 → 几条」是连着的。 */
+  h3.gh .gc{margin-left:14px}
+  /* 列宽：名称 42 / 额度 31 / 时间 27。
+     第三列不是一行短日期，是「失效时间 + 领取限制」的长句，
+     按 24% 分会把 288px 塞成四五行；第一列反倒常剩大段空白。 */
+  table.qt th:nth-child(1){width:42%}
+  table.qt th:nth-child(2){width:31%}
+  table.qt th:nth-child(3){width:27%}
+}
 
 
 .vs{

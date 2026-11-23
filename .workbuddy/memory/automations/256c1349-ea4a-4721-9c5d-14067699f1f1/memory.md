@@ -3214,3 +3214,35 @@ commit **`8734d4b`** → push `3552505..8734d4b`；部署 **`7997207170`** succe
   按钮必须定宽高（`◑` 字宽不足 1em，padding 撑出竖长条）。
 - 提交 `afcd123` + `95cc436`；部署 `7998973699` success；线上 index/quick/archive md5 = 本地。
 - **下期出刊不用额外动作**：`build_site.sh` 已含两件，守卫会自动挡住回退。
+
+## 077 期后补丁二（2026-11-23 20:44–21:00）· 极速页补三件控件 + 皮肤归一
+
+用户问「极速视图是不是比完整日报、常驻台账少了设置选择类的东西」，确认确实少，然后说「改吧」。
+- 极速页改前只有 **2 个 `<button>`**（都是皮肤切换），无 `.chip` 样式；日报 12 个、总账 11 个。
+- 补三件（`build_quick.py` 内实现，不搬日报那套「只筛一张表」的逻辑）：
+  状态筛 6 档 chip（角标实算）/ 全文检索（命中数 + 上下条 + Esc）/ 回顶浮钮。
+  筛选时 h3/h2 跟着表走、h2 静态「6 条」改写「筛出 N 条」、筛「已结束」自动展开折叠块。
+- 皮肤归一：`build_web.py` 改 `import themeswitch`（注入 `__TS_HEAD__/__TS_CSS__/__TS_JS__`），
+  删掉 `getElementById("themeBtn")` 老实现；`.themebtn` 尺寸收进 `:not(.iconbtn)`。
+  `check_views` 第 8 项加严 + 禁老写法复活。
+- 三坑：`[hidden]` 打不过 `h3.gh` 的 `display:flex`（须 `!important`）/ head 裸露 `/*` 被渲染成正文
+  （`build_web` 已加出口断言）/ `lint_table` 期号取不到拼出非法正则崩（已 `re.escape` + 退化）。
+- 守卫：`build_site` 三项 ALL GREEN、`verify_web` 缺失片段 0、`lint_table --strict` CLEAN、
+  `check_tables` 25 表 0 异常、`check_frozen` 高危 0。
+- commit `9e4878a`；**下期出刊不用额外动作**，`build_site.sh` 已覆盖。
+
+## 077 期后补丁三（2026-11-23 21:00）· 极速页补宽屏适配
+
+用户：「极速视图好像没做宽屏适配，我看完整日报和常驻台账都做了」——属实。
+- 病因：`build_quick.py` 的 `.wrap{max-width:860px}` 从 2026-09 起没跟，日报 / 总账都是 1240。
+  1920 屏实测极速版心 860（正文占 **45%**），左右各空 512。
+- 改：`.wrap` → 1240；新增 `@media (min-width:1080px)` 宽屏段。
+  改后三页在 1920 下 `left=322 / right=1562 / width=1240` **完全一致**。
+- 宽屏段连带改四项（只改容器会露馅）：
+  ① 字号整体升一档（body 16 / h1 34 / table 15）；② 列宽 41-31-28 → **42-31-27**；
+  ③ `.qsearch` 的 `flex:1 1 100%` 在宽屏会把检索框挤到第二行 → 改 `flex:1 1 200px`，一行放下 chip+检索+计数；
+  ④ `h3.gh .gc` 的 `margin-left:auto` 在大版心上会把「N 条」甩到 1000px 外 → 改紧跟描述 14px。
+- **硬约束**：宽屏段必须写在「筛选条」那批 CSS **之后**，否则 `.qsearch` 的 360px 基础值同特异性盖回去（症状=改了没反应）。
+- 回归：1920/1440/1280 → wrap 1240；900 → 863；640/390 → 表格转卡片（cols=0 正常）；全档无横向溢出；
+  宽屏下筛选/检索行为不变（all 112 / soon 4 / 检索「智谱」→ 显示 3 / 104 条）。
+- 守卫全绿：build_site 三项 ALL GREEN、verify_web 缺失片段 0、lint_table --strict CLEAN、首页 == 极速同字节。
