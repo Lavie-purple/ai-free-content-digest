@@ -2236,3 +2236,50 @@ assert res.count(r) == 1 for each untouched row # ③ 未改写行唯一（数�
 `check_views.py` 新增第 7 项：五页里除 `archive.html`（期次列表，没有单一日期）外，
 都必须有日期条且 `data-date` == 最新一期文件名里的日期。`build_quick.py` 出口另加一次
 `datebadge.check()`，日期条缺失直接 `exit 1`。
+
+## §十·45 · 皮肤切换按钮为什么只有三页有（2026-11-23 用户第二次问版式）
+
+### 一、根因：不是功能缺失，是**入口缺失**
+
+五页里 `standing.html` / `details.html` / 期页 由 `build_web.py` 生成，模板里有
+`#themeBtn` + 内联防闪烁脚本 + `html[data-theme="dark"]` 变量块；
+而 `quick.html` / `index.html` / `archive.html`（build_quick.py、build_index_web.py）
+**只有 `@media (prefers-color-scheme:dark)`** —— 跟着系统走，读者没法手动切。
+用户看到的就是「有的页右上角有 ◑，有的没有」。
+
+### 二、`.workbuddy/themeswitch.py` 是第三件共用件（前两件 viewswitch / datebadge）
+
+- `HEAD_JS` —— 内联在 `<style>` **之前**的防闪烁脚本，键 `aihs-theme`（与 build_web 相同）。
+  比 build_web 那份多一道 light/dark 白名单：存了脏值不会把 `data-theme` 设成非法值。
+- `dark_block(vars)` —— 把一段暗色变量包成两条选择器：
+  `html[data-theme="dark"]`（手动切）+ `@media (prefers-color-scheme:dark){ html:not([data-theme]) }`
+  （脚本没跑起来时的兜底）。**原来写在 `@media` 里的 `:root{}` 必须搬出来**，
+  否则手动切换不生效（media 只认系统，不认 attribute）。
+- `button(bid="themeBtn")` —— `bid=None` 时不写 id，供同页第二枚用（重复 id 不合法）。
+- `JS` —— `querySelectorAll(".themebtn")`，多枚按钮状态同步。**不用 getElementById**。
+- `check(html)` —— 出口自检，缺按钮/键/属性任一即 exit 1。
+
+### 三、按钮必须定宽高，不能靠 padding 撑
+
+`◑`（U+25D1）在等距字体里的实际字宽不到 1em，`padding:4px 7px` 算出来的框是**竖长条**
+（页脚那枚实测如此，截图可见）。改成 `width:27px; height:24px; display:inline-flex;
+align-items:center; justify-content:center; padding:0` 才是正圆心的方块。
+
+### 四、极速页要两枚按钮（页头 + 页脚）
+
+极速页是 104 行长表，页头那枚滚几千像素就没了；日报靠 sticky 顶栏所以一直可达。
+所以页脚 `.back` 也放一枚（`.back` 从 `inline-block` 改 `flex` + `gap:12px` 才对齐）。
+两枚靠 `.themebtn` 类同步，`aria-pressed` / `title` 一起变（headless 点击实测：
+`n=2 / p0=true / p1=true / theme=dark`）。
+
+### 五、守卫第 8 项
+
+`check_views.py` 断言五页都有 `id="themeBtn"` + `aihs-theme` + `data-theme`。
+三项缺一的表现各不相同：缺按钮 = 点不了；缺键 = 跨页不延续；缺 data-theme = 点了没反应。
+
+### 六、验证方式（本轮新增的手法，值得复用）
+
+静态截图只能证明「画出来了」，证明不了「点了会变」。做法：把 `<web>.html` 复制一份，
+在 `</body>` 前插 `setTimeout(... click() ...)`，用
+`chrome --headless --virtual-time-budget=3000 --dump-dom` 读 `document.title` 里回填的
+`before/after/again/aria-pressed`。file:// 下 localStorage 受限，但 attribute 切换照常可验。
