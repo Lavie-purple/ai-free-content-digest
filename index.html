@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>免费速查 · AI 免费内容与权益速递</title>
 <meta name="description" content="AI 免费额度速查：给什么、能拿多少、到什么时候结束，一条一行。">
+<meta name="color-scheme" content="light dark">
+<script>
+/* 防闪烁：先定主题，再渲染（与日报页共用 localStorage 键 aihs-theme） */
+(function(){try{
+  var t=localStorage.getItem("aihs-theme");
+  if(t!=="light"&&t!=="dark"){
+    t=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";
+  }
+  document.documentElement.setAttribute("data-theme",t);
+}catch(e){}})();
+</script>
 <style>
 :root{
   --bg:#faf8f4; --surface:#ffffff; --surface-2:#f4f1ea; --rule:#e2ddd1; --rule-2:#cfc8b8;
@@ -15,15 +26,50 @@
   --fs: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
   --fm:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
+html[data-theme="dark"]{
+  --bg:#14120e;
+  --surface:#1b1813;
+  --surface-2:#221e17;
+  --rule:#332d24;
+  --rule-2:#463e31;
+  --ink:#ece7dc;
+  --ink-2:#cec8ba;
+  --muted:#9d9486;
+  --faint:#8e8577;
+  --accent:#ff6d55;
+  --accent-ink:#ff8b76;
+  --accent-soft:rgba(255,109,85,.13);
+  --crit:#ff3b30;
+  --soon:#e0a24a;
+  --live:#6fbe8e;
+  --plan:#82a9d6;
+  --over:#9c9387;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -16px rgba(0,0,0,.6);
+}
 @media (prefers-color-scheme:dark){
-  :root{
-    --bg:#14120e; --surface:#1b1813; --surface-2:#221e17; --rule:#332d24; --rule-2:#463e31;
-    --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;
-    --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.13);
-    --crit:#ff3b30; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#9c9387;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -16px rgba(0,0,0,.6);
+  /* 兜底：内联脚本未执行时不至于整页亮白 */
+  html:not([data-theme]){
+  --bg:#14120e;
+  --surface:#1b1813;
+  --surface-2:#221e17;
+  --rule:#332d24;
+  --rule-2:#463e31;
+  --ink:#ece7dc;
+  --ink-2:#cec8ba;
+  --muted:#9d9486;
+  --faint:#8e8577;
+  --accent:#ff6d55;
+  --accent-ink:#ff8b76;
+  --accent-soft:rgba(255,109,85,.13);
+  --crit:#ff3b30;
+  --soon:#e0a24a;
+  --live:#6fbe8e;
+  --plan:#82a9d6;
+  --over:#9c9387;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -16px rgba(0,0,0,.6);
   }
 }
+
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
@@ -38,11 +84,15 @@ header{padding:36px 0 0}
 .kicker{
   font-family:var(--fm); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
   color:var(--accent-ink); font-weight:600;
+  /* 2026-11-23：右侧原来只有一枚「往期总目录」，现在加上皮肤切换按钮。
+     改 flex 是为了让两者一起贴右、且窄屏能整块换行（原来 .arc 是 float，按钮没处放）。 */
+  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
 }
+.kicker .kick-tools{display:flex; align-items:center; gap:10px; margin-left:auto}
 /* 首页（= 本页）不再是总目录，往期入口缩到页头右上角一行小字：
    不占首屏、但也不必翻到页脚才找得到。 */
 .kicker .arc{
-  float:right; letter-spacing:0; text-transform:none; font-weight:500;
+  letter-spacing:0; text-transform:none; font-weight:500;
   color:var(--muted); text-decoration:none; border-bottom:1px solid var(--rule);
 }
 .kicker .arc:hover{color:var(--accent-ink); border-bottom-color:var(--accent)}
@@ -170,7 +220,10 @@ footer a:hover{border-bottom-color:var(--accent)}
 footer p{margin:0 0 6px}
 footer b{color:var(--muted); font-weight:600}
 .back{
-  display:inline-block; margin-top:2px; font-family:var(--fm); font-size:12px;
+  /* 页脚这枚皮肤按钮是「滚到表尾也能切」的兜底（页头那枚会滚出视野）。
+     改 flex 是为了让按钮与刊名同基线；文字那半不加弹性，按钮紧跟着不飘到右边。 */
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  margin-top:2px; font-family:var(--fm); font-size:12px;
   color:var(--accent-ink);
 }
 
@@ -287,13 +340,32 @@ footer b{color:var(--muted); font-weight:600}
   .db{display:flex !important; break-inside:avoid}
 }
 
+.themebtn{
+  /* 定成固定小方块而不是靠 padding 撑：◑ 在等距字体里的实际字宽不到 1em，
+     用 padding 算出来的框会变成竖长条（页脚那枚实测如此）。固定宽高 + 居中一劳永逸。 */
+  display:inline-flex; align-items:center; justify-content:center;
+  width:27px; height:24px; padding:0;
+  font-family:var(--fm); font-size:13px; line-height:1; letter-spacing:0;
+  color:var(--muted); background:transparent;
+  border:1px solid var(--rule-2); border-radius:3px;
+  cursor:pointer; text-transform:none;
+  /* 页头那行字只有 11.5px，按钮若同号会小到像标点；独立成 13px + 描边才读得出「可以点」 */
+  transition:color .16s,border-color .16s,background .16s;
+}
+.themebtn:hover{color:var(--accent-ink); border-color:var(--accent); background:var(--accent-soft)}
+.themebtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media print{.themebtn{display:none !important}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
-  <div class="kicker">免费速查 · Free Tier Index<a class="arc" href="archive.html">往期总目录 &#8594;</a></div>
+  <div class="kicker">
+    <span class="kick-t">免费速查 · Free Tier Index</span>
+    <span class="kick-tools"><a class="arc" href="archive.html">往期总目录 &#8594;</a><button class="themebtn" id="themeBtn" type="button" aria-label="切换明暗主题" aria-pressed="false" title="切换明暗主题">◑</button></span>
+  </div>
   <div class="db" data-date="2026-11-23" role="note" aria-label="本页对应的日期"><span class="db-flag">本页日期</span><span class="db-date">2026<em>年</em>11<em>月</em>23<em>日</em></span><span class="db-wd">周一</span><span class="db-meta">104 条在册</span></div>
   <h1>AI 免费额度，一条一行</h1>
   <p class="lede">只回答四个问题：<b>给什么</b>、<b>能拿多少</b>、<b>到什么时候结束</b>、<b>要什么门槛</b>。不写沿革、不写期号、不写论证过程。</p>
@@ -456,9 +528,32 @@ footer b{color:var(--muted); font-weight:600}
   <p><b>要追证：</b>本页只收「我现在能领什么」—— 模型发布、开源公告、申报通知、停服迁移这类新闻不在此列。
      每一条的原文、原始出处、核对时点、口径与历史变更、避坑记录都在完整版日报里，本页只做「能不能白拿」的判断。
      <a href="AI免费内容与权益速递-第077期-2026-11-23.html">读本期完整日报 &#8594;</a>　<a href="archive.html">历史各期索引 &#8594;</a></p>
-  <p class="back">AI 免费内容与权益速递 · 免费速查</p>
+  <p class="back"><span>AI 免费内容与权益速递 · 免费速查</span><button class="themebtn" type="button" aria-label="切换明暗主题" aria-pressed="false" title="切换明暗主题">◑</button></p>
 </footer>
 
 </div>
+<script>
+(function(){
+  var root=document.documentElement;
+  var btns=Array.prototype.slice.call(document.querySelectorAll(".themebtn"));
+  if(!btns.length) return;
+  function paint(){
+    var dark=root.getAttribute("data-theme")==="dark";
+    btns.forEach(function(b){
+      b.setAttribute("aria-pressed", dark?"true":"false");
+      b.setAttribute("title", dark?"当前暗色，点击切到亮色":"当前亮色，点击切到暗色");
+    });
+  }
+  btns.forEach(function(b){
+    b.addEventListener("click",function(){
+      var t=root.getAttribute("data-theme")==="dark"?"light":"dark";
+      root.setAttribute("data-theme",t);
+      try{localStorage.setItem("aihs-theme",t);}catch(e){}
+      paint();
+    });
+  });
+  paint();
+})();
+</script>
 </body>
 </html>

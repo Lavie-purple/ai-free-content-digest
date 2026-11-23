@@ -32,6 +32,7 @@ from string import Template
 WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import datebadge
+import themeswitch
 import viewswitch
 SRC = os.path.join(WS, ".workbuddy", "data", "quick_items.csv")
 DEADLINES = os.path.join(WS, ".workbuddy", "data", "deadlines.csv")
@@ -234,6 +235,22 @@ def build(rows):
         "viewswitch": vs_html,
         "full_href": full_href,
         "vs_css": viewswitch.CSS,
+        # 皮肤切换（2026-11-23）：三个占位符 + 一段暗色变量。
+        # 暗色值沿用本页原有那套（没有跟日报统一 —— 两页底色本来就差一点，
+        # 强行拉齐会改变既有观感；要统一的是「按钮行为」，不是色号）。
+        "ts_head": themeswitch.HEAD_JS,
+        "ts_css": themeswitch.CSS,
+        "ts_btn": themeswitch.button(),
+        # 页脚那枚不写 id（同页重复 id 不合法）；JS 按 .themebtn 类同时绑两枚。
+        "ts_btn_foot": themeswitch.button(bid=None),
+        "ts_js": themeswitch.JS,
+        "ts_dark": themeswitch.dark_block(
+            "--bg:#14120e; --surface:#1b1813; --surface-2:#221e17; --rule:#332d24; --rule-2:#463e31;"
+            " --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;"
+            " --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.13);"
+            " --crit:#ff3b30; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#9c9387;"
+            " --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -16px rgba(0,0,0,.6)"
+        ),
     })
 
 
@@ -313,6 +330,8 @@ TEMPLATE = r"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>免费速查 · AI 免费内容与权益速递</title>
 <meta name="description" content="AI 免费额度速查：给什么、能拿多少、到什么时候结束，一条一行。">
+<meta name="color-scheme" content="light dark">
+${ts_head}
 <style>
 :root{
   --bg:#faf8f4; --surface:#ffffff; --surface-2:#f4f1ea; --rule:#e2ddd1; --rule-2:#cfc8b8;
@@ -323,15 +342,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   --fs: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
   --fm:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#14120e; --surface:#1b1813; --surface-2:#221e17; --rule:#332d24; --rule-2:#463e31;
-    --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;
-    --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.13);
-    --crit:#ff3b30; --soon:#e0a24a; --live:#6fbe8e; --plan:#82a9d6; --over:#9c9387;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -16px rgba(0,0,0,.6);
-  }
-}
+${ts_dark}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
@@ -346,11 +357,15 @@ header{padding:36px 0 0}
 .kicker{
   font-family:var(--fm); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
   color:var(--accent-ink); font-weight:600;
+  /* 2026-11-23：右侧原来只有一枚「往期总目录」，现在加上皮肤切换按钮。
+     改 flex 是为了让两者一起贴右、且窄屏能整块换行（原来 .arc 是 float，按钮没处放）。 */
+  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
 }
+.kicker .kick-tools{display:flex; align-items:center; gap:10px; margin-left:auto}
 /* 首页（= 本页）不再是总目录，往期入口缩到页头右上角一行小字：
    不占首屏、但也不必翻到页脚才找得到。 */
 .kicker .arc{
-  float:right; letter-spacing:0; text-transform:none; font-weight:500;
+  letter-spacing:0; text-transform:none; font-weight:500;
   color:var(--muted); text-decoration:none; border-bottom:1px solid var(--rule);
 }
 .kicker .arc:hover{color:var(--accent-ink); border-bottom-color:var(--accent)}
@@ -478,7 +493,10 @@ footer a:hover{border-bottom-color:var(--accent)}
 footer p{margin:0 0 6px}
 footer b{color:var(--muted); font-weight:600}
 .back{
-  display:inline-block; margin-top:2px; font-family:var(--fm); font-size:12px;
+  /* 页脚这枚皮肤按钮是「滚到表尾也能切」的兜底（页头那枚会滚出视野）。
+     改 flex 是为了让按钮与刊名同基线；文字那半不加弹性，按钮紧跟着不飘到右边。 */
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  margin-top:2px; font-family:var(--fm); font-size:12px;
   color:var(--accent-ink);
 }
 
@@ -522,13 +540,17 @@ footer b{color:var(--muted); font-weight:600}
 }
 ${vs_css}
 ${db_css}
+${ts_css}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
-  <div class="kicker">免费速查 · Free Tier Index<a class="arc" href="archive.html">往期总目录 &#8594;</a></div>
+  <div class="kicker">
+    <span class="kick-t">免费速查 · Free Tier Index</span>
+    <span class="kick-tools"><a class="arc" href="archive.html">往期总目录 &#8594;</a>${ts_btn}</span>
+  </div>
   ${datebar}
   <h1>AI 免费额度，一条一行</h1>
   <p class="lede">只回答四个问题：<b>给什么</b>、<b>能拿多少</b>、<b>到什么时候结束</b>、<b>要什么门槛</b>。不写沿革、不写期号、不写论证过程。</p>
@@ -566,10 +588,11 @@ ${over}
   <p><b>要追证：</b>本页只收「我现在能领什么」—— 模型发布、开源公告、申报通知、停服迁移这类新闻不在此列。
      每一条的原文、原始出处、核对时点、口径与历史变更、避坑记录都在完整版日报里，本页只做「能不能白拿」的判断。
      <a href="${full_href}">读本期完整日报 &#8594;</a>　<a href="archive.html">历史各期索引 &#8594;</a></p>
-  <p class="back">AI 免费内容与权益速递 · 免费速查</p>
+  <p class="back"><span>AI 免费内容与权益速递 · 免费速查</span>${ts_btn_foot}</p>
 </footer>
 
 </div>
+${ts_js}
 </body>
 </html>
 """
@@ -602,6 +625,11 @@ def main():
     bad = datebadge.check(html, BASE.strftime("%Y-%m-%d"))
     if bad:
         raise SystemExit("页头日期条异常：%s" % "；".join(bad))
+
+    # 皮肤切换按钮必须在（2026-11-23 用户问「极速视图为什么没有切换按钮」）
+    bad = themeswitch.check(html)
+    if bad:
+        raise SystemExit("皮肤切换异常：%s" % bad)
 
     # 首页自指检测：index.html 与 quick.html 是同一份内容，页面里若还有
     # `href="index.html"`，读者点「历史各期索引」会原地打转（看起来像没反应）。

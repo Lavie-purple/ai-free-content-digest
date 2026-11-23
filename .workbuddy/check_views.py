@@ -225,6 +225,22 @@ def check_page(path, expect, n_quick, n_ledger, latest, latest_date=None):
         ok.extend(o)
         err.extend(e)
 
+    # 8. 皮肤切换按钮（五页都要，含往期总目录）
+    # 2026-11-23 用户问「极速视图为什么没有切换按钮」——那天之前 quick/index/archive
+    # 只有 @media 跟随系统，手动切不了。三项缺一都会让按钮点了没反应：
+    #   按钮本体 / 防闪烁脚本里的 localStorage 键 / 暗色变量能挂上的 data-theme。
+    miss = []
+    if 'id="themeBtn"' not in s:
+        miss.append("按钮 #themeBtn")
+    if "aihs-theme" not in s:
+        miss.append("localStorage 键 aihs-theme")
+    if 'data-theme' not in s:
+        miss.append("data-theme")
+    if miss:
+        err.append("%s：皮肤切换缺 %s" % (name, "、".join(miss)))
+    else:
+        ok.append("皮肤切换齐全")
+
     return ok, err
 
 

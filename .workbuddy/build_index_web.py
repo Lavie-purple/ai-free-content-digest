@@ -29,6 +29,7 @@ WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import sys as _sys
 _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import viewswitch
+import themeswitch
 OUT = os.path.join(WS, "archive.html")
 DEF = "AI免费内容与权益速递-"
 
@@ -277,6 +278,8 @@ def main():
 <meta property="og:title" content="AI 免费内容与权益速递">
 <meta property="og:description" content="每天筛出 AI 免费额度、免费内容与分发入口的新变化，只做增量与纠错。">
 <meta property="og:type" content="website">
+<meta name="color-scheme" content="light dark">
+__TS_HEAD__
 <style>
 :root{
   --bg:#f2eee5; --surface:#fbf9f3; --surface-2:#f6f2e8;
@@ -289,15 +292,7 @@ def main():
   --shadow:0 1px 2px rgba(40,32,20,.10),0 8px 28px rgba(40,32,20,.07);
   --ease:cubic-bezier(.16,1,.3,1);
 }
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#131210; --surface:#1c1a16; --surface-2:#232019;
-    --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;
-    --rule:rgba(236,231,220,.15); --rule-2:rgba(236,231,220,.3); --rule-strong:rgba(236,231,220,.55);
-    --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.14);
-    --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
-  }
-}
+__TS_DARK__
 *,*::before,*::after{box-sizing:border-box}
 body{
   margin:0; background:var(--bg); color:var(--ink);
@@ -317,6 +312,8 @@ header.top{border-bottom:3px solid var(--ink); padding-bottom:18px; margin-botto
   padding-bottom:10px;
 }
 .kicker em{font-style:normal; color:var(--accent-ink)}
+/* 期号与皮肤切换按钮同一格（2026-11-23）：单独再加第四格会把三个 span 挤成四等分 */
+.kicker .kick-last{display:inline-flex; align-items:center; gap:10px}
 h1{
   font-size:clamp(30px,5.2vw,46px); line-height:1.14; margin:0 0 12px;
   font-weight:800; letter-spacing:-.01em;
@@ -471,6 +468,7 @@ footer .fr{
   .btn{display:none}
 }
 __VS_CSS__
+__TS_CSS__
 .vsnote{margin:12px 0 0; font-size:13px; color:var(--faint); line-height:1.8; max-width:70ch}
 .vsnote b{color:var(--ink-2); font-weight:600}
 </style>
@@ -482,7 +480,7 @@ __VS_CSS__
   <div class="kicker">
     <span>AI 免费内容与权益速递</span>
     <span><a href="quick.html">&#8592; 回首页（极速视图）</a></span>
-    <span>更新至 <em>第 __LATEST__ 期</em></span>
+    <span class="kick-last">更新至 <em>第 __LATEST__ 期</em>__TS_BTN__</span>
   </div>
   <!-- 「能&#8288;力」之间插的是 WORD JOINER（U+2060）：手机上标题正好在这里折行，
        会把「能力」拆成上下两截。零宽不换行符只是禁掉这一个断点，换行点自然移到别处。 -->
@@ -552,6 +550,7 @@ __ROWS__
 </footer>
 
 </div>
+__TS_JS__
 </body>
 </html>
 """
@@ -573,6 +572,17 @@ __ROWS__
 
     doc = (DOC
            .replace("__VS_CSS__", viewswitch.CSS)
+           .replace("__TS_HEAD__", themeswitch.HEAD_JS)
+           .replace("__TS_CSS__", themeswitch.CSS)
+           .replace("__TS_BTN__", themeswitch.button())
+           .replace("__TS_JS__", themeswitch.JS)
+           .replace("__TS_DARK__", themeswitch.dark_block(
+               "--bg:#131210; --surface:#1c1a16; --surface-2:#232019;"
+               " --ink:#ece7dc; --ink-2:#cec8ba; --muted:#9d9486; --faint:#8e8577;"
+               " --rule:rgba(236,231,220,.15); --rule-2:rgba(236,231,220,.3);"
+               " --rule-strong:rgba(236,231,220,.55);"
+               " --accent:#ff6d55; --accent-ink:#ff8b76; --accent-soft:rgba(255,109,85,.14);"
+               " --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42)"))
            .replace("__VIEWSWITCH__", viewswitch.render(
                None, n_quick=quick_n, n_ledger=ledger_n, ws=WS))
            .replace("__QUICK_N__", quick_n)
@@ -589,6 +599,9 @@ __ROWS__
            .replace("__ROWS__", "\n".join(row(i) for i in rest))
            .replace("__TODAY__", today))
 
+    bad = themeswitch.check(doc)
+    if bad:
+        raise SystemExit("皮肤切换异常：%s" % bad)
     io.open(OUT, "w", encoding="utf-8", newline="\n").write(doc)
     print("往期总目录 -> archive.html  %d bytes" % os.path.getsize(OUT))
     print("  共 %d 期（%s）· 合计 %d 字 · %d 张表 · 信源 %d 条"
