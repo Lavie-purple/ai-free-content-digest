@@ -2198,3 +2198,41 @@ assert res.count(r) == 1 for each untouched row # ③ 未改写行唯一（数�
 - 三态 `A38 + B8 + C5 + D206 + E5 = 262`；色标 ⚪8/🔴5/🟢190/🟡29/🟠14/⚠16；`classify` crit5/live189/switch14/pending29/unclear17/over8。
 - 守卫：`lint_table --strict` CLEAN（起手即 0 条，本期无需 `slim`）；`check_tables` 25 表 / 异常 0；`check_frozen` 高危 0 / 引用 29 / 首登 0 / 对账 449；`check_headlines` 77 期 ALL GREEN；`check_views` / `check_site_freshness` / `verify_web` ALL GREEN（120 状态格、h3 19 = md 19）。
 - 提交 `8734d4b` → 推送 `3552505..8734d4b`；部署 `7997207170` success（`11:16:56Z`）；**六页线上 md5 = 本地**（期页 `84402194` / `index`=`quick` `64a8ddbf` / `standing` `2f7c8fc1` / `details` `0923caee` / `archive` `01872b84`）。
+
+## §十·44 · 页头日期条（2026-11-23 用户反馈「找不到这是哪天的」）
+
+### 一、问题不在「没写日期」，在「日期都不在第一眼」
+
+改前四处有日期，全部藏在边角：日报刊头右上角 11px 等宽小字、极速页**页脚倒数第二段**
+「本页基准日」、总账只有「逐期复核 · 原文照搬」（无日期）、附录根本没有单一日期。
+用户原话「内容太多繁杂 一下子找不到」。所以修法是**在页头固定加一条日期条**，不是调字号。
+
+### 二、`.workbuddy/datebadge.py` 是五页共用组件（改一处、五页同时变）
+
+- `render(date, issue=None, note=None, label="本页日期")` → `<div class="db" data-date="YYYY-MM-DD">`，内含
+  `.db-flag`（描边标签）、`.db-date`（23px 粗体，年月日用 `<em>` 缩小）、`.db-wd`（周几）、`.db-meta`（右对齐附注）。
+- **`data-date` 是守卫锚点**，`check_views.py` 第 7 项靠它断言「页面上写的日期 == 最新一期日期」。改结构必须留。
+- **只用两套模板都有的变量**（--rule / --surface / --ink / --ink-2 / --faint / --accent-ink），
+  和 `viewswitch.py` 同一纪律；`--accent-soft` 不能填色 —— 会和顶栏「当前章节」的粉色标签撞脸，看着像能点。
+- 日期一律**从源文件已核实时点读**（日报 `扫描截止`、总账 `最后全量复核`、附录取 `## 第NNN期（日期）` 最大者），
+  绝不 `date.today()`：往期重建会打上「今天」，且每次重建字节都变、破坏幂等。
+- 取不到日期时返回空串（宁可没有，也不写错的日子），`build_web` 会打印告警。
+
+### 三、`date_line` 是**主题行**，不是日期行（本次踩到，`verify_web` 当场抓住）
+
+`build_web.py` 里 `date_line = metas[0]`，实际内容是「主题：AI 免费内容发布 · …」，
+日期在 `theme_line`（`metas[1]`，渲染成 `mh-sub` 那段「扫描截止…」）与页脚 `__DATELINE__` 里。
+我按变量名误判，把 `__DATEBLOCK__` 改成「增量与纠错口径」，结果**主题行整行从页面消失**，
+`verify_web` 报「保真: 缺失片段 1 —— 主题ai免费内容发布…」。源码已加警示注释。
+**教训：变量名不可信，改之前先 grep 渲染出来的字面量。**
+
+### 四、顶栏常驻日期戳
+
+日报 / 总账 / 附录的顶栏 `#077` 后面追加 `<span class="tb-date">11-23</span>`，
+解决「滚到文中就不知道是哪天」的问题（刊头日期条会滚出视野）。极速页无顶栏，不适用。
+
+### 五、守卫
+
+`check_views.py` 新增第 7 项：五页里除 `archive.html`（期次列表，没有单一日期）外，
+都必须有日期条且 `data-date` == 最新一期文件名里的日期。`build_quick.py` 出口另加一次
+`datebadge.check()`，日期条缺失直接 `exit 1`。

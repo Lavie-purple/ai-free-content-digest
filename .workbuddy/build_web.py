@@ -14,6 +14,7 @@ import io, os, re, sys, html
 
 WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import datebadge
 import viewswitch
 import json
 
@@ -555,6 +556,10 @@ def build():
     if is_ledger:
         date_block = "<em>逐期复核 · 原文照搬</em>"
     elif date_line:
+        # ⚠️ 这里 `date_line` 取的是 `metas[0]`，实际内容是**主题行**（不是日期）——
+        # 日期在 `mh-sub` 那段「扫描截止 …」与页脚 `__DATELINE__` 里。
+        # 2026-11-23 加日期条时曾按名字误判、把这一段改成「增量与纠错口径」，
+        # 结果主题行从页面上消失（verify_web 的保真检查当场报「缺失片段 1」）。
         date_block = esc(date_line) + " \u00b7 <em>增量与纠错口径</em>"
     else:
         date_block = "<em>增量与纠错口径</em>"
@@ -690,6 +695,38 @@ def build():
             n_ledger = max(sum(1 for _l in _lt.split("\n")
                                if _l.strip().startswith("|")
                                and not re.match(r"^\|\s*-", _l.strip())) - 1, 0)
+    # 页头日期条（2026-11-23 用户反馈「内容太多，一下子找不到这是哪天的」）。
+    # 日期一律从源 md 里已核实的时点读，不取 today() —— 往期重建时若打上「今天」，
+    # 读者会以为旧闻是新的，且每次重建字节都变、破坏幂等。
+    bar_date = bar_note = bar_label = None
+    if is_digest:
+        _b = re.search(r"扫描截止\s*\**\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})", src)
+        if _b:
+            bar_date, bar_note = _b.group(1), "数据截至 %s（GMT+8）" % _b.group(2)
+            bar_label = "本页日期"
+    elif is_ledger:
+        _b = re.search(r"最后全量复核\**：\s*(\d{4}-\d{2}-\d{2})", src)
+        if _b:
+            bar_date = _b.group(1)
+            bar_note = "%s 条 · 全量复核" % n_ledger if n_ledger else "全量复核"
+            bar_label = "复核日期"
+    else:
+        # 附录逐期累积、不属于任何一期：取正文里最新那一期的日期，附注写期次区间，
+        # 免得读者拿它当「本期的附录」。
+        _ds = re.findall(r"^##\s*第\s*(\d+)\s*期[（(](\d{4}-\d{2}-\d{2})", src, re.M)
+        if _ds:
+            bar_date = max(_ds, key=lambda x: x[1])[1]
+            bar_note = "累积第 %03d–%03d 期" % (min(int(x[0]) for x in _ds),
+                                              max(int(x[0]) for x in _ds))
+            bar_label = "最新收录"
+    # 日期条上不再重复期号：刊头上一行、顶栏 `#077`、切换器「完整日报」三处都已写，
+    # 这里只答「哪天」+「截至几点」，多一个「第 077 期」就正是用户说的「太杂」。
+    datebar_html = datebadge.render(
+        bar_date, note=bar_note, label=bar_label)
+    if is_digest and not datebar_html:
+        print("⚠️ 页头日期条没生成：源 md 里读不到「扫描截止 YYYY-MM-DD HH:MM」")
+    doc = doc.replace("__DATEBAR__", datebar_html).replace("__DB_CSS__", datebadge.CSS)
+
     doc = doc.replace("__VS_CSS__", viewswitch.CSS)
     doc = doc.replace("__VIEWSWITCH__", viewswitch.render(
         "standing" if is_ledger else "full",
@@ -702,6 +739,9 @@ def build():
         doc = doc.replace("<title>%s · %s</title>" % (esc(mast), esc(issue_line)),
                           "<title>%s</title>" % esc(mast))
     doc = doc.replace("__ISSUE_BADGE__", esc(issue_badge))
+    # 顶栏常驻日期戳：`#077 11-23`。只写月-日（跨年歧义在本刊可忽略，
+    # 页头日期条与页脚扫描截止都会写全年），窄屏顶栏放得下。
+    doc = doc.replace("__TB_DATE__", esc(bar_date[5:]) if bar_date else "")
     doc = doc.replace("__MH_NUM__", esc(mh_num))
 
     io.open(OUT, "w", encoding="utf-8", newline="\n").write(doc)
@@ -815,6 +855,11 @@ code{
 .tb-brand{font-family:var(--fd); font-weight:700; letter-spacing:.04em; white-space:nowrap; font-size:var(--fs-sm)}
 .tb-brand .tbb-short{display:none}
 .tb-brand b{color:var(--accent-ink); font-family:var(--fm); font-weight:700; margin-left:6px; letter-spacing:0}
+/* 滚动后刊头日期条会滚出视野，顶栏常驻的这枚日期戳负责「随时知道这是哪天」 */
+.tb-date{
+  font-family:var(--fm); font-size:var(--fs-xs); font-weight:400; color:var(--faint);
+  margin-left:7px; letter-spacing:.02em; font-variant-numeric:tabular-nums;
+}
 .tb-nav{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; flex:1}
 .tb-nav::-webkit-scrollbar{display:none}
 .tb-nav a{
@@ -1446,6 +1491,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
   .audit-fold>summary{display:none !important}
   .rise{opacity:1 !important; transform:none !important}
 }
+__DB_CSS__
 </style>
 </head>
 <body__BODYCLASS__>
@@ -1455,7 +1501,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
 
 <header class="topbar" data-no-print>
   <div class="tb-in">
-    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#__ISSUE_BADGE__</b></span>
+    <span class="tb-brand"><span class="tbb-long">AI 免费内容与权益速递</span><span class="tbb-short">AI 速递</span><b>#__ISSUE_BADGE__</b><span class="tb-date">__TB_DATE__</span></span>
     <nav class="tb-nav" id="topnav" aria-label="章节导航">__NAV__</nav>
     <div class="tb-tools">
       <button class="iconbtn" id="searchBtn" type="button" aria-label="全文检索" aria-expanded="false">\u2315</button>
@@ -1476,6 +1522,7 @@ mark.hl.cur{background:var(--accent); color:#fff}
     <span>AI 免费内容与权益速递 · __ISSUE_LINE__</span>
     <span>__DATEBLOCK__</span>
   </div>
+  __DATEBAR__
   <div class="mh-rule" aria-hidden="true"></div>
   <h1 class="mh-t">__TITLE__</h1>
   <p class="mh-sub">__THEME__</p>

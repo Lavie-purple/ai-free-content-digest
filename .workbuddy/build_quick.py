@@ -31,6 +31,7 @@ from string import Template
 
 WS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import datebadge
 import viewswitch
 SRC = os.path.join(WS, ".workbuddy", "data", "quick_items.csv")
 DEADLINES = os.path.join(WS, ".workbuddy", "data", "deadlines.csv")
@@ -215,6 +216,13 @@ def build(rows):
 
     return Template(TEMPLATE).substitute({
         "date": BASE.strftime("%Y-%m-%d"),
+        # 页头日期条：读者第一眼要看到的「这是哪一天」。
+        # 日期取 BASE（最新一期 md 的日期）—— 与页脚「本页基准日」同源，
+        # 两处不一致就说明 CSV 与日报没对齐，属于出刊事故而不是显示问题。
+        "datebar": datebadge.render(
+            BASE.strftime("%Y-%m-%d"),
+            note="%d 条在册" % len(rows)),
+        "db_css": datebadge.CSS,
         "n_live": n_live,
         "n_week": n_week,
         "n_over": n_over,
@@ -513,6 +521,7 @@ footer b{color:var(--muted); font-weight:600}
   a{color:#000; text-decoration:none}
 }
 ${vs_css}
+${db_css}
 </style>
 </head>
 <body>
@@ -520,6 +529,7 @@ ${vs_css}
 
 <header>
   <div class="kicker">免费速查 · Free Tier Index<a class="arc" href="archive.html">往期总目录 &#8594;</a></div>
+  ${datebar}
   <h1>AI 免费额度，一条一行</h1>
   <p class="lede">只回答四个问题：<b>给什么</b>、<b>能拿多少</b>、<b>到什么时候结束</b>、<b>要什么门槛</b>。不写沿革、不写期号、不写论证过程。</p>
   <hr class="rule">
@@ -587,6 +597,11 @@ def main():
     left = re.findall(r"\$\{[a-z_]+\}", html)
     if left:
         raise SystemExit("还有占位符没填：%s" % set(left))
+
+    # 页头日期条必须在、且日期就是基准日（2026-11-23 用户反馈「找不到这是哪天的」）
+    bad = datebadge.check(html, BASE.strftime("%Y-%m-%d"))
+    if bad:
+        raise SystemExit("页头日期条异常：%s" % "；".join(bad))
 
     # 首页自指检测：index.html 与 quick.html 是同一份内容，页面里若还有
     # `href="index.html"`，读者点「历史各期索引」会原地打转（看起来像没反应）。

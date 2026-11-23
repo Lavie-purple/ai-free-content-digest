@@ -114,7 +114,28 @@ def check_home_is_quick(ws):
     return ok, err
 
 
-def check_page(path, expect, n_quick, n_ledger, latest):
+def check_datebar(s, name, expect_date):
+    """页头日期条必须在，且写的日期就是 expect_date。
+
+    2026-11-23 用户反馈「内容太多，一下子找不到这是哪天的」。此前日期只藏在
+    刊头右上角一行 11px 小字 / 页脚倒数第二段，首屏看不见。日期条是**加**出来的，
+    但没有守卫的话，下次改版式照样会把它顺手删掉 —— 那就又回到「找不到」。
+    """
+    ok, err = [], []
+    m = re.search(r'<div class="db" data-date="(\d{4}-\d{2}-\d{2})"', s)
+    if not m:
+        return ok, ["%s：缺页头日期条（<div class=\"db\" data-date=…>）" % name]
+    got = m.group(1)
+    if expect_date and got != expect_date:
+        err.append("%s：日期条写 %s，最新一期是 %s" % (name, got, expect_date))
+    elif not re.search(r'class="db-date"', s):
+        err.append("%s：日期条里没有 .db-date（日期没渲染出来）" % name)
+    else:
+        ok.append("日期条 = %s" % got)
+    return ok, err
+
+
+def check_page(path, expect, n_quick, n_ledger, latest, latest_date=None):
     """返回 (ok 列表, err 列表)。expect=None 表示首页（三格都不该高亮）。"""
     ok, err = [], []
     name = os.path.basename(path)
@@ -198,6 +219,12 @@ def check_page(path, expect, n_quick, n_ledger, latest):
     else:
         ok.append("内嵌 viewswitch 样式")
 
+    # 7. 页头日期条（往期总目录不要求：它是期次列表，没有「本页是哪一天」）
+    if expect is not None:
+        o, e = check_datebar(s, name, latest_date)
+        ok.extend(o)
+        err.extend(e)
+
     return ok, err
 
 
@@ -209,6 +236,9 @@ def main():
 
     latest = viewswitch.latest_issue_html(WS)
     n_quick, n_ledger = count_quick(), count_ledger()
+    # 日期条该写哪天：从最新一期文件名里取 YYYY-MM-DD（不读 mtime，也不取 today()）
+    m_d = re.search(r"(\d{4}-\d{2}-\d{2})\.html$", latest or "")
+    latest_date = m_d.group(1) if m_d else None
 
     print("=" * 64)
     print("三视图守卫 · 最新一期 = %s" % (latest or "（没找到）"))
@@ -239,7 +269,7 @@ def main():
         if not fn:
             continue
         ok, err = check_page(os.path.join(WS, fn), expect,
-                             n_quick, n_ledger, latest)
+                             n_quick, n_ledger, latest, latest_date)
         print("\n[%s] %s" % (label, fn))
         for x in ok:
             print("  OK   " + x)
