@@ -12,14 +12,14 @@ token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
 token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
 token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
 token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
-api,OpenRouter 免费档,全量 476 个模型中 14 个零价 / 11 个带 :free 后缀（2026-11-22 实读，四项同降 1）,,长期（动态目录）,live,注册，看 :free 后缀；本期出 2 进 1：下架 dots-3-note-preview:free（真免费）与 meituan/longcat-2.0，新增 thinkingmachines/inkling-2-mini（付费）；gpt-6.2 仍 8 条无 :free（第 5 天）
+api,OpenRouter 免费档,全量 477 个模型中 15 个零价 / 12 个带 :free 后缀（2026-11-23 实读，四项全部回补 +1）,,长期（动态目录）,live,注册，看 :free 后缀；本期只进 1 出 0：dots-3-note-preview:free 回归（created 仍 2026-08-14，不是新上架）；gpt-6.2 仍 8 条无 :free（第 6 天）
 over,OpenRouter stealth/crouton-alpha,免费隐身模型 · 100 万上下文 · $0,2026-11-09,11/9 起目录条目被删、llms.txt 404,over,—
 api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
 api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
 api,OpenCode DeepSeek V4.1 Flash Free,免费，200K 上下文,,未公布,live,仅限平台内
-api,OpenCode 免费模型清单,12 项（2026-11-22 实读，一进一出：进 Tidepool Alpha Free、出 Inkling 2 Small Free）,,未公布（清单动态变动）,live,LongCat 2.5 Free 每日 100 次；Beam Free 明确排除中国大陆；弃用表 11/19 新增 3 行（Inkling 2 Small Free / GLM 5.2 / GLM 5.1）
+api,OpenCode 免费模型清单,11 项（2026-11-23 实读，净减 1：出 LongCat 2.5 Free、无新增；Jev 1.14 上架但收费 $0.042）,,未公布（清单动态变动）,live,"Jev 1.13 免费、1.14 收费；Beam Free 明确排除中国大陆；弃用表换行：清走 5 行旧记录、新增 LongCat-2.0 / November 22, 2026（与 2.5 不是同一模型）"
 api,OpenRouter Thinking Machines Inkling 2 Small (free),0 元／百万 token · 100 万上下文 · 594B 总参 / 17B 激活,,未公布（:free 条目，官方未给下架日）,live,注册即用；⚠️ HF 上没有权重（连续第 4 期），只能通过平台调用
-api,OpenCode LongCat 2.5 Free,免费（限免两周）,,起 11/9 限免两周（终点日未给）,live,仅限 OpenCode 内；⚠️ 厂商官方站 免费/限免/额度 各 0 命中，只有分发层在说
+api,OpenCode LongCat 2.5 Free,免费（限免两周）,2026-11-22,11/22 起从 Free models 段消失（077 期核实）；弃用表同日标的是 LongCat-2.0，行名不同、不写因果,over,仅限 OpenCode 内；⚠️ 厂商官方站 免费/限免/额度 各 0 命中，只有分发层在说
 api,MiniMax 开放平台 M3 / M2,免费试用,2026-11-07,11/7,over,注册
 over,DeepSeek Search / Fetch API,免费调用,2026-11-01,11/1 00:00 起按请求计费,over,直接调用
 api,GMI Cloud 免费档,Qwen3.8-Max / Flash、Wan3.0 全免费,,本次再延 7 天（滚动续期）,live,GMI API Key
@@ -89,8 +89,8 @@ api,腾讯混元 Hy4 flash（WorkBuddy 内限免）,WorkBuddy 客户端内限免
 api,OpenCode Zen hy4-flash-free,零价（`-free` 池第 15 个）,,未公布（官方免费池，随池调整、不预告）,live,"`-free` 目录 14 → 15 · 页 98,175 → 98,592 字（+417）· diff 10 行全落在一个模型块；池内模型随时下架，不承诺长期"
 api,Runware 4K 图像生成 5 折,4K 档 50% OFF（数组 22 条不变；徽标清零 = 货架下架）,2026-11-17,"11/17（促销数组 `endsAt: ""2026-11-17""` 仍在册、卡片 `title` **2 → 0**、价目一个数没动；**本期已按期下架**）",over,`4K` 类促销只挂徽标、不动价目（官方帮助文案原话）；**判下架只能看徽标**。与 `MiniMax` 官方页（截止 11/18 00:00、未撤）**两个口径分岔**
 api,阿里 Qwen4-Max（可体验，非免费额度）,付费 $1.5 / $4.5 每百万 token（1M 上下文 · 原生视觉）,,无截止日（付费旗舰；「小尺寸 Qwen4 将开源」是承诺、无型号无日期）,pending,官方博客 free / 免费 0 命中 —— 只写「可在 QwenWork / Qoder / QwenStudio 使用」，只算可体验、不进免费清单
-token,智谱 AutoClaw 国内站 M11W3 每周福利（100M Tokens）,"100M Tokens ＝ 10,000 积分（本周额度是上周同类活动的 2 倍）",2026-11-22,11/22 23:59 收口（11/16–11/22）；M11W4（11/23–11/29，仍 100M）11/23 00:00 接班，两期只隔 1 分钟,live,登录即可领取、每账号限领一次；**只在 AutoClaw 内使用**，自接 Coding Plan 或其他 API 另计费
-api,Google Antigravity 免费档三个第三方模型 11/30 移除,免费档 $0/month 不变；Claude Sonnet 4.6 / Claude Opus 4.6 / GPT-OSS-120b 三个模型下架,2026-11-30,"官方脚注由 `Will be removed on November 18, 2026.` 改为 `November 30, 2026.`（全页 November 18 归零）；073/074 写的「到期未执行」应更正为「改期」",live,免费档四个模型全在：Gemini 3.8 Flash + Sonnet 4.6 / Opus 4.6 / GPT-OSS-120B；Gemini 4 全家只在付费档
+token,智谱 AutoClaw 国内站 M11W3 每周福利（100M Tokens）,"100M Tokens ＝ 10,000 积分（本周额度是上周同类活动的 2 倍）",2026-11-22,11/22 23:59 已收口（11/16–11/22）；M11W4（11/23–11/29，仍 100M）已于 11/23 00:00 接班,over,登录即可领取、每账号限领一次；**只在 AutoClaw 内使用**，自接 Coding Plan 或其他 API 另计费
+api,Google Antigravity 免费档三个第三方模型 11/30 移除,免费档 $0/month 不变；Claude Sonnet 4.6 / Claude Opus 4.6 / GPT-OSS-120b 三个模型下架,2026-11-30,"官方脚注 8 处全为 `November 30, 2026`（November 18 归零）；077 期：页面字节与上期同、可见文本 diff 0 行（md5 变 = 构建标识）",live,免费档四个模型全在：Gemini 3.8 Flash + Sonnet 4.6 / Opus 4.6 / GPT-OSS-120B；Gemini 4 全家只在付费档
 edu,OpenAI ChatGPT for Academic Researchers 扩容至 20 万研究者,"本轮 50,000 个名额、每名额带 2 名协作者（合计最多 150,000 人）；档位是 Plus",,无截止日（名额制、先到先得；官方未给申请关闭日）—— 11/23 是开放申请日，不是截止日,live,**档位从 Pro 降到 Plus**（官方逐字 `most participants would have stayed within ChatGPT Plus usage limits`）；额度无数字、模型只写 `frontier models`；抽签改先到先得
 api,腾讯 Hy4 flash 进入 OpenRouter 目录（付费 · 标价五折）,输入 $0.035 / 输出 $0.1405 每百万 token（≈ 官方人民币价五折）,,无截止日（目录标价，未挂 `discount`、无 `:free` 变体）,pending,**付费条目**，进目录 ≠ 免费；`created` 换北京 11/16 22:18。按 7.1 折算正好是官方 0.5 元 / 2 元的一半 —— **汇率 7.1 是本报假设**
 oss,腾讯混元 Hy4 flash 开放权重,220.25B 实测总参（含 64B Engram）/ 激活 11.3B + 0.43B / 1M 上下文 / 三仓 600 个文件,,无截止日（权重永久开放；许可有商用门槛，不是时间门槛）,live,`Tencent Hy License 1.0` ＝ `Apache 2.0` 派生 + `§10`：对外做 `MaaS` 且（全球年毛收入 > US$50M 或产品 MAU > 1 亿）须另签；**纯内部使用豁免**。三仓 `gated: false`；`safetensors` 实测 220.25B ≠ 媒体 224B
@@ -102,4 +102,4 @@ oss,MatOS 材料科研智能体（开源）,"3,135 数据集 / 386 技能 / 104 
 token,智谱 AutoClaw 国内站 M11W4 每周福利（100M Tokens）,"100M Tokens ＝ 10,000 积分（第 2 周维持 100M）",2026-11-29,11/29 23:59（北京时间）失效；领取窗口 11/23 00:00 起（官方逐字「活动时间 11 月 23 日（周一）00:00—11 月 29 日（周日）23:59」）,live,登录客户端即领，每账号一次；与 M11W3（到 11/22 23:59）只隔 1 分钟、不重叠；额度锁在客户端、导不出 API
 oss,Thinking Machines Inkling 2 Mini 开放权重,26.4B 总参 / 3.4B 激活（循环层跑 3 次）· 权重约 20GB,,无截止日（Apache-2.0，权重永久开放）；公告 2026-11-20 PT ＝ 北京 11/21 04:28,live,权重约 20GB（多为原生 NVFP4、末 4 层 MXFP8），官方实测机 MacBook Pro M5 Pro 48GB；32GB 机器能否跑满上下文官方未给数；HF 建仓 11/17、权重变更 11/20、公告 11/21
 oss,腾讯混元 Hy4（770B）开放权重,770B 总参 / 激活 49B + 视觉 1.23B · 1M 上下文 · 78 层,,无截止日（权重永久开放；Tencent Hy License，须读 LICENSE 原文）,live,三仓权重 11/20 03:05Z（北京 11:05）同批落盘；BF16 约 1.5TB、FP8 约 770GB —— 开放≠可本地跑；想跑走 AngelSlim/Hy4-GGUF
-api,Thinking Machines Inkling 2 Mini API（OpenRouter）,2 provider：$0.075/$0.30 每百万 token（PrimeIntellect · fp4 · 1M ctx）｜$0.08/$0.35（Io Net · nvfp4 · 256K ctx）,,无截止日（按量计费）；created 北京 2026-11-21 10:19；无 :free 变体、无免费额度,live,discount 0（原价）；两个 provider 上下文与价格都不同；Tinker 侧是否有免费额度仍未取到一手
+api,Thinking Machines Inkling 2 Mini API（OpenRouter）,4 个价点：$0.0375/$0.15、$0.075/$0.30、$0.12/$0.50（PrimeIntellect · fp4 · 1M ctx）｜$0.12/$0.50（Io Net · nvfp4 · 256K ctx）,,无截止日（按量计费）；created 北京 2026-11-21 10:19；无 :free 变体、无免费额度,live,最便宜档与最贵档差 3.2 倍；Io Net 由 $0.08/$0.35 涨到 $0.12/$0.50（输入 +50.0%）；PrimeIntellect 三档同 id / 同量化 / 同报 1M
