@@ -3,11 +3,11 @@
 > 本文件由 `.workbuddy/build_index.py` **自动生成，请勿手工编辑**。
 > 重建：`python .workbuddy/build_index.py`
 
-共 **77 期**（2026-09-14 ~ 2026-11-23），Markdown 合计 **9292725 B ≈ 9075 KB**。
+共 **78 期**（2026-09-14 ~ 2026-11-24），Markdown 合计 **9415879 B ≈ 9195 KB**。
 
-**站点首页**就是这份速查：**[《免费速查》](index.html)**（`index.html` 与 [`quick.html`](quick.html) 同字节）—— **104 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
+**站点首页**就是这份速查：**[《免费速查》](index.html)**（`index.html` 与 [`quick.html`](quick.html) 同字节）—— **105 条**，一条一行，只写给什么 / 能拿多少 / 到期日 / 门槛。
 
-另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**195 条**没有确切截止日的长期权益，全量原文、不逐期重印。
+另有 **《常驻权益总账》**（`常驻权益总账.md` ／ 网页版 `standing.html`）：**196 条**没有确切截止日的长期权益，全量原文、不逐期重印。
 
 | 期号 | 日期 | 本期定位 | md 体积 | 表格 | 网页版 | 避坑编号 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -88,11 +88,12 @@
 | **075** | 2026-11-21 | Thinking Machines 开源 Inkling 2 Mini：26.4B/3.4B、权重约 20GB、Apache-2.0，可在笔记本离线跑 | 113,420 B | 15 | 247143 B | 321–324 |
 | **076** | 2026-11-22 | OpenRouter 免费池 12→11（下架一条真免费）；Inkling 2 Mini 上架按量计费、无免费档 | 112,777 B | 17 | 247533 B | 325–328 |
 | **077** | 2026-11-23 | OpenRouter 免费池 11→12（上期撤的真免费次日回归）；OpenCode 12→11 撤 LongCat 2.5 | 120,161 B | 25 | 264294 B | 329–332 |
+| **078** | 2026-11-24 | 百度 ERNIE 5.5 Flash Preview 权重上线 HF（Apache-2.0），比 11/25 承诺早 2 天 | 123,154 B | 22 | 269303 B | — |
 
 ## 台账与结构化数据（内部，不对外展示）
 
 - **信源分级台账** `AI信息源分级清单-T0-T4.md`：296 条（T0 179 / T1 19 / T2 18 / T3 44 / T4 36）
-- **截止时间表** `.workbuddy/data/deadlines.csv`：262 条（由 `extract_deadlines.py` 从最新一期重建）
+- **截止时间表** `.workbuddy/data/deadlines.csv`：263 条（由 `extract_deadlines.py` 从最新一期重建）
 - **已固化条目库** `.workbuddy/data/frozen_items.md`（防重复往期）
 - **待澄清口径** `.workbuddy/data/open_questions.md`
 - **信源命中统计** `.workbuddy/data/source_hits.csv`（品牌提及口径，用于筛零命中源）
