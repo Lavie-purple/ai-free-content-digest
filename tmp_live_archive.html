@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AI 免费内容与权益速递 · 往期总目录</title>
+<meta name="description" content="每天筛出 AI 免费额度、免费内容与分发入口的新变化，只做增量与纠错。已出 79 期。">
+<meta property="og:title" content="AI 免费内容与权益速递">
+<meta property="og:description" content="每天筛出 AI 免费额度、免费内容与分发入口的新变化，只做增量与纠错。">
+<meta property="og:type" content="website">
+<meta name="color-scheme" content="light dark">
+<script>
+/* 防闪烁：先定主题，再渲染（与日报页共用 localStorage 键 aihs-theme） */
+(function(){try{
+  var t=localStorage.getItem("aihs-theme");
+  if(t!=="light"&&t!=="dark"){
+    t=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";
+  }
+  document.documentElement.setAttribute("data-theme",t);
+}catch(e){}})();
+</script>
+<style>
+:root{
+  --bg:#f2eee5; --surface:#fbf9f3; --surface-2:#f6f2e8;
+  --ink:#1b1913; --ink-2:#3a362d; --muted:#5f584a; --faint:#736a5a;
+  --rule:rgba(27,25,19,.16); --rule-2:rgba(27,25,19,.34); --rule-strong:rgba(27,25,19,.62);
+  --accent:#bf3327; --accent-ink:#a02a20; --accent-soft:rgba(191,51,39,.10);
+  --fd:Georgia,"Times New Roman","Source Han Serif SC","Songti SC","SimSun",serif;
+  --fu:-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+  --fm:"Cascadia Mono",Consolas,"JetBrains Mono",Menlo,monospace;
+  --shadow:0 1px 2px rgba(40,32,20,.10),0 8px 28px rgba(40,32,20,.07);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+html[data-theme="dark"]{
+  --bg:#131210;
+  --surface:#1c1a16;
+  --surface-2:#232019;
+  --ink:#ece7dc;
+  --ink-2:#cec8ba;
+  --muted:#9d9486;
+  --faint:#8e8577;
+  --rule:rgba(236,231,220,.15);
+  --rule-2:rgba(236,231,220,.3);
+  --rule-strong:rgba(236,231,220,.55);
+  --accent:#ff6d55;
+  --accent-ink:#ff8b76;
+  --accent-soft:rgba(255,109,85,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
+}
+@media (prefers-color-scheme:dark){
+  /* 兜底：内联脚本未执行时不至于整页亮白 */
+  html:not([data-theme]){
+  --bg:#131210;
+  --surface:#1c1a16;
+  --surface-2:#232019;
+  --ink:#ece7dc;
+  --ink-2:#cec8ba;
+  --muted:#9d9486;
+  --faint:#8e8577;
+  --rule:rgba(236,231,220,.15);
+  --rule-2:rgba(236,231,220,.3);
+  --rule-strong:rgba(236,231,220,.55);
+  --accent:#ff6d55;
+  --accent-ink:#ff8b76;
+  --accent-soft:rgba(255,109,85,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.42);
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--fu); line-height:1.85; -webkit-text-size-adjust:100%;
+  overflow-wrap:break-word;
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:radial-gradient(70rem 42rem at 8% -12%, var(--accent-soft), transparent 62%);
+}
+.wrap{position:relative; z-index:2; max-width:880px; margin:0 auto; padding:56px 24px 88px}
+a{color:inherit}
+header.top{border-bottom:3px solid var(--ink); padding-bottom:18px; margin-bottom:8px}
+.kicker{
+  font-family:var(--fm); font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--muted); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  padding-bottom:10px;
+}
+.kicker em{font-style:normal; color:var(--accent-ink)}
+/* 期号与皮肤切换按钮同一格（2026-11-23）：单独再加第四格会把三个 span 挤成四等分 */
+.kicker .kick-last{display:inline-flex; align-items:center; gap:10px}
+h1{
+  font-size:clamp(30px,5.2vw,46px); line-height:1.14; margin:0 0 12px;
+  font-weight:800; letter-spacing:-.01em;
+  /* 手机上「每天，哪些 AI 能力可以免费用」正好卡在折行临界点，
+     第二行只剩一个「用」字。balance 让两行长度均匀。 */
+  text-wrap:balance;
+}
+.lede{
+  font-family:var(--fd); font-size:17px; line-height:1.9; color:var(--ink-2);
+  margin:0 0 18px; max-width:60ch;
+}
+.lede strong{color:var(--ink); font-weight:700}
+/* 目录页里的「回首页」与「极速视图」链接：不写上划线会跟正文糊成一片 */
+.kicker a,.lede a{color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--rule-2)}
+.kicker a:hover,.lede a:hover{border-bottom-color:var(--accent)}
+/* 极速视图精选卡里的一句定位语（2026-11-01 起：首页默认视图 = 极速） */
+.qlede{
+  font-family:var(--fd); font-size:15.5px; line-height:1.85; color:var(--ink-2);
+  margin:0 0 18px; max-width:64ch;
+}
+.qlede strong{color:var(--ink); font-weight:700}
+.stats{
+  display:flex; gap:22px; flex-wrap:wrap; font-family:var(--fm); font-size:12.5px;
+  color:var(--muted); padding-top:4px;
+}
+.stats b{color:var(--ink); font-weight:700; font-size:15px; margin-right:4px}
+section{margin-top:44px}
+.slabel{
+  font-family:var(--fm); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--faint); padding-bottom:8px; margin-bottom:16px; border-bottom:1px solid var(--rule);
+}
+.card{
+  background:var(--surface); border:1px solid var(--rule); border-radius:0 10px 10px 0;
+  border-left:3px solid var(--accent); box-shadow:var(--shadow); padding:24px 26px;
+}
+.card .tagline{
+  font-family:var(--fm); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent-ink); display:flex; align-items:center; gap:7px; margin-bottom:10px;
+}
+.card .dot{width:7px;height:7px;border-radius:99px;background:var(--accent);display:inline-block}
+.metaline{font-family:var(--fm); font-size:12.5px; color:var(--muted); margin-bottom:8px}
+.metaline b{color:var(--ink)}
+.metaline .sep{margin:0 8px; color:var(--faint)}
+.card h2{
+  font-size:clamp(22px,3.4vw,30px); line-height:1.3; margin:0 0 14px; font-weight:800;
+}
+.card h2 a{text-decoration:none; border-bottom:2px solid transparent; transition:border-color .18s}
+.card h2 a:hover{border-bottom-color:var(--accent)}
+ul.abs{list-style:none; margin:0 0 20px; padding:0; display:grid; gap:9px}
+ul.abs li{
+  position:relative; padding-left:19px; font-family:var(--fd); font-size:15.5px;
+  line-height:1.85; color:var(--ink-2);
+}
+ul.abs li::before{
+  content:""; position:absolute; left:2px; top:.8em; width:7px; height:1.5px; background:var(--accent);
+}
+.acts{display:flex; gap:10px; flex-wrap:wrap}
+.btn{
+  display:inline-block; padding:9px 18px; border-radius:99px; font-size:14px; font-weight:600;
+  border:1px solid var(--rule-2); text-decoration:none; transition:all .18s var(--ease);
+}
+.btn:hover{border-color:var(--accent); color:var(--accent-ink); transform:translateY(-1px)}
+.btn.primary{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.btn.primary:hover{background:var(--accent); border-color:var(--accent); color:#fff}
+ul.list{list-style:none; margin:0; padding:0; border-top:1px solid var(--rule)}
+ul.list li.row{border-bottom:1px solid var(--rule)}
+ul.list li.row a{
+  display:grid;
+  grid-template-columns:52px 68px minmax(0,1fr) auto auto;
+  gap:14px; align-items:baseline; padding:13px 10px 13px 12px; text-decoration:none;
+  border-left:3px solid transparent; transition:background .16s,border-color .16s;
+}
+ul.list li.row a:hover{background:var(--surface-2); border-left-color:var(--accent)}
+.no{font-family:var(--fm); font-weight:700; color:var(--accent-ink); font-size:14px}
+.d{font-family:var(--fm); font-size:12.5px; color:var(--faint)}
+.th{font-size:14.5px; color:var(--ink-2); overflow-wrap:break-word}
+.pit{font-family:var(--fm); font-size:11.5px; color:var(--faint); white-space:nowrap}
+.kind{
+  font-family:var(--fm); font-size:10.5px; letter-spacing:.06em; color:var(--muted);
+  border:1px solid var(--rule); border-radius:3px; padding:1px 6px; white-space:nowrap;
+}
+footer{
+  margin-top:56px; padding-top:20px; border-top:2px solid var(--ink);
+  font-size:13.5px; color:var(--muted); line-height:1.9;
+}
+footer a{color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--rule-2)}
+footer a:hover{border-bottom-color:var(--accent)}
+footer .fr{
+  font-family:var(--fm); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  padding-bottom:10px; margin-bottom:14px; border-bottom:1px solid var(--rule); color:var(--faint);
+}
+.warn{
+  margin:26px 0 0; padding:14px 18px; border-left:3px solid var(--rule-strong);
+  background:var(--surface-2); border-radius:0 8px 8px 0;
+  font-size:13.5px; color:var(--muted); line-height:1.85;
+}
+/* ---------- 手机（<=600px）----------
+   两个要点：
+   ① 按钮做成 44px 高的真触控区（原来 36px 高、手机上不好点），且两个按钮等分整行；
+   ② 往期列表改成「左列期号+日期上下排、右列标题跨两行垂直居中」的显式网格，
+      不再靠 order 让浏览器自己摆——原写法在不同引擎下 d 的落点并不一致。 */
+@media (max-width:600px){
+  .wrap{padding:30px 16px 56px}
+  .kicker{font-size:11px; letter-spacing:.12em; gap:6px 14px}
+  h1{font-size:27px; line-height:1.2}
+  .lede{font-size:16px; line-height:1.85; margin-bottom:16px}
+  .stats{gap:12px 18px; font-size:12px}
+  .stats b{font-size:14px}
+  section{margin-top:34px}
+  .slabel{font-size:10.5px; margin-bottom:14px}
+  .card{padding:20px 18px}
+  .metaline{font-size:12px}
+  .card h2{font-size:21px; line-height:1.32; margin-bottom:12px}
+  ul.abs{gap:10px; margin-bottom:18px}
+  ul.abs li{font-size:15.5px; line-height:1.8}
+  .acts{gap:10px}
+  .btn{
+    display:flex; align-items:center; justify-content:center;
+    flex:1 1 auto; min-height:44px; padding:12px 16px; font-size:15px;
+  }
+  ul.list li.row a{
+    grid-template-columns:46px minmax(0,1fr);
+    grid-template-rows:auto auto;
+    gap:2px 12px; align-items:center; padding:14px 10px 14px 12px;
+  }
+  .no{grid-column:1; grid-row:1; align-self:end; font-size:13.5px}
+  .d{grid-column:1; grid-row:2; align-self:start; font-size:12px}
+  .th{grid-column:2; grid-row:1 / span 2; font-size:15px}
+  .pit,.kind{display:none}
+  .warn{padding:14px 16px; font-size:14px}
+  footer{margin-top:40px; font-size:13.5px}
+  /* 刘海 / 小白条 —— env() 不被支持时整条声明作废，自动退回上面的值 */
+  .wrap{
+    padding-left:calc(16px + env(safe-area-inset-left));
+    padding-right:calc(16px + env(safe-area-inset-right));
+    padding-bottom:calc(56px + env(safe-area-inset-bottom));
+  }
+}
+/* 超窄屏（<=360px） */
+@media (max-width:360px){
+  .wrap{padding:24px 12px 48px}
+  h1{font-size:24px}
+  .card{padding:18px 15px}
+  ul.abs li{font-size:15px; padding-left:17px}
+  .btn{padding:11px 14px; font-size:14px}
+}
+@media print{
+  body::before{display:none}
+  .wrap{max-width:none; padding:0}
+  .card,ul.list li.row a{box-shadow:none}
+  .btn{display:none}
+}
+
+.vs{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  margin:18px 0 20px; border:1px solid var(--rule); background:var(--surface);
+  box-shadow:var(--shadow);
+}
+.vs-i{
+  display:block; padding:10px 14px; text-decoration:none; color:var(--ink-2);
+  border-right:1px solid var(--rule); transition:background 120ms ease;
+}
+.vs-i:last-child{border-right:0}
+.vs-i:hover{background:var(--surface-2)}
+.vs-k{display:block; font-size:13.5px; font-weight:600; line-height:1.45}
+.vs-k i{font-style:normal; margin-right:5px; opacity:.75}
+.vs-d{display:block; font-size:11.5px; color:var(--faint); line-height:1.5; margin-top:1px}
+.vs-i.is-on{background:var(--ink); color:var(--bg); cursor:default}
+.vs-i.is-on .vs-d{color:var(--bg); opacity:.6}
+.vs-i.is-on .vs-k i{opacity:.85}
+/* 只给「极速」的图标上强调色：整行标红会盖过当前页的实心块，反而让人以为它才是当前页 */
+.vs-quick .vs-k i{color:var(--accent-ink); opacity:1}
+.vs-quick.is-on .vs-k i{color:var(--bg)}
+@media (max-width:640px){
+  /* 窄屏不要三行堆叠：日报页顶已有固定导航条 + 刊头 + 说明框，
+     再来三行切换器会把首屏全占掉。压成单行三格，副标题不出。 */
+  .vs{grid-template-columns:repeat(3,1fr); margin-top:14px}
+  .vs-i{
+    padding:9px 6px; text-align:center;
+    border-right:1px solid var(--rule); border-bottom:0;
+  }
+  .vs-i:last-child{border-right:0}
+  .vs-k{font-size:12px; line-height:1.3}
+  .vs-k i{margin-right:3px}
+  .vs-d{display:none}
+}
+@media print{.vs{display:none !important}}
+
+/* 皮肤按钮 = 类钩子 .themebtn（行为统一） + 两种外形（按所处位置）
+   2026-11-23 二次统一：此前日报/总账/附录走 `iconbtn#themeBtn + getElementById`，
+   极速/目录走 `.themebtn + querySelectorAll` —— 两套实现，谁改了一边另一边不会跟。
+   现在三种页面**共用同一段 JS**（按类选择器绑事件、同步 aria-pressed），
+   外形仍然分两种，因为按钮所在的位置本来就不一样：
+     · 顶栏里那枚（.iconbtn）保持 38px 方形，和旁边的 ≡ ⌕ ↑ 同高；
+     · 页头/页脚独立那枚（不带 .iconbtn）是 27×24 小方块。
+   所以尺寸规则挂在 `:not(.iconbtn)` 上 —— 否则小方块规则会把顶栏图标压成
+   27×24，与邻居高低不齐（这个坑第一天就踩过）。 */
+.themebtn{cursor:pointer; text-transform:none}
+.themebtn:not(.iconbtn){
+  /* 定成固定小方块而不是靠 padding 撑：◑ 在等距字体里的实际字宽不到 1em，
+     用 padding 算出来的框会变成竖长条（页脚那枚实测如此）。固定宽高 + 居中一劳永逸。 */
+  display:inline-flex; align-items:center; justify-content:center;
+  width:27px; height:24px; padding:0;
+  font-family:var(--fm); font-size:13px; line-height:1; letter-spacing:0;
+  color:var(--muted); background:transparent;
+  border:1px solid var(--rule-2); border-radius:3px;
+  /* 页头那行字只有 11.5px，按钮若同号会小到像标点；独立成 13px + 描边才读得出「可以点」 */
+  transition:color .16s,border-color .16s,background .16s;
+}
+.themebtn:not(.iconbtn):hover{color:var(--accent-ink); border-color:var(--accent); background:var(--accent-soft)}
+.themebtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media print{.themebtn{display:none !important}}
+
+.vsnote{margin:12px 0 0; font-size:13px; color:var(--faint); line-height:1.8; max-width:70ch}
+.vsnote b{color:var(--ink-2); font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">
+    <span>AI 免费内容与权益速递</span>
+    <span><a href="quick.html">&#8592; 回首页（极速视图）</a></span>
+    <span class="kick-last">更新至 <em>第 079 期</em><button class="themebtn" id="themeBtn" type="button" aria-label="切换明暗主题" aria-pressed="false" title="切换明暗主题">◑</button></span>
+  </div>
+  <!-- 「能&#8288;力」之间插的是 WORD JOINER（U+2060）：手机上标题正好在这里折行，
+       会把「能力」拆成上下两截。零宽不换行符只是禁掉这一个断点，换行点自然移到别处。 -->
+  <h1>每天，哪些 AI 能&#8288;力可以免费用</h1>
+  <p class="lede">
+    把散落在官方公告、模型卡、平台招募页和社区帖里的<strong>免费额度、免费内容与分发入口</strong>
+    逐条核实，写清口径、标好截止日期。<strong>只做增量与纠错</strong>，不重复往期已固化的内容。
+    <br><strong>本页是往期总目录</strong>；站点首页已改为 <a href="quick.html">极速视图</a>。
+  </p>
+  <div class="stats">
+    <span><b>79</b>期</span>
+    <span><b>4,660,398</b>字</span>
+    <span><b>1131</b>张表</span>
+    <span><b>296</b>条信源</span>
+  </div>
+</header>
+
+<section>
+  <div class="slabel">站点首页 · 极速视图</div>
+  <article class="card big">
+    <div class="tagline"><span class="dot"></span>首页 · 2026-11-02 起</div>
+    <div class="metaline"><b>极速视图</b><span class="sep">·</span>105 条<span class="sep">·</span>一条一行</div>
+    <h2><a href="quick.html">现在有什么免费、能拿多少、到什么时候、要什么门槛</a></h2>
+    <p class="qlede">
+      只答这四个问题，<strong>不写沿革、不写期号</strong> —— 想知道「今天能白拿什么」，从这里进。
+    </p>
+    <div class="acts">
+      <a class="btn primary" href="quick.html">打开极速视图 →</a>
+      <a class="btn" href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC079%E6%9C%9F-2026-11-25.html">看完整日报（第 079 期）→</a>
+    </div>
+  </article>
+</section>
+
+<section>
+  <div class="slabel">最新一期 · 完整日报</div>
+  <article class="card big">
+  <div class="tagline"><span class="dot"></span>最新一期</div>
+  <div class="metaline"><b>第 079 期</b><span class="sep">·</span>2026-11-25<span class="sep">·</span>118,271 字<span class="sep">·</span>18 张表</div>
+  <h2><a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC079%E6%9C%9F-2026-11-25.html">OpenRouter 免费池 12→11（dots 端点归零、目录消失）；Antigravity 11/30 移除脚注 13 处已核实</a></h2>
+  <ul class="abs"><li>本期头条（免费池少的那一条，是「路由没了」不是「URL 写错了」）：OpenRouter 免费池 12 → 11（零价 15 → 14、max_price=0 14 → 13），唯一少的是 dots-studio/dot…</li><li>本期第二条（促销数组会滚，只是慢一天）：Runware 的 pricing 页促销数组由 18 条降到 2 条（endsAt 出现次数 22 → 2、OFF 字样 24 → 2），只剩 heygen-video-1-0（…</li><li>本期第三条（上期「无法核实」的那条，其实一直能核实）：antigravity.google/pricing 本期 200 / 188,088 字节，脚注逐字 Will be removed on November 30…</li><li>本期第四条（HF 的 downloads 一夜之间全动了）：十三个仓合计 198,940 → 246,356（+47,416），与 078 期「整列 0 变化」正好相反；likes 合计 +396。「冻结一窗、再补一窗」…</li></ul>
+  <div class="acts"><a class="btn primary" href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC079%E6%9C%9F-2026-11-25.html">读网页版 →</a><a class="btn" href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC079%E6%9C%9F-2026-11-25.md">看 Markdown</a></div>
+</article>
+</section>
+
+<section>
+  <div class="slabel">三个视图 · 同一批数据</div>
+  <nav class="vs" aria-label="视图切换"><a class="vs-i vs-quick" href="quick.html"><span class="vs-k"><i aria-hidden="true">&#9889;</i>极速视图</span><span class="vs-d">105 条 · 一条一行</span></a><a class="vs-i vs-full" href="AI免费内容与权益速递-第079期-2026-11-25.html"><span class="vs-k"><i aria-hidden="true">&#9678;</i>完整日报</span><span class="vs-d">第 079 期 · 十节</span></a><a class="vs-i vs-standing" href="standing.html"><span class="vs-k"><i aria-hidden="true">&#9776;</i>常驻总账</span><span class="vs-d">196 条 · 无截止日</span></a></nav>
+  <p class="vsnote">
+    <b>极速视图</b>只答四个问题 —— 给什么 / 能拿多少 / 到什么时候 / 什么门槛，不写沿革、不写期号；
+    <b>常驻总账</b>收没有确切截止日的长期权益，逐期复核但不逐期重印原文。
+    三个页面顶部的这排切换器位置一致，随时可以换。
+  </p>
+</section>
+
+<section>
+  <div class="slabel">全部 79 期 · 新的在前</div>
+  <ul class="list">
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC078%E6%9C%9F-2026-11-24.html">
+    <span class="no">078</span>
+    <span class="d">11-24</span>
+    <span class="th">百度 ERNIE 5.5 Flash Preview 权重上线 HF（Apache-2.0），比 11/25 承诺早 2 天</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC077%E6%9C%9F-2026-11-23.html">
+    <span class="no">077</span>
+    <span class="d">11-23</span>
+    <span class="th">OpenRouter 免费池 11→12（上期撤的真免费次日回归）；OpenCode 12→11 撤 LongCat 2.5</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC076%E6%9C%9F-2026-11-22.html">
+    <span class="no">076</span>
+    <span class="d">11-22</span>
+    <span class="th">OpenRouter 免费池 12→11（下架一条真免费）；Inkling 2 Mini 上架按量计费、无免费档</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC075%E6%9C%9F-2026-11-21.html">
+    <span class="no">075</span>
+    <span class="d">11-21</span>
+    <span class="th">Thinking Machines 开源 Inkling 2 Mini：26.4B/3.4B、权重约 20GB、Apache-2.0…</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC074%E6%9C%9F-2026-11-20.html">
+    <span class="no">074</span>
+    <span class="d">11-20</span>
+    <span class="th">AutoClaw 11/23-11/29 领 100M Tokens（1 万积分）；MiniMax 4K 五折撤两天后重挂、删截止日</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC073%E6%9C%9F-2026-11-19.html">
+    <span class="no">073</span>
+    <span class="d">11-19</span>
+    <span class="th">Google Antigravity 免费档三个第三方模型 11/18 到期未撤、脚注仍写「将移除」；MiniMax 4K 五折已撤回</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC072%E6%9C%9F-2026-11-18.html">
+    <span class="no">072</span>
+    <span class="d">11-18</span>
+    <span class="th">腾讯混元 Hy4 flash 开放权重：220.25B 总参 / 激活 11.3B / 1M，附商用门槛</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC071%E6%9C%9F-2026-11-17.html">
+    <span class="no">071</span>
+    <span class="d">11-17</span>
+    <span class="th">OpenAI 把学术研究者计划扩到 20 万人：11/23 开放 5 万个名额、每人带 2 名协作者，档位从 Pro 降到 Plus</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC070%E6%9C%9F-2026-11-16.html">
+    <span class="no">070</span>
+    <span class="d">11-16</span>
+    <span class="th">腾讯混元 Hy4 flash 发布：WorkBuddy 内限免到 11/29…</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC069%E6%9C%9F-2026-11-15.html">
+    <span class="no">069</span>
+    <span class="d">11-15</span>
+    <span class="th">美团 LongCat-2.5 以 MIT 公开 1.6T 权重：48B 激活、1M 上下文、231 个文件，无需申请</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC068%E6%9C%9F-2026-11-14.html">
+    <span class="no">068</span>
+    <span class="d">11-14</span>
+    <span class="th">Runway 开源 27B 机器人模型 Praxis-1（Apache 2.0）…</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC067%E6%9C%9F-2026-11-13.html">
+    <span class="no">067</span>
+    <span class="d">11-13</span>
+    <span class="th">谷歌发布 Gemini 4 Hydrogen：免费用户在 Gemini 应用里只能靠自动选模用到它，Antigravity 只给付费档</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC066%E6%9C%9F-2026-11-12.html">
+    <span class="no">066</span>
+    <span class="d">11-12</span>
+    <span class="th">文心 ERNIE 5.5 Flash Preview 发布：官方写「11/25 前」开源、同日 OpenRouter 上从付费档搬进免费档</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC065%E6%9C%9F-2026-11-11.html">
+    <span class="no">065</span>
+    <span class="d">11-11</span>
+    <span class="th">Anthropic 把 Claude 扩成工作台：定价页新增 Sheets / Whiteboards 两行，Free 档逐字写 No</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC064%E6%9C%9F-2026-11-10.html">
+    <span class="no">064</span>
+    <span class="d">11-10</span>
+    <span class="th">Claude Fable 5.2 发布：Max 档含 Fable、Pro 要付 credits，发布优惠逐字排除 Free 档</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC063%E6%9C%9F-2026-11-09.html">
+    <span class="no">063</span>
+    <span class="d">11-09</span>
+    <span class="th">AIHOT 上线「Token 羊毛」免费额度聚合页：51 张卡、109 处核实标注、页头写「今天还能领 ¥201」</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC062%E6%9C%9F-2026-11-08.html">
+    <span class="no">062</span>
+    <span class="d">11-08</span>
+    <span class="th">Inkling 2 Small 在 OpenCode 上线免费档（三列 Free、数据留存、十地区不可用），权重仍未放</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC061%E6%9C%9F-2026-11-07.html">
+    <span class="no">061</span>
+    <span class="d">11-07</span>
+    <span class="th">豆包工作个人版 11/6 起取消 5 小时额度限制，周额度内可自由安排</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC060%E6%9C%9F-2026-11-06.html">
+    <span class="no">060</span>
+    <span class="d">11-06</span>
+    <span class="th">百度开源 ERNIE-5.5-Flash-Base（280B/14B 激活），许可分三档有条件商用</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC059%E6%9C%9F-2026-11-05.html">
+    <span class="no">059</span>
+    <span class="d">11-05</span>
+    <span class="th">Kimi K3.1 Pro 完整权重公开；OpenRouter 摘下 inkling 两个 :free 变体</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC058%E6%9C%9F-2026-11-04.html">
+    <span class="no">058</span>
+    <span class="d">11-04</span>
+    <span class="th">OpenRouter 现零公告免费模型 crouton-alpha；Kimi 权重承诺到期未上架</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC057%E6%9C%9F-2026-11-03.html">
+    <span class="no">057</span>
+    <span class="d">11-03</span>
+    <span class="th">商汤 SenseNova 6.8 Flash 上线，API 侧公测期完全免费（限 Lite 版）</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC056%E6%9C%9F-2026-11-02.html">
+    <span class="no">056</span>
+    <span class="d">11-02</span>
+    <span class="th">OpenAI：12 月起 ChatGPT 与 Codex 额度合池，Free 档不在范围内</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC055%E6%9C%9F-2026-11-01.html">
+    <span class="no">055</span>
+    <span class="d">11-01</span>
+    <span class="th">Anthropic 公布 16 模型水印对照表，并上线免费的 Content Checker 工具</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC054%E6%9C%9F-2026-10-31.html">
+    <span class="no">054</span>
+    <span class="d">10-31</span>
+    <span class="th">SoMark OXR 给出免注册免 API key 的免费 API：每天 500 页 / 每月 2000 页</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC053%E6%9C%9F-2026-10-30.html">
+    <span class="no">053</span>
+    <span class="d">10-30</span>
+    <span class="th">Mistral Large 4 万亿参数权重公开，模型卡写明发布首周共享免费预算</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC052%E6%9C%9F-2026-10-29.html">
+    <span class="no">052</span>
+    <span class="d">10-29</span>
+    <span class="th">智谱 AutoClaw 同页四个 Token 数实为四个活动；Anthropic S-1 列免费档风险</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC051%E6%9C%9F-2026-10-29.html">
+    <span class="no">051</span>
+    <span class="d">10-29</span>
+    <span class="th">Google Antigravity 公开个人 $0/month 档；科研项目可申请免费 6 个月</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC050%E6%9C%9F-2026-10-28.html">
+    <span class="no">050</span>
+    <span class="d">10-28</span>
+    <span class="th">Opera 发布 WebAI：浏览器本地推理、无需 API key 与云成本</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC049%E6%9C%9F-2026-10-27.html">
+    <span class="no">049</span>
+    <span class="d">10-27</span>
+    <span class="th">百度开源文心 Unlimited OCR 2：MIT 许可、免部署 API 限时免费</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC048%E6%9C%9F-2026-10-27.html">
+    <span class="no">048</span>
+    <span class="d">10-27</span>
+    <span class="th">OpenAI 发布 Signals v3.0 数据集（CC BY 4.0，可下载 CSV）</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC047%E6%9C%9F-2026-10-27.html">
+    <span class="no">047</span>
+    <span class="d">10-27</span>
+    <span class="th">OpenAI 发布 GPT-6.1 Terra，API 价格较前代低 50%，但免费档未列入</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC046%E6%9C%9F-2026-10-25.html">
+    <span class="no">046</span>
+    <span class="d">10-25</span>
+    <span class="th">月之暗面发布 Kimi K3.1 Pro：3T 级开放权重、承诺 11/4 前放权重</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC045%E6%9C%9F-2026-10-23.html">
+    <span class="no">045</span>
+    <span class="d">10-23</span>
+    <span class="th">MiniMax M3.1 Flash 免费档 10/22 从 OpenRouter 与 OpenCode 收口</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC044%E6%9C%9F-2026-10-22.html">
+    <span class="no">044</span>
+    <span class="d">10-22</span>
+    <span class="th">OpenAI 同日 7 条公告仅一条带免费语义；OpenRouter 目录 21 个零价模型</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC043%E6%9C%9F-2026-10-21.html">
+    <span class="no">043</span>
+    <span class="d">10-21</span>
+    <span class="th">MiniMax M3.1 Flash 开放权重定档 10/23；MiniMax-H3 用自定义社区许可</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC042%E6%9C%9F-2026-10-20.html">
+    <span class="no">042</span>
+    <span class="d">10-20</span>
+    <span class="th">AutoClaw 官方页仍是改写后版本，按官方口径今天仍可领 3,000 万</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC041%E6%9C%9F-2026-10-19.html">
+    <span class="no">041</span>
+    <span class="d">10-19</span>
+    <span class="th">智谱 AutoClaw 活动页额度从 60M 提到 85M、单日 3000 万改两天各 3000 万</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC040%E6%9C%9F-2026-10-18.html">
+    <span class="no">040</span>
+    <span class="d">10-18</span>
+    <span class="th">OpenCode 遭大规模攻击，1.4% Console 用户凭证受影响</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC039%E6%9C%9F-2026-10-17.html">
+    <span class="no">039</span>
+    <span class="d">10-17</span>
+    <span class="th">OpenCode 的 Beam 免费档中国大陆不可用；Ollama Cloud 同期限免</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC038%E6%9C%9F-2026-10-17.html">
+    <span class="no">038</span>
+    <span class="d">10-17</span>
+    <span class="th">Reflection 按 Apache 2.0 放出 501B Beam 权重；腾讯元器 11/9 停服</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC037%E6%9C%9F-2026-10-16.html">
+    <span class="no">037</span>
+    <span class="d">10-16</span>
+    <span class="th">Meta 开放 816B Muse Spark Open 权重；蚂蚁 Ling-3.1-flash 以 MIT 放出</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC036%E6%9C%9F-2026-10-15.html">
+    <span class="no">036</span>
+    <span class="d">10-15</span>
+    <span class="th">阶跃 Step 5 Preview 权重放出；OpenCode 全免 DeepSeek V4.1 Flash</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC035%E6%9C%9F-2026-10-14.html">
+    <span class="no">035</span>
+    <span class="d">10-14</span>
+    <span class="th">谷歌把 Gemini 4 Argon 收口为付费档；OpenAI 让 GPT-6 下沉到免费档</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC034%E6%9C%9F-2026-10-13.html">
+    <span class="no">034</span>
+    <span class="d">10-13</span>
+    <span class="th">阶跃发布智能体手机 STEPX Neo；OpenAI 免费开放 Auto-review</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC033%E6%9C%9F-2026-10-12.html">
+    <span class="no">033</span>
+    <span class="d">10-12</span>
+    <span class="th">阶跃 Step 5 Preview 接入腾讯 WorkBuddy，10/12–10/25 独家限免</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC032%E6%9C%9F-2026-10-12.html">
+    <span class="no">032</span>
+    <span class="d">10-12</span>
+    <span class="th">vLLM-SR Decision 3.0 六档权重开源；Gemini 4 Argon 已发布</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC031%E6%9C%9F-2026-10-11.html">
+    <span class="no">031</span>
+    <span class="d">10-11</span>
+    <span class="th">Google 公众开放 SynthID Detector；Drex 1.5 改用 Open RAIL-M 许可</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC030%E6%9C%9F-2026-10-11.html">
+    <span class="no">030</span>
+    <span class="d">10-11</span>
+    <span class="th">决策模型按输入模态分文本/视觉/语音三支；Vidu Q4 与 Kling 4.0 上线</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC029%E6%9C%9F-2026-10-10.html">
+    <span class="no">029</span>
+    <span class="d">10-10</span>
+    <span class="th">Cloudflare Clef-omni 四模态发布；Qwen-Image-2.1-Turbo 8 步开源</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC028%E6%9C%9F-2026-10-09.html">
+    <span class="no">028</span>
+    <span class="d">10-09</span>
+    <span class="th">Gemini 免费档正式只剩 Flash-Lite；阶跃 Step 5 Preview 限免一周</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC027%E6%9C%9F-2026-10-08.html">
+    <span class="no">027</span>
+    <span class="d">10-08</span>
+    <span class="th">Anthropic 发布 Haiku 5.5、开放 Max/Team 月度 API 额度；Liquid AI 开源 d1 系列</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC026%E6%9C%9F-2026-10-07.html">
+    <span class="no">026</span>
+    <span class="d">10-07</span>
+    <span class="th">Anthropic 创业权益包最高 $45,000，含免费一年 Claude Team 5 席</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC025%E6%9C%9F-2026-10-06.html">
+    <span class="no">025</span>
+    <span class="d">10-06</span>
+    <span class="th">Mistral Large 4 与 Reflection AI Beam 同日公开；两条免费编码新通道</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC024%E6%9C%9F-2026-10-05.html">
+    <span class="no">024</span>
+    <span class="d">10-05</span>
+    <span class="th">Perplexity 开源决策模型且输出免费；阿里放出 Qwen3-VL 端侧多模态双档</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC023%E6%9C%9F-2026-10-04.html">
+    <span class="no">023</span>
+    <span class="d">10-04</span>
+    <span class="th">Google 收免费桌：Gemini 免费档 10/9 起只剩 Flash-Lite</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC022%E6%9C%9F-2026-10-03.html">
+    <span class="no">022</span>
+    <span class="d">10-03</span>
+    <span class="th">Qoder Qwen3.8-Flash 继续免费、腾讯 Hy3/Hy4 夜间限免延至 10/31</span>
+    <span class="pit">避坑 —</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC021%E6%9C%9F-2026-10-02.html">
+    <span class="no">021</span>
+    <span class="d">10-02</span>
+    <span class="th">FLUX 3 Image / Suno Speech beta 等新条目；Qwen-Image-2.1 登顶开源图像榜</span>
+    <span class="pit">避坑 96–99</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC020%E6%9C%9F-2026-10-01.html">
+    <span class="no">020</span>
+    <span class="d">10-01</span>
+    <span class="th">Claude Tag Credits 10/1 过期；Claude Code 云会话新增 $250/$100 免费额度</span>
+    <span class="pit">避坑 91–95</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC019%E6%9C%9F-2026-09-30.html">
+    <span class="no">019</span>
+    <span class="d">09-30</span>
+    <span class="th">DevDay 20+ 项发布落地；Claude Sonnet 5.5 官宣、GPT-6.1 Sol 上线</span>
+    <span class="pit">避坑 86–90</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC018%E6%9C%9F-2026-09-29.html">
+    <span class="no">018</span>
+    <span class="d">09-29</span>
+    <span class="th">DevDay 落幕；9/30 单日 10 条到期进入最后一天</span>
+    <span class="pit">避坑 66–85</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC017%E6%9C%9F-2026-09-28.html">
+    <span class="no">017</span>
+    <span class="d">09-28</span>
+    <span class="th">GPT-5.5 10/14 下线获官方确认；火山方舟 5 折今天最后一天</span>
+    <span class="pit">避坑 66–80</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC016%E6%9C%9F-2026-09-27.html">
+    <span class="no">016</span>
+    <span class="d">09-27</span>
+    <span class="th">OpenRouter 免费档刷新、Hermes 7 款免费模型上线；9/28 双节点进入 1 天倒计时</span>
+    <span class="pit">避坑 66–75</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC015%E6%9C%9F-2026-09-26.html">
+    <span class="no">015</span>
+    <span class="d">09-26</span>
+    <span class="th">DevDay 倒计时 3 天；9/25 三线同窗收口无静默延期</span>
+    <span class="pit">避坑 66–70</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC014%E6%9C%9F-2026-09-25.html">
+    <span class="no">014</span>
+    <span class="d">09-25</span>
+    <span class="th">GitHub Models 静默退役；智谱收紧免费入口；9/25 三线同窗收口</span>
+    <span class="pit">避坑 61–65</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC013%E6%9C%9F-2026-09-24.html">
+    <span class="no">013</span>
+    <span class="d">09-24</span>
+    <span class="th">OpenAI DevDay 定档 9/29 旧金山；GPT-5.5 将于 10/14 全线下线</span>
+    <span class="pit">避坑 56–60</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC012%E6%9C%9F-2026-09-23.html">
+    <span class="no">012</span>
+    <span class="d">09-23</span>
+    <span class="th">GPT-6 Sol / Luna 上线、API 价格降 50%；Claude Opus 5.5 降价 20%</span>
+    <span class="pit">避坑 51–55</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC011%E6%9C%9F-2026-09-22.html">
+    <span class="no">011</span>
+    <span class="d">09-22</span>
+    <span class="th">阿里公开 Qwen4 模型家族；智谱 GLM-5.3-Flash 夜间免费延至 10/7</span>
+    <span class="pit">避坑 46–50</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC010%E6%9C%9F-2026-09-21.html">
+    <span class="no">010</span>
+    <span class="d">09-21</span>
+    <span class="th">阶跃 Step 5 Preview 全量开放并送最高 75 天免费权益；千问开源 Qwen-Image-2.1</span>
+    <span class="pit">避坑 41–45</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC009%E6%9C%9F-2026-09-20.html">
+    <span class="no">009</span>
+    <span class="d">09-20</span>
+    <span class="th">阶跃星辰发布 Step 5 Preview（600B/27B 激活、1M 上下文），权重 10/15 才开放</span>
+    <span class="pit">避坑 36–40</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC008%E6%9C%9F-2026-09-19.html">
+    <span class="no">008</span>
+    <span class="d">09-19</span>
+    <span class="th">Union Alpha 认领为路由器并结束限免；Qoder 把 Qwen3.8-Flash 改为免费调用</span>
+    <span class="pit">避坑 31–35</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC007%E6%9C%9F-2026-09-18.html">
+    <span class="no">007</span>
+    <span class="d">09-18</span>
+    <span class="th">Qwen3.8-Omni-Flash 发布：1M 上下文、音频输入降价超 98%；小红书上线 Cura</span>
+    <span class="pit">避坑 26–30</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC006%E6%9C%9F-2026-09-17.html">
+    <span class="no">006</span>
+    <span class="d">09-17</span>
+    <span class="th">Union Alpha 上线 OpenRouter 与 OpenCode 限免一周；快手招募 AI 互动内容创作者</span>
+    <span class="pit">避坑 21–25</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC005%E6%9C%9F-2026-09-16.html">
+    <span class="no">005</span>
+    <span class="d">09-16</span>
+    <span class="th">抖音「AI 工坊」内测：AI 生成内容直进首页推荐流；AutoClaw 免费档今日收口</span>
+    <span class="pit">避坑 16–20</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC004%E6%9C%9F-2026-09-15.html">
+    <span class="no">004</span>
+    <span class="d">09-15</span>
+    <span class="th">Agnes Video 2.5 Flash 完全免费不限量；Atria Dawn 744B 以 MIT 开源</span>
+    <span class="pit">避坑 12–15</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC003%E6%9C%9F-2026-09-15.html">
+    <span class="no">003</span>
+    <span class="d">09-15</span>
+    <span class="th">Sora 消费端已关停、API 9/24 关停且无免费档；ZCode 3 亿 token 已截止</span>
+    <span class="pit">避坑 1–11</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-%E7%AC%AC002%E6%9C%9F-2026-09-14-%E5%A4%8D%E6%A0%B8%E7%89%88.html">
+    <span class="no">002</span>
+    <span class="d">09-14</span>
+    <span class="th">ZCode 3 亿 token 今日 9:00 收口；GLM-5.3-Flash 夜间免费 9/20 到期</span>
+    <span class="pit">避坑 1–10</span>
+    <span class="kind">网页版</span>
+  </a>
+</li>
+<li class="row">
+  <a href="AI%E5%85%8D%E8%B4%B9%E5%86%85%E5%AE%B9%E4%B8%8E%E6%9D%83%E7%9B%8A%E9%80%9F%E9%80%92-2026-09-14.md">
+    <span class="no">001</span>
+    <span class="d">09-14</span>
+    <span class="th">讯飞星火 X2.5 限时免费调用、商汤 Token Plan 注册即领不绑卡、文心 4.0 九月整月免费</span>
+    <span class="pit">避坑 1–7</span>
+    <span class="kind">Markdown</span>
+  </a>
+</li>
+  </ul>
+</section>
+
+<div class="warn">
+  <strong>说明</strong>：这是一份人工核实过的情报整理，<strong>不构成投资、法律或商业决策建议</strong>。
+  厂商条款与额度随时会变，请以官方页面为最终依据。<br>
+  其中「免费」区分三种不同口径：<strong>零价格</strong> / <strong>限时试用</strong> / <strong>不限量但留存数据</strong>，
+  报告里会在需要处写明条款分叉点。
+</div>
+
+<footer>
+  <div class="fr"><span>AI 免费内容与权益速递</span><span>2026-09-14 ~ 2026-11-25</span></div>
+  <p>本页由 <code>.workbuddy/build_index_web.py</code> 自动生成，请勿手工编辑。</p>
+  <p>仓库：<a href="https://github.com/Lavie-purple/ai-free-content-digest">Lavie-purple/ai-free-content-digest</a></p>
+</footer>
+
+</div>
+<script>
+(function(){
+  var root=document.documentElement;
+  var btns=Array.prototype.slice.call(document.querySelectorAll(".themebtn"));
+  if(!btns.length) return;
+  function paint(){
+    var dark=root.getAttribute("data-theme")==="dark";
+    btns.forEach(function(b){
+      b.setAttribute("aria-pressed", dark?"true":"false");
+      b.setAttribute("title", dark?"当前暗色，点击切到亮色":"当前亮色，点击切到暗色");
+    });
+  }
+  btns.forEach(function(b){
+    b.addEventListener("click",function(){
+      var t=root.getAttribute("data-theme")==="dark"?"light":"dark";
+      root.setAttribute("data-theme",t);
+      try{localStorage.setItem("aihs-theme",t);}catch(e){}
+      paint();
+    });
+  });
+  paint();
+})();
+</script>
+</body>
+</html>
