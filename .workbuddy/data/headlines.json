@@ -77,5 +77,6 @@
   "075": "Thinking Machines 开源 Inkling 2 Mini：26.4B/3.4B、权重约 20GB、Apache-2.0，可在笔记本离线跑",
   "076": "OpenRouter 免费池 12→11（下架一条真免费）；Inkling 2 Mini 上架按量计费、无免费档",
   "077": "OpenRouter 免费池 11→12（上期撤的真免费次日回归）；OpenCode 12→11 撤 LongCat 2.5",
-  "078": "百度 ERNIE 5.5 Flash Preview 权重上线 HF（Apache-2.0），比 11/25 承诺早 2 天"
+  "078": "百度 ERNIE 5.5 Flash Preview 权重上线 HF（Apache-2.0），比 11/25 承诺早 2 天",
+  "079": "OpenRouter 免费池 12→11（dots 端点归零、目录消失）；Antigravity 11/30 移除脚注 13 处已核实"
 }

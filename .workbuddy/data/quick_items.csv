@@ -1,4 +1,4 @@
-分组,名称,量,截止日,截止说明,状态,门槛
+﻿分组,名称,量,截止日,截止说明,状态,门槛
 token,AutoClaw 国内站 M11W1 万圣节档,50M Tokens,2026-11-08,11/8 23:59 失效（11/2 起）,over,登录即领，每账号一次
 token,AutoClaw 国际站 M11W1,40M Tokens（上周未领可叠加至 80M）,2026-11-08,11/8 23:59 失效（10/31 起，比国内站早两天）,over,登录即领
 token,AutoClaw 2.2.0 升级礼,"5,000 积分（≈5,000 万 tokens）",,领到后 7 天内有效,live,升级客户端
@@ -12,7 +12,7 @@ token,移动云 Token 赠送,"2,500 万 Token",2026-12-31,12/31,live,新用户
 token,xAI Grok 新号额度,$25,,领取后 30 天,live,新号，需先领取才起算
 token,TypeSafe AI Jev,注册送 $5（≈1.19 亿输入 token）,,未公布,live,注册，免绑卡
 token,Muse 邀请码,10 亿 tokens / 码，最多 20 人,,未公布,live,持邀请码
-api,OpenRouter 免费档,全量 474 个模型中 15 个零价 / 12 个带 :free 后缀（2026-11-24 实读，全量 −3、三项持平）,,长期（动态目录）,live,注册，看 :free 后缀；本期出 3 进 0：kimi-k2 / kimi-k2-thinking / mimo-v2.5-pro 全部为付费模型；dots-3-note-preview:free 仍在目录（裸冒号 404、%3A 200）；带冒号的 id 要用 %3A 请求
+api,OpenRouter 免费档,全量 472 个模型中 14 个零价 / 11 个带 :free 后缀（2026-11-25 实读，四项同降）,,长期（动态目录）,live,注册，看 :free 后缀；本期出 5 进 3：唯一退出的免费条目是 dots-3-note-preview:free（目录 0 命中、%3A 端点 200 但 endpoints 为空数组）；带冒号的 id 要用 %3A 请求，但 200 不等于在售
 over,OpenRouter stealth/crouton-alpha,免费隐身模型 · 100 万上下文 · $0,2026-11-09,11/9 起目录条目被删、llms.txt 404,over,—
 api,OpenRouter recursive/flint-v1.0:free,免费，262K 上下文,,未公布,live,注册
 api,OpenCode GLM-5.3-Flash Free,免费，200K 上下文,,未公布（官方口径 limited time）,live,仅限平台内，不是通用 API
@@ -90,7 +90,7 @@ api,OpenCode Zen hy4-flash-free,零价（`-free` 池第 15 个）,,未公布（�
 api,Runware 4K 图像生成 5 折,4K 档 50% OFF（数组 22 条不变；徽标清零 = 货架下架）,2026-11-17,"11/17（促销数组 `endsAt: ""2026-11-17""` 仍在册、卡片 `title` **2 → 0**、价目一个数没动；**本期已按期下架**）",over,`4K` 类促销只挂徽标、不动价目（官方帮助文案原话）；**判下架只能看徽标**。与 `MiniMax` 官方页（截止 11/18 00:00、未撤）**两个口径分岔**
 api,阿里 Qwen4-Max（可体验，非免费额度）,付费 $1.5 / $4.5 每百万 token（1M 上下文 · 原生视觉）,,无截止日（付费旗舰；「小尺寸 Qwen4 将开源」是承诺、无型号无日期）,pending,官方博客 free / 免费 0 命中 —— 只写「可在 QwenWork / Qoder / QwenStudio 使用」，只算可体验、不进免费清单
 token,智谱 AutoClaw 国内站 M11W3 每周福利（100M Tokens）,"100M Tokens ＝ 10,000 积分（本周额度是上周同类活动的 2 倍）",2026-11-22,11/22 23:59 已收口（11/16–11/22）；M11W4（11/23–11/29，仍 100M）已于 11/23 00:00 接班,over,登录即可领取、每账号限领一次；**只在 AutoClaw 内使用**，自接 Coding Plan 或其他 API 另计费
-api,Google Antigravity 免费档三个第三方模型 11/30 移除,免费档 $0/month 不变；Claude Sonnet 4.6 / Claude Opus 4.6 / GPT-OSS-120b 三个模型下架,2026-11-30,"官方脚注原为 November 30, 2026；078 期首页已 0 处、pricing 页 000（30 秒超时）—— 本期无法核实，日期照留、不下「已取消」结论",live,免费档四个模型全在：Gemini 3.8 Flash + Sonnet 4.6 / Opus 4.6 / GPT-OSS-120B；Gemini 4 全家只在付费档
+api,Google Antigravity 免费档三个第三方模型 11/30 移除,免费档 $0/month 不变；Claude Sonnet 4.6 / Claude Opus 4.6 / GPT-OSS-120b 三个模型下架,2026-11-30,"官方脚注逐字 Will be removed on November 30, 2026.；079 期已核实：pricing 页 200 / 188,088 字节、脚注 13 处",live,免费档 5 个模型：Gemini 4 Hydrogen / Gemini 3.8 Flash / Sonnet 4.6 / Opus 4.6 / GPT-OSS-120B；后四个挂移除脚注 → 11/30 后第一方剩 2–3 个
 edu,OpenAI ChatGPT for Academic Researchers 扩容至 20 万研究者,"本轮 50,000 个名额、每名额带 2 名协作者（合计最多 150,000 人）；档位是 Plus",,无截止日（名额制、先到先得；官方未给申请关闭日）—— 11/23 是开放申请日，不是截止日,live,**档位从 Pro 降到 Plus**（官方逐字 `most participants would have stayed within ChatGPT Plus usage limits`）；额度无数字、模型只写 `frontier models`；抽签改先到先得
 api,腾讯 Hy4 flash 进入 OpenRouter 目录（付费 · 标价五折）,输入 $0.035 / 输出 $0.1405 每百万 token（≈ 官方人民币价五折）,,无截止日（目录标价，未挂 `discount`、无 `:free` 变体）,pending,**付费条目**，进目录 ≠ 免费；`created` 换北京 11/16 22:18。按 7.1 折算正好是官方 0.5 元 / 2 元的一半 —— **汇率 7.1 是本报假设**
 oss,腾讯混元 Hy4 flash 开放权重,220.25B 实测总参（含 64B Engram）/ 激活 11.3B + 0.43B / 1M 上下文 / 三仓 600 个文件,,无截止日（权重永久开放；许可有商用门槛，不是时间门槛）,live,`Tencent Hy License 1.0` ＝ `Apache 2.0` 派生 + `§10`：对外做 `MaaS` 且（全球年毛收入 > US$50M 或产品 MAU > 1 亿）须另签；**纯内部使用豁免**。三仓 `gated: false`；`safetensors` 实测 220.25B ≠ 媒体 224B
@@ -99,8 +99,8 @@ api,MiniMax H3-Image 4K 五折（官方页）,4K 五折回挂：0.2261 / 0.2404 
 api,DeepSeek 服务端搜索 / 抓取不计费,调用模型时触发的 `web tools` / `web_search` 不再单独计费（原 $0.75 / 千次归零）,,11/18 12:00（北京）起生效；结果并入上下文按 token 计,live,**单独调 `Search` / `Fetch` API 仍 $0.75 / 千次**（同页表未变）。免的是「模型自己搜」，不是「你去搜」；读进去的正文仍按 token 收
 oss,范式 Phai-A1-35B-1M 开放权重,35.1B 全 BF16 / 1M 上下文 / Apache-2.0 / 28 个文件,,无截止日（权重永久开放）；建仓 11/12，公开日 11/19,live,**「单张 3090」需 4bit 量化**：BF16 权重 70.2 GB vs 显存 24 GB（避坑 316）。底座 `Qwen3.6-35B-A3B`；`Phai-M1`（视频）仓未检索到，记预告
 oss,MatOS 材料科研智能体（开源）,"3,135 数据集 / 386 技能 / 104 工作流 / 51 角色 / 48 款计算软件",,无截止日（arXiv + GitHub 双开源）,live,基准均在同底座前提下：ResearchClawBench +33.6%、材料任务 +80.8%；DuoCompNet MAE 低 13.6%。**开源 ≠ 免费算力**，要自己的模型与机器
-token,智谱 AutoClaw 国内站 M11W4 每周福利（100M Tokens）,"100M Tokens ＝ 10,000 积分（第 2 周维持 100M）",2026-11-29,11/29 23:59（北京时间）失效；领取窗口 11/23 00:00 起（官方逐字「活动时间 11 月 23 日（周一）00:00—11 月 29 日（周日）23:59」）,live,登录客户端即领，每账号一次；与 M11W3（到 11/22 23:59）只隔 1 分钟、不重叠；额度锁在客户端、导不出 API；M11W5 连续第 3 期 404
+token,智谱 AutoClaw 国内站 M11W4 每周福利（100M Tokens）,"100M Tokens ＝ 10,000 积分（第 3 周维持 100M）",2026-11-29,11/29 23:59（北京时间）失效；领取窗口 11/23 00:00 起（官方逐字「活动时间 11 月 23 日（周一）00:00—11 月 29 日（周日）23:59」）,live,登录客户端即领，每账号一次；额度锁在客户端、导不出 API；M11W5 连续第 4 期 404（周档到点才挂，别提前等）
 oss,Thinking Machines Inkling 2 Mini 开放权重,26.4B 总参 / 3.4B 激活（循环层跑 3 次）· 权重约 20GB,,无截止日（Apache-2.0，权重永久开放）；公告 2026-11-20 PT ＝ 北京 11/21 04:28,live,权重约 20GB（多为原生 NVFP4、末 4 层 MXFP8），官方实测机 MacBook Pro M5 Pro 48GB；32GB 机器能否跑满上下文官方未给数；HF 建仓 11/17、权重变更 11/20、公告 11/21
 oss,腾讯混元 Hy4（770B）开放权重,770B 总参 / 激活 49B + 视觉 1.23B · 1M 上下文 · 78 层,,无截止日（权重永久开放；Tencent Hy License，须读 LICENSE 原文）,live,三仓权重 11/20 03:05Z（北京 11:05）同批落盘；BF16 约 1.5TB、FP8 约 770GB —— 开放≠可本地跑；想跑走 AngelSlim/Hy4-GGUF
-api,Thinking Machines Inkling 2 Mini API（OpenRouter）,4 个价点：$0.0375/$0.15、$0.075/$0.30、$0.15/$0.60（PrimeIntellect · fp4 · 1M ctx）｜$0.12/$0.50（Io Net · nvfp4 · 256K ctx）,,无截止日（按量计费）；created 北京 2026-11-21 10:19；无 :free 变体、无免费额度,live,最便宜档与最贵档差 4.0 倍；本期顶档由 $0.12/$0.50 涨到 $0.15/$0.60（输入 +25.0%、输出 +20.0%）；Io Net 未涨 → 由最贵变第二贵；无 :free 变体、无免费额度
-oss,百度 ERNIE 5.5 Flash Preview 开放权重,280B 总参 / 14B 激活 · 1M 上下文 · Apache-2.0 · 128 个分片（共 142 文件）,,无结束日（Apache-2.0 开放权重）；三仓北京 2026-11-23 17:00 上线，比官方承诺的 11/25 早 2 天,live,能下载 ≠ 能本地跑：BF16 约 560GB、FP8 约 280GB；社区 GGUF 尚未出（unsloth 名下 ?search=ernie 为 0）；OpenRouter 另有 :free API 可用
+api,Thinking Machines Inkling 2 Mini API（OpenRouter）,5 个价点：$0.0375/$0.15、$0.075/$0.30 ×2（PrimeIntellect + DeepInfra · 1M ctx）｜$0.12/$0.50（Io Net · 256K ctx）｜$0.15/$0.60（PrimeIntellect 顶档）,,无截止日（按量计费）；created 北京 2026-11-21 10:19；无 :free 变体、无免费额度,live,最便宜档与最贵档仍差 4.0 倍；079 期新增 DeepInfra 档（$0.075/$0.30，与 PrimeIntellect 中档同价）；无 :free 变体、无免费额度
+oss,百度 ERNIE 5.5 Flash Preview 开放权重,280B 总参 / 14B 激活 · 1M 上下文 · Apache-2.0 · 128 个分片（共 142 文件）,,无结束日（Apache-2.0 开放权重）；三仓北京 2026-11-23 17:00 上线，比官方承诺的 11/25 早 2 天,live,首日 117 次下载 / 314 likes（75/15/27）；likes : downloads = 2.7 : 1，点收藏的多、下得动的少；BF16 约 560GB；社区 GGUF 尚未出；OpenRouter 另有 :free API 可用
