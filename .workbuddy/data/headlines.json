@@ -80,5 +80,6 @@
   "078": "百度 ERNIE 5.5 Flash Preview 权重上线 HF（Apache-2.0），比 11/25 承诺早 2 天",
   "079": "OpenRouter 免费池 12→11（dots 端点归零、目录消失）；Antigravity 11/30 移除脚注 13 处已核实",
   "080": "OpenRouter 一天进 5 出 3，4 条是 :batch 半价副本；免费池 11 条未动",
-  "081": "OpenRouter 一天进 3 条、免费池仍 11 条：2 条是 Kimi K2 老权重回架"
+  "081": "OpenRouter 一天进 3 条、免费池仍 11 条：2 条是 Kimi K2 老权重回架",
+  "082": "DeepSeek 网页与 App 上线单轮 Token 账单：两轮对话显示 0.000426 元，聊天仍免费"
 }
